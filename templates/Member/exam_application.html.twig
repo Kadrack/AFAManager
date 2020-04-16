@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    AFAManager
+{% endblock %}
+
+{% block stylesheets %}
+{% endblock %}
+
+{% block body %}
+    <a href="{{ path('club_index') }}">Home</a><br /><br />
+
+    <h1>Candidature session examen</h1>
+
+    <h2>Détails session</h2>
+
+    <table>
+        <tr>
+            <th>Date</th>
+            <th>Adresse</th>
+            <th>Code postal</th>
+            <th>Localité</th>
+            <th>Ouverture inscription</th>
+            <th>Fermeture inscription</th>
+        </tr>
+        <tr>
+            <td>{{ exam.getGradeSessionDate()|date("d/m/Y") }}</td>
+            <td>{{ exam.getGradeSessionStreet() }}</td>
+            <td>{{ exam.getGradeSessionZip() }}</td>
+            <td>{{ exam.getGradeSessionCity() }}</td>
+            <td>{{ exam.getGradeSessionCandidateOpen()|date("d/m/Y") }}</td>
+            <td>{{ exam.getGradeSessionCandidateClose()|date("d/m/Y") }}</td>
+        </tr>
+    </table>
+
+
+
+    {{ form_start(form) }}
+    {{ form_widget(form) }}
+    {{ form_end(form) }}
+{% endblock %}
+
+{% block javascripts %}
+{% endblock %}

@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    AFAManager
+{% endblock %}
+
+{% block stylesheets %}
+{% endblock %}
+
+{% block body %}
+    <a href="{{ path('common_index') }}">Home</a>
+    <h1>Passages de grade Dan</h1>
+    <h2><a href="{{ path('exam_create') }}">Nouvelle session</a></h2>
+    {% if exams != null %}
+        <h2>Liste sessions</h2>
+        <table>
+            <tr>
+                <th>Date</th>
+                <th>Type</th>
+                <th>Ouverture inscription</th>
+                <th>Fermeture inscription</th>
+                <th>Commandes</th>
+            </tr>
+            {%  for exam in exams %}
+                <tr>
+                    <td>{{ exam.getGradeSessionDate()|date("d/m/Y") }}</td>
+                    <td>{{ listData.getExamType(exam.getGradeSessionType()) }}</td>
+                    <td>{{ exam.getGradeSessionCandidateOpen()|date("d/m/Y") }}</td>
+                    <td>{{ exam.getGradeSessionCandidateClose()|date("d/m/Y") }}</td>
+                    <td><a href="{{ path('exam_detail', {'exam_id': exam.getGradeSessionId()}) }}">Détails</a> - <a href="{{ path('exam_update', {'exam_id': exam.getGradeSessionId()}) }}">Modifier</a></td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% endif %}
+{% endblock %}
+
+{% block javascripts %}
+{% endblock %}

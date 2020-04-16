@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    AFAManager
+{% endblock %}
+
+{% block stylesheets %}
+{% endblock %}
+
+{% block body %}
+    <a href="{{ path('club_index') }}">Home</a>
+    <h1>{{ club.getClubName() }}</h1>
+    <h2>Membres inactifs</h2>
+    <table>
+        <tr>
+            <th>#</th>
+            <th>Licence n°</th>
+            <th>Prénom</th>
+            <th>Nom</th>
+            <th>Echéance</th>
+            <th>Commande</th>
+        </tr>
+        {% for member in members %}
+            {% if member.Id != null %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ member.Id }}</td>
+                    <td>{{ member.FirstName|title }}</td>
+                    <td>{{ member.Name|title }}</td>
+                    <td>{{ member.Deadline|date("d/m/Y") }}</td>
+                    <td><a href="{{ path('member_licence_renew_update', {'club_number': club.getClubNumber(), 'member_id': member.Id, 'renew_id': member.Licence}) }}">Modifier</a> - <a href="{{ path('member_licence_renew', {'club_number': club.getClubNumber(), 'member_id': member.Id}) }}">Renouveller</a></td>
+                </tr>
+            {% endif %}
+        {% endfor %}
+    </table>
+{% endblock %}
+
+{% block javascripts %}
+{% endblock %}

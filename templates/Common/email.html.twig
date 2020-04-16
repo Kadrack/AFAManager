@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    AFAManager
+{% endblock %}
+
+{% block stylesheets %}
+{% endblock %}
+
+{% block body %}
+    {{ form_start(form) }}
+    {{ form_widget(form) }}
+    {{ form_end(form) }}
+{% endblock %}
+
+{% block javascripts %}
+    {# <script>
+        ClassicEditor
+            .create( document.querySelector( '#common_email_EmailBody' ) )
+            .then( editor => {console.log( editor );} )
+            .catch( error => {console.error( error );} );
+    </script>
+    <script>ClassicEditor.create()</script> #}
+{% endblock %}

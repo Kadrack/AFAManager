@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    AFAManager
+{% endblock %}
+
+{% block stylesheets %}
+{% endblock %}
+
+{% block body %}
+    <a href="{{ path('common_index') }}">Home</a>
+    <h1>Liste des clubs</h1>
+    <table>
+        <tr>
+            <th>Id</th>
+            <th>Nom</th>
+            <th>Province</th>
+            <th>Email contact</th>
+            <th>Adresse contact</th>
+            <th>Localité contact</th>
+            <th>Commentaires</th>
+            <th>Status</th>
+        </tr>
+        {% for club in clubs %}
+            <tr>
+                <td>{{ club.id }}</td>
+                <td>{{ club.name }}</td>
+                <td>{{ club.province }}</td>
+                <td>{{ club.contact_email }}</td>
+                <td>{{ club.contact_address }}</td>
+                <td>{{ club.contact_zip }} - {{ club.contact_city }}</td>
+                <td>{{ club.comment }}</td>
+                <td>{{ club.status }}</td>
+            </tr>
+        {% endfor %}
+        </table>
+{% endblock %}
+
+{% block javascripts %}
+{% endblock %}

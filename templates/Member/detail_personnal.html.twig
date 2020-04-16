@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    AFAManager
+{% endblock %}
+
+{% block stylesheets %}
+{% endblock %}
+
+{% block body %}
+    <a href="{{ path('club_index') }}">Home</a><br />
+    <h1>{{ member.getMemberFirstname() }} {{ member.getMemberName() }}</h1>
+    <h2>Données personnelles</h2>
+    <table>
+        <tr>
+            <th>Photos</th>
+            <th>Prénom</th>
+            <th>Nom</th>
+            <th>Adresse</th>
+            <th>Localité</th>
+            <th>Commande</th>
+        </tr>
+        <tr>
+            <td><img alt="" src=" {{ asset('uploads/photos/'~member.getMemberPhoto()) }}" /></td>
+            <td>{{ member.getMemberFirstname() }}</td>
+            <td>{{ member.getMemberName() }}</td>
+            <td>{{ member.getMemberAddress() }}</td>
+            <td>{{ member.getMemberZip }} {{ member.getMemberCity }}</td>
+            <td><a href="{{ path('member_update', {'club_number': club.getClubNumber(), 'member_id': member.getMemberId()}) }}">Modifier</a></td>
+        </tr>
+    </table>
+{% endblock %}
+
+{% block javascripts %}
+{% endblock %}

@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    AFAManager
+{% endblock %}
+
+{% block stylesheets %}
+{% endblock %}
+
+{% block body %}
+    <a href="{{ path('exam_index') }}">Home</a>
+    <h1>Résultat candidat</h1>
+    <table>
+        <tr>
+            <th>Photo</th>
+            <th>Prénom</th>
+            <th>Nom</th>
+        </tr>
+        <tr>
+            <td><img alt="" src=" {{ asset('uploads/photos/'~member.getMemberPhoto()) }}" /></td>
+            <td>{{ member.getMemberFirstname() }}</td>
+            <td>{{ member.getMemberName() }}</td>
+        </tr>
+    </table>
+    {{ form_start(form) }}
+    {{ form_widget(form) }}
+    {{ form_end(form) }}
+{% endblock %}
+
+{% block javascripts %}
+{% endblock %}

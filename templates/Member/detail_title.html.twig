@@ -1,0 +1,67 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    AFAManager
+{% endblock %}
+
+{% block stylesheets %}
+{% endblock %}
+
+{% block body %}
+    <a href="{{ path('club_index') }}">Home</a><br />
+    <h1>{{ member.getMemberFirstname() }} {{ member.getMemberName() }}</h1>
+    {% if aikikai is not null %}
+        <h2>Historique titre Aïkikaï</h2>
+        <table>
+            <tr>
+                <th>Titre</th>
+                <th>Date</th>
+                <th>N° diplôme</th>
+            </tr>
+            {% for title in aikikai %}
+                <tr>
+                    <td>{{ list.getGradeTitleAikikai(title.getGradeTitleRank()) }}</td>
+                    <td>{{ title.getGradeTitleExam().getGradeSessionDate()|date("d/m/Y") }}</td>
+                    <td>{{ title.getGradeTitleCertificate() }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% endif %}
+    {% if old_adeps is not null %}
+        <h2>Historique ancien titre ADEPS</h2>
+        <table>
+            <tr>
+                <th>Titre</th>
+                <th>Date</th>
+                <th>N° diplôme</th>
+            </tr>
+            {% for title in old_adeps %}
+                <tr>
+                    <td>{{ list.getGradeTitleAdeps(title.getGradeTitleRank()) }}</td>
+                    <td>{{ title.getGradeTitleExam().getGradeSessionDate()|date("d/m/Y") }}</td>
+                    <td>{{ title.getGradeTitleCertificate() }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% endif %}
+    {% if adeps is not null %}
+        <h2>Historique titre ADEPS</h2>
+        <table>
+            <tr>
+                <th>Titre</th>
+                <th>Date</th>
+                <th>N° diplôme</th>
+            </tr>
+            {% for title in adeps %}
+                <tr>
+                    <td>{{ list.getGradeTitleAdeps(title.getGradeTitleRank()) }}</td>
+                    <td>{{ title.getGradeTitleExam().getGradeSessionDate()|date("d/m/Y") }}</td>
+                    <td>{{ title.getGradeTitleCertificate() }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% endif %}
+{% endblock %}
+
+{% block javascripts %}
+{% endblock %}

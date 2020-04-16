@@ -1,0 +1,59 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    AFAManager
+{% endblock %}
+
+{% block stylesheets %}
+{% endblock %}
+
+{% block body %}
+    <a href="{{ path('exam_index') }}">Home</a>
+    <h1>Détails session</h1>
+    {% if applicants != null %}
+        <h2>Candidats en attente</h2>
+        <table>
+            <tr>
+                <th>Prénom</th>
+                <th>Nom</th>
+                <th>Club</th>
+                <th>Professeur</th>
+                <th>Dernier examen</th>
+                <th>Dernière évaluation</th>
+                <th>Commandes</th>
+            </tr>
+            {% for applicant in applicants %}
+                <tr>
+                    <td>{{ applicant.getGradeDanMember().getMemberFirstName() }}</td>
+                    <td>{{ applicant.getGradeDanMember().getMemberName() }}</td>
+                    <td>{{ applicant.getGradeDanClub().getClubName() }}</td>
+                    <td>{% if applicant.getGradeDanClub().getClubMainTeacher().getClubTeacherFirstname() is defined %}{{ applicant.getGradeDanClub().getClubMainTeacher().getClubTeacherFirstname() }} {{ applicant.getGradeDanClub().getClubMainTeacher().getClubTeacherName() }}{% else %}Non défini{% endif %}</td>
+                    <td>{% if applicant.getGradeDanMember().getMemberLastGradeDan().getGradeDanExam() is defined %}{{ applicant.getGradeDanMember().getMemberLastGradeDan().getGradeDanExam().getExamDate()|date("d/m/Y") }}{% else %}{{ applicant.getGradeDanMember().getMemberFirstLicence().getMemberLicenceUpdate()|date("d/m/Y") }}{% endif %}</td>
+                    <td>{% if applicant.getGradeDanMember().getMemberLastGradeDan().getGradeDanExam() is defined %}{{ applicant.getGradeDanMember().getMemberLastGradeDan().getGradeDanStatus() }}{% else %}Début de pratique{% endif %}</td>
+                    <td><a href="{{ path('exam_applicant_detail', {'exam_id': exam.getGradeSessionId(), 'member_id': applicant.getGradeDanMember().getMemberId()}) }}">Détails</a></td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% endif %}
+    {% if candidates != null %}
+        <h2>Candidats validés</h2>
+        {% for candidate in candidates %}
+            {{ candidate.getGradeDanMember().getMemberFirstName() }} {{ candidate.getGradeDanMember().getMemberName }} : <a href="{{ path('exam_candidate_detail', {'exam_id': exam.getGradeSessionId(), 'member_id': candidate.getGradeDanMember().getMemberId()}) }}">Résultats</a><br />
+        {% endfor %}
+    {% endif %}
+    {% if refused != null %}
+        <h2>Candidats refusé</h2>
+        {% for candidate in refused %}
+            {{ candidate.getGradeDanMember().getMemberFirstName() }} {{ candidate.getGradeDanMember().getMemberName }} : <a href="{{ path('exam_candidate_detail', {'exam_id': exam.getGradeSessionId(), 'member_id': candidate.getGradeDanMember().getMemberId()}) }}">Résultats</a><br />
+        {% endfor %}
+    {% endif %}
+    {% if promoted != null %}
+        <h2>Candidats promu</h2>
+        {% for candidate in promoted %}
+            {{ candidate.getGradeDanMember().getMemberFirstName() }} {{ candidate.getGradeDanMember().getMemberName }} : <a href="{{ path('exam_candidate_detail', {'exam_id': exam.getGradeSessionId(), 'member_id': candidate.getGradeDanMember().getMemberId()}) }}">Résultats</a><br />
+        {% endfor %}
+    {% endif %}
+{% endblock %}
+
+{% block javascripts %}
+{% endblock %}

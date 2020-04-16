@@ -1,0 +1,80 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    AFAManager
+{% endblock %}
+
+{% block stylesheets %}
+{% endblock %}
+
+{% block body %}
+    <a href="{{ path('training_index') }}">Home</a>
+    {{ form_start(form) }}
+    <h1>{{ training.getTrainingName()|title }}</h1>
+    <table>
+        <tr>
+            <th>Total Cash</th>
+            <th>Total Carte</th>
+        </tr>
+        <tr>
+            <td>{{ total_cash }}</td>
+            <td>{{ total_card }}</td>
+        </tr>
+    </table>
+    <h2>Pratiquants AFA</h2>
+    <table>
+        <tr>
+            <th colspan="3">N° licence</th>
+            <th>Cours</th>
+            <th>Paiement</th>
+            <th>Mode</th>
+            <th>Commandes</th>
+        </tr>
+        <tr>
+            <td colspan="3">{{ form_widget(form.TrainingAttendanceId) }}</td>
+            <td>{{ form_widget(form.TrainingAttendanceSession) }}</td>
+            <td>{{ form_widget(form.TrainingAttendancePayment) }}</td>
+            <td width="60">{{ form_widget(form.TrainingAttendancePaymentType) }}</td>
+            <td>{{ form_widget(form.Submit) }}</td>
+        </tr>
+        <tr>
+            <th>Prénom</th>
+            <th>Nom</th>
+            <th>Licence</th>
+            <th>Cours</th>
+            <th>Paiement</th>
+            <th>Mode</th>
+            <th>Commandes</th>
+        </tr>
+        {% for practitioner in practitioners %}
+            <tr>
+                <td>{{ practitioner.member_firstname|title }}</td>
+                <td>{{ practitioner.member_name|title }}</td>
+                <td>{{ practitioner.member_id }}</td>
+                <td>
+                    {% for session in practitioners_sessions %}
+                        {% if session.training_attendance_unique == practitioner.training_attendance_unique %}
+                            {% if session.training_session_starting_hour != null %}
+                                {{ listData.getDay(session.training_session_date|date('N')) }}
+                                {% if session.training_session_starting_hour|date('H') < 12 %}
+                                    Matin
+                                {% else %}
+                                    Après-midi
+                                {% endif %}
+                            {% else %}
+                                {{ session.training_session_duration/60 }} h
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                </td>
+                <td>{{ practitioner.training_attendance_payment }} €</td>
+                <td>{{ listData.getPaymentType(practitioner.training_attendance_payment_type) }}</td>
+                <td></td>
+            </tr>
+        {% endfor %}
+    </table>
+    {{ form_end(form) }}
+{% endblock %}
+
+{% block javascripts %}
+{% endblock %}

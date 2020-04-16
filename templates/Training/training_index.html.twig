@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    AFAManager
+{% endblock %}
+
+{% block stylesheets %}
+{% endblock %}
+
+{% block body %}
+    <a href="{{ path('common_index') }}">Home</a>
+    <h1>Liste des stages</h1>
+    <h2><a href="{{ path('training_create') }}">Ajouter</a></h2>
+    <table>
+        <tr>
+            <th>Date</th>
+            <th>Titre</th>
+            <th># Cours</th>
+            <th>Type</th>
+            <th>Commandes</th>
+        </tr>
+        {% for training in trainings %}
+            <tr>
+                <td>{{ training.training_session_date|date("d/m/Y") }}</td>
+                <td>{{ training.training_name }}</td>
+                <td>{{ training.training_total_sessions }}</td>
+                <td>{{ listData.getTrainingType(training.training_type) }}</td>
+                <td><a href="{{ path('training_detail', {'training_id': training.training_id}) }}">Détails</a> - <a href="{{ path('training_attendance_add', {'training_id': training.training_id}) }}">Membres</a> - <a href="{{ path('training_attendance_foreign_add', {'training_id': training.training_id}) }}">Non AFA</a></td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}
+
+{% block javascripts %}
+{% endblock %}

@@ -1,0 +1,57 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    AFAManager
+{% endblock %}
+
+{% block stylesheets %}
+{% endblock %}
+
+{% block body %}
+    <a href="{{ path('training_index') }}">Home</a>
+    <h1>{{ training.getTrainingName() }}</h1>
+    <table>
+        <tr>
+            <th>Titre</th>
+            <th>Type</th>
+            <th>Commandes</th>
+        </tr>
+        <tr>
+            <td>{{ training.getTrainingName() }}</td>
+            <td>{{ listData.getTrainingType(training.getTrainingType()) }}</td>
+            <td><a href="{{ path('training_update', {'training_id': training.getTrainingId()}) }}">Modifier</a> - <a href="{{ path('training_delete', {'training_id': training.getTrainingId()}) }}">Supprimer</a></td>
+        </tr>
+    </table>
+    <h2>Cours</h2>
+    <table>
+        <tr>
+            <th>Date</th>
+            <th>Début</th>
+            <th>Fin</th>
+            <th># Heures</th>
+            <th>Présences</th>
+            <th>Commandes</th>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td><a href="{{ path('training_session_add', {'training_id': training.getTrainingId()}) }}">Ajouter</a></td>
+        </tr>
+        {% for session in sessions %}
+            <tr>
+                <td>{{ session.training_session_date|date('d/m/Y') }}</td>
+                <td>{% if session.training_session_starting_hour != null %}{{ session.training_session_starting_hour|date('H:i') }}{% endif %}</td>
+                <td>{% if session.training_session_ending_hour != null %}{{ session.training_session_ending_hour|date('H:i') }}{% endif %}</td>
+                <td>{{ session.training_session_duration/60 }}</td>
+                <td>{#{ session.1 }#}</td>
+                <td><a href="{{ path('training_session_update', {'training_id': training.getTrainingId(), 'session_id': session.training_session_id}) }}">Modifier</a> - <a href="{{ path('training_session_delete', {'training_id': training.getTrainingId(), 'session_id': session.training_session_id}) }}">Supprimer</a></td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}
+
+{% block javascripts %}
+{% endblock %}

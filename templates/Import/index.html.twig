@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    AFAManager
+{% endblock %}
+
+{% block stylesheets %}
+{% endblock %}
+
+{% block body %}
+    <a href="{{ path('import_dojos') }}">Importer les dojos</a><br />
+    <a href="{{ path('import_pratiquants') }}">Importer les pratiquants</a><br />
+    <a href="{{ path('import_kyus') }}">Importer les grades kyu</a><br />
+    <a href="{{ path('import_dan_sessions') }}">Importer les sessions dan</a><br />
+    <a href="{{ path('import_grades_dan') }}">Importer les grades dan</a><br />
+    <a href="{{ path('import_teach_sessions') }}">Importer les sessions des titres Aïkikaï</a><br />
+    <a href="{{ path('import_grades_teach') }}">Importer les titres Aïkikaï</a><br />
+    <a href="{{ path('import_adeps_sessions') }}">Importer les sessions ADEPS</a><br />
+    <a href="{{ path('import_grades_adeps') }}">Importer les titres ADEPS</a><br />
+    <a href="{{ path('import_stages') }}">Importer les stages</a><br />
+    <a href="{{ path('import_stages_session') }}">Importer les sessions des stages</a><br />
+    <a href="{{ path('import_stages_presence') }}">Importer les présences aux sessions de stage</a><br />
+{% endblock %}
+
+{% block javascripts %}
+{% endblock %}

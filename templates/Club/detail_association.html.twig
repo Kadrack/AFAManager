@@ -1,0 +1,63 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    AFAManager
+{% endblock %}
+
+{% block stylesheets %}
+{% endblock %}
+
+{% block body %}
+    <a href="{{ path('club_index') }}">Home</a>
+    {{ form_start(form) }}
+    <h1>{{ club.getClubName()|title }}</h1>
+    <h2>Siège</h2>
+    <table>
+        <tr>
+            <th>Numéro</th>
+            <th>Nom</th>
+            <th>Adresse</th>
+            <th>Code postal</th>
+            <th>Localité</th>
+        </tr>
+        <tr>
+            <td>{{ form_widget(form.ClubNumber) }}</td>
+            <td>{{ form_widget(form.ClubName) }}</td>
+            <td>{{ form_widget(form.ClubAddress) }}</td>
+            <td>{{ form_widget(form.ClubZip) }}</td>
+            <td>{{ form_widget(form.ClubCity) }}</td>
+        </tr>
+    </table>
+    <h2>Comité</h2>
+    <table>
+        <tr>
+            <th>Type Association</th>
+            <th>Président</th>
+            <th>Trésorier</th>
+            <th>Secrétaire</th>
+            <th>Email de contact</th>
+        </tr>
+        <tr>
+            <td>{{ form_widget(form.ClubType) }}</td>
+            <td>{{ form_widget(form.ClubPresident) }}</td>
+            <td>{{ form_widget(form.ClubTreasurer) }}</td>
+            <td>{{ form_widget(form.ClubSecretary) }}</td>
+            <td>{{ form_widget(form.ClubEmailContact) }}</td>
+        </tr>
+    </table>
+    <h2>Internet</h2>
+    <table>
+        <tr>
+            <th>URL</th>
+            <th>Email</th>
+        </tr>
+        <tr>
+            <td>{{ form_widget(form.ClubUrl) }}</td>
+            <td>{{ form_widget(form.ClubEmailPublic) }}</td>
+        </tr>
+    </table>
+    {{ form_end(form) }}
+{% endblock %}
+
+{% block javascripts %}
+{% endblock %}
