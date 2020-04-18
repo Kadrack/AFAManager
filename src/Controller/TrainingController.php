@@ -29,7 +29,7 @@ class TrainingController extends AbstractController
     {
         $trainings = $this->getDoctrine()->getRepository(Training::class)->getActiveTrainings();
 
-        return $this->render('Training/training_index.html.twig', array('trainings' => $trainings[0]['training_id'] == null ? null : $trainings, 'listData' => new ListData()));
+        return $this->render('Training/training_index.html.twig', array('trainings' => count($trainings) == 0 ? null : $trainings, 'listData' => new ListData()));
     }
 
     /**

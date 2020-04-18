@@ -9,7 +9,6 @@
 /public/bundles/
 /var/
 /vendor/
-/bin/
 /tests/
 /translations/
 ###< symfony/framework-bundle ###
