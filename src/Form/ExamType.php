@@ -143,11 +143,8 @@ class ExamType extends AbstractType
                     'multiple' => false,
                     'expanded' => true,
                     'choices' => array('Refusé' => 4, 'Promu' => 3)))
-            ->add('GradeDanCertificateAFA', TextType::class,
-                array('label' => 'N° Diplôme AFA : ',
-                    'required' => false))
-            ->add('GradeDanCertificateAikikai', TextType::class,
-                array('label' => 'N° Diplôme Aïkikaï : ',
+            ->add('GradeDanCertificate', TextType::class,
+                array('label' => 'N° Diplôme : ',
                     'required' => false))
             ->add('GradeDanComment', TextareaType::class,
                 array('label' => 'Commentaire : ',

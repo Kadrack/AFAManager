@@ -237,17 +237,17 @@ class MemberController extends AbstractController
         $exam   = $this->getDoctrine()->getRepository(GradeSession::class)->getOpenSession($today->format('Y-m-d'));
         $member = $this->getDoctrine()->getRepository(Member::class)->findOneBy(['member_id' => $member_id]);
 
-        if (!is_object($member->getMemberLastExamResult()))
+        if (!is_object($member->getMemberLastGradeDan()))
         {
             $rank = 7;
         }
-        elseif ($member->getMemberLastExamResult()->getExamResultStatus() == 3)
+        elseif ($member->getMemberLastGradeDan()->getExamResultStatus() == 3)
         {
-            $rank = $member->getMemberLastExamResult()->getExamResultRank() + 1;
+            $rank = $member->getMemberLastGradeDan()->getExamResultRank() + 1;
         }
         else
         {
-            $rank = $member->getMemberLastExamResult()->getExamResultRank();
+            $rank = $member->getMemberLastGradeDan()->getExamResultRank();
         }
 
         $grade = new GradeDan();

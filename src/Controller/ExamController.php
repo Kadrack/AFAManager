@@ -138,7 +138,7 @@ class ExamController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid())
         {
-            $member->setMemberLastExamResult($grade);
+            $member->setMemberLastGradeDan($grade);
 
             $entityManager = $this->getDoctrine()->getManager();
 
