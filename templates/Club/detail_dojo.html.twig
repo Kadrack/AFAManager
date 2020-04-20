@@ -1,14 +1,13 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-    AFAManager
+    AFA-Manager
 {% endblock %}
 
 {% block stylesheets %}
 {% endblock %}
 
 {% block body %}
-    <a href="{{ path('club_index') }}">Home</a>
     <h1>{{ club.getClubName()|title }}</h1>
     <h2>Dojo(s)</h2>
     <table>

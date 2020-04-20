@@ -1,14 +1,13 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-    AFAManager
+    AFA-Manager
 {% endblock %}
 
 {% block stylesheets %}
 {% endblock %}
 
 {% block body %}
-    <a href="{{ path('exam_index') }}">Home</a>
     <h1>Détails session</h1>
     {% if applicants != null %}
         <h2>Candidats en attente</h2>

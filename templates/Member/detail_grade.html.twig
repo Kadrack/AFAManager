@@ -1,14 +1,13 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-    AFAManager
+    AFA-Manager
 {% endblock %}
 
 {% block stylesheets %}
 {% endblock %}
 
 {% block body %}
-    <a href="{{ path('club_index') }}">Home</a><br />
     <h1>{{ member.getMemberFirstname() }} {{ member.getMemberName() }}</h1>
     {% if grade_kyu_history is not null %}
         <h2>Historique grade Kyu</h2>
