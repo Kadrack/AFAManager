@@ -28,7 +28,7 @@
                     <td>{{ applicant.getGradeDanClub().getClubName() }}</td>
                     <td>{% if applicant.getGradeDanClub().getClubMainTeacher().getClubTeacherFirstname() is defined %}{{ applicant.getGradeDanClub().getClubMainTeacher().getClubTeacherFirstname() }} {{ applicant.getGradeDanClub().getClubMainTeacher().getClubTeacherName() }}{% else %}Non défini{% endif %}</td>
                     <td>{% if applicant.getGradeDanMember().getMemberLastGradeDan().getGradeDanExam() is defined %}{{ applicant.getGradeDanMember().getMemberLastGradeDan().getGradeDanExam().getExamDate()|date("d/m/Y") }}{% else %}{{ applicant.getGradeDanMember().getMemberFirstLicence().getMemberLicenceUpdate()|date("d/m/Y") }}{% endif %}</td>
-                    <td>{% if applicant.getGradeDanMember().getMemberLastGradeDan().getGradeDanExam() is defined %}{{ applicant.getGradeDanMember().getMemberLastGradeDan().getGradeDanStatus() }}{% else %}Début de pratique{% endif %}</td>
+                    <td>{% if applicant.getGradeDanMember().getMemberLastGradeDan().getGradeDanExam() is defined %}{{ applicant.getGradeDanMember().getMemberLastGradeDan().getGradeDanStatus() }}{% else %}Aucune{% endif %}</td>
                     <td><a href="{{ path('exam_applicant_detail', {'exam_id': exam.getGradeSessionId(), 'member_id': applicant.getGradeDanMember().getMemberId()}) }}">Détails</a></td>
                 </tr>
             {% endfor %}
@@ -36,21 +36,60 @@
     {% endif %}
     {% if candidates != null %}
         <h2>Candidats validés</h2>
-        {% for candidate in candidates %}
-            {{ candidate.getGradeDanMember().getMemberFirstName() }} {{ candidate.getGradeDanMember().getMemberName }} : <a href="{{ path('exam_candidate_detail', {'exam_id': exam.getGradeSessionId(), 'member_id': candidate.getGradeDanMember().getMemberId()}) }}">Résultats</a><br />
-        {% endfor %}
+        <table>
+            <tr>
+                <th>Prénom</th>
+                <th>Nom</th>
+                <th>Grade présenté</th>
+                <th>Commandes</th>
+            </tr>
+            {% for candidate in candidates %}
+                <tr>
+                    <td>{{ candidate.getGradeDanMember().getMemberFirstName() }}</td>
+                    <td>{{ candidate.getGradeDanMember().getMemberName() }}</td>
+                    <td>{{ listData.getGrade(candidate.getGradeDanRank()) }}</td>
+                    <td><a href="{{ path('exam_candidate_detail', {'exam_id': exam.getGradeSessionId(), 'member_id': candidate.getGradeDanMember().getMemberId()}) }}">Résultats</a></td>
+                </tr>
+            {% endfor %}
+        </table>
     {% endif %}
     {% if refused != null %}
         <h2>Candidats refusé</h2>
-        {% for candidate in refused %}
-            {{ candidate.getGradeDanMember().getMemberFirstName() }} {{ candidate.getGradeDanMember().getMemberName }} : <a href="{{ path('exam_candidate_detail', {'exam_id': exam.getGradeSessionId(), 'member_id': candidate.getGradeDanMember().getMemberId()}) }}">Résultats</a><br />
-        {% endfor %}
+        <table>
+            <tr>
+                <th>Prénom</th>
+                <th>Nom</th>
+                <th>Grade raté</th>
+                <th>Commandes</th>
+            </tr>
+            {% for candidate in refused %}
+                <tr>
+                    <td>{{ candidate.getGradeDanMember().getMemberFirstName() }}</td>
+                    <td>{{ candidate.getGradeDanMember().getMemberName() }}</td>
+                    <td>{{ listData.getGrade(candidate.getGradeDanMember().getMemberLastGradeDan().getGradeDanRank()) }}</td>
+                    <td><a href="{{ path('exam_candidate_detail', {'exam_id': exam.getGradeSessionId(), 'member_id': candidate.getGradeDanMember().getMemberId()}) }}">Détails</a></td>
+                </tr>
+            {% endfor %}
+        </table>
     {% endif %}
     {% if promoted != null %}
         <h2>Candidats promu</h2>
-        {% for candidate in promoted %}
-            {{ candidate.getGradeDanMember().getMemberFirstName() }} {{ candidate.getGradeDanMember().getMemberName }} : <a href="{{ path('exam_candidate_detail', {'exam_id': exam.getGradeSessionId(), 'member_id': candidate.getGradeDanMember().getMemberId()}) }}">Résultats</a><br />
-        {% endfor %}
+        <table>
+            <tr>
+                <th>Prénom</th>
+                <th>Nom</th>
+                <th>Grade obtenu</th>
+                <th>Commandes</th>
+            </tr>
+            {% for candidate in promoted %}
+                <tr>
+                    <td>{{ candidate.getGradeDanMember().getMemberFirstName() }}</td>
+                    <td>{{ candidate.getGradeDanMember().getMemberName() }}</td>
+                    <td>{{ listData.getGrade(candidate.getGradeDanMember().getMemberLastGradeDan().getGradeDanRank()) }}</td>
+                    <td><a href="{{ path('exam_candidate_detail', {'exam_id': exam.getGradeSessionId(), 'member_id': candidate.getGradeDanMember().getMemberId()}) }}">Détails</a></td>
+                </tr>
+            {% endfor %}
+        </table>
     {% endif %}
 {% endblock %}
 
