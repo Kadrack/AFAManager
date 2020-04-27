@@ -54,10 +54,6 @@ class ExamType extends AbstractType
         $list = new ListData();
 
         $builder
-            ->add('GradeSessionType', ChoiceType::class,
-                array('label' => 'Type de session : ',
-                    'placeholder' => 'Choississez un type',
-                    'choices' => $list->getExamType(0)))
             ->add('GradeSessionDate', DateType::class,
                 array('label' => 'Date de session : ',
                     'widget' => 'single_text'))

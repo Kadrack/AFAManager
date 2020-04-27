@@ -26,7 +26,7 @@ class ExamController extends AbstractController
     {
         $exams = $this->getDoctrine()->getRepository(GradeSession::class)->findBy([], ['grade_session_date' => 'DESC', 'grade_session_type' => 'DESC']);
 
-        return $this->render('Exam/index.html.twig', array('exams' => $exams, 'listData' => new ListData()));
+        return $this->render('Exam/index.html.twig', array('exams' => $exams));
     }
 
     /**
@@ -41,6 +41,8 @@ class ExamController extends AbstractController
         if ($form->isSubmitted() && $form->isValid())
         {
             $exam = $form->getData();
+
+            $exam->setExamType(1);
 
             $entityManager = $this->getDoctrine()->getManager();
 

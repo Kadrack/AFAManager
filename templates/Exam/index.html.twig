@@ -15,7 +15,6 @@
         <table>
             <tr>
                 <th>Date</th>
-                <th>Type</th>
                 <th>Ouverture inscription</th>
                 <th>Fermeture inscription</th>
                 <th>Commandes</th>
@@ -23,7 +22,6 @@
             {%  for exam in exams %}
                 <tr>
                     <td>{{ exam.getGradeSessionDate()|date("d/m/Y") }}</td>
-                    <td>{{ listData.getExamType(exam.getGradeSessionType()) }}</td>
                     <td>{{ exam.getGradeSessionCandidateOpen()|date("d/m/Y") }}</td>
                     <td>{{ exam.getGradeSessionCandidateClose()|date("d/m/Y") }}</td>
                     <td><a href="{{ path('exam_detail', {'exam_id': exam.getGradeSessionId()}) }}">Détails</a> - <a href="{{ path('exam_update', {'exam_id': exam.getGradeSessionId()}) }}">Modifier</a></td>
