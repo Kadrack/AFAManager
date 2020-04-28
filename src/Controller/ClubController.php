@@ -408,6 +408,8 @@ class ClubController extends AbstractController
 
             $member = $this->getDoctrine()->getRepository(Member::class)->findOneBy(['member_id' => $form->get('ClubTeacherMember')->getData()]);
 
+            //To Do : Add a number licence verification the member id must exist before continue
+
             $teacher->setClubTeacherFirstname($member->getMemberFirstname());
             $teacher->setClubTeacherMember($member);
             $teacher->setClubTeacherName($member->getMemberName());

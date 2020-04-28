@@ -54,7 +54,7 @@ class MemberController extends AbstractController
 
             $member->setMemberFirstLicence($licence);
             $member->setMemberLastLicence($licence);
-            $member->setMemberPhoto($photoUploader->upload($form['MemberPhoto']->getData()));
+            $member->setMemberPhoto($form['MemberPhoto']->getData() == null ? 'nophoto.png' : $photoUploader->upload($form['MemberPhoto']->getData()));
 
             if ($form->get('GradeKyuRank')->getData() != null)
             {
@@ -296,7 +296,7 @@ class MemberController extends AbstractController
         $licence_new->setMemberLicenceDeadline(new \DateTime('+1 year '.$licence_old->getMemberLicenceDeadline()->format('Y-m-d')));
         $licence_new->setMemberLicenceStatus(1);
 
-        if ($member->getMemberLastExamResult() != null)
+        if ($member->getMemberLastGradeDan() != null)
         {
             $kyu = false;
         }

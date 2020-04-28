@@ -42,7 +42,7 @@ class ExamController extends AbstractController
         {
             $exam = $form->getData();
 
-            $exam->setExamType(1);
+            $exam->setGradeSessionType(1);
 
             $entityManager = $this->getDoctrine()->getManager();
 
