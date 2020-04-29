@@ -307,7 +307,7 @@ class TrainingController extends AbstractController
 
         $practitioners_sessions = $this->getDoctrine()->getRepository(TrainingAttendance::class)->getPractitionersSessions($training->getTrainingId());
 
-        return $this->render('Training/attendance_add.html.twig', array('form' => $form->createView(), 'training' => $training, 'practitioners' => $practitioners, 'practitioners_sessions' => $practitioners_sessions, 'listData' => new ListData(), 'total_card' => $card, 'total_cash' => $cash));
+        return $this->render('Training/attendance_add.html.twig', array('form' => $form->createView(), 'training' => $training, 'practitioners' => $practitioners, 'practitioners_sessions' => $practitioners_sessions, 'listData' => new ListData(), 'total_card' => $card, 'total_cash' => $cash, 'today' => new \DateTime()));
     }
 
     /**

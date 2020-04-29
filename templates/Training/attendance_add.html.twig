@@ -49,7 +49,7 @@
             <tr>
                 <td>{{ practitioner.member_firstname|title }}</td>
                 <td>{{ practitioner.member_name|title }}</td>
-                <td>{{ practitioner.member_id }}</td>
+                <td>{{ practitioner.member_id }} {% if practitioner.member_licence_deadline > today %}<img alt="" src=" {{ asset('images/pass.png') }}" />{% else %}<img alt="" src=" {{ asset('images/fail.png') }}" />{% endif %}</td>
                 <td>
                     {% for session in practitioners_sessions %}
                         {% if session.training_attendance_unique == practitioner.training_attendance_unique %}

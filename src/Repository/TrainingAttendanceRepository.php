@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Member;
+use App\Entity\MemberLicence;
 use App\Entity\TrainingAttendance;
 use App\Entity\TrainingSession;
 
@@ -27,8 +28,9 @@ class TrainingAttendanceRepository extends ServiceEntityRepository
     {
         $qb = $this->createQueryBuilder('a');
 
-        return $qb->select('m.member_firstname', 'm.member_name', 'm.member_id', 'a.training_attendance_unique', 'a.training_attendance_payment', 'a.training_attendance_payment_type')
+        return $qb->select('m.member_firstname', 'm.member_name', 'm.member_id', 'l.member_licence_deadline','a.training_attendance_unique', 'a.training_attendance_payment', 'a.training_attendance_payment_type')
             ->join(Member::class, 'm', 'WITH', $qb->expr()->eq('a.training_attendance_member', 'm.member_id'))
+            ->join(MemberLicence::class, 'l', 'WITH', $qb->expr()->eq('m.member_last_licence', 'l.member_licence_id'))
             ->where($qb->expr()->isNotNull('a.training_attendance_payment'))
             ->andWhere($qb->expr()->eq('a.training', $training_id))
             ->andWhere($qb->expr()->isNotNull('a.training_attendance_member'))
