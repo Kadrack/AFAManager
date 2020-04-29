@@ -407,22 +407,22 @@ class ClubController extends AbstractController
             $teacher->setClubTeacher($club);
 
             $member = $this->getDoctrine()->getRepository(Member::class)->findOneBy(['member_id' => $form->get('ClubTeacherMember')->getData()]);
-
-            //To Do : Add a number licence verification the member id must exist before continue
-
-            $teacher->setClubTeacherFirstname($member->getMemberFirstname());
-            $teacher->setClubTeacherMember($member);
-            $teacher->setClubTeacherName($member->getMemberName());
-
-            if ($form->get('ClubTeacherTitle')->getData() == 1)
+            
+            if ($member != null)
             {
-                $club->setClubMainTeacher($teacher);
+                $teacher->setClubTeacherFirstname($member->getMemberFirstname());
+                $teacher->setClubTeacherMember($member);
+                $teacher->setClubTeacherName($member->getMemberName());
+
+                if ($form->get('ClubTeacherTitle')->getData() == 1) {
+                    $club->setClubMainTeacher($teacher);
+                }
+
+                $entityManager = $this->getDoctrine()->getManager();
+
+                $entityManager->persist($teacher);
+                $entityManager->flush();
             }
-
-            $entityManager = $this->getDoctrine()->getManager();
-
-            $entityManager->persist($teacher);
-            $entityManager->flush();
 
             return $this->redirectToRoute('club_detail_class', array('club_number' => $club->getClubNumber()));
         }
