@@ -29,7 +29,7 @@
                 <td>{{ address.getTrainingAddressCity() }}</td>
                 <td>{{ address.getTrainingAddressTatamis() }}</td>
                 <td>{% if address.getTrainingAddressDEA() %}Oui{% else %}Non{% endif %}</td>
-                <td>{{ address.getTrainingAddressDEAFormation()|date("d/m/Y") }}</td>
+                <td>{% if address.getTrainingAddressDEA() %}{{ address.getTrainingAddressDEAFormation()|date("d/m/Y") }}{% else %}N/A{% endif %}</td>
                 <td><a href="{{ path('club_address_update', {'club_number': club.getClubNumber(), 'address_id': address.getTrainingAddressId()}) }}">Modifier</a> - <a href="{{ path('club_address_delete', {'club_number': club.getClubNumber(), 'address_id': address.getTrainingAddressId()}) }}">Supprimer</a></td>
             </tr>
         {% endfor %}

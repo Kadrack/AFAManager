@@ -246,6 +246,11 @@ class ClubController extends AbstractController
 
             $address = $form->getData();
 
+            if ($address->getTrainingAddressDEA() == false)
+            {
+                $address->setTrainingAddressDEAFormation(null);
+            }
+
             $address->setTrainingAddressClub($club);
 
             $entityManager = $this->getDoctrine()->getManager();
