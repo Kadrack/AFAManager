@@ -131,7 +131,7 @@ class ExamController extends AbstractController
 
         $grade = $this->getDoctrine()->getRepository(GradeDan::class)->findOneBy(['grade_dan_id' => $grade_id]);
 
-        $form = $this->createForm(ExamType::class, $grade, array('form' => 'applicant_validation', 'data_class' => GradeDan::class, 'action' => $this->generateUrl('exam_applicant_detail', array('exam_id' => $exam_id, 'member_id' => $member_id)), 'method' => 'POST'));
+        $form = $this->createForm(ExamType::class, $grade, array('form' => 'applicant_validation', 'data_class' => GradeDan::class, 'action' => $this->generateUrl('exam_applicant_detail', array('exam_id' => $exam_id, 'member_id' => $member_id, 'grade_id' => $grade_id)), 'method' => 'POST'));
 
         $form->handleRequest($request);
 
