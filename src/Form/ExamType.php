@@ -138,7 +138,7 @@ class ExamType extends AbstractType
                 array('label' => 'Résultat : ',
                     'multiple' => false,
                     'expanded' => true,
-                    'choices' => array('Refusé' => 4, 'Promu' => 3)))
+                    'choices' => array('Refusé' => 3, 'Promu' => 4)))
             ->add('GradeDanCertificate', TextType::class,
                 array('label' => 'N° Diplôme : ',
                     'required' => false))
@@ -153,9 +153,9 @@ class ExamType extends AbstractType
     private function candidate_aikikai(FormBuilderInterface $builder)
     {
         $builder
-            ->add('GradeCertificate', TextType::class,
+            ->add('GradeDanCertificate', TextType::class,
                 array('label' => 'N° certificat : '))
-            ->add('GradeComment', TextareaType::class,
+            ->add('GradeDanComment', TextareaType::class,
                 array('label' => 'Commentaire : ',
                     'required' => false))
             ->add('Submit', SubmitType::class,

@@ -241,13 +241,13 @@ class MemberController extends AbstractController
         {
             $rank = 7;
         }
-        elseif ($member->getMemberLastGradeDan()->getExamResultStatus() == 3)
+        elseif ($member->getMemberLastGradeDan()->getGradeDanStatus() == 3)
         {
-            $rank = $member->getMemberLastGradeDan()->getExamResultRank() + 1;
+            $rank = $member->getMemberLastGradeDan()->getGradeDanRank() + 1;
         }
         else
         {
-            $rank = $member->getMemberLastGradeDan()->getExamResultRank();
+            $rank = $member->getMemberLastGradeDan()->getGradeDanRank();
         }
 
         $grade = new GradeDan();

@@ -51,7 +51,7 @@ class ListData
 
     public function getExamResult(int $result)
     {
-        $results = array('Postulant' => 1, 'Candidat' => 2, 'Promu' => 3, 'Refusé' => 4);
+        $results = array('Postulant' => 1, 'Candidat' => 2, 'Refusé' => 3, 'Promu' => 4);
 
         if ($result == 0)
         {
