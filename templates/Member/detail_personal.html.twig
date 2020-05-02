@@ -25,7 +25,7 @@
             <td>{{ member.getMemberName() }}</td>
             <td>{{ member.getMemberAddress() }}</td>
             <td>{{ member.getMemberZip }} {{ member.getMemberCity }}</td>
-            <td><a href="{{ path('member_update', {'club_number': club.getClubNumber(), 'member_id': member.getMemberId()}) }}">Modifier</a></td>
+            <td><a href="{{ path('member_update', {'club_number': club_number, 'member_id': member.getMemberId()}) }}">Modifier</a></td>
         </tr>
     </table>
 {% endblock %}

@@ -98,25 +98,23 @@ class MemberController extends AbstractController
             $entityManager->persist($card);
             $entityManager->flush();
 
-            return $this->redirectToRoute('club_active_members', array('club_number' => $club->getClubNumber()));
+            return $this->redirectToRoute('club_active_members', array('club_number' => $club_number));
         }
         
         return $this->render('Member/create.html.twig', array('form' => $form->createView()));
     }
 
     /**
-     * @Route("/club/{club_number<\d+>}/detail_personnel/{member_id<\d+>}", name="member_detail_personnal")
+     * @Route("/club/{club_number<\d+>}/detail_personnel/{member_id<\d+>}", name="member_detail_personal")
      * @param int $club_number
      * @param int $member_id
      * @return Response
      */
-    public function detailPersonnal(int $club_number, int $member_id)
+    public function detailPersonal(int $club_number, int $member_id)
     {
-        $club = $this->getDoctrine()->getRepository(Club::class)->findOneBy(['club_number' => $club_number]);
-
         $member = $this->getDoctrine()->getRepository(Member::class)->findOneBy(['member_id' => $member_id]);
 
-        return $this->render('Member/detail_personnal.html.twig', array('member' => $member, 'club' => $club));
+        return $this->render('Member/detail_personal.html.twig', array('member' => $member, 'club_number' => $club_number));
     }
 
     /**
@@ -127,8 +125,6 @@ class MemberController extends AbstractController
      */
     public function detailGrade(int $club_number, int $member_id)
     {
-        $club = $this->getDoctrine()->getRepository(Club::class)->findOneBy(['club_number' => $club_number]);
-
         $member = $this->getDoctrine()->getRepository(Member::class)->findOneBy(['member_id' => $member_id]);
 
         $today = new DateTime('today');
@@ -159,7 +155,7 @@ class MemberController extends AbstractController
             $exam_candidate = true;
         }
 
-        return $this->render('Member/detail_grade.html.twig', array('member' => $member, 'club' => $club, 'grade_dan_history' => sizeof($grade_dan_history) == 0 ? null : $grade_dan_history, 'grade_kyu_history' => sizeof($grade_kyu_history) == 0 ? null : $grade_kyu_history, 'exam_candidate' => $exam_candidate, 'list' => new ListData()));
+        return $this->render('Member/detail_grade.html.twig', array('member' => $member, 'club_number' => $club_number, 'grade_dan_history' => sizeof($grade_dan_history) == 0 ? null : $grade_dan_history, 'grade_kyu_history' => sizeof($grade_kyu_history) == 0 ? null : $grade_kyu_history, 'exam_candidate' => $exam_candidate, 'list' => new ListData()));
     }
 
     /**
@@ -170,8 +166,6 @@ class MemberController extends AbstractController
      */
     public function detailTitle(int $club_number, int $member_id)
     {
-        $club = $this->getDoctrine()->getRepository(Club::class)->findOneBy(['club_number' => $club_number]);
-
         $member = $this->getDoctrine()->getRepository(Member::class)->findOneBy(['member_id' => $member_id]);
 
         $title_history = $this->getDoctrine()->getRepository(GradeTitle::class)->findBy(['grade_title_member' => $member->getMemberId()], ['grade_title_rank' => 'ASC']);
@@ -196,7 +190,7 @@ class MemberController extends AbstractController
             }
         }
 
-        return $this->render('Member/detail_title.html.twig', array('member' => $member, 'club' => $club, 'aikikai' => $i == 0 ? null : $aikikai, 'old_adeps' => $j == 0 ? null : $old_adeps, 'adeps' => $k == 0 ? null : $adeps, 'list' => new ListData()));
+        return $this->render('Member/detail_title.html.twig', array('member' => $member, 'club_number' => $club_number, 'aikikai' => $i == 0 ? null : $aikikai, 'old_adeps' => $j == 0 ? null : $old_adeps, 'adeps' => $k == 0 ? null : $adeps, 'list' => new ListData()));
     }
 
     /**
@@ -207,15 +201,13 @@ class MemberController extends AbstractController
      */
     public function detailLicence(int $club_number, int $member_id)
     {
-        $club = $this->getDoctrine()->getRepository(Club::class)->findOneBy(['club_number' => $club_number]);
-
         $member = $this->getDoctrine()->getRepository(Member::class)->findOneBy(['member_id' => $member_id]);
 
         $licence_history = $this->getDoctrine()->getRepository(MemberLicence::class)->findBy(['member_licence' => $member->getMemberId()], ['member_licence_id' => 'DESC']);
 
         $next_renew = $licence_history[0]->getMemberLicenceDeadline() < new DateTime('-3 month today');
 
-        return $this->render('Member/detail_licence.html.twig', array('member' => $member, 'club' => $club, 'licence_history' => $licence_history, 'next_renew' => $next_renew, 'list' => new ListData()));
+        return $this->render('Member/detail_licence.html.twig', array('member' => $member, 'club_number' => $club_number, 'licence_history' => $licence_history, 'next_renew' => $next_renew, 'list' => new ListData()));
     }
 
     /**
@@ -228,8 +220,6 @@ class MemberController extends AbstractController
      */
     public function updatePersonal(Request $request, PhotoUploader $photoUploader, int $club_number, int $member_id)
     {
-        $club = $this->getDoctrine()->getRepository(Club::class)->findOneBy(['club_number' => $club_number]);
-
         $member = $this->getDoctrine()->getRepository(Member::class)->findOneBy(['member_id' => $member_id]);
 
         $form = $this->createForm(MemberType::class, $member, array('form' => 'update'));
@@ -247,10 +237,10 @@ class MemberController extends AbstractController
 
             $entityManager->flush();
 
-            return $this->redirectToRoute('club_active_members', array('club_number' => $club->getClubNumber(), 'member_id' => $member->getMemberId()));
+            return $this->redirectToRoute('club_active_members', array('club_number' => $club_number, 'member_id' => $member->getMemberId()));
         }
 
-        return $this->render('Member/personnal_update.html.twig', array('form' => $form->createView()));
+        return $this->render('Member/personal_update.html.twig', array('form' => $form->createView()));
     }
 
     /**
@@ -300,7 +290,7 @@ class MemberController extends AbstractController
             $entityManager->persist($grade);
             $entityManager->flush();
 
-            return $this->redirectToRoute('member_detail_grade', array('club_number' => $club->getClubNumber(), 'member_id' => $member->getMemberId()));
+            return $this->redirectToRoute('member_detail_grade', array('club_number' => $club_number, 'member_id' => $member->getMemberId()));
         }
 
         return $this->render('Member/exam_application.html.twig', array('form' => $form->createView(), 'exam' => $exam[0]));
@@ -424,11 +414,11 @@ class MemberController extends AbstractController
 
             if ($session->get('origin') == 'active')
             {
-                return $this->redirectToRoute('member_detail_licence', array('club_number' => $club->getClubNumber(), 'member_id' => $member->getMemberId()));
+                return $this->redirectToRoute('member_detail_licence', array('club_number' => $club_number, 'member_id' => $member->getMemberId()));
             }
             else
             {
-                return $this->redirectToRoute('club_inactive_members', array('club_number' => $club->getClubNumber()));
+                return $this->redirectToRoute('club_inactive_members', array('club_number' => $club_number));
             }
         }
 

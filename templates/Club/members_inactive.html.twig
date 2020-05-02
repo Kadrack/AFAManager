@@ -8,7 +8,7 @@
 {% endblock %}
 
 {% block body %}
-    <h1>{{ club.getClubName() }}</h1>
+    <h1>{{ club_name }}</h1>
     <h2>Membres inactifs</h2>
     <table>
         <tr>
@@ -27,7 +27,7 @@
                     <td>{{ member.FirstName|title }}</td>
                     <td>{{ member.Name|title }}</td>
                     <td>{{ member.Deadline|date("d/m/Y") }}</td>
-                    <td><a href="{{ path('member_licence_renew_update', {'club_number': club.getClubNumber(), 'member_id': member.Id, 'renew_id': member.Licence}) }}">Modifier</a> - <a href="{{ path('member_licence_renew', {'club_number': club.getClubNumber(), 'member_id': member.Id}) }}">Renouveller</a></td>
+                    <td><a href="{{ path('member_licence_renew_update', {'club_number': club_number, 'member_id': member.Id, 'renew_id': member.Licence}) }}">Modifier</a> - <a href="{{ path('member_licence_renew', {'club_number': club_number, 'member_id': member.Id}) }}">Renouveller</a></td>
                 </tr>
             {% endif %}
         {% endfor %}

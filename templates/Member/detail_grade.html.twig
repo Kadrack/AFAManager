@@ -25,7 +25,7 @@
         </table>
     {% endif %}
     {% if exam_candidate %}
-        <a href="{{ path('member_exam_application', {'club_number': club.getClubNumber(), 'member_id': member.getMemberId()}) }}">Candidature examen fédéral</a>
+        <a href="{{ path('member_exam_application', {'club_number': club_number, 'member_id': member.getMemberId()}) }}">Candidature examen fédéral</a>
     {% endif %}
     {% if grade_dan_history is not null %}
         <h2>Historique grade Dan</h2>
