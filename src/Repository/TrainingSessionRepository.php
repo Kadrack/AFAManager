@@ -2,7 +2,6 @@
 // src/Repository/TrainingSessionRepositorytory.php
 namespace App\Repository;
 
-use App\Entity\TrainingAttendance;
 use App\Entity\TrainingSession;
 
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;

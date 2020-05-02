@@ -2,9 +2,9 @@
 // src/Entity/MemberLicence.php
 namespace App\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
+use DateTimeInterface;
 
-use Symfony\Component\Validator\Constraints as Assert;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Table(name="afamanager_member_licence")
@@ -62,36 +62,36 @@ class MemberLicence
         return $this->member_licence_id;
     }
 
-    public function getMemberLicenceUpdate(): ?\DateTimeInterface
+    public function getMemberLicenceUpdate(): ?DateTimeInterface
     {
         return $this->member_licence_update;
     }
 
-    public function setMemberLicenceUpdate(\DateTimeInterface $member_licence_update): self
+    public function setMemberLicenceUpdate(DateTimeInterface $member_licence_update): self
     {
         $this->member_licence_update = $member_licence_update;
 
         return $this;
     }
 
-    public function getMemberLicenceDeadline(): ?\DateTimeInterface
+    public function getMemberLicenceDeadline(): ?DateTimeInterface
     {
         return $this->member_licence_deadline;
     }
 
-    public function setMemberLicenceDeadline(\DateTimeInterface $member_licence_deadline): self
+    public function setMemberLicenceDeadline(DateTimeInterface $member_licence_deadline): self
     {
         $this->member_licence_deadline = $member_licence_deadline;
 
         return $this;
     }
 
-    public function getMemberLicenceMedicalCertificate(): ?\DateTimeInterface
+    public function getMemberLicenceMedicalCertificate(): ?DateTimeInterface
     {
         return $this->member_licence_medical_certificate;
     }
 
-    public function setMemberLicenceMedicalCertificate(\DateTimeInterface $member_licence_medical_certificate): self
+    public function setMemberLicenceMedicalCertificate(DateTimeInterface $member_licence_medical_certificate): self
     {
         $this->member_licence_medical_certificate = $member_licence_medical_certificate;
 

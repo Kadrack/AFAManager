@@ -51,8 +51,6 @@ class ExamType extends AbstractType
 
     private function examCreate(FormBuilderInterface $builder)
     {
-        $list = new ListData();
-
         $builder
             ->add('GradeSessionDate', DateType::class,
                 array('label' => 'Date de session : ',

@@ -3,12 +3,9 @@
 namespace App\Form;
 
 use App\Entity\Training;
-use App\Entity\TrainingAddress;
 use App\Entity\TrainingSession;
 
 use App\Service\ListData;
-
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
 use Symfony\Component\Form\AbstractType;
 

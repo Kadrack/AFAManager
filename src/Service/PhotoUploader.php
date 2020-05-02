@@ -8,8 +8,6 @@ class PhotoUploader
 {
     private $image;
 
-    private $image_info;
-
     private $salt;
 
     private $targetDirectory;
@@ -37,22 +35,22 @@ class PhotoUploader
 
         $file->move($this->targetDirectory.'/original', $fileName);
 
-        $this->image_info = getimagesize($this->targetDirectory.'/original/'.$fileName);
+        $image_info = getimagesize($this->targetDirectory.'/original/'.$fileName);
 
-        if( $this->image_info[2] == IMAGETYPE_JPEG )
+        if( $image_info[2] == IMAGETYPE_JPEG )
         {
             $this->image = imagecreatefromjpeg($this->targetDirectory.'/original/'.$fileName);
         }
-        elseif( $this->image_info[2] == IMAGETYPE_GIF )
+        elseif( $image_info[2] == IMAGETYPE_GIF )
         {
             $this->image = imagecreatefromgif($this->targetDirectory.'/original/'.$fileName);
         }
-        elseif( $this->image_info[2] == IMAGETYPE_PNG )
+        elseif( $image_info[2] == IMAGETYPE_PNG )
         {
             $this->image = imagecreatefrompng($this->targetDirectory.'/original/'.$fileName);
         }
 
-        $ratio = $this->image_info[0] / $this->image_info[1];
+        $ratio = $image_info[0] / $image_info[1];
 
         if ($this->width / $this->height > $ratio)
         {
@@ -65,19 +63,19 @@ class PhotoUploader
 
         $new_image = imagecreatetruecolor($this->width, $this->height);
 
-        imagecopyresampled($new_image, $this->image, 0, 0, 0, 0, $this->width, $this->height, $this->image_info[0], $this->image_info[1]);
+        imagecopyresampled($new_image, $this->image, 0, 0, 0, 0, $this->width, $this->height, $image_info[0], $image_info[1]);
 
         $this->image = $new_image;
 
-        if( $this->image_info[2] == IMAGETYPE_JPEG )
+        if( $image_info[2] == IMAGETYPE_JPEG )
         {
             imagejpeg($this->image, $this->targetDirectory.'/'.$fileName, $compression);
         }
-        elseif( $this->image_info[2] == IMAGETYPE_GIF )
+        elseif( $image_info[2] == IMAGETYPE_GIF )
         {
             imagegif($this->image, $this->targetDirectory.'/'.$fileName);
         }
-        elseif( $this->image_info[2] == IMAGETYPE_PNG )
+        elseif( $image_info[2] == IMAGETYPE_PNG )
         {
             imagepng($this->image, $this->targetDirectory.'/'.$fileName);
         }

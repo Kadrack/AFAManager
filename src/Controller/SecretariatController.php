@@ -6,13 +6,12 @@ use App\Entity\SecretariatSupporter;
 
 use App\Form\SecretariatType;
 
-use Doctrine\ORM\EntityRepository;
-
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class SecretariatController extends AbstractController
@@ -37,6 +36,8 @@ class SecretariatController extends AbstractController
 
     /**
      * @Route("/secretariat/sympathisant_ajouter", name="secretariat_supporter_create")
+     * @param Request $request
+     * @return RedirectResponse|Response
      */
     public function supporterAdd(Request $request)
     {
@@ -61,6 +62,9 @@ class SecretariatController extends AbstractController
 
     /**
      * @Route("/secretariat/sympathisant_modifier/{supporter_id<\d+>}", name="secretariat_supporter_update")
+     * @param Request $request
+     * @param int $supporter_id
+     * @return RedirectResponse|Response
      */
     public function supporterUpdate(Request $request, int $supporter_id)
     {
@@ -84,6 +88,9 @@ class SecretariatController extends AbstractController
 
     /**
      * @Route("/secretariat/sympathisant_supprimer/{supporter_id<\d+>}", name="secretariat_supporter_delete")
+     * @param Request $request
+     * @param int $supporter_id
+     * @return RedirectResponse|Response
      */
     public function supporterDelete(Request $request, int $supporter_id)
     {

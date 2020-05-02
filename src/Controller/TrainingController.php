@@ -11,13 +11,12 @@ use App\Form\TrainingType;
 
 use App\Service\ListData;
 
-use Doctrine\ORM\EntityRepository;
-
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class TrainingController extends AbstractController
@@ -34,6 +33,8 @@ class TrainingController extends AbstractController
 
     /**
      * @Route("/stage/creer", name="training_create")
+     * @param Request $request
+     * @return RedirectResponse|Response
      */
     public function create(Request $request)
     {
@@ -68,6 +69,8 @@ class TrainingController extends AbstractController
 
     /**
      * @Route("/stage/{training_id<\d+>}/detail", name="training_detail")
+     * @param int $training_id
+     * @return Response
      */
     public function detail(int $training_id)
     {
@@ -80,6 +83,9 @@ class TrainingController extends AbstractController
 
     /**
      * @Route("/stage/{training_id<\d+>}/modifier", name="training_update")
+     * @param Request $request
+     * @param int $training_id
+     * @return RedirectResponse|Response
      */
     public function update(Request $request, int $training_id)
     {
@@ -103,6 +109,9 @@ class TrainingController extends AbstractController
 
     /**
      * @Route("/stage/{training_id<\d+>}/supprimer", name="training_delete")
+     * @param Request $request
+     * @param int $training_id
+     * @return RedirectResponse|Response
      */
     public function delete(Request $request, int $training_id)
     {
@@ -127,6 +136,9 @@ class TrainingController extends AbstractController
 
     /**
      * @Route("/stage/{training_id<\d+>}/ajouter-session", name="training_session_add")
+     * @param Request $request
+     * @param int $training_id
+     * @return RedirectResponse|Response
      */
     public function sessionAdd(Request $request, int $training_id)
     {
@@ -160,6 +172,10 @@ class TrainingController extends AbstractController
 
     /**
      * @Route("/stage/{training_id<\d+>}/modifier-session/{session_id<\d+>}", name="training_session_update")
+     * @param Request $request
+     * @param int $training_id
+     * @param int $session_id
+     * @return RedirectResponse|Response
      */
     public function sessionUpdate(Request $request, int $training_id, int $session_id)
     {
@@ -191,6 +207,10 @@ class TrainingController extends AbstractController
 
     /**
      * @Route("/stage/{training_id<\d+>}/supprimer-session/{session_id<\d+>}", name="training_session_delete")
+     * @param Request $request
+     * @param int $training_id
+     * @param int $session_id
+     * @return RedirectResponse|Response
      */
     public function sessionDelete(Request $request, int $training_id, int $session_id)
     {
@@ -239,6 +259,9 @@ class TrainingController extends AbstractController
 
     /**
      * @Route("/stage/{training_id<\d+>}/ajouter-pratiquant", name="training_attendance_add")
+     * @param Request $request
+     * @param int $training_id
+     * @return RedirectResponse|Response
      */
     public function attendanceAdd(Request $request, int $training_id)
     {
@@ -312,6 +335,9 @@ class TrainingController extends AbstractController
 
     /**
      * @Route("/stage/{training_id<\d+>}/ajouter-pratiquant-non-afa", name="training_attendance_foreign_add")
+     * @param Request $request
+     * @param int $training_id
+     * @return RedirectResponse|Response
      */
     public function attendanceForeignAdd(Request $request, int $training_id)
     {

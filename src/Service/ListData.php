@@ -51,13 +51,13 @@ class ListData
 
     public function getExamResult(int $result)
     {
-        $results = array('Postulant' => 1, 'Candidat' => 2, 'Refusé' => 3, 'Promu' => 4);
+        $results = array('Postulant' => 1, 'Candidat' => 2, 'Refusé' => 3, 'Promu' => 4, 'Promu ' => 5);
 
         if ($result == 0)
         {
             return $results;
         }
-        else if ($result > 4)
+        else if ($result > 5)
         {
             return "Autre";
         }

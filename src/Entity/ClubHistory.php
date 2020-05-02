@@ -2,9 +2,9 @@
 // src/Entity/ClubHistory.php
 namespace App\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
+use DateTimeInterface;
 
-use Symfony\Component\Validator\Constraints as Assert;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Table(name="afamanager_club_history")
@@ -45,12 +45,12 @@ class ClubHistory
         return $this->club_history_id;
     }
 
-    public function getClubHistoryUpdate(): ?\DateTimeInterface
+    public function getClubHistoryUpdate(): ?DateTimeInterface
     {
         return $this->club_history_update;
     }
 
-    public function setClubHistoryUpdate(\DateTimeInterface $club_history_update): self
+    public function setClubHistoryUpdate(DateTimeInterface $club_history_update): self
     {
         $this->club_history_update = $club_history_update;
 

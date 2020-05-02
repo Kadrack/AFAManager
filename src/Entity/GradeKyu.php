@@ -2,6 +2,8 @@
 // src/Entity/GradeKyu.php
 namespace App\Entity;
 
+use DateTimeInterface;
+
 use Doctrine\ORM\Mapping as ORM;
 
 use Symfony\Component\Validator\Constraints as Assert;
@@ -68,12 +70,12 @@ class GradeKyu
         return $this;
     }
 
-    public function getGradeKyuDate(): ?\DateTimeInterface
+    public function getGradeKyuDate(): ?DateTimeInterface
     {
         return $this->grade_kyu_date;
     }
 
-    public function setGradeKyuDate(\DateTimeInterface $grade_kyu_date): self
+    public function setGradeKyuDate(DateTimeInterface $grade_kyu_date): self
     {
         $this->grade_kyu_date = $grade_kyu_date;
 

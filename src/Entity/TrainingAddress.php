@@ -2,6 +2,8 @@
 // src/Entity/YTrainingAddress.php
 namespace App\Entity;
 
+use DateTimeInterface;
+
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 
@@ -161,12 +163,12 @@ class TrainingAddress
         return $this;
     }
 
-    public function getTrainingAddressDEAFormation(): ?\DateTimeInterface
+    public function getTrainingAddressDEAFormation(): ?DateTimeInterface
     {
         return $this->training_address_dea_formation;
     }
 
-    public function setTrainingAddressDEAFormation(?\DateTimeInterface $training_address_dea_formation): self
+    public function setTrainingAddressDEAFormation(?DateTimeInterface $training_address_dea_formation): self
     {
         $this->training_address_dea_formation = $training_address_dea_formation;
 

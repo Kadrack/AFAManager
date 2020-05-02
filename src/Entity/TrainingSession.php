@@ -4,12 +4,12 @@ namespace App\Entity;
 
 use App\Service\ListData;
 
+use DateTimeInterface;
+
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 
 use Doctrine\ORM\Mapping as ORM;
-
-use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Table(name="afamanager_training_session")
@@ -82,36 +82,36 @@ class TrainingSession
         return $this;
     }
 
-    public function getTrainingSessionDate(): ?\DateTimeInterface
+    public function getTrainingSessionDate(): ?DateTimeInterface
     {
         return $this->training_session_date;
     }
 
-    public function setTrainingSessionDate(?\DateTimeInterface $training_session_date): self
+    public function setTrainingSessionDate(?DateTimeInterface $training_session_date): self
     {
         $this->training_session_date = $training_session_date;
 
         return $this;
     }
 
-    public function getTrainingSessionStartingHour(): ?\DateTimeInterface
+    public function getTrainingSessionStartingHour(): ?DateTimeInterface
     {
         return $this->training_session_starting_hour;
     }
 
-    public function setTrainingSessionStartingHour(?\DateTimeInterface $training_session_starting_hour): self
+    public function setTrainingSessionStartingHour(?DateTimeInterface $training_session_starting_hour): self
     {
         $this->training_session_starting_hour = $training_session_starting_hour;
 
         return $this;
     }
 
-    public function getTrainingSessionEndingHour(): ?\DateTimeInterface
+    public function getTrainingSessionEndingHour(): ?DateTimeInterface
     {
         return $this->training_session_ending_hour;
     }
 
-    public function setTrainingSessionEndingHour(?\DateTimeInterface $training_session_ending_hour): self
+    public function setTrainingSessionEndingHour(?DateTimeInterface $training_session_ending_hour): self
     {
         $this->training_session_ending_hour = $training_session_ending_hour;
 

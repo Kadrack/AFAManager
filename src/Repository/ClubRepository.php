@@ -7,6 +7,8 @@ use App\Entity\ClubHistory;
 use App\Entity\MemberLicence;
 use App\Entity\Member;
 
+use DateTime;
+
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 use Doctrine\Persistence\ManagerRegistry;
@@ -53,7 +55,7 @@ class ClubRepository extends ServiceEntityRepository
     {
         $qb = $this->createQueryBuilder('c');
 
-        $today = new \DateTime('today');
+        $today = new DateTime('today');
 
         return $qb->select('c.club_number AS Number', 'c.club_name AS Name', 'c.club_province AS Province', $qb->expr()->count('(l.licence_club)').' AS Members')
                 ->join(MemberLicence::class, 'l', 'WITH', $qb->expr()->eq('l.licence_club', 'c.club_id'))

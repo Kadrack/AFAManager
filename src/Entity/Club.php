@@ -2,6 +2,8 @@
 // src/Entity/Club.php
 namespace App\Entity;
 
+use DateTimeInterface;
+
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 
@@ -247,12 +249,12 @@ class Club
         return $this;
     }
 
-    public function getClubCreation(): ?\DateTimeInterface
+    public function getClubCreation(): ?DateTimeInterface
     {
         return $this->club_creation;
     }
 
-    public function setClubCreation(?\DateTimeInterface $club_creation): self
+    public function setClubCreation(?DateTimeInterface $club_creation): self
     {
         $this->club_creation = $club_creation;
 

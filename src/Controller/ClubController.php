@@ -15,11 +15,16 @@ use App\Form\EmailType;
 
 use App\Service\ListData;
 
-use Doctrine\ORM\EntityRepository;
+use DateTime;
+
+use Swift_Mailer;
+use Swift_Message;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 use Symfony\Component\Routing\Annotation\Route;
@@ -58,6 +63,8 @@ class ClubController extends AbstractController
 
     /**
      * @Route("/club/creer", name="club_create")
+     * @param Request $request
+     * @return RedirectResponse|Response
      */
     public function create(Request $request)
     {
@@ -90,6 +97,9 @@ class ClubController extends AbstractController
 
     /**
      * @Route("/club/{club_number<\d+>}/detail_association", name="club_detail_association")
+     * @param Request $request
+     * @param int $club_number
+     * @return RedirectResponse|Response
      */
     public function detailAssociation(Request $request, int $club_number)
     {
@@ -113,6 +123,8 @@ class ClubController extends AbstractController
 
     /**
      * @Route("/club/{club_number<\d+>}/detail_cours", name="club_detail_class")
+     * @param int $club_number
+     * @return Response
      */
     public function detailClass(int $club_number)
     {
@@ -131,12 +143,15 @@ class ClubController extends AbstractController
 
     /**
      * @Route("/club/{club_number<\d+>}/membres_actifs", name="club_active_members")
+     * @param SessionInterface $session
+     * @param int $club_number
+     * @return Response
      */
     public function activeMembers(SessionInterface $session, int $club_number)
     {
         $session->set('origin', 'active');
 
-        $today = new \DateTime('today');
+        $today = new DateTime('today');
 
         $club = $this->getDoctrine()->getRepository(Club::class)->findOneBy(['club_number' => $club_number]);
 
@@ -147,12 +162,15 @@ class ClubController extends AbstractController
 
     /**
      * @Route("/club/{club_number<\d+>}/membres_inactifs", name="club_inactive_members")
+     * @param SessionInterface $session
+     * @param int $club_number
+     * @return Response
      */
     public function inactiveMembers(SessionInterface $session, int $club_number)
     {
         $session->set('origin', 'inactive');
 
-        $today = new \DateTime('today');
+        $today = new DateTime('today');
 
         $club = $this->getDoctrine()->getRepository(Club::class)->findOneBy(['club_number' => $club_number]);
 
@@ -163,6 +181,9 @@ class ClubController extends AbstractController
 
     /**
      * @Route("/club/{club_number<\d+>}/desaffilier", name="club_disaffiliate")
+     * @param Request $request
+     * @param int $club_number
+     * @return RedirectResponse|Response
      */
     public function disaffiliate(Request $request, int $club_number)
     {
@@ -172,7 +193,7 @@ class ClubController extends AbstractController
 
         $form = $this->createForm(ClubType::class, $history, array('form' => 'history_entry', 'data_class' => ClubHistory::class));
 
-        $form->get('ClubHistoryUpdate')->setData(new \DateTime('today'));
+        $form->get('ClubHistoryUpdate')->setData(new DateTime('today'));
 
         $form->handleRequest($request);
 
@@ -198,6 +219,9 @@ class ClubController extends AbstractController
 
     /**
      * @Route("/club/{club_number<\d+>}/reaffilier", name="club_reassign")
+     * @param Request $request
+     * @param int $club_number
+     * @return RedirectResponse|Response
      */
     public function reassign(Request $request, int $club_number)
     {
@@ -207,7 +231,7 @@ class ClubController extends AbstractController
 
         $form = $this->createForm(ClubType::class, $history, array('form' => 'history_entry', 'data_class' => ClubHistory::class));
 
-        $form->get('ClubHistoryUpdate')->setData(new \DateTime('today'));
+        $form->get('ClubHistoryUpdate')->setData(new DateTime('today'));
 
         $form->handleRequest($request);
 
@@ -233,6 +257,9 @@ class ClubController extends AbstractController
 
     /**
      * @Route("/club/{club_number<\d+>}/ajouter_adresse", name="club_address_add")
+     * @param Request $request
+     * @param int $club_number
+     * @return RedirectResponse|Response
      */
     public function addressAdd(Request $request, int $club_number)
     {
@@ -266,6 +293,10 @@ class ClubController extends AbstractController
 
     /**
      * @Route("/club/{club_number<\d+>}/modifier_adresse/{address_id<\d+>}", name="club_address_update")
+     * @param Request $request
+     * @param int $club_number
+     * @param int $address_id
+     * @return RedirectResponse|Response
      */
     public function addressUpdate(Request $request, int $club_number, int $address_id)
     {
@@ -291,6 +322,10 @@ class ClubController extends AbstractController
 
     /**
      * @Route("/club/{club_number<\d+>}/supprimer_adresse/{address_id<\d+>}", name="club_address_delete")
+     * @param Request $request
+     * @param int $club_number
+     * @param int $address_id
+     * @return RedirectResponse|Response
      */
     public function addressDelete(Request $request, int $club_number, int $address_id)
     {
@@ -317,6 +352,9 @@ class ClubController extends AbstractController
 
     /**
      * @Route("/club/{club_number<\d+>}/ajouter_horaire", name="club_training_add")
+     * @param Request $request
+     * @param int $club_number
+     * @return RedirectResponse|Response
      */
     public function trainingAdd(Request $request, int $club_number)
     {
@@ -345,6 +383,10 @@ class ClubController extends AbstractController
 
     /**
      * @Route("/club/{club_number<\d+>}/modifier_horaire/{training_id<\d+>}", name="club_training_update")
+     * @param Request $request
+     * @param int $club_number
+     * @param int $training_id
+     * @return RedirectResponse|Response
      */
     public function trainingUpdate(Request $request, int $club_number, int $training_id)
     {
@@ -370,6 +412,10 @@ class ClubController extends AbstractController
 
     /**
      * @Route("/club/{club_number<\d+>}/supprimer_horaire/{training_id<\d+>}", name="club_training_delete")
+     * @param Request $request
+     * @param int $club_number
+     * @param int $training_id
+     * @return RedirectResponse|Response
      */
     public function trainingDelete(Request $request, int $club_number, int $training_id)
     {
@@ -396,6 +442,9 @@ class ClubController extends AbstractController
 
     /**
      * @Route("/club/{club_number<\d+>}/ajouter_professeur_afa", name="club_teacher_afa_add")
+     * @param Request $request
+     * @param int $club_number
+     * @return RedirectResponse|Response
      */
     public function teacherAFAAdd(Request $request, int $club_number)
     {
@@ -437,6 +486,10 @@ class ClubController extends AbstractController
 
     /**
      * @Route("/club/{club_number<\d+>}/modifier_professeur_afa/{teacher_id<\d+>}", name="club_teacher_afa_update")
+     * @param Request $request
+     * @param int $club_number
+     * @param int $teacher_id
+     * @return RedirectResponse|Response
      */
     public function teacherAFAUpdate(Request $request, int $club_number, int $teacher_id)
     {
@@ -471,6 +524,10 @@ class ClubController extends AbstractController
 
     /**
      * @Route("/club/{club_number<\d+>}/supprimer_professeur_afa/{teacher_id<\d+>}", name="club_teacher_afa_delete")
+     * @param Request $request
+     * @param int $club_number
+     * @param int $teacher_id
+     * @return RedirectResponse|Response
      */
     public function teacherAFADelete(Request $request, int $club_number, int $teacher_id)
     {
@@ -508,6 +565,9 @@ class ClubController extends AbstractController
 
     /**
      * @Route("/club/{club_number<\d+>}/ajouter_professeur_etranger", name="club_teacher_foreign_add")
+     * @param Request $request
+     * @param int $club_number
+     * @return RedirectResponse|Response
      */
     public function teacherForeignAdd(Request $request, int $club_number)
     {
@@ -541,6 +601,10 @@ class ClubController extends AbstractController
 
     /**
      * @Route("/club/{club_number<\d+>}/modifier_professeur_etranger/{teacher_id<\d+>}", name="club_teacher_foreign_update")
+     * @param Request $request
+     * @param int $club_number
+     * @param int $teacher_id
+     * @return RedirectResponse|Response
      */
     public function teacherForeignUpdate(Request $request, int $club_number, int $teacher_id)
     {
@@ -571,6 +635,10 @@ class ClubController extends AbstractController
 
     /**
      * @Route("/club/{club_number<\d+>}/supprimer_professeur_etranger/{teacher_id<\d+>}", name="club_teacher_foreign_delete")
+     * @param Request $request
+     * @param int $club_number
+     * @param int $teacher_id
+     * @return RedirectResponse|Response
      */
     public function teacherForeignDelete(Request $request, int $club_number, int $teacher_id)
     {
@@ -604,8 +672,12 @@ class ClubController extends AbstractController
 
     /**
      * @Route("/club/{club_number<\d+>}/contact", name="club_contact")
+     * @param Request $request
+     * @param Swift_Mailer $mailer
+     * @param int $club_number
+     * @return RedirectResponse|Response
      */
-    public function contact(Request $request, \Swift_Mailer $mailer, int $club_number)
+    public function contact(Request $request, Swift_Mailer $mailer, int $club_number)
     {
         $form = $this->createForm(EmailType::class, new Email());
 
@@ -623,7 +695,7 @@ class ClubController extends AbstractController
 
             $entityManager = $this->getDoctrine()->getManager();
 
-            $message = (new \Swift_Message($email->getEmailTitle()))
+            $message = (new Swift_Message($email->getEmailTitle()))
                 ->setFrom($email->getEmailFrom())
                 ->setTo($email->getEmailTo())
                 ->setBody($email->getEmailBody());

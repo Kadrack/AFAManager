@@ -14,11 +14,8 @@ use App\Entity\Training;
 use App\Entity\TrainingAttendance;
 use App\Entity\TrainingSession;
 
-use Doctrine\ORM\EntityRepository;
-
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 class ConvertController extends AbstractController

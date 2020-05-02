@@ -2,6 +2,8 @@
 // src/Entity/Training.php
 namespace App\Entity;
 
+use DateTimeInterface;
+
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 
@@ -158,24 +160,24 @@ class Training
         return $this;
     }
 
-    public function getTrainingStartingHour(): ?\DateTimeInterface
+    public function getTrainingStartingHour(): ?DateTimeInterface
     {
         return $this->training_starting_hour;
     }
 
-    public function setTrainingStartingHour(?\DateTimeInterface $training_starting_hour): self
+    public function setTrainingStartingHour(?DateTimeInterface $training_starting_hour): self
     {
         $this->training_starting_hour = $training_starting_hour;
 
         return $this;
     }
 
-    public function getTrainingEndingHour(): ?\DateTimeInterface
+    public function getTrainingEndingHour(): ?DateTimeInterface
     {
         return $this->training_ending_hour;
     }
 
-    public function setTrainingEndingHour(?\DateTimeInterface $training_ending_hour): self
+    public function setTrainingEndingHour(?DateTimeInterface $training_ending_hour): self
     {
         $this->training_ending_hour = $training_ending_hour;
 

@@ -2,6 +2,8 @@
 // src/Entity/Member.php
 namespace App\Entity;
 
+use DateTimeInterface;
+
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 
@@ -277,12 +279,12 @@ class Member
         return $this;
     }
 
-    public function getMemberBirthday(): ?\DateTimeInterface
+    public function getMemberBirthday(): ?DateTimeInterface
     {
         return $this->member_birthday;
     }
 
-    public function setMemberBirthday(\DateTimeInterface $member_birthday): self
+    public function setMemberBirthday(DateTimeInterface $member_birthday): self
     {
         $this->member_birthday = $member_birthday;
 

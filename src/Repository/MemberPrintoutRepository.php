@@ -18,6 +18,6 @@ class MemberPrintoutRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Email::class);
+        parent::__construct($registry, MemberPrintout::class);
     }
 }

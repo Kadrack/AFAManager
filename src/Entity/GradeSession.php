@@ -2,6 +2,8 @@
 // src/Entity/GradeSession.php
 namespace App\Entity;
 
+use DateTimeInterface;
+
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 
@@ -42,22 +44,16 @@ class GradeSession
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     *
-     * @Assert\NotBlank()
      */
     private $grade_session_street;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
-     *
-     * @Assert\NotBlank()
      */
     private $grade_session_zip;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     *
-     * @Assert\NotBlank()
      */
     private $grade_session_city;
 
@@ -104,12 +100,12 @@ class GradeSession
         return $this;
     }
 
-    public function getGradeSessionDate(): ?\DateTimeInterface
+    public function getGradeSessionDate(): ?DateTimeInterface
     {
         return $this->grade_session_date;
     }
 
-    public function setGradeSessionDate(\DateTimeInterface $grade_session_date): self
+    public function setGradeSessionDate(DateTimeInterface $grade_session_date): self
     {
         $this->grade_session_date = $grade_session_date;
 
@@ -176,24 +172,24 @@ class GradeSession
         return $this;
     }
 
-    public function getGradeSessionCandidateOpen(): ?\DateTimeInterface
+    public function getGradeSessionCandidateOpen(): ?DateTimeInterface
     {
         return $this->grade_session_candidate_open;
     }
 
-    public function setGradeSessionCandidateOpen(\DateTimeInterface $grade_session_candidate_open): self
+    public function setGradeSessionCandidateOpen(DateTimeInterface $grade_session_candidate_open): self
     {
         $this->grade_session_candidate_open = $grade_session_candidate_open;
 
         return $this;
     }
 
-    public function getGradeSessionCandidateClose(): ?\DateTimeInterface
+    public function getGradeSessionCandidateClose(): ?DateTimeInterface
     {
         return $this->grade_session_candidate_close;
     }
 
-    public function setGradeSessionCandidateClose(\DateTimeInterface $grade_session_candidate_close): self
+    public function setGradeSessionCandidateClose(DateTimeInterface $grade_session_candidate_close): self
     {
         $this->grade_session_candidate_close = $grade_session_candidate_close;
 

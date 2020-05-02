@@ -29,7 +29,7 @@
                     <td>{% if applicant.getGradeDanClub().getClubMainTeacher().getClubTeacherFirstname() is defined %}{{ applicant.getGradeDanClub().getClubMainTeacher().getClubTeacherFirstname() }} {{ applicant.getGradeDanClub().getClubMainTeacher().getClubTeacherName() }}{% else %}Non défini{% endif %}</td>
                     <td>{% if applicant.getGradeDanMember().getMemberLastGradeDan().getGradeDanExam() is defined %}{{ applicant.getGradeDanMember().getMemberLastGradeDan().getGradeDanExam().getGradeSessionDate()|date("d/m/Y") }}{% else %}{{ applicant.getGradeDanMember().getMemberFirstLicence().getMemberLicenceUpdate()|date("d/m/Y") }}{% endif %}</td>
                     <td>{% if applicant.getGradeDanMember().getMemberLastGradeDan().getGradeDanExam() is defined %}{{ applicant.getGradeDanMember().getMemberLastGradeDan().getGradeDanStatus() }}{% else %}Aucune{% endif %}</td>
-                    <td><a href="{{ path('exam_applicant_detail', {'exam_id': exam.getGradeSessionId(), 'member_id': applicant.getGradeDanMember().getMemberId(), 'grade_id': applicant.getGradeDanId()}) }}">Détails</a></td>
+                    <td><a href="{{ path('grade_exam_applicant_detail', {'session_id': session_id, 'member_id': applicant.getGradeDanMember().getMemberId(), 'grade_id': applicant.getGradeDanId()}) }}">Détails</a></td>
                 </tr>
             {% endfor %}
         </table>
@@ -48,7 +48,7 @@
                     <td>{{ candidate.getGradeDanMember().getMemberFirstName() }}</td>
                     <td>{{ candidate.getGradeDanMember().getMemberName() }}</td>
                     <td>{{ listData.getGrade(candidate.getGradeDanRank()) }}</td>
-                    <td><a href="{{ path('exam_candidate_detail', {'exam_id': exam.getGradeSessionId(), 'member_id': candidate.getGradeDanMember().getMemberId(), 'grade_id': candidate.getGradeDanId()}) }}">Résultats</a></td>
+                    <td><a href="{{ path('grade_exam_candidate_detail', {'session_id': session_id, 'member_id': candidate.getGradeDanMember().getMemberId(), 'grade_id': candidate.getGradeDanId()}) }}">Résultats</a></td>
                 </tr>
             {% endfor %}
         </table>
@@ -67,7 +67,7 @@
                     <td>{{ candidate.getGradeDanMember().getMemberFirstName() }}</td>
                     <td>{{ candidate.getGradeDanMember().getMemberName() }}</td>
                     <td>{{ listData.getGrade(candidate.getGradeDanMember().getMemberLastGradeDan().getGradeDanRank()) }}</td>
-                    <td><a href="{{ path('exam_candidate_detail', {'exam_id': exam.getGradeSessionId(), 'member_id': candidate.getGradeDanMember().getMemberId(), 'grade_id': candidate.getGradeDanId()}) }}">Modifier</a></td>
+                    <td><a href="{{ path('grade_exam_candidate_detail', {'session_id': session_id, 'member_id': candidate.getGradeDanMember().getMemberId(), 'grade_id': candidate.getGradeDanId()}) }}">Modifier</a></td>
                 </tr>
             {% endfor %}
         </table>
@@ -79,8 +79,8 @@
                 <th>Prénom</th>
                 <th>Nom</th>
                 <th>Grade obtenu</th>
-                <th>Diplome Fédéral</th>
-                <th>Diplome Aïkikaï</th>
+                <th>Diplôme Fédéral</th>
+                <th>Diplôme Aïkikaï</th>
                 <th>Commandes</th>
             </tr>
             {% for candidate in promoted %}
@@ -90,7 +90,7 @@
                     <td>{{ listData.getGrade(candidate.Grade) }}</td>
                     <td>{{ candidate.Federal_Certificate }}</td>
                     <td>{{ candidate.Aikikai_Certificate }}</td>
-                    <td><a href="{{ path('exam_candidate_detail_update', {'exam_id': exam.getGradeSessionId(), 'member_id': candidate.Id, 'grade_id': candidate.Grade_Id}) }}">Modifier</a>{% if candidate.Aikikai_Certificate == null %} - <a href="{{ path('exam_candidate_add_aikikai', {'exam_id': exam.getGradeSessionId(), 'member_id': candidate.Id, 'grade_id': candidate.Grade_Id}) }}">Ajouter Aïkikaï</a>{% else %} - <a href="{{ path('exam_candidate_detail_aikikai', {'exam_id': exam.getGradeSessionId(), 'member_id': candidate.Id, 'grade_id': candidate.Grade_Id}) }}">Modifier Aïkikaï</a>{% endif %}</td>
+                    <td><a href="{{ path('grade_exam_candidate_detail_update', {'session_id': session_id, 'member_id': candidate.Id, 'grade_id': candidate.Grade_Id}) }}">Modifier</a>{% if candidate.Aikikai_Certificate == null %} - <a href="{{ path('grade_exam_candidate_add_aikikai', {'session_id': session_id, 'member_id': candidate.Id, 'grade_id': candidate.Grade_Id}) }}">Ajouter Aïkikaï</a>{% else %} - <a href="{{ path('grade_exam_candidate_detail_aikikai', {'session_id': session_id, 'member_id': candidate.Id, 'grade_id': candidate.Grade_Id}) }}">Modifier Aïkikaï</a>{% endif %}</td>
                 </tr>
             {% endfor %}
         </table>

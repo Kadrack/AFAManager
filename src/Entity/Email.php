@@ -2,6 +2,7 @@
 // src/Entity/Email.php
 namespace App\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 use Symfony\Component\Validator\Constraints as Assert;
@@ -48,7 +49,7 @@ class Email
     
     public function __construct()
     {
-        $this->email_creation_date = new \DateTime('today');
+        $this->email_creation_date = new DateTime('today');
     }
 
     public function getEmailId()

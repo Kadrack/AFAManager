@@ -2,9 +2,9 @@
 // src/Entity/MemberPrintout.php
 namespace App\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
+use DateTimeInterface;
 
-use Symfony\Component\Validator\Constraints as Assert;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Table(name="afamanager_member_printout")
@@ -45,12 +45,12 @@ class MemberPrintout
         return $this->member_printout_id;
     }
 
-    public function getMemberPrintoutCreation(): ?\DateTimeInterface
+    public function getMemberPrintoutCreation(): ?DateTimeInterface
     {
         return $this->member_printout_creation;
     }
 
-    public function setMemberPrintoutCreation(\DateTimeInterface $member_printout_creation): self
+    public function setMemberPrintoutCreation(DateTimeInterface $member_printout_creation): self
     {
         $this->member_printout_creation = $member_printout_creation;
 
@@ -69,12 +69,12 @@ class MemberPrintout
         return $this;
     }
 
-    public function getMemberPrintoutDone(): ?\DateTimeInterface
+    public function getMemberPrintoutDone(): ?DateTimeInterface
     {
         return $this->member_printout_done;
     }
 
-    public function setMemberPrintoutDone(\DateTimeInterface $member_printout_done): self
+    public function setMemberPrintoutDone(DateTimeInterface $member_printout_done): self
     {
         $this->member_printout_done = $member_printout_done;
 

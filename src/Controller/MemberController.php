@@ -18,9 +18,14 @@ use App\Service\ListData;
 
 use App\Service\PhotoUploader;
 
+use DateTime;
+
+use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 use Symfony\Component\Routing\Annotation\Route;
@@ -29,6 +34,11 @@ class MemberController extends AbstractController
 {
     /**
      * @Route("/club/{club_number<\d+>}/creer_membre", name="member_create")
+     * @param Request $request
+     * @param PhotoUploader $photoUploader
+     * @param int $club_number
+     * @return RedirectResponse|Response
+     * @throws Exception
      */
     public function create(Request $request, PhotoUploader $photoUploader, int $club_number)
     {   
@@ -46,9 +56,9 @@ class MemberController extends AbstractController
 
             $licence->setMemberLicenceStatus(1);
             $licence->setMemberLicenceClub($club);
-            $licence->setMemberLicenceUpdate(new \DateTime('today'));
+            $licence->setMemberLicenceUpdate(new DateTime('today'));
             $licence->setMemberLicenceMedicalCertificate($form->get('MemberLicenceMedicalCertificate')->getData());
-            $licence->setMemberLicenceDeadline(new \DateTime('+1 year '.$licence->getMemberLicenceMedicalCertificate()->format('Y-m-d')));
+            $licence->setMemberLicenceDeadline(new DateTime('+1 year '.$licence->getMemberLicenceMedicalCertificate()->format('Y-m-d')));
 
             $member->addMemberLicences($licence);
 
@@ -73,13 +83,13 @@ class MemberController extends AbstractController
 
             $stamp->setMemberPrintoutAction(1);
             $stamp->setMemberPrintoutLicence($licence);
-            $stamp->setMemberPrintoutCreation(new \DateTime('today'));
+            $stamp->setMemberPrintoutCreation(new DateTime('today'));
 
             $card = new MemberPrintout();
 
             $card->setMemberPrintoutAction(2);
             $card->setMemberPrintoutLicence($licence);
-            $card->setMemberPrintoutCreation(new \DateTime('today'));
+            $card->setMemberPrintoutCreation(new DateTime('today'));
 
             $entityManager = $this->getDoctrine()->getManager();
 
@@ -96,6 +106,9 @@ class MemberController extends AbstractController
 
     /**
      * @Route("/club/{club_number<\d+>}/detail_personnel/{member_id<\d+>}", name="member_detail_personnal")
+     * @param int $club_number
+     * @param int $member_id
+     * @return Response
      */
     public function detailPersonnal(int $club_number, int $member_id)
     {
@@ -108,6 +121,9 @@ class MemberController extends AbstractController
 
     /**
      * @Route("/club/{club_number<\d+>}/detail_grade/{member_id<\d+>}", name="member_detail_grade")
+     * @param int $club_number
+     * @param int $member_id
+     * @return Response
      */
     public function detailGrade(int $club_number, int $member_id)
     {
@@ -115,7 +131,7 @@ class MemberController extends AbstractController
 
         $member = $this->getDoctrine()->getRepository(Member::class)->findOneBy(['member_id' => $member_id]);
 
-        $today = new \DateTime('today');
+        $today = new DateTime('today');
 
         $grade_dan_history = $this->getDoctrine()->getRepository(GradeDan::class)->getGradeDanHistory($member->getMemberId());
 
@@ -148,6 +164,9 @@ class MemberController extends AbstractController
 
     /**
      * @Route("/club/{club_number<\d+>}/detail_titre/{member_id<\d+>}", name="member_detail_title")
+     * @param int $club_number
+     * @param int $member_id
+     * @return Response
      */
     public function detailTitle(int $club_number, int $member_id)
     {
@@ -182,6 +201,9 @@ class MemberController extends AbstractController
 
     /**
      * @Route("/club/{club_number<\d+>}/detail_licence/{member_id<\d+>}", name="member_detail_licence")
+     * @param int $club_number
+     * @param int $member_id
+     * @return Response
      */
     public function detailLicence(int $club_number, int $member_id)
     {
@@ -191,15 +213,20 @@ class MemberController extends AbstractController
 
         $licence_history = $this->getDoctrine()->getRepository(MemberLicence::class)->findBy(['member_licence' => $member->getMemberId()], ['member_licence_id' => 'DESC']);
 
-        $next_renew = $licence_history[0]->getMemberLicenceDeadline() < new \DateTime('-3 month today') ? true : false;
+        $next_renew = $licence_history[0]->getMemberLicenceDeadline() < new DateTime('-3 month today');
 
         return $this->render('Member/detail_licence.html.twig', array('member' => $member, 'club' => $club, 'licence_history' => $licence_history, 'next_renew' => $next_renew, 'list' => new ListData()));
     }
 
     /**
      * @Route("/club/{club_number<\d+>}/modifier/{member_id<\d+>}", name="member_update")
+     * @param Request $request
+     * @param PhotoUploader $photoUploader
+     * @param int $club_number
+     * @param int $member_id
+     * @return RedirectResponse|Response
      */
-    public function updatePersonnal(Request $request, PhotoUploader $photoUploader, int $club_number, int $member_id)
+    public function updatePersonal(Request $request, PhotoUploader $photoUploader, int $club_number, int $member_id)
     {
         $club = $this->getDoctrine()->getRepository(Club::class)->findOneBy(['club_number' => $club_number]);
 
@@ -228,10 +255,14 @@ class MemberController extends AbstractController
 
     /**
      * @Route("/club/{club_number<\d+>}/modifier/{member_id<\d+>}/candidature", name="member_exam_application")
+     * @param Request $request
+     * @param int $club_number
+     * @param int $member_id
+     * @return RedirectResponse|Response
      */
     public function exam_application(Request $request, int $club_number, int $member_id)
     {
-        $today = new \DateTime('today');
+        $today = new DateTime('today');
 
         $club   = $this->getDoctrine()->getRepository(Club::class)->findOneBy(['club_number' => $club_number]);
         $exam   = $this->getDoctrine()->getRepository(GradeSession::class)->getOpenSession($today->format('Y-m-d'));
@@ -277,6 +308,12 @@ class MemberController extends AbstractController
 
     /**
      * @Route("/club/{club_number<\d+>}/modifier/{member_id<\d+>}/renouveller", name="member_licence_renew")
+     * @param SessionInterface $session
+     * @param Request $request
+     * @param int $club_number
+     * @param int $member_id
+     * @return RedirectResponse|Response
+     * @throws Exception
      */
     public function licence_renew(SessionInterface $session, Request $request, int $club_number, int $member_id)
     {
@@ -292,8 +329,8 @@ class MemberController extends AbstractController
 
         $licence_new->setMemberLicence($member);
         $licence_new->setMemberLicenceClub($club);
-        $licence_new->setMemberLicenceUpdate(new \DateTime('today'));
-        $licence_new->setMemberLicenceDeadline(new \DateTime('+1 year '.$licence_old->getMemberLicenceDeadline()->format('Y-m-d')));
+        $licence_new->setMemberLicenceUpdate(new DateTime('today'));
+        $licence_new->setMemberLicenceDeadline(new DateTime('+1 year '.$licence_old->getMemberLicenceDeadline()->format('Y-m-d')));
         $licence_new->setMemberLicenceStatus(1);
 
         if ($member->getMemberLastGradeDan() != null)
@@ -336,7 +373,7 @@ class MemberController extends AbstractController
 
             $stamp->setMemberPrintoutAction(1);
             $stamp->setMemberPrintoutLicence($licence_new);
-            $stamp->setMemberPrintoutCreation(new \DateTime('today'));
+            $stamp->setMemberPrintoutCreation(new DateTime('today'));
 
             if ($licence_new->getMemberLicenceClub() != $licence_old->getMemberLicenceClub())
             {
@@ -344,7 +381,7 @@ class MemberController extends AbstractController
 
                 $card->setMemberPrintoutAction(2);
                 $card->setMemberPrintoutLicence($licence_new);
-                $card->setMemberPrintoutCreation(new \DateTime('today'));
+                $card->setMemberPrintoutCreation(new DateTime('today'));
 
                 $entityManager->persist($card);
             }
@@ -357,7 +394,7 @@ class MemberController extends AbstractController
                 }
                 else if ($licence_old->getMemberLicenceGradeKyu() != null)
                 {
-                    $update = $licence_old->getMemberLicenceGradeKyu()->getGradeKyuRank() < $form->get('GradeKyuRank')->getData() ? true : false;
+                    $update = $licence_old->getMemberLicenceGradeKyu()->getGradeKyuRank() < $form->get('GradeKyuRank')->getData();
                 }
                 else
                 {
@@ -400,6 +437,12 @@ class MemberController extends AbstractController
 
     /**
      * @Route("/club/{club_number<\d+>}/modifier/{member_id<\d+>}/renouveller_modifier/{renew_id<\d+>}", name="member_licence_renew_update")
+     * @param SessionInterface $session
+     * @param Request $request
+     * @param int $club_number
+     * @param int $member_id
+     * @param int $renew_id
+     * @return RedirectResponse|Response
      */
     public function licence_renew_update(SessionInterface $session, Request $request, int $club_number, int $member_id, int $renew_id)
     {
@@ -477,7 +520,7 @@ class MemberController extends AbstractController
                 }
             }
 
-            $renew->setMemberLicenceUpdate(new \DateTime('today'));
+            $renew->setMemberLicenceUpdate(new DateTime('today'));
 
             $entityManager->flush();
 
