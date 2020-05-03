@@ -25,14 +25,16 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 use Symfony\Component\Routing\Annotation\Route;
 
+/**
+ * @Route("/club", name="club_")
+ */
 class ClubController extends AbstractController
 {
     /**
-     * @Route("/club/", name="club_index")
+     * @Route("/", name="index")
      */
     public function index()
     {
@@ -62,7 +64,7 @@ class ClubController extends AbstractController
     }
 
     /**
-     * @Route("/club/creer", name="club_create")
+     * @Route("/creer", name="create")
      * @param Request $request
      * @return RedirectResponse|Response
      */
@@ -96,15 +98,13 @@ class ClubController extends AbstractController
     }
 
     /**
-     * @Route("/club/{club_number<\d+>}/detail_association", name="club_detail_association")
+     * @Route("/{club<\d+>}/detail_association", name="detail_association")
      * @param Request $request
-     * @param int $club_number
+     * @param Club $club
      * @return RedirectResponse|Response
      */
-    public function detailAssociation(Request $request, int $club_number)
+    public function detailAssociation(Request $request, Club $club)
     {
-        $club = $this->getDoctrine()->getRepository(Club::class)->findOneBy(['club_number' => $club_number]);
-
         $form = $this->createForm(ClubType::class, $club, array('form' => 'detail_association'));
 
         $form->handleRequest($request);
@@ -118,18 +118,16 @@ class ClubController extends AbstractController
             return $this->redirectToRoute('club_index');
         }
 
-        return $this->render('Club/detail_association.html.twig', array('form' => $form->createView(), 'club_number' => $club_number, 'listData' => new ListData()));
+        return $this->render('Club/detail_association.html.twig', array('form' => $form->createView(), 'club' => $club));
     }
 
     /**
-     * @Route("/club/{club_number<\d+>}/detail_cours", name="club_detail_class")
-     * @param int $club_number
+     * @Route("/{club<\d+>}/detail_cours", name="detail_class")
+     * @param Club $club
      * @return Response
      */
-    public function detailClass(int $club_number)
+    public function detailClass(Club $club)
     {
-        $club = $this->getDoctrine()->getRepository(Club::class)->findOneBy(['club_number' => $club_number]);
-
         $addresses = $club->getClubAddresses();
 
         $trainings = $this->getDoctrine()->getRepository(Training::class)->findBy(['training_club' => $club->getClubId()], ['training_day' => 'ASC', 'training_starting_hour' => 'ASC']);
@@ -138,51 +136,45 @@ class ClubController extends AbstractController
 
         $foreign_teachers = $this->getDoctrine()->getRepository(ClubTeacher::class)->getForeignTeachers($club);
 
-        return $this->render('Club/detail_dojo.html.twig', array('club_number' => $club_number, 'addresses' => $addresses, 'trainings' => $trainings, 'afa_teachers' => $afa_teachers, 'foreign_teachers' => $foreign_teachers, 'listData' => new ListData()));
+        return $this->render('Club/detail_dojo.html.twig', array('club' => $club, 'addresses' => $addresses, 'trainings' => $trainings, 'afa_teachers' => $afa_teachers, 'foreign_teachers' => $foreign_teachers, 'listData' => new ListData()));
     }
 
     /**
-     * @Route("/club/{club_number<\d+>}/membres_actifs", name="club_active_members")
-     * @param int $club_number
+     * @Route("/{club<\d+>}/membres_actifs", name="active_members")
+     * @param Club $club
      * @return Response
      */
-    public function activeMembers(int $club_number)
+    public function activeMembers(Club $club)
     {
         $today = new DateTime('today');
-
-        $club = $this->getDoctrine()->getRepository(Club::class)->findOneBy(['club_number' => $club_number]);
 
         $members = $this->getDoctrine()->getRepository(Member::class)->getClubActiveMembers($club, $today->format('Y-m-d'));
 
-        return $this->render('Club/members_active.html.twig', array('members' => $members, 'club_number' => $club_number, 'club_name' => $club->getClubName()));
+        return $this->render('Club/members_active.html.twig', array('members' => $members, 'club' => $club));
     }
 
     /**
-     * @Route("/club/{club_number<\d+>}/membres_inactifs", name="club_inactive_members")
-     * @param int $club_number
+     * @Route("/{club<\d+>}/membres_inactifs", name="inactive_members")
+     * @param Club $club
      * @return Response
      */
-    public function inactiveMembers(int $club_number)
+    public function inactiveMembers(Club $club)
     {
         $today = new DateTime('today');
 
-        $club = $this->getDoctrine()->getRepository(Club::class)->findOneBy(['club_number' => $club_number]);
-
         $members = $this->getDoctrine()->getRepository(Member::class)->getClubInactiveMembers($club, $today->format('Y-m-d'));
 
-        return $this->render('Club/members_inactive.html.twig', array('members' => $members == null ? null : $members, 'club_number' => $club_number, 'club_name' => $club->getClubName()));
+        return $this->render('Club/members_inactive.html.twig', array('members' => $members == null ? null : $members, 'club' => $club));
     }
 
     /**
-     * @Route("/club/{club_number<\d+>}/desaffilier", name="club_disaffiliate")
+     * @Route("/{club<\d+>}/desaffilier", name="disaffiliate")
      * @param Request $request
-     * @param int $club_number
+     * @param Club $club
      * @return RedirectResponse|Response
      */
-    public function disaffiliate(Request $request, int $club_number)
+    public function disaffiliate(Request $request, Club $club)
     {
-        $club = $this->getDoctrine()->getRepository(Club::class)->findOneBy(['club_number' => $club_number]);
-
         $history = new ClubHistory();
 
         $form = $this->createForm(ClubType::class, $history, array('form' => 'history_entry', 'data_class' => ClubHistory::class));
@@ -208,19 +200,17 @@ class ClubController extends AbstractController
             return $this->redirectToRoute('club_index');
         }
 
-        return $this->render('Club/history_entry.html.twig', array('form' => $form->createView(), 'club_number' => $club_number, 'listData' => new ListData()));
+        return $this->render('Club/history_entry.html.twig', array('form' => $form->createView(), 'club' => $club, 'listData' => new ListData()));
     }
 
     /**
-     * @Route("/club/{club_number<\d+>}/reaffilier", name="club_reassign")
+     * @Route("/{club<\d+>}/reaffilier", name="reassign")
      * @param Request $request
-     * @param int $club_number
+     * @param Club $club
      * @return RedirectResponse|Response
      */
-    public function reassign(Request $request, int $club_number)
+    public function reassign(Request $request, Club $club)
     {
-        $club = $this->getDoctrine()->getRepository(Club::class)->findOneBy(['club_number' => $club_number]);
-
         $history = new ClubHistory();
 
         $form = $this->createForm(ClubType::class, $history, array('form' => 'history_entry', 'data_class' => ClubHistory::class));
@@ -246,16 +236,16 @@ class ClubController extends AbstractController
             return $this->redirectToRoute('club_index');
         }
 
-        return $this->render('Club/history_entry.html.twig', array('form' => $form->createView(), 'club_number' => $club_number, 'listData' => new ListData()));
+        return $this->render('Club/history_entry.html.twig', array('form' => $form->createView(), 'club' => $club, 'listData' => new ListData()));
     }
 
     /**
-     * @Route("/club/{club_number<\d+>}/ajouter_adresse", name="club_address_add")
+     * @Route("/{club<\d+>}/ajouter_adresse", name="address_add")
      * @param Request $request
-     * @param int $club_number
+     * @param Club $club
      * @return RedirectResponse|Response
      */
-    public function addressAdd(Request $request, int $club_number)
+    public function addressAdd(Request $request, Club $club)
     {
         $form = $this->createForm(ClubType::class, new TrainingAddress(), array('form' => 'address_create', 'data_class' => TrainingAddress::class));
 
@@ -263,8 +253,6 @@ class ClubController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid())
         {
-            $club = $this->getDoctrine()->getRepository(Club::class)->findOneBy(['club_number' => $club_number]);
-
             $address = $form->getData();
 
             if ($address->getTrainingAddressDEA() == false)
@@ -279,23 +267,21 @@ class ClubController extends AbstractController
             $entityManager->persist($address);
             $entityManager->flush();
 
-            return $this->redirectToRoute('club_detail_class', array('club_number' => $club_number));
+            return $this->redirectToRoute('club_detail_class', array('club' => $club->getClubId()));
         }
 
         return $this->render('Club/address_add.html.twig', array('form' => $form->createView()));
     }
 
     /**
-     * @Route("/club/{club_number<\d+>}/modifier_adresse/{address_id<\d+>}", name="club_address_update")
+     * @Route("/{club<\d+>}/modifier_adresse/{address<\d+>}", name="address_update")
      * @param Request $request
-     * @param int $club_number
-     * @param int $address_id
+     * @param Club $club
+     * @param TrainingAddress $address
      * @return RedirectResponse|Response
      */
-    public function addressUpdate(Request $request, int $club_number, int $address_id)
+    public function addressUpdate(Request $request, Club $club, TrainingAddress $address)
     {
-        $address = $this->getDoctrine()->getRepository(TrainingAddress::class)->findOneBy(['training_address_id' => $address_id]);
-
         $form = $this->createForm(ClubType::class, $address, array('form' => 'address_update', 'data_class' => TrainingAddress::class));
 
         $form->handleRequest($request);
@@ -306,23 +292,21 @@ class ClubController extends AbstractController
 
             $entityManager->flush();
 
-            return $this->redirectToRoute('club_detail_class', array('club_number' => $club_number));
+            return $this->redirectToRoute('club_detail_class', array('club' => $club->getClubId()));
         }
 
         return $this->render('Club/address_update.html.twig', array('form' => $form->createView()));
     }
 
     /**
-     * @Route("/club/{club_number<\d+>}/supprimer_adresse/{address_id<\d+>}", name="club_address_delete")
+     * @Route("/{club<\d+>}/supprimer_adresse/{address<\d+>}", name="address_delete")
      * @param Request $request
-     * @param int $club_number
-     * @param int $address_id
+     * @param Club $club
+     * @param TrainingAddress $address
      * @return RedirectResponse|Response
      */
-    public function addressDelete(Request $request, int $club_number, int $address_id)
+    public function addressDelete(Request $request, Club $club, TrainingAddress $address)
     {
-        $address = $this->getDoctrine()->getRepository(TrainingAddress::class)->findOneBy(['training_address_id' => $address_id]);
-
         $form = $this->createForm(ClubType::class, $address, array('form' => 'address_delete', 'data_class' => TrainingAddress::class));
 
         $form->handleRequest($request);
@@ -334,22 +318,20 @@ class ClubController extends AbstractController
             $entityManager->remove($address);
             $entityManager->flush();
 
-            return $this->redirectToRoute('club_detail_class', array('club_number' => $club_number));
+            return $this->redirectToRoute('club_detail_class', array('club' => $club->getClubId()));
         }
 
         return $this->render('Club/address_delete.html.twig', array('form' => $form->createView()));
     }
 
     /**
-     * @Route("/club/{club_number<\d+>}/ajouter_horaire", name="club_training_add")
+     * @Route("/{club<\d+>}/ajouter_horaire", name="training_add")
      * @param Request $request
-     * @param int $club_number
+     * @param Club $club
      * @return RedirectResponse|Response
      */
-    public function trainingAdd(Request $request, int $club_number)
+    public function trainingAdd(Request $request, Club $club)
     {
-        $club = $this->getDoctrine()->getRepository(Club::class)->findOneBy(['club_number' => $club_number]);
-
         $form = $this->createForm(ClubType::class, new Training(), array('form' => 'training_create', 'data_class' => Training::class, 'choices' => $club->getClubAddresses()));
 
         $form->handleRequest($request);
@@ -365,23 +347,21 @@ class ClubController extends AbstractController
             $entityManager->persist($training);
             $entityManager->flush();
 
-            return $this->redirectToRoute('club_detail_class', array('club_number' => $club_number));
+            return $this->redirectToRoute('club_detail_class', array('club' => $club->getClubId()));
         }
 
         return $this->render('Club/training_add.html.twig', array('form' => $form->createView()));
     }
 
     /**
-     * @Route("/club/{club_number<\d+>}/modifier_horaire/{training_id<\d+>}", name="club_training_update")
+     * @Route("/{club<\d+>}/modifier_horaire/{training<\d+>}", name="training_update")
      * @param Request $request
-     * @param int $club_number
-     * @param int $training_id
+     * @param Club $club
+     * @param Training $training
      * @return RedirectResponse|Response
      */
-    public function trainingUpdate(Request $request, int $club_number, int $training_id)
+    public function trainingUpdate(Request $request, Club $club, Training $training)
     {
-        $training = $this->getDoctrine()->getRepository(Training::class)->findOneBy(['training_id' => $training_id]);
-
         $form = $this->createForm(ClubType::class, $training, array('form' => 'training_update', 'data_class' => Training::class));
 
         $form->handleRequest($request);
@@ -392,23 +372,21 @@ class ClubController extends AbstractController
 
             $entityManager->flush();
 
-            return $this->redirectToRoute('club_detail_class', array('club_number' => $club_number));
+            return $this->redirectToRoute('club_detail_class', array('club' => $club->getClubId()));
         }
 
         return $this->render('Club/training_update.html.twig', array('form' => $form->createView()));
     }
 
     /**
-     * @Route("/club/{club_number<\d+>}/supprimer_horaire/{training_id<\d+>}", name="club_training_delete")
+     * @Route("/{club<\d+>}/supprimer_horaire/{training<\d+>}", name="training_delete")
      * @param Request $request
-     * @param int $club_number
-     * @param int $training_id
+     * @param Club $club
+     * @param Training $training
      * @return RedirectResponse|Response
      */
-    public function trainingDelete(Request $request, int $club_number, int $training_id)
+    public function trainingDelete(Request $request, Club $club, Training $training)
     {
-        $training = $this->getDoctrine()->getRepository(Training::class)->findOneBy(['training_id' => $training_id]);
-
         $form = $this->createForm(ClubType::class, $training, array('form' => 'training_delete', 'data_class' => Training::class));
 
         $form->handleRequest($request);
@@ -420,19 +398,19 @@ class ClubController extends AbstractController
             $entityManager->remove($training);
             $entityManager->flush();
 
-            return $this->redirectToRoute('club_detail_class', array('club_number' => $club_number));
+            return $this->redirectToRoute('club_detail_class', array('club' => $club->getClubId()));
         }
 
         return $this->render('Club/training_delete.html.twig', array('form' => $form->createView()));
     }
 
     /**
-     * @Route("/club/{club_number<\d+>}/ajouter_professeur_afa", name="club_teacher_afa_add")
+     * @Route("/{club<\d+>}/ajouter_professeur_afa", name="teacher_afa_add")
      * @param Request $request
-     * @param int $club_number
+     * @param Club $club
      * @return RedirectResponse|Response
      */
-    public function teacherAFAAdd(Request $request, int $club_number)
+    public function teacherAFAAdd(Request $request, Club $club)
     {
         $form = $this->createForm(ClubType::class, new ClubTeacher(), array('form' => 'teacher_afa_create', 'data_class' => ClubTeacher::class));
 
@@ -440,8 +418,6 @@ class ClubController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid())
         {
-            $club = $this->getDoctrine()->getRepository(Club::class)->findOneBy(['club_number' => $club_number]);
-
             $teacher = $form->getData();
 
             $teacher->setClubTeacher($club);
@@ -464,23 +440,21 @@ class ClubController extends AbstractController
                 $entityManager->flush();
             }
 
-            return $this->redirectToRoute('club_detail_class', array('club_number' => $club_number));
+            return $this->redirectToRoute('club_detail_class', array('club' => $club->getClubId()));
         }
 
         return $this->render('Club/teacher_afa_add.html.twig', array('form' => $form->createView()));
     }
 
     /**
-     * @Route("/club/{club_number<\d+>}/modifier_professeur_afa/{teacher_id<\d+>}", name="club_teacher_afa_update")
+     * @Route("/{club<\d+>}/modifier_professeur_afa/{teacher<\d+>}", name="teacher_afa_update")
      * @param Request $request
-     * @param int $club_number
-     * @param int $teacher_id
+     * @param Club $club
+     * @param ClubTeacher $teacher
      * @return RedirectResponse|Response
      */
-    public function teacherAFAUpdate(Request $request, int $club_number, int $teacher_id)
+    public function teacherAFAUpdate(Request $request, Club $club, ClubTeacher $teacher)
     {
-        $teacher = $this->getDoctrine()->getRepository(ClubTeacher::class)->findOneBy(['club_teacher_id' => $teacher_id]);
-
         $form = $this->createForm(ClubType::class, $teacher, array('form' => 'teacher_afa_update', 'data_class' => ClubTeacher::class));
 
         $form->get('ClubTeacherMember')->setData($teacher->getClubTeacherMember()->getMemberId());
@@ -491,8 +465,6 @@ class ClubController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid())
         {
-            $club = $this->getDoctrine()->getRepository(Club::class)->findOneBy(['club_number' => $club_number]);
-
             if ($form->get('ClubTeacherTitle')->getData() == 1)
             {
                 $club->setClubMainTeacher($teacher);
@@ -502,23 +474,21 @@ class ClubController extends AbstractController
 
             $entityManager->flush();
 
-            return $this->redirectToRoute('club_detail_class', array('club_number' => $club_number));
+            return $this->redirectToRoute('club_detail_class', array('club' => $club->getClubId()));
         }
 
         return $this->render('Club/teacher_afa_update.html.twig', array('form' => $form->createView()));
     }
 
     /**
-     * @Route("/club/{club_number<\d+>}/supprimer_professeur_afa/{teacher_id<\d+>}", name="club_teacher_afa_delete")
+     * @Route("/{club<\d+>}/supprimer_professeur_afa/{teacher<\d+>}", name="teacher_afa_delete")
      * @param Request $request
-     * @param int $club_number
-     * @param int $teacher_id
+     * @param Club $club
+     * @param ClubTeacher $teacher
      * @return RedirectResponse|Response
      */
-    public function teacherAFADelete(Request $request, int $club_number, int $teacher_id)
+    public function teacherAFADelete(Request $request, Club $club, ClubTeacher $teacher)
     {
-        $teacher = $this->getDoctrine()->getRepository(ClubTeacher::class)->findOneBy(['club_teacher_id' => $teacher_id]);
-
         $form = $this->createForm(ClubType::class, $teacher, array('form' => 'teacher_afa_delete', 'data_class' => ClubTeacher::class));
 
         $form->get('ClubTeacherMember')->setData($teacher->getClubTeacherMember()->getMemberId());
@@ -529,33 +499,31 @@ class ClubController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid())
         {
-            $club = $this->getDoctrine()->getRepository(Club::class)->findOneBy(['club_number' => $club_number]);
-
             $entityManager = $this->getDoctrine()->getManager();
 
             if ($form->get('ClubTeacherTitle')->getData() == 1)
             {
                 $main_teacher = $this->getDoctrine()->getRepository(ClubTeacher::class)->findOneBy(['club_teacher' => $club->getClubId(), 'club_teacher_title' => 1]);
 
-                $club->setClubMainTeacher($main_teacher->getClubTeacherId() == $teacher_id ? null : $main_teacher);
+                $club->setClubMainTeacher($main_teacher->getClubTeacherId() == $teacher->getClubTeacherId() ? null : $main_teacher);
             }
 
             $entityManager->remove($teacher);
             $entityManager->flush();
 
-            return $this->redirectToRoute('club_detail_class', array('club_number' => $club_number));
+            return $this->redirectToRoute('club_detail_class', array('club' => $club->getClubId()));
         }
 
         return $this->render('Club/teacher_afa_delete.html.twig', array('form' => $form->createView()));
     }
 
     /**
-     * @Route("/club/{club_number<\d+>}/ajouter_professeur_etranger", name="club_teacher_foreign_add")
+     * @Route("/{club<\d+>}/ajouter_professeur_etranger", name="teacher_foreign_add")
      * @param Request $request
-     * @param int $club_number
+     * @param Club $club
      * @return RedirectResponse|Response
      */
-    public function teacherForeignAdd(Request $request, int $club_number)
+    public function teacherForeignAdd(Request $request, Club $club)
     {
         $form = $this->createForm(ClubType::class, new ClubTeacher(), array('form' => 'teacher_foreign_create', 'data_class' => ClubTeacher::class));
 
@@ -563,8 +531,6 @@ class ClubController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid())
         {
-            $club = $this->getDoctrine()->getRepository(Club::class)->findOneBy(['club_number' => $club_number]);
-
             $teacher = $form->getData();
 
             $teacher->setClubTeacher($club);
@@ -579,31 +545,27 @@ class ClubController extends AbstractController
             $entityManager->persist($teacher);
             $entityManager->flush();
 
-            return $this->redirectToRoute('club_detail_class', array('club_number' => $club_number));
+            return $this->redirectToRoute('club_detail_class', array('club' => $club->getClubId()));
         }
 
         return $this->render('Club/teacher_afa_add.html.twig', array('form' => $form->createView()));
     }
 
     /**
-     * @Route("/club/{club_number<\d+>}/modifier_professeur_etranger/{teacher_id<\d+>}", name="club_teacher_foreign_update")
+     * @Route("/{club<\d+>}/modifier_professeur_etranger/{teacher<\d+>}", name="teacher_foreign_update")
      * @param Request $request
-     * @param int $club_number
-     * @param int $teacher_id
+     * @param Club $club
+     * @param ClubTeacher $teacher
      * @return RedirectResponse|Response
      */
-    public function teacherForeignUpdate(Request $request, int $club_number, int $teacher_id)
+    public function teacherForeignUpdate(Request $request, Club $club, ClubTeacher $teacher)
     {
-        $teacher = $this->getDoctrine()->getRepository(ClubTeacher::class)->findOneBy(['club_teacher_id' => $teacher_id]);
-
         $form = $this->createForm(ClubType::class, $teacher, array('form' => 'teacher_foreign_update', 'data_class' => ClubTeacher::class));
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid())
         {
-            $club = $this->getDoctrine()->getRepository(Club::class)->findOneBy(['club_number' => $club_number]);
-
             if ($form->get('ClubTeacherTitle')->getData() == 1)
             {
                 $club->setClubMainTeacher($teacher);
@@ -613,57 +575,53 @@ class ClubController extends AbstractController
 
             $entityManager->flush();
 
-            return $this->redirectToRoute('club_detail_class', array('club_number' => $club_number));
+            return $this->redirectToRoute('club_detail_class', array('club' => $club->getClubId()));
         }
 
         return $this->render('Club/teacher_afa_update.html.twig', array('form' => $form->createView()));
     }
 
     /**
-     * @Route("/club/{club_number<\d+>}/supprimer_professeur_etranger/{teacher_id<\d+>}", name="club_teacher_foreign_delete")
+     * @Route("/{club<\d+>}/supprimer_professeur_etranger/{teacher<\d+>}", name="teacher_foreign_delete")
      * @param Request $request
-     * @param int $club_number
-     * @param int $teacher_id
+     * @param Club $club
+     * @param ClubTeacher $teacher
      * @return RedirectResponse|Response
      */
-    public function teacherForeignDelete(Request $request, int $club_number, int $teacher_id)
+    public function teacherForeignDelete(Request $request, Club $club, ClubTeacher $teacher)
     {
-        $teacher = $this->getDoctrine()->getRepository(ClubTeacher::class)->findOneBy(['club_teacher_id' => $teacher_id]);
-
         $form = $this->createForm(ClubType::class, $teacher, array('form' => 'teacher_foreign_delete', 'data_class' => ClubTeacher::class));
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid())
         {
-            $club = $this->getDoctrine()->getRepository(Club::class)->findOneBy(['club_number' => $club_number]);
-
             $entityManager = $this->getDoctrine()->getManager();
 
             if ($form->get('ClubTeacherTitle')->getData() == 1)
             {
                 $main_teacher = $this->getDoctrine()->getRepository(ClubTeacher::class)->findOneBy(['club_teacher' => $club->getClubId(), 'club_teacher_title' => 1]);
 
-                $club->setClubMainTeacher($main_teacher->getClubTeacherId() == $teacher_id ? null : $main_teacher);
+                $club->setClubMainTeacher($main_teacher->getClubTeacherId() == $teacher->getClubTeacherId() ? null : $main_teacher);
             }
 
             $entityManager->remove($teacher);
             $entityManager->flush();
 
-            return $this->redirectToRoute('club_detail_class', array('club_number' => $club_number));
+            return $this->redirectToRoute('club_detail_class', array('club' => $club->getClubId()));
         }
 
         return $this->render('Club/teacher_afa_delete.html.twig', array('form' => $form->createView()));
     }
 
     /**
-     * @Route("/club/{club_number<\d+>}/contact", name="club_contact")
+     * @Route("/{club<\d+>}/contact", name="contact")
      * @param Request $request
      * @param Swift_Mailer $mailer
-     * @param int $club_number
+     * @param Club $club
      * @return RedirectResponse|Response
      */
-    public function contact(Request $request, Swift_Mailer $mailer, int $club_number)
+    public function contact(Request $request, Swift_Mailer $mailer, Club $club)
     {
         $form = $this->createForm(EmailType::class, new Email());
 
@@ -671,8 +629,6 @@ class ClubController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid())
         {
-            $club = $this->getDoctrine()->getRepository(Club::class)->findOneBy(['club_number' => $club_number]);
-
             $email = $form->getData();
             
             $email->setEmailFrom('kadrack@gmail.com');
@@ -691,7 +647,7 @@ class ClubController extends AbstractController
             $entityManager->persist($email);
             $entityManager->flush();
 
-            return $this->redirectToRoute('club_detail_class', array('club_number' => $club_number));
+            return $this->redirectToRoute('club_detail_class', array('club' => $club->getClubId()));
         }
 
         return $this->render('Common/email.html.twig', array('form' => $form->createView()));

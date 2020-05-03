@@ -24,7 +24,7 @@
                     <td>{{ session.getGradeSessionDate()|date("d/m/Y") }}</td>
                     <td>{{ session.getGradeSessionCandidateOpen()|date("d/m/Y") }}</td>
                     <td>{{ session.getGradeSessionCandidateClose()|date("d/m/Y") }}</td>
-                    <td><a href="{{ path('grade_exam_detail', {'session_id': session.getGradeSessionId()}) }}">Détails</a> - <a href="{{ path('grade_exam_update', {'session_id': session.getGradeSessionId()}) }}">Modifier</a></td>
+                    <td><a href="{{ path('grade_exam_detail', {'session': session.getGradeSessionId()}) }}">Détails</a> - <a href="{{ path('grade_exam_update', {'session': session.getGradeSessionId()}) }}">Modifier</a></td>
                 </tr>
             {% endfor %}
         </table>

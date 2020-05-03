@@ -73,23 +73,12 @@ class TrainingType extends AbstractType
     private function addressCreate(FormBuilderInterface $builder)
     {
         $builder
-            ->add('TrainingAddressName', TextType::class,
-                array('label' => 'Lieu : ',
-                    'required' => false))
-            ->add('TrainingAddressStreet', TextType::class,
-                array('label' => 'Adresse : '))
-            ->add('TrainingAddressZip', IntegerType::class,
-                array('label' => 'Code postal : '))
-            ->add('TrainingAddressCity', TextType::class,
-                array('label' => 'Localité : '))
-            ->add('TrainingAddressTatamis', IntegerType::class,
-                array('label' => 'Tatamis (m²) : ',
-                    'required' => false))
-            ->add('TrainingAddressDEA', ChoiceType::class,
-                array('label' => 'Présence d\'un DEA : ',
-                    'multiple' => false,
-                    'expanded' => true,
-                    'choices' => array('Non' => 0, 'Oui' => 1)))
+            ->add('TrainingAddressName', TextType::class, array('label' => 'Lieu : ', 'required' => false))
+            ->add('TrainingAddressStreet', TextType::class, array('label' => 'Adresse : '))
+            ->add('TrainingAddressZip', IntegerType::class, array('label' => 'Code postal : '))
+            ->add('TrainingAddressCity', TextType::class, array('label' => 'Localité : '))
+            ->add('TrainingAddressTatamis', IntegerType::class, array('label' => 'Tatamis (m²) : ', 'required' => false))
+            ->add('TrainingAddressDEA', ChoiceType::class, array('label' => 'Présence d\'un DEA : ', 'multiple' => false, 'expanded' => true, 'choices' => array('Non' => 0, 'Oui' => 1)))
         ;
     }
 
@@ -98,30 +87,11 @@ class TrainingType extends AbstractType
         $list = new ListData();
 
         $builder
-            ->add('TrainingAttendanceId', TextType::class,
-                array('label' => 'N° de licence : ',
-                    'required' => true,
-                    'mapped' => false))
-            ->add('TrainingAttendanceSession', ChoiceType::class,
-                array('label' => 'Session : ',
-                    'multiple' => true,
-                    'expanded' => true,
-                    'choices' => $choices,
-                    'mapped' => false,
-                    'choice_value' => 'training_session_id',
-                    'choice_label' => 'training_session_choice_name'))
-            ->add('TrainingAttendancePayment', IntegerType::class,
-                array('label' => 'Paiement : ',
-                    'required' => false,
-                    'mapped' => false))
-            ->add('TrainingAttendancePaymentType', ChoiceType::class,
-                array('label' => 'Mode de paiement : ',
-                    'multiple' => false,
-                    'expanded' => true,
-                    'choices' => $list->getPaymentType(0),
-                    'mapped' => false))
-            ->add('Submit', SubmitType::class,
-                array('label' => 'Ajouter'))
+            ->add('TrainingAttendanceId', TextType::class, array('label' => 'N° de licence : ', 'required' => true, 'mapped' => false))
+            ->add('TrainingAttendanceSession', ChoiceType::class, array('label' => 'Session : ', 'multiple' => true, 'expanded' => true, 'choices' => $choices, 'mapped' => false, 'choice_value' => 'training_session_id', 'choice_label' => 'training_session_choice_name'))
+            ->add('TrainingAttendancePayment', IntegerType::class, array('label' => 'Paiement : ', 'required' => false, 'mapped' => false))
+            ->add('TrainingAttendancePaymentType', ChoiceType::class, array('label' => 'Mode de paiement : ', 'multiple' => false, 'expanded' => true, 'choices' => $list->getPaymentType(0), 'mapped' => false))
+            ->add('Submit', SubmitType::class, array('label' => 'Ajouter'))
         ;
     }
 
@@ -130,104 +100,52 @@ class TrainingType extends AbstractType
         $list = new ListData();
 
         $builder
-            ->add('TrainingAttendanceName', TextType::class,
-                array('label' => 'Nom : ',
-                    'required' => true,
-                    'mapped' => false))
-            ->add('TrainingAttendanceSex', ChoiceType::class,
-                array('label' => 'Sexe : ',
-                    'multiple' => false,
-                    'expanded' => true,
-                    'choices' => $list->getSex(0),
-                    'mapped' => false))
-            ->add('TrainingAttendanceCountry', CountryType::class,
-                array('label' => 'Pays : ',
-                    'choice_translation_locale' => 'fr',
-                    'preferred_choices' => array('BE', 'FR'),
-                    'required' => true,
-                    'mapped' => false,
-                    'placeholder' => 'Choississez un pays',))
-            ->add('TrainingAttendanceSession', ChoiceType::class,
-                array('label' => 'Session : ',
-                    'multiple' => true,
-                    'expanded' => true,
-                    'choices' => $choices,
-                    'mapped' => false,
-                    'choice_value' => 'training_session_id',
-                    'choice_label' => 'training_session_choice_name'))
-            ->add('TrainingAttendancePayment', IntegerType::class,
-                array('label' => 'Paiement : ',
-                    'required' => false,
-                    'mapped' => false))
-            ->add('TrainingAttendancePaymentType', ChoiceType::class,
-                array('label' => 'Mode de paiement : ',
-                    'multiple' => false,
-                    'expanded' => true,
-                    'choices' => $list->getPaymentType(0),
-                    'mapped' => false))
-            ->add('Submit', SubmitType::class,
-                array('label' => 'Ajouter'))
+            ->add('TrainingAttendanceName', TextType::class, array('label' => 'Nom : ', 'required' => true, 'mapped' => false))
+            ->add('TrainingAttendanceSex', ChoiceType::class, array('label' => 'Sexe : ', 'multiple' => false, 'expanded' => true, 'choices' => $list->getSex(0), 'mapped' => false))
+            ->add('TrainingAttendanceCountry', CountryType::class, array('label' => 'Pays : ', 'choice_translation_locale' => 'fr', 'preferred_choices' => array('BE', 'FR'), 'required' => true, 'mapped' => false, 'placeholder' => 'Choississez un pays',))
+            ->add('TrainingAttendanceSession', ChoiceType::class, array('label' => 'Session : ', 'multiple' => true, 'expanded' => true, 'choices' => $choices, 'mapped' => false, 'choice_value' => 'training_session_id', 'choice_label' => 'training_session_choice_name'))
+            ->add('TrainingAttendancePayment', IntegerType::class, array('label' => 'Paiement : ', 'required' => false, 'mapped' => false))
+            ->add('TrainingAttendancePaymentType', ChoiceType::class, array('label' => 'Mode de paiement : ', 'multiple' => false, 'expanded' => true, 'choices' => $list->getPaymentType(0), 'mapped' => false))
+            ->add('Submit', SubmitType::class, array('label' => 'Ajouter'))
         ;
     }
 
     private function sessionAdd(FormBuilderInterface $builder)
     {
         $builder
-            ->add('TrainingSessionDate', DateType::class,
-                array('label' => 'Date : ',
-                    'widget' => 'single_text'))
-            ->add('TrainingSessionStartingHour', TimeType::class,
-                array ('label' => 'Début : '))
-            ->add('TrainingSessionEndingHour', TimeType::class,
-                array ('label' => 'Fin : '))
-            ->add('Submit', SubmitType::class,
-                array('label' => 'Ajouter'))
+            ->add('TrainingSessionDate', DateType::class, array('label' => 'Date : ', 'widget' => 'single_text'))
+            ->add('TrainingSessionStartingHour', TimeType::class, array ('label' => 'Début : '))
+            ->add('TrainingSessionEndingHour', TimeType::class, array ('label' => 'Fin : '))
+            ->add('Submit', SubmitType::class, array('label' => 'Ajouter'))
         ;
     }
 
     private function sessionCreate(FormBuilderInterface $builder)
     {
         $builder
-            ->add('TrainingSessionDate', DateType::class,
-                array('label' => 'Date : ',
-                    'widget' => 'single_text'))
-            ->add('TrainingSessionStartingHour', TimeType::class,
-                array ('label' => 'Début : '))
-            ->add('TrainingSessionEndingHour', TimeType::class,
-                array ('label' => 'Fin : '))
+            ->add('TrainingSessionDate', DateType::class, array('label' => 'Date : ', 'widget' => 'single_text'))
+            ->add('TrainingSessionStartingHour', TimeType::class, array ('label' => 'Début : '))
+            ->add('TrainingSessionEndingHour', TimeType::class, array ('label' => 'Fin : '))
         ;
     }
 
     private function sessionUpdate(FormBuilderInterface $builder)
     {
         $builder
-            ->add('TrainingSessionDate', DateType::class,
-                array('label' => 'Date : ',
-                    'widget' => 'single_text'))
-            ->add('TrainingSessionStartingHour', TimeType::class,
-                array ('label' => 'Début : '))
-            ->add('TrainingSessionEndingHour', TimeType::class,
-                array ('label' => 'Fin : '))
-            ->add('Submit', SubmitType::class,
-                array('label' => 'Modifier'))
+            ->add('TrainingSessionDate', DateType::class, array('label' => 'Date : ', 'widget' => 'single_text'))
+            ->add('TrainingSessionStartingHour', TimeType::class, array ('label' => 'Début : '))
+            ->add('TrainingSessionEndingHour', TimeType::class, array ('label' => 'Fin : '))
+            ->add('Submit', SubmitType::class, array('label' => 'Modifier'))
         ;
     }
 
     private function sessionDelete(FormBuilderInterface $builder)
     {
         $builder
-            ->add('TrainingSessionDate', DateType::class,
-                array('label' => 'Date : ',
-                    'widget' => 'single_text',
-                    'disabled' => true))
-            ->add('TrainingSessionStartingHour', TimeType::class,
-                array ('label' => 'Début : ',
-                    'disabled' => true))
-            ->add('TrainingSessionEndingHour', TimeType::class,
-                array ('label' => 'Fin : ',
-                    'disabled' => true))
-            ->add('Submit', SubmitType::class,
-                array('label' => 'Supprimer'))
+            ->add('TrainingSessionDate', DateType::class, array('label' => 'Date : ', 'widget' => 'single_text', 'disabled' => true))
+            ->add('TrainingSessionStartingHour', TimeType::class, array ('label' => 'Début : ', 'disabled' => true))
+            ->add('TrainingSessionEndingHour', TimeType::class, array ('label' => 'Fin : ', 'disabled' => true))
+            ->add('Submit', SubmitType::class, array('label' => 'Supprimer'))
         ;
     }
 
@@ -236,29 +154,15 @@ class TrainingType extends AbstractType
         $list = new ListData();
 
         $builder
-            ->add('TrainingType', ChoiceType::class,
-                array('label' => 'Type de stage : ',
-                    'placeholder' => 'Choississez un type',
-                    'choices' => $list->getTrainingType(0)))
-            ->add('TrainingName', TextType::class,
-                array('label' => 'Nom : '))
-            ->add('TrainingPlace', TextType::class,
-                array('label' => 'Lieu : ',
-                    'required' => false))
-            ->add('TrainingStreet', TextType::class,
-                array('label' => 'Adresse : '))
-            ->add('TrainingZip', IntegerType::class,
-                array('label' => 'Code postal : '))
-            ->add('TrainingCity', TextType::class,
-                array('label' => 'Localité : '))
-            ->add('Session', TrainingType::class,
-                array('form' => 'session_create',
-                    'data_class' => TrainingSession::class))
-            ->add('TrainingComment', TextareaType::class,
-                array('label' => 'Commentaire : ',
-                    'required' => false))
-            ->add('Submit', SubmitType::class,
-                array('label' => 'Ajouter'))
+            ->add('TrainingType', ChoiceType::class, array('label' => 'Type de stage : ', 'placeholder' => 'Choississez un type', 'choices' => $list->getTrainingType(0)))
+            ->add('TrainingName', TextType::class, array('label' => 'Nom : '))
+            ->add('TrainingPlace', TextType::class, array('label' => 'Lieu : ', 'required' => false))
+            ->add('TrainingStreet', TextType::class, array('label' => 'Adresse : '))
+            ->add('TrainingZip', IntegerType::class, array('label' => 'Code postal : '))
+            ->add('TrainingCity', TextType::class, array('label' => 'Localité : '))
+            ->add('Session', TrainingType::class, array('form' => 'session_create', 'data_class' => TrainingSession::class))
+            ->add('TrainingComment', TextareaType::class, array('label' => 'Commentaire : ', 'required' => false))
+            ->add('Submit', SubmitType::class, array('label' => 'Ajouter'))
         ;
     }
 
@@ -267,17 +171,10 @@ class TrainingType extends AbstractType
         $list = new ListData();
 
         $builder
-            ->add('TrainingType', ChoiceType::class,
-                array('label' => 'Type de stage : ',
-                    'placeholder' => 'Choississez un type',
-                    'choices' => $list->getTrainingType(0)))
-            ->add('TrainingName', TextType::class,
-                array('label' => 'Nom : '))
-            ->add('TrainingComment', TextareaType::class,
-                array('label' => 'Commentaire : ',
-                    'required' => false))
-            ->add('Submit', SubmitType::class,
-                array('label' => 'Modifier'))
+            ->add('TrainingType', ChoiceType::class, array('label' => 'Type de stage : ', 'placeholder' => 'Choississez un type', 'choices' => $list->getTrainingType(0)))
+            ->add('TrainingName', TextType::class, array('label' => 'Nom : '))
+            ->add('TrainingComment', TextareaType::class, array('label' => 'Commentaire : ', 'required' => false))
+            ->add('Submit', SubmitType::class, array('label' => 'Modifier'))
         ;
     }
 
@@ -286,20 +183,10 @@ class TrainingType extends AbstractType
         $list = new ListData();
 
         $builder
-            ->add('TrainingType', ChoiceType::class,
-                array('label' => 'Type de stage : ',
-                    'placeholder' => 'Choississez un type',
-                    'choices' => $list->getTrainingType(0),
-                    'disabled' => true))
-            ->add('TrainingName', TextType::class,
-                array('label' => 'Nom : ',
-                    'disabled' => true))
-            ->add('TrainingComment', TextareaType::class,
-                array('label' => 'Commentaire : ',
-                    'required' => false,
-                    'disabled' => true))
-            ->add('Submit', SubmitType::class,
-                array('label' => 'Supprimer'))
+            ->add('TrainingType', ChoiceType::class, array('label' => 'Type de stage : ', 'placeholder' => 'Choississez un type', 'choices' => $list->getTrainingType(0), 'disabled' => true))
+            ->add('TrainingName', TextType::class, array('label' => 'Nom : ', 'disabled' => true))
+            ->add('TrainingComment', TextareaType::class, array('label' => 'Commentaire : ', 'required' => false, 'disabled' => true))
+            ->add('Submit', SubmitType::class, array('label' => 'Supprimer'))
         ;
     }
 }

@@ -19,10 +19,13 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
+/**
+ * @Route("/stage", name="training_")
+ */
 class TrainingController extends AbstractController
 {
     /**
-     * @Route("/stage/", name="training_index")
+     * @Route("/", name="index")
      */
     public function index()
     {
@@ -32,7 +35,7 @@ class TrainingController extends AbstractController
     }
 
     /**
-     * @Route("/stage/creer", name="training_create")
+     * @Route("/creer", name="create")
      * @param Request $request
      * @return RedirectResponse|Response
      */
@@ -68,29 +71,25 @@ class TrainingController extends AbstractController
     }
 
     /**
-     * @Route("/stage/{training_id<\d+>}/detail", name="training_detail")
-     * @param int $training_id
+     * @Route("/{training<\d+>}/detail", name="detail")
+     * @param Training $training
      * @return Response
      */
-    public function detail(int $training_id)
+    public function detail(Training $training)
     {
-        $training = $this->getDoctrine()->getRepository(Training::class)->findOneBy(['training_id' => $training_id]);
-
         $sessions = $this->getDoctrine()->getRepository(TrainingSession::class)->getTrainingSessions($training->getTrainingId());
 
         return $this->render('Training/training_detail.html.twig', array('training' => $training, 'sessions' => $sessions, 'listData' => new ListData()));
     }
 
     /**
-     * @Route("/stage/{training_id<\d+>}/modifier", name="training_update")
+     * @Route("/{training<\d+>}/modifier", name="update")
      * @param Request $request
-     * @param int $training_id
+     * @param Training $training
      * @return RedirectResponse|Response
      */
-    public function update(Request $request, int $training_id)
+    public function update(Request $request, Training $training)
     {
-        $training = $this->getDoctrine()->getRepository(Training::class)->findOneBy(['training_id' => $training_id]);
-
         $form = $this->createForm(TrainingType::class, $training, array('form' => 'training_update'));
 
         $form->handleRequest($request);
@@ -108,15 +107,13 @@ class TrainingController extends AbstractController
     }
 
     /**
-     * @Route("/stage/{training_id<\d+>}/supprimer", name="training_delete")
+     * @Route("/{training<\d+>}/supprimer", name="delete")
      * @param Request $request
-     * @param int $training_id
+     * @param Training $training
      * @return RedirectResponse|Response
      */
-    public function delete(Request $request, int $training_id)
+    public function delete(Request $request, Training $training)
     {
-        $training = $this->getDoctrine()->getRepository(Training::class)->findOneBy(['training_id' => $training_id]);
-
         $form = $this->createForm(TrainingType::class, $training, array('form' => 'training_delete'));
 
         $form->handleRequest($request);
@@ -135,15 +132,13 @@ class TrainingController extends AbstractController
     }
 
     /**
-     * @Route("/stage/{training_id<\d+>}/ajouter-session", name="training_session_add")
+     * @Route("/{training<\d+>}/ajouter-session", name="session_add")
      * @param Request $request
-     * @param int $training_id
+     * @param Training $training
      * @return RedirectResponse|Response
      */
-    public function sessionAdd(Request $request, int $training_id)
+    public function sessionAdd(Request $request, Training $training)
     {
-        $training = $this->getDoctrine()->getRepository(Training::class)->findOneBy(['training_id' => $training_id]);
-
         $form = $this->createForm(TrainingType::class, new TrainingSession(), array('form' => 'session_add', 'data_class' => TrainingSession::class));
 
         $form->handleRequest($request);
@@ -164,25 +159,21 @@ class TrainingController extends AbstractController
             $entityManager->persist($session);
             $entityManager->flush();
 
-            return $this->redirectToRoute('training_detail', array('training_id' => $training->getTrainingId()));
+            return $this->redirectToRoute('training_detail', array('training' => $training->getTrainingId()));
         }
 
         return $this->render('Training/session_add.html.twig', array('form' => $form->createView()));
     }
 
     /**
-     * @Route("/stage/{training_id<\d+>}/modifier-session/{session_id<\d+>}", name="training_session_update")
+     * @Route("/{training<\d+>}/modifier-session/{session<\d+>}", name="session_update")
      * @param Request $request
-     * @param int $training_id
-     * @param int $session_id
+     * @param Training $training
+     * @param TrainingSession $session
      * @return RedirectResponse|Response
      */
-    public function sessionUpdate(Request $request, int $training_id, int $session_id)
+    public function sessionUpdate(Request $request, Training $training, TrainingSession $session)
     {
-        $training = $this->getDoctrine()->getRepository(Training::class)->findOneBy(['training_id' => $training_id]);
-
-        $session = $this->getDoctrine()->getRepository(TrainingSession::class)->findOneBy(['training_session_id' => $session_id]);
-
         $form = $this->createForm(TrainingType::class, $session, array('form' => 'session_add', 'data_class' => TrainingSession::class));
 
         $form->handleRequest($request);
@@ -199,25 +190,21 @@ class TrainingController extends AbstractController
 
             $entityManager->flush();
 
-            return $this->redirectToRoute('training_detail', array('training_id' => $training->getTrainingId()));
+            return $this->redirectToRoute('training_detail', array('training' => $training->getTrainingId()));
         }
 
         return $this->render('Training/session_update.html.twig', array('form' => $form->createView()));
     }
 
     /**
-     * @Route("/stage/{training_id<\d+>}/supprimer-session/{session_id<\d+>}", name="training_session_delete")
+     * @Route("/{training<\d+>}/supprimer-session/{session<\d+>}", name="session_delete")
      * @param Request $request
-     * @param int $training_id
-     * @param int $session_id
+     * @param Training $training
+     * @param TrainingSession $session
      * @return RedirectResponse|Response
      */
-    public function sessionDelete(Request $request, int $training_id, int $session_id)
+    public function sessionDelete(Request $request, Training $training, TrainingSession $session)
     {
-        $training = $this->getDoctrine()->getRepository(Training::class)->findOneBy(['training_id' => $training_id]);
-
-        $session = $this->getDoctrine()->getRepository(TrainingSession::class)->findOneBy(['training_session_id' => $session_id]);
-
         $form = $this->createForm(TrainingType::class, $session, array('form' => 'session_delete', 'data_class' => TrainingSession::class));
 
         $form->handleRequest($request);
@@ -249,7 +236,7 @@ class TrainingController extends AbstractController
             }
             else
             {
-                return $this->redirectToRoute('training_detail', array('training_id' => $training->getTrainingId()));
+                return $this->redirectToRoute('training_detail', array('training' => $training->getTrainingId()));
             }
 
         }
@@ -258,15 +245,13 @@ class TrainingController extends AbstractController
     }
 
     /**
-     * @Route("/stage/{training_id<\d+>}/ajouter-pratiquant", name="training_attendance_add")
+     * @Route("/{training<\d+>}/ajouter-pratiquant", name="attendance_add")
      * @param Request $request
-     * @param int $training_id
+     * @param Training $training
      * @return RedirectResponse|Response
      */
-    public function attendanceAdd(Request $request, int $training_id)
+    public function attendanceAdd(Request $request, Training $training)
     {
-        $training = $this->getDoctrine()->getRepository(Training::class)->findOneBy(['training_id' => $training_id]);
-
         $choices = $this->getDoctrine()->getRepository(TrainingSession::class)->findBy(['training' => $training->getTrainingId()], ['training_session_date' => 'ASC', 'training_session_starting_hour' => 'ASC', 'training_session_duration' => 'ASC']);
 
         $form = $this->createForm(TrainingType::class, null, array('form' => 'attendance_add', 'data_class' => null, 'choices' => $choices));
@@ -307,7 +292,7 @@ class TrainingController extends AbstractController
 
             $entityManager->flush();
 
-            return $this->redirectToRoute('training_attendance_add', array('training_id' => $training->getTrainingId()));
+            return $this->redirectToRoute('training_attendance_add', array('training' => $training->getTrainingId()));
         }
 
         $payments = $this->getDoctrine()->getRepository(TrainingAttendance::class)->getPayments($training->getTrainingId());
@@ -334,15 +319,13 @@ class TrainingController extends AbstractController
     }
 
     /**
-     * @Route("/stage/{training_id<\d+>}/ajouter-pratiquant-non-afa", name="training_attendance_foreign_add")
+     * @Route("/{training<\d+>}/ajouter-pratiquant-non-afa", name="attendance_foreign_add")
      * @param Request $request
-     * @param int $training_id
+     * @param Training $training
      * @return RedirectResponse|Response
      */
-    public function attendanceForeignAdd(Request $request, int $training_id)
+    public function attendanceForeignAdd(Request $request, Training $training)
     {
-        $training = $this->getDoctrine()->getRepository(Training::class)->findOneBy(['training_id' => $training_id]);
-
         $choices = $this->getDoctrine()->getRepository(TrainingSession::class)->findBy(['training' => $training->getTrainingId()], ['training_session_date' => 'ASC', 'training_session_starting_hour' => 'ASC']);
 
         $form = $this->createForm(TrainingType::class, null, array('form' => 'attendance_foreign_add', 'data_class' => null, 'choices' => $choices));
@@ -383,7 +366,7 @@ class TrainingController extends AbstractController
 
             $entityManager->flush();
 
-            return $this->redirectToRoute('training_attendance_foreign_add', array('training_id' => $training->getTrainingId()));
+            return $this->redirectToRoute('training_attendance_foreign_add', array('training' => $training->getTrainingId()));
         }
 
         $payments = $this->getDoctrine()->getRepository(TrainingAttendance::class)->getPayments($training->getTrainingId());

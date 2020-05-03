@@ -14,10 +14,13 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
+/**
+ * @Route("/secretariat", name="secretariat_")
+ */
 class SecretariatController extends AbstractController
 {
     /**
-     * @Route("/secretariat/", name="secretariat_index")
+     * @Route("/", name="index")
      */
     public function index()
     {
@@ -25,7 +28,7 @@ class SecretariatController extends AbstractController
     }
 
     /**
-     * @Route("/secretariat/sympathisant_liste", name="secretariat_supporter_index")
+     * @Route("/sympathisant_liste", name="supporter_index")
      */
     public function supporterIndex()
     {
@@ -35,7 +38,7 @@ class SecretariatController extends AbstractController
     }
 
     /**
-     * @Route("/secretariat/sympathisant_ajouter", name="secretariat_supporter_create")
+     * @Route("/sympathisant_ajouter", name="supporter_create")
      * @param Request $request
      * @return RedirectResponse|Response
      */
@@ -61,15 +64,13 @@ class SecretariatController extends AbstractController
     }
 
     /**
-     * @Route("/secretariat/sympathisant_modifier/{supporter_id<\d+>}", name="secretariat_supporter_update")
+     * @Route("/sympathisant_modifier/{supporter<\d+>}", name="supporter_update")
      * @param Request $request
-     * @param int $supporter_id
+     * @param SecretariatSupporter $supporter
      * @return RedirectResponse|Response
      */
-    public function supporterUpdate(Request $request, int $supporter_id)
+    public function supporterUpdate(Request $request, SecretariatSupporter $supporter)
     {
-        $supporter = $this->getDoctrine()->getRepository(SecretariatSupporter::class)->findOneBy(['secretariat_supporter_id' => $supporter_id]);
-
         $form = $this->createForm(SecretariatType::class, $supporter, array('form' => 'supporter_update', 'data_class' => SecretariatSupporter::class));
 
         $form->handleRequest($request);
@@ -87,15 +88,13 @@ class SecretariatController extends AbstractController
     }
 
     /**
-     * @Route("/secretariat/sympathisant_supprimer/{supporter_id<\d+>}", name="secretariat_supporter_delete")
+     * @Route("/sympathisant_supprimer/{supporter<\d+>}", name="supporter_delete")
      * @param Request $request
-     * @param int $supporter_id
+     * @param SecretariatSupporter $supporter
      * @return RedirectResponse|Response
      */
-    public function supporterDelete(Request $request, int $supporter_id)
+    public function supporterDelete(Request $request, SecretariatSupporter $supporter)
     {
-        $supporter = $this->getDoctrine()->getRepository(SecretariatSupporter::class)->findOneBy(['secretariat_supporter_id' => $supporter_id]);
-
         $form = $this->createForm(SecretariatType::class, $supporter, array('form' => 'supporter_delete', 'data_class' => SecretariatSupporter::class));
 
         $form->handleRequest($request);

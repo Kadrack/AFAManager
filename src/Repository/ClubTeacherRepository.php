@@ -27,6 +27,7 @@ class ClubTeacherRepository extends ServiceEntityRepository
     public function getAFATeachers(Club $club): ?array
     {
         $qb = $this->createQueryBuilder('t');
+
         return $qb->select('t.club_teacher_id AS Id', 't.club_teacher_title AS Title', 't.club_teacher_type AS Type', 'm.member_firstname AS Firstname', 'm.member_name AS Name', 'd.grade_dan_rank AS Dan')
             ->join(Member::class, 'm', 'WITH', $qb->expr()->eq('m.member_id', 't.club_teacher_member'))
             ->join(GradeDan::class, 'd', 'WITH', $qb->expr()->eq('m.member_last_grade_dan', 'd.grade_dan_id'))
@@ -42,6 +43,7 @@ class ClubTeacherRepository extends ServiceEntityRepository
     public function getForeignTeachers(Club $club): ?array
     {
         $qb = $this->createQueryBuilder('t');
+
         return $qb->select('t.club_teacher_id AS Id', 't.club_teacher_title AS Title', 't.club_teacher_type AS Type', 't.club_teacher_firstname AS Firstname', 't.club_teacher_name AS Name', 't.club_teacher_grade AS Grade', 't.club_teacher_grade_title_aikikai AS GradeTitleAikikai', 't.club_teacher_grade_title_adeps AS GradeTitleAdeps')
             ->where($qb->expr()->IsNull('t.club_teacher_member'))
             ->andWhere($qb->expr()->eq('t.club_teacher', $club->getClubId()))

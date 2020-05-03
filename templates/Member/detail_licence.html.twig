@@ -20,14 +20,14 @@
             <tr>
                 <td></td>
                 <td></td>
-                <td><a href="{{ path('member_licence_renew', {'club_number': club_number, 'member_id': member.getMemberId()}) }}">Renouveller</a></td>
+                <td><a href="{{ path('member_licence_renew', {'club': club.getClubId(), 'member': member.getMemberId()}) }}">Renouveller</a></td>
             </tr>
         {% endif %}
         {% for licence in licence_history %}
             <tr>
                 <td>{{ licence.getMemberLicenceDeadline()|date("d/m/Y") }}</td>
-                <td>{{ licence.getMemberLicenceClub().getClubNumber() }} - {{ licence.getMemberLicenceClub().getClubName() }}</td>
-                <td><a href="{{ path('member_licence_renew_update', {'club_number': club_number, 'member_id': member.getMemberId(), 'renew_id': licence.getMemberLicenceId()}) }}">Modifier</a></td>
+                <td>{{ licence.getMemberLicenceClub().getClubId() }} - {{ licence.getMemberLicenceClub().getClubName() }}</td>
+                <td><a href="{{ path('member_licence_renew_update', {'club': club.getClubId(), 'member': member.getMemberId(), 'renew': licence.getMemberLicenceId()}) }}">Modifier</a></td>
             </tr>
         {% endfor %}
     </table>

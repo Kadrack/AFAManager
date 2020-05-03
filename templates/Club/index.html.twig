@@ -22,9 +22,9 @@
             </tr>
             {% for club in active.Clubs %}
                 <tr>
-                    <td>{{ club.Number }}</td>
+                    <td>{{ club.Id }}</td>
                     <td>{{ club.Name|title }}</td>
-                    <td><a href="{{ path('club_detail_association', {'club_number': club.Number}) }}">Association</a> - <a href="{{ path('club_detail_class', {'club_number': club.Number}) }}">Cours</a> - <a href="{{ path('club_active_members', {'club_number': club.Number}) }}">Membres Actifs</a> - <a href="{{ path('club_inactive_members', {'club_number': club.Number}) }}">Membres Inactifs</a> - <a href="{{ path('club_disaffiliate', {'club_number': club.Number}) }}">Désaffilier</a></td>
+                    <td><a href="{{ path('club_detail_association', {'club': club.Id}) }}">Association</a> - <a href="{{ path('club_detail_class', {'club': club.Id}) }}">Cours</a> - <a href="{{ path('club_active_members', {'club': club.Id}) }}">Membres Actifs</a> - <a href="{{ path('club_inactive_members', {'club': club.Id}) }}">Membres Inactifs</a> - <a href="{{ path('club_disaffiliate', {'club': club.Id}) }}">Désaffilier</a></td>
                 </tr>
             {% endfor %}
         {% endfor %}
@@ -39,9 +39,9 @@
             </tr>
             {% for club in inactive_clubs %}
                 <tr>
-                    <td>{{ club.Number }}</td>
+                    <td>{{ club.Id }}</td>
                     <td>{{ club.Name }}</td>
-                    <td><a href="{{ path('club_reassign', {'club_number': club.Number}) }}">Activer</a> - <a href="{{ path('club_detail_association', {'club_number': club.Number}) }}">Association</a> - <a href="{{ path('club_detail_class', {'club_number': club.Number}) }}">Cours</a> - <a href="{{ path('club_active_members', {'club_number': club.Number}) }}">Membres Actifs</a> - <a href="{{ path('club_inactive_members', {'club_number': club.Number}) }}">Membres Inactifs</a></td>
+                    <td><a href="{{ path('club_reassign', {'club': club.Id}) }}">Activer</a> - <a href="{{ path('club_detail_association', {'club': club.Id}) }}">Association</a> - <a href="{{ path('club_detail_class', {'club': club.Id}) }}">Cours</a> - <a href="{{ path('club_active_members', {'club': club.Id}) }}">Membres Actifs</a> - <a href="{{ path('club_inactive_members', {'club': club.Id}) }}">Membres Inactifs</a></td>
                 </tr>
             {% endfor %}
         {% endif %}

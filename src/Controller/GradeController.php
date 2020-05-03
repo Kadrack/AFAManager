@@ -17,10 +17,13 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
+/**
+ * @Route("/grade", name="grade_")
+ */
 class GradeController extends AbstractController
 {
     /**
-     * @Route("/grade/session-examen", name="grade_exam_index")
+     * @Route("/session-examen", name="exam_index")
      */    
     public function exam_index()
     {
@@ -30,7 +33,7 @@ class GradeController extends AbstractController
     }
 
     /**
-     * @Route("/grade/session-examen/creer", name="grade_exam_create")
+     * @Route("/session-examen/creer", name="exam_create")
      * @param Request $request
      * @return RedirectResponse|Response
      */
@@ -58,15 +61,13 @@ class GradeController extends AbstractController
     }
 
     /**
-     * @Route("/grade/session-examen/{session_id<\d+>}/modifier", name="grade_exam_update")
+     * @Route("/session-examen/{session<\d+>}/modifier", name="exam_update")
      * @param Request $request
-     * @param int $session_id
+     * @param GradeSession $session
      * @return RedirectResponse|Response
      */
-    public function exam_update(Request $request, int $session_id)
+    public function exam_update(Request $request, GradeSession $session)
     {
-        $session = $this->getDoctrine()->getRepository(GradeSession::class)->findOneBy(['grade_session_id' => $session_id]);
-
         $form = $this->createForm(ExamType::class, $session, array('form' => 'update'));
 
         $form->handleRequest($request);
@@ -77,26 +78,26 @@ class GradeController extends AbstractController
 
             $entityManager->flush();
 
-            return $this->redirectToRoute('grade_exam_index', array('session_id' => $session_id));
+            return $this->redirectToRoute('grade_exam_index', array('session' => $session->getGradeSessionId()));
         }
 
         return $this->render('Grade/Exam/update.html.twig', array('form' => $form->createView()));
     }
 
     /**
-     * @Route("/grade/session-examen/{session_id<\d+>}/detail", name="grade_exam_detail")
-     * @param int $session_id
+     * @Route("/session-examen/{session<\d+>}/detail", name="exam_detail")
+     * @param GradeSession $session
      * @return Response
      */
-    public function exam_detail(int $session_id)
+    public function exam_detail(GradeSession $session)
     {
-        $applicants = $this->getDoctrine()->getRepository(GradeDan::class)->findBy(['grade_dan_status' => 1, 'grade_dan_exam' => $session_id], ['grade_dan_rank' => 'ASC']);
+        $applicants = $this->getDoctrine()->getRepository(GradeDan::class)->findBy(['grade_dan_status' => 1, 'grade_dan_exam' => $session->getGradeSessionId()], ['grade_dan_rank' => 'ASC']);
 
-        $candidates = $this->getDoctrine()->getRepository(GradeDan::class)->findBy(['grade_dan_status' => 2, 'grade_dan_exam' => $session_id], ['grade_dan_rank' => 'ASC']);
+        $candidates = $this->getDoctrine()->getRepository(GradeDan::class)->findBy(['grade_dan_status' => 2, 'grade_dan_exam' => $session->getGradeSessionId()], ['grade_dan_rank' => 'ASC']);
 
-        $refused    = $this->getDoctrine()->getRepository(GradeDan::class)->findBy(['grade_dan_status' => 3, 'grade_dan_exam' => $session_id], ['grade_dan_rank' => 'ASC']);
+        $refused    = $this->getDoctrine()->getRepository(GradeDan::class)->findBy(['grade_dan_status' => 3, 'grade_dan_exam' => $session->getGradeSessionId()], ['grade_dan_rank' => 'ASC']);
 
-        $promoted   = $this->getDoctrine()->getRepository(GradeDan::class)->findBy(['grade_dan_status' => array(4,5), 'grade_dan_exam' => $session_id], ['grade_dan_rank' => 'ASC']);
+        $promoted   = $this->getDoctrine()->getRepository(GradeDan::class)->findBy(['grade_dan_status' => array(4,5), 'grade_dan_exam' => $session->getGradeSessionId()], ['grade_dan_rank' => 'ASC']);
 
         $promoted_filtered = array(); $i = 0;
 
@@ -116,30 +117,27 @@ class GradeController extends AbstractController
             }
             else
             {
+                $promoted_filtered[$i-1]['Grade_Aikikai_Id']    = $promote->getGradeDanId();
                 $promoted_filtered[$i-1]['Aikikai_Certificate'] = $promote->getGradeDanCertificate();
             }
 
             $i++;
         }
 
-        return $this->render('Grade/Exam/detail.html.twig', array('session_id' => $session_id, 'applicants' => $applicants, 'candidates' => $candidates, 'promoted' => $promoted_filtered, 'refused' => $refused, 'listData' => new ListData()));
+        return $this->render('Grade/Exam/detail.html.twig', array('session' => $session, 'applicants' => $applicants, 'candidates' => $candidates, 'promoted' => $promoted_filtered, 'refused' => $refused, 'listData' => new ListData()));
     }
 
     /**
-     * @Route("/grade/session-examen/{session_id<\d+>}/postulant/{member_id<\d+>}/grade/{grade_id<\d+>}/detail", name="grade_exam_applicant_detail")
+     * @Route("/session-examen/{session<\d+>}/postulant/{member<\d+>}/grade/{grade<\d+>}/detail", name="exam_applicant_detail")
      * @param Request $request
-     * @param int $session_id
-     * @param int $member_id
-     * @param int $grade_id
+     * @param GradeSession $session
+     * @param Member $member
+     * @param GradeDan $grade
      * @return RedirectResponse|Response
      */
-    public function exam_applicant_detail(Request $request, int $session_id, int $member_id, int $grade_id)
+    public function exam_applicant_detail(Request $request, GradeSession $session, Member $member, GradeDan $grade)
     {
-        $member = $this->getDoctrine()->getRepository(Member::class)->findOneBy(['member_id' => $member_id]);
-
-        $grade = $this->getDoctrine()->getRepository(GradeDan::class)->findOneBy(['grade_dan_id' => $grade_id]);
-
-        $form = $this->createForm(ExamType::class, $grade, array('form' => 'applicant_validation', 'data_class' => GradeDan::class, 'action' => $this->generateUrl('grade_exam_applicant_detail', array('session_id' => $session_id, 'member_id' => $member_id, 'grade_id' => $grade_id)), 'method' => 'POST'));
+        $form = $this->createForm(ExamType::class, $grade, array('form' => 'applicant_validation', 'data_class' => GradeDan::class));
 
         $form->handleRequest($request);
 
@@ -151,27 +149,23 @@ class GradeController extends AbstractController
 
             $entityManager->flush();
 
-            return $this->redirectToRoute('grade_exam_detail', array('session_id' => $session_id));
+            return $this->redirectToRoute('grade_exam_detail', array('session' => $session->getGradeSessionId()));
         }
 
-        return $this->render('Grade/Exam/applicant_detail.html.twig', array('session_id' => $session_id, 'member' => $member, 'form' => $form->createView()));
+        return $this->render('Grade/Exam/applicant_detail.html.twig', array('session' => $session, 'member' => $member, 'form' => $form->createView()));
     }
 
     /**
-     * @Route("/grade/session-examen/{session_id<\d+>}/candidat/{member_id<\d+>}/grade/{grade_id<\d+>}/detail", name="grade_exam_candidate_detail")
+     * @Route("/session-examen/{session<\d+>}/candidat/{member<\d+>}/grade/{grade<\d+>}/detail", name="exam_candidate_detail")
      * @param Request $request
-     * @param int $session_id
-     * @param int $member_id
-     * @param int $grade_id
+     * @param GradeSession $session
+     * @param Member $member
+     * @param GradeDan $grade
      * @return RedirectResponse|Response
      */
-    public function exam_candidate_detail(Request $request, int $session_id, int $member_id, int $grade_id)
+    public function exam_candidate_detail(Request $request, GradeSession $session, Member $member, GradeDan $grade)
     {
-        $member = $this->getDoctrine()->getRepository(Member::class)->findOneBy(['member_id' => $member_id]);
-
-        $grade = $this->getDoctrine()->getRepository(GradeDan::class)->findOneBy(['grade_dan_id' => $grade_id]);
-
-        $form = $this->createForm(ExamType::class, $grade, array('form' => 'candidate_result', 'data_class' => GradeDan::class, 'action' => $this->generateUrl('grade_exam_candidate_detail', array('session_id' => $session_id, 'member_id' => $member_id, 'grade_id' => $grade_id)), 'method' => 'POST'));
+        $form = $this->createForm(ExamType::class, $grade, array('form' => 'candidate_result', 'data_class' => GradeDan::class));
 
         $form->handleRequest($request);
 
@@ -183,27 +177,23 @@ class GradeController extends AbstractController
 
             $entityManager->flush();
 
-            return $this->redirectToRoute('grade_exam_detail', array('session_id' => $session_id));
+            return $this->redirectToRoute('grade_exam_detail', array('session' => $session->getGradeSessionId()));
         }
 
-        return $this->render('Grade/Exam/candidate_detail.html.twig', array('session_id' => $session_id, 'member' => $member, 'form' => $form->createView()));
+        return $this->render('Grade/Exam/candidate_detail.html.twig', array('session' => $session, 'member' => $member, 'form' => $form->createView()));
     }
 
     /**
-     * @Route("/grade/session-examen/{session_id<\d+>}/candidat/{member_id<\d+>}/grade/{grade_id<\d+>}/detail_update", name="grade_exam_candidate_detail_update")
+     * @Route("/session-examen/{session<\d+>}/candidat/{member<\d+>}/grade/{grade<\d+>}/detail_update", name="exam_candidate_detail_update")
      * @param Request $request
-     * @param int $session_id
-     * @param int $member_id
-     * @param int $grade_id
+     * @param GradeSession $session
+     * @param Member $member
+     * @param GradeDan $grade
      * @return RedirectResponse|Response
      */
-    public function exam_candidate_detail_update(Request $request, int $session_id, int $member_id, int $grade_id)
+    public function exam_candidate_detail_update(Request $request, GradeSession $session, Member $member, GradeDan $grade)
     {
-        $member = $this->getDoctrine()->getRepository(Member::class)->findOneBy(['member_id' => $member_id]);
-
-        $grade = $this->getDoctrine()->getRepository(GradeDan::class)->findOneBy(['grade_dan_id' => $grade_id]);
-
-        $form = $this->createForm(ExamType::class, $grade, array('form' => 'candidate_result', 'data_class' => GradeDan::class, 'action' => $this->generateUrl('grade_exam_candidate_detail_update', array('session_id' => $session_id, 'member_id' => $member_id, 'grade_id' => $grade_id)), 'method' => 'POST'));
+        $form = $this->createForm(ExamType::class, $grade, array('form' => 'candidate_result', 'data_class' => GradeDan::class));
 
         $form->handleRequest($request);
 
@@ -215,7 +205,7 @@ class GradeController extends AbstractController
             {
                 $member->setMemberLastGradeDan($grade);
 
-                $grade_aikikai = $this->getDoctrine()->getRepository(GradeDan::class)->findOneBy(['grade_dan_member' => $member_id, 'grade_dan_exam' => $session_id, 'grade_dan_status' => 5]);
+                $grade_aikikai = $this->getDoctrine()->getRepository(GradeDan::class)->findOneBy(['grade_dan_member' => $member->getMemberId(), 'grade_dan_exam' => $session->getGradeSessionId(), 'grade_dan_status' => 5]);
 
                 if ($grade_aikikai != null)
                 {
@@ -225,26 +215,22 @@ class GradeController extends AbstractController
 
             $entityManager->flush();
 
-            return $this->redirectToRoute('grade_exam_detail', array('session_id' => $session_id));
+            return $this->redirectToRoute('grade_exam_detail', array('session' => $session->getGradeSessionId()));
         }
 
-        return $this->render('Grade/Exam/candidate_detail.html.twig', array('session_id' => $session_id, 'member' => $member, 'form' => $form->createView()));
+        return $this->render('Grade/Exam/candidate_detail.html.twig', array('session' => $session, 'member' => $member, 'form' => $form->createView()));
     }
 
     /**
-     * @Route("/grade/session-examen/{session_id<\d+>}/candidat/{member_id<\d+>}/grade/{grade_id<\d+>}/ajouter_aikikai", name="grade_exam_candidate_add_aikikai")
+     * @Route("/session-examen/{session<\d+>}/candidat/{member<\d+>}/grade/{grade<\d+>}/ajouter_aikikai", name="exam_candidate_add_aikikai")
      * @param Request $request
-     * @param int $session_id
-     * @param int $member_id
-     * @param int $grade_id
+     * @param GradeSession $session
+     * @param Member $member
+     * @param GradeDan $grade
      * @return RedirectResponse|Response
      */
-    public function exam_candidate_add_aikikai(Request $request, int $session_id, int $member_id, int $grade_id)
+    public function exam_candidate_add_aikikai(Request $request, GradeSession $session, Member $member, GradeDan $grade)
     {
-        $member = $this->getDoctrine()->getRepository(Member::class)->findOneBy(['member_id' => $member_id]);
-
-        $grade = $this->getDoctrine()->getRepository(GradeDan::class)->findOneBy(['grade_dan_id' => $grade_id]);
-
         $grade_aikikai = new GradeDan();
 
         $grade_aikikai->setGradeDanRank($grade->getGradeDanRank() + 1);
@@ -253,7 +239,7 @@ class GradeController extends AbstractController
         $grade_aikikai->setGradeDanExam($grade->getGradeDanExam());
         $grade_aikikai->setGradeDanMember($grade->getGradeDanMember());
 
-        $form = $this->createForm(ExamType::class, $grade_aikikai, array('form' => 'candidate_aikikai', 'data_class' => GradeDan::class, 'action' => $this->generateUrl('grade_exam_candidate_add_aikikai', array('session_id' => $session_id, 'member_id' => $member_id, 'grade_id' => $grade_id)), 'method' => 'POST'));
+        $form = $this->createForm(ExamType::class, $grade_aikikai, array('form' => 'candidate_aikikai', 'data_class' => GradeDan::class));
 
         $form->handleRequest($request);
 
@@ -266,28 +252,24 @@ class GradeController extends AbstractController
             $entityManager->persist($grade_aikikai);
             $entityManager->flush();
 
-            return $this->redirectToRoute('grade_exam_detail', array('session_id' => $session_id));
+            return $this->redirectToRoute('grade_exam_detail', array('session' => $session->getGradeSessionId()));
         }
 
-        return $this->render('Grade/Exam/candidate_detail.html.twig', array('session_id' => $session_id, 'member' => $member, 'grade' => $grade, 'form' => $form->createView()));
+        return $this->render('Grade/Exam/candidate_detail.html.twig', array('session' => $session, 'member' => $member, 'grade' => $grade, 'form' => $form->createView()));
 
     }
 
     /**
-     * @Route("/grade/session-examen/{session_id<\d+>}/candidat/{member_id<\d+>}/grade/{grade_id<\d+>}/detail_aikikai", name="grade_exam_candidate_detail_aikikai")
+     * @Route("/session-examen/{session<\d+>}/candidat/{member<\d+>}/grade/{grade<\d+>}/detail_aikikai", name="exam_candidate_detail_aikikai")
      * @param Request $request
-     * @param int $session_id
-     * @param int $member_id
-     * @param int $grade_id
+     * @param GradeSession $session
+     * @param Member $member
+     * @param GradeDan $grade
      * @return RedirectResponse|Response
      */
-    public function exam_candidate_detail_aikikai(Request $request, int $session_id, int $member_id, int $grade_id)
+    public function exam_candidate_detail_aikikai(Request $request, GradeSession $session, Member $member, GradeDan $grade)
     {
-        $member = $this->getDoctrine()->getRepository(Member::class)->findOneBy(['member_id' => $member_id]);
-
-        $grade = $this->getDoctrine()->getRepository(GradeDan::class)->findOneBy(['grade_dan_id' => $grade_id]);
-
-        $form = $this->createForm(ExamType::class, $grade, array('form' => 'candidate_aikikai', 'data_class' => GradeDan::class, 'action' => $this->generateUrl('grade_exam_candidate_detail_aikikai', array('session_id' => $session_id, 'member_id' => $member_id, 'grade_id' => $grade_id)), 'method' => 'POST'));
+        $form = $this->createForm(ExamType::class, $grade, array('form' => 'candidate_aikikai', 'data_class' => GradeDan::class));
 
         $form->handleRequest($request);
 
@@ -299,9 +281,9 @@ class GradeController extends AbstractController
 
             $entityManager->flush();
 
-            return $this->redirectToRoute('grade_exam_detail', array('session_id' => $session_id));
+            return $this->redirectToRoute('grade_exam_detail', array('session' => $session->getGradeSessionId()));
         }
 
-        return $this->render('Grade/Exam/candidate_detail.html.twig', array('session_id' => $session_id, 'member' => $member, 'form' => $form->createView()));
+        return $this->render('Grade/Exam/candidate_detail.html.twig', array('session' => $session, 'member' => $member, 'form' => $form->createView()));
     }
 }

@@ -40,62 +40,36 @@ class SecretariatType extends AbstractType
     private function supporterCreate(FormBuilderInterface $builder)
     {
         $builder
-            ->add('SecretariatSupporterName', TextType::class,
-                array('label' => 'Nom : '))
-            ->add('SecretariatSupporterAddress', TextType::class,
-                array('label' => 'Adresse : '))
-            ->add('SecretariatSupporterZip', IntegerType::class,
-                array('label' => 'Code postal : '))
-            ->add('SecretariatSupporterCity', TextType::class,
-                array('label' => 'Localité : '))
-            ->add('SecretariatSupporterComment', TextareaType::class,
-                array('label' => 'Commentaire : ',
-                    'required' => false))
-            ->add('Submit', SubmitType::class,
-                array('label' => 'Ajouter'))
+            ->add('SecretariatSupporterName', TextType::class, array('label' => 'Nom : '))
+            ->add('SecretariatSupporterAddress', TextType::class, array('label' => 'Adresse : '))
+            ->add('SecretariatSupporterZip', IntegerType::class, array('label' => 'Code postal : '))
+            ->add('SecretariatSupporterCity', TextType::class, array('label' => 'Localité : '))
+            ->add('SecretariatSupporterComment', TextareaType::class, array('label' => 'Commentaire : ', 'required' => false))
+            ->add('Submit', SubmitType::class, array('label' => 'Ajouter'))
         ;
     }
 
     private function supporterUpdate(FormBuilderInterface $builder)
     {
         $builder
-            ->add('SecretariatSupporterName', TextType::class,
-                array('label' => 'Nom : '))
-            ->add('SecretariatSupporterAddress', TextType::class,
-                array('label' => 'Adresse : '))
-            ->add('SecretariatSupporterZip', IntegerType::class,
-                array('label' => 'Code postal : '))
-            ->add('SecretariatSupporterCity', TextType::class,
-                array('label' => 'Localité : '))
-            ->add('SecretariatSupporterComment', TextareaType::class,
-                array('label' => 'Commentaire : ',
-                    'required' => false))
-            ->add('Submit', SubmitType::class,
-                array('label' => 'Modifier'))
+            ->add('SecretariatSupporterName', TextType::class, array('label' => 'Nom : '))
+            ->add('SecretariatSupporterAddress', TextType::class, array('label' => 'Adresse : '))
+            ->add('SecretariatSupporterZip', IntegerType::class, array('label' => 'Code postal : '))
+            ->add('SecretariatSupporterCity', TextType::class, array('label' => 'Localité : '))
+            ->add('SecretariatSupporterComment', TextareaType::class, array('label' => 'Commentaire : ', 'required' => false))
+            ->add('Submit', SubmitType::class, array('label' => 'Modifier'))
         ;
     }
 
     private function supporterDelete(FormBuilderInterface $builder)
     {
         $builder
-            ->add('SecretariatSupporterName', TextType::class,
-                array('label' => 'Nom : ',
-                    'disabled' => true))
-            ->add('SecretariatSupporterAddress', TextType::class,
-                array('label' => 'Adresse : ',
-                    'disabled' => true))
-            ->add('SecretariatSupporterZip', IntegerType::class,
-                array('label' => 'Code postal : ',
-                    'disabled' => true))
-            ->add('SecretariatSupporterCity', TextType::class,
-                array('label' => 'Localité : ',
-                    'disabled' => true))
-            ->add('SecretariatSupporterComment', TextareaType::class,
-                array('label' => 'Commentaire : ',
-                    'required' => false,
-                    'disabled' => true))
-            ->add('Submit', SubmitType::class,
-                array('label' => 'Effacer'))
+            ->add('SecretariatSupporterName', TextType::class, array('label' => 'Nom : ', 'disabled' => true))
+            ->add('SecretariatSupporterAddress', TextType::class, array('label' => 'Adresse : ', 'disabled' => true))
+            ->add('SecretariatSupporterZip', IntegerType::class, array('label' => 'Code postal : ', 'disabled' => true))
+            ->add('SecretariatSupporterCity', TextType::class, array('label' => 'Localité : ', 'disabled' => true))
+            ->add('SecretariatSupporterComment', TextareaType::class, array('label' => 'Commentaire : ', 'required' => false, 'disabled' => true))
+            ->add('Submit', SubmitType::class, array('label' => 'Effacer'))
         ;
     }
 }

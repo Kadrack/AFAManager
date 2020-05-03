@@ -4,8 +4,6 @@ namespace App\Form;
 
 use App\Entity\GradeSession;
 
-use App\Service\ListData;
-
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 use Symfony\Component\Form\AbstractType;
@@ -52,112 +50,65 @@ class ExamType extends AbstractType
     private function examCreate(FormBuilderInterface $builder)
     {
         $builder
-            ->add('GradeSessionDate', DateType::class,
-                array('label' => 'Date de session : ',
-                    'widget' => 'single_text'))
-            ->add('GradeSessionCandidateOpen', DateType::class,
-                array('label' => 'Ouverture inscription : ',
-                    'widget' => 'single_text'))
-            ->add('GradeSessionCandidateClose', DateType::class,
-                array('label' => 'Fermeture inscription : ',
-                    'widget' => 'single_text'))
-            ->add('GradeSessionPlace', TextType::class,
-                array('label' => 'Lieu : ',
-                    'required' => false))
-            ->add('GradeSessionStreet', TextType::class,
-                array('label' => 'Adresse : '))
-            ->add('GradeSessionZip', IntegerType::class,
-                array('label' => 'Code postal : '))
-            ->add('GradeSessionCity', TextType::class,
-                array('label' => 'Localité : '))
-            ->add('GradeSessionComment', TextareaType::class,
-                array('label' => 'Commentaire : ',
-                    'required' => false))
-            ->add('Submit', SubmitType::class,
-                array('label' => 'Ajouter'))
+            ->add('GradeSessionDate', DateType::class, array('label' => 'Date de session : ', 'widget' => 'single_text'))
+            ->add('GradeSessionCandidateOpen', DateType::class, array('label' => 'Ouverture inscription : ', 'widget' => 'single_text'))
+            ->add('GradeSessionCandidateClose', DateType::class, array('label' => 'Fermeture inscription : ', 'widget' => 'single_text'))
+            ->add('GradeSessionPlace', TextType::class, array('label' => 'Lieu : ', 'required' => false))
+            ->add('GradeSessionStreet', TextType::class, array('label' => 'Adresse : '))
+            ->add('GradeSessionZip', IntegerType::class, array('label' => 'Code postal : '))
+            ->add('GradeSessionCity', TextType::class, array('label' => 'Localité : '))
+            ->add('GradeSessionComment', TextareaType::class, array('label' => 'Commentaire : ', 'required' => false))
+            ->add('Submit', SubmitType::class, array('label' => 'Ajouter'))
         ;
     }
 
     private function examApplication(FormBuilderInterface $builder)
     {
         $builder
-            ->add('GradeDanComment', TextareaType::class,
-                array('label' => 'Commentaire : ',
-                    'required' => false))
-            ->add('Submit', SubmitType::class,
-                array('label' => 'Valider'))
+            ->add('GradeDanComment', TextareaType::class, array('label' => 'Commentaire : ', 'required' => false))
+            ->add('Submit', SubmitType::class, array('label' => 'Valider'))
         ;
     }
 
     private function applicantValidation(FormBuilderInterface $builder)
     {
         $builder
-            ->add('GradeDanComment', TextareaType::class,
-                array('label' => 'Commentaire : ',
-                    'required' => false))
-            ->add('Submit', SubmitType::class,
-                array('label' => 'Valider'))
+            ->add('GradeDanComment', TextareaType::class, array('label' => 'Commentaire : ', 'required' => false))
+            ->add('Submit', SubmitType::class, array('label' => 'Valider'))
         ;
     }
 
     private function update(FormBuilderInterface $builder)
     {
         $builder
-            ->add('GradeSessionDate', DateType::class,
-                array('label' => 'Date de session : ',
-                    'widget' => 'single_text'))
-            ->add('GradeSessionCandidateOpen', DateType::class,
-                array('label' => 'Ouverture inscription : ',
-                    'widget' => 'single_text'))
-            ->add('GradeSessionCandidateClose', DateType::class,
-                array('label' => 'Fermeture inscription : ',
-                    'widget' => 'single_text'))
-            ->add('GradeSessionPlace', TextType::class,
-                array('label' => 'Lieu : ',
-                    'required' => false))
-            ->add('GradeSessionStreet', TextType::class,
-                array('label' => 'Adresse : '))
-            ->add('GradeSessionZip', IntegerType::class,
-                array('label' => 'Code postal : '))
-            ->add('GradeSessionCity', TextType::class,
-                array('label' => 'Localité : '))
-            ->add('GradeSessionComment', TextareaType::class,
-                array('label' => 'Commentaire : ',
-                    'required' => false))
-            ->add('Submit', SubmitType::class,
-                array('label' => 'Modifier'))
+            ->add('GradeSessionDate', DateType::class, array('label' => 'Date de session : ', 'widget' => 'single_text'))
+            ->add('GradeSessionCandidateOpen', DateType::class, array('label' => 'Ouverture inscription : ', 'widget' => 'single_text'))
+            ->add('GradeSessionCandidateClose', DateType::class, array('label' => 'Fermeture inscription : ', 'widget' => 'single_text'))
+            ->add('GradeSessionPlace', TextType::class, array('label' => 'Lieu : ', 'required' => false))
+            ->add('GradeSessionStreet', TextType::class, array('label' => 'Adresse : '))
+            ->add('GradeSessionZip', IntegerType::class, array('label' => 'Code postal : '))
+            ->add('GradeSessionCity', TextType::class, array('label' => 'Localité : '))
+            ->add('GradeSessionComment', TextareaType::class, array('label' => 'Commentaire : ', 'required' => false))
+            ->add('Submit', SubmitType::class, array('label' => 'Modifier'))
         ;
     }
 
     private function candidate_result(FormBuilderInterface $builder)
     {
         $builder
-            ->add('GradeDanStatus', ChoiceType::class,
-                array('label' => 'Résultat : ',
-                    'multiple' => false,
-                    'expanded' => true,
-                    'choices' => array('Refusé' => 3, 'Promu' => 4)))
-            ->add('GradeDanCertificate', TextType::class,
-                array('label' => 'N° Diplôme : ',
-                    'required' => false))
-            ->add('GradeDanComment', TextareaType::class,
-                array('label' => 'Commentaire : ',
-                    'required' => false))
-            ->add('Submit', SubmitType::class,
-                array('label' => 'Valider'))
+            ->add('GradeDanStatus', ChoiceType::class, array('label' => 'Résultat : ', 'multiple' => false, 'expanded' => true, 'choices' => array('Refusé' => 3, 'Promu' => 4)))
+            ->add('GradeDanCertificate', TextType::class, array('label' => 'N° Diplôme : ', 'required' => false))
+            ->add('GradeDanComment', TextareaType::class, array('label' => 'Commentaire : ', 'required' => false))
+            ->add('Submit', SubmitType::class, array('label' => 'Valider'))
         ;
     }
 
     private function candidate_aikikai(FormBuilderInterface $builder)
     {
         $builder
-            ->add('GradeDanCertificate', TextType::class,
-                array('label' => 'N° certificat : '))
-            ->add('GradeDanComment', TextareaType::class,
-                array('label' => 'Commentaire : ',
-                    'required' => false))
-            ->add('Submit', SubmitType::class,
-                array('label' => 'Valider'))
+            ->add('GradeDanCertificate', TextType::class, array('label' => 'N° certificat : '))
+            ->add('GradeDanComment', TextareaType::class, array('label' => 'Commentaire : ', 'required' => false))
+            ->add('Submit', SubmitType::class, array('label' => 'Valider'))
         ;
     }
 }

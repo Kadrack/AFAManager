@@ -90,7 +90,7 @@ class ClubType extends AbstractType
         $list = new ListData();
 
         $builder
-            ->add('ClubNumber', IntegerType::class, array('label' => 'N° Club : '))
+            ->add('ClubId', IntegerType::class, array('label' => 'N° Club : '))
             ->add('ClubName', TextType::class, array('label' => 'Nom : '))
             ->add('ClubAddress', TextType::class, array('label' => 'Adresse du siège : '))
             ->add('ClubZip', IntegerType::class, array('label' => 'Code postal : '))
@@ -117,7 +117,6 @@ class ClubType extends AbstractType
         $list = new ListData();
 
         $builder
-            ->add('ClubNumber', IntegerType::class)
             ->add('ClubName', TextType::class)
             ->add('ClubAddress', TextType::class)
             ->add('ClubZip', IntegerType::class)

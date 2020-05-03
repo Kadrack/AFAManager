@@ -30,11 +30,11 @@ class ClubRepository extends ServiceEntityRepository
     {
         $qb = $this->createQueryBuilder('c');
 
-        return $qb->select('c.club_number AS Number', 'c.club_name AS Name','c.club_province AS Province')
+        return $qb->select('c.club_id AS Id', 'c.club_name AS Name','c.club_province AS Province')
             ->join(ClubHistory::class, 'h', 'WITH', $qb->expr()->eq('h.club_history_id', 'c.club_last_history'))
             ->where($qb->expr()->eq('h.club_history_status', 1))
             ->orderBy('c.club_province', 'ASC')
-            ->addOrderBy('c.club_number', 'ASC')
+            ->addOrderBy('c.club_id', 'ASC')
             ->getQuery()
             ->getArrayResult();
     }
@@ -43,10 +43,10 @@ class ClubRepository extends ServiceEntityRepository
     {
         $qb = $this->createQueryBuilder('c');
 
-        return $qb->select('c.club_number AS Number', 'c.club_name AS Name','c.club_province AS Province')
+        return $qb->select('c.club_id AS Id', 'c.club_name AS Name','c.club_province AS Province')
             ->join(ClubHistory::class, 'h', 'WITH', $qb->expr()->eq('h.club_history_id', 'c.club_last_history'))
             ->where($qb->expr()->neq('h.club_history_status', 1))
-            ->orderBy('c.club_number', 'ASC')
+            ->orderBy('c.club_id', 'ASC')
             ->getQuery()
             ->getArrayResult();
     }
@@ -57,7 +57,7 @@ class ClubRepository extends ServiceEntityRepository
 
         $today = new DateTime('today');
 
-        return $qb->select('c.club_number AS Number', 'c.club_name AS Name', 'c.club_province AS Province', $qb->expr()->count('(l.licence_club)').' AS Members')
+        return $qb->select('c.club_id AS Id', 'c.club_name AS Name', 'c.club_province AS Province', $qb->expr()->count('(l.licence_club)').' AS Members')
                 ->join(MemberLicence::class, 'l', 'WITH', $qb->expr()->eq('l.licence_club', 'c.club_id'))
                 ->join(Member::class, 'm', 'WITH', $qb->expr()->eq('m.member_id', 'l.licence_member'))
                 ->where($qb->expr()->gt('l.licence_deadline', "'".$today->format('Y-m-d')."'"))

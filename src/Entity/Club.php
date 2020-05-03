@@ -19,17 +19,9 @@ class Club
 {
     /**
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
      * @ORM\Column(type="integer")
      */
     private $club_id;
-
-    /**
-     * @ORM\Column(type="integer", unique=true)
-     *
-     * @Assert\NotBlank()
-     */
-    private $club_number;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -177,14 +169,9 @@ class Club
         return $this->club_id;
     }
 
-    public function getClubNumber(): ?int
+    public function setClubId(?int $club_id): self
     {
-        return $this->club_number;
-    }
-
-    public function setClubNumber(?int $club_number): self
-    {
-        $this->club_number = $club_number;
+        $this->club_id = $club_id;
 
         return $this;
     }

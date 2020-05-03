@@ -55,93 +55,44 @@ class MemberType extends AbstractType
         $list = new ListData();
 
         $builder
-            ->add('MemberFirstName', TextType::class,
-                array('label' => 'Prénom : '))
-            ->add('MemberName', TextType::class,
-                array('label' => 'Nom : '))
-            ->add('MemberPhoto', FileType::class,
-                array('label' => 'Photo : ',
-                    'required'=> false))
-            ->add('MemberSex', ChoiceType::class,
-                array('label' => 'Sexe : ',
-                    'multiple' => false,
-                    'expanded' => true,
-                    'choices' => array('Féminin' => 0, 'Masculin' => 1)))
-            ->add('MemberAddress', TextType::class,
-                array('label' => 'Adresse : '))
-            ->add('MemberZip', IntegerType::class,
-                array('label' => 'Code postal : '))
-            ->add('MemberCity', TextType::class,
-                array('label' => 'Localité : '))
-            ->add('MemberCountry', CountryType::class,
-                array('label' => 'Pays : ',
-                    'choice_translation_locale' => 'fr',
-                    'preferred_choices' => array('BE', 'FR')))
-            ->add('MemberEmail', EmailType::class,
-                array('label' => 'Email : '))
-            ->add('MemberBirthday', BirthdayType::class,
-                array('label' => 'Date de naissance : ',
-                    'widget' => 'single_text'))
-            ->add('GradeKyuRank', ChoiceType::class,
-                array('label' => 'Grade : ',
-                    'placeholder' => 'Choississez un grade',
-                    'choices' => $list->getGradeKyu(),
-                    'required' => false,
-                    'mapped' => false))
-            ->add('MemberLicenceMedicalCertificate', DateType::class,
-                array('label' => 'Date certificat : ',
-                    'widget' => 'single_text',
-                    'mapped' => false))
-            ->add('MemberComment', TextareaType::class,
-                array('label' => 'Commentaire : ',
-                    'required' => false))
-            ->add('Submit', SubmitType::class,
-                array('label' => 'Ajouter'))
+            ->add('MemberFirstName', TextType::class, array('label' => 'Prénom : '))
+            ->add('MemberName', TextType::class, array('label' => 'Nom : '))
+            ->add('MemberPhoto', FileType::class, array('label' => 'Photo : ', 'required'=> false))
+            ->add('MemberSex', ChoiceType::class, array('label' => 'Sexe : ', 'multiple' => false, 'expanded' => true, 'choices' => array('Féminin' => 0, 'Masculin' => 1)))
+            ->add('MemberAddress', TextType::class, array('label' => 'Adresse : '))
+            ->add('MemberZip', IntegerType::class, array('label' => 'Code postal : '))
+            ->add('MemberCity', TextType::class, array('label' => 'Localité : '))
+            ->add('MemberCountry', CountryType::class, array('label' => 'Pays : ', 'choice_translation_locale' => 'fr', 'preferred_choices' => array('BE', 'FR')))
+            ->add('MemberEmail', EmailType::class, array('label' => 'Email : '))
+            ->add('MemberBirthday', BirthdayType::class, array('label' => 'Date de naissance : ', 'widget' => 'single_text'))
+            ->add('GradeKyuRank', ChoiceType::class, array('label' => 'Grade : ', 'placeholder' => 'Choississez un grade', 'choices' => $list->getGradeKyu(), 'required' => false, 'mapped' => false))
+            ->add('MemberLicenceMedicalCertificate', DateType::class, array('label' => 'Date certificat : ', 'widget' => 'single_text', 'mapped' => false))
+            ->add('MemberComment', TextareaType::class, array('label' => 'Commentaire : ', 'required' => false))
+            ->add('Submit', SubmitType::class, array('label' => 'Ajouter'))
         ;
     }
 
     private function update(FormBuilderInterface $builder)
     {
         $builder
-            ->add('MemberPhoto', FileType::class,
-                array('label' => 'Photo : ',
-                    'required' => false,
-                    'mapped' => false))
-            ->add('MemberAddress', TextType::class,
-                array('label' => 'Adresse : '))
-            ->add('MemberZip', IntegerType::class,
-                array('label' => 'Code postal : '))
-            ->add('MemberCity', TextType::class,
-                array('label' => 'Localité : '))
-            ->add('MemberCountry', CountryType::class,
-                array('label' => 'Pays : ',
-                    'choice_translation_locale' => 'fr',
-                    'preferred_choices' => array('BE', 'FR')))
-            ->add('MemberEmail', EmailType::class,
-                array('label' => 'Email : '))
-            ->add('MemberComment', TextareaType::class,
-                array('label' => 'Commentaire : ',
-                    'required' => false))
-            ->add('Submit', SubmitType::class,
-                array('label' => 'Modifier'))
+            ->add('MemberPhoto', FileType::class, array('label' => 'Photo : ', 'required' => false, 'mapped' => false))
+            ->add('MemberAddress', TextType::class, array('label' => 'Adresse : '))
+            ->add('MemberZip', IntegerType::class, array('label' => 'Code postal : '))
+            ->add('MemberCity', TextType::class, array('label' => 'Localité : '))
+            ->add('MemberCountry', CountryType::class, array('label' => 'Pays : ', 'choice_translation_locale' => 'fr', 'preferred_choices' => array('BE', 'FR')))
+            ->add('MemberEmail', EmailType::class, array('label' => 'Email : '))
+            ->add('MemberComment', TextareaType::class, array('label' => 'Commentaire : ', 'required' => false))
+            ->add('Submit', SubmitType::class, array('label' => 'Modifier'))
         ;
     }
 
     private function licenceRenew(FormBuilderInterface $builder)
     {
         $builder
-            ->add('MemberLicenceClub', EntityType::class,
-                array('label' => 'Club : ',
-                    'class' => Club::class,
-                    'choice_label' => 'club_number'))
-            ->add('MemberLicenceDeadline', DateType::class,
-                array('label' => 'Date échéance : ',
-                    'widget' => 'single_text'))
-            ->add('MemberLicenceMedicalCertificate', DateType::class,
-                array('label' => 'Date certificat : ',
-                    'widget' => 'single_text'))
-            ->add('Submit', SubmitType::class,
-                array('label' => 'Enregistrer'))
+            ->add('MemberLicenceClub', EntityType::class, array('label' => 'Club : ', 'class' => Club::class, 'choice_label' => 'club_id'))
+            ->add('MemberLicenceDeadline', DateType::class, array('label' => 'Date échéance : ', 'widget' => 'single_text'))
+            ->add('MemberLicenceMedicalCertificate', DateType::class, array('label' => 'Date certificat : ', 'widget' => 'single_text'))
+            ->add('Submit', SubmitType::class, array('label' => 'Enregistrer'))
         ;
     }
 
@@ -150,24 +101,11 @@ class MemberType extends AbstractType
         $list = new ListData();
 
         $builder
-            ->add('MemberLicenceClub', EntityType::class,
-                array('label' => 'Club : ',
-                    'class' => Club::class,
-                    'choice_label' => 'club_number'))
-            ->add('GradeKyuRank', ChoiceType::class,
-                array('label' => 'Grade : ',
-                    'placeholder' => 'Choississez un grade',
-                    'choices' => $list->getGradeKyu(),
-                    'required' => false,
-                    'mapped' => false))
-            ->add('MemberLicenceDeadline', DateType::class,
-                array('label' => 'Date échéance : ',
-                    'widget' => 'single_text'))
-            ->add('MemberLicenceMedicalCertificate', DateType::class,
-                array('label' => 'Date certificat : ',
-                    'widget' => 'single_text'))
-            ->add('Submit', SubmitType::class,
-                array('label' => 'Enregistrer'))
+            ->add('MemberLicenceClub', EntityType::class, array('label' => 'Club : ', 'class' => Club::class, 'choice_label' => 'club_id'))
+            ->add('GradeKyuRank', ChoiceType::class, array('label' => 'Grade : ', 'placeholder' => 'Choississez un grade', 'choices' => $list->getGradeKyu(), 'required' => false, 'mapped' => false))
+            ->add('MemberLicenceDeadline', DateType::class, array('label' => 'Date échéance : ', 'widget' => 'single_text'))
+            ->add('MemberLicenceMedicalCertificate', DateType::class, array('label' => 'Date certificat : ', 'widget' => 'single_text'))
+            ->add('Submit', SubmitType::class, array('label' => 'Enregistrer'))
         ;
     }
 }
