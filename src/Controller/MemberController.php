@@ -11,7 +11,7 @@ use App\Entity\Member;
 use App\Entity\MemberLicence;
 use App\Entity\MemberPrintout;
 
-use App\Form\ExamType;
+use App\Form\GradeType;
 use App\Form\MemberType;
 
 use App\Service\ListData;
@@ -21,6 +21,7 @@ use App\Service\PhotoUploader;
 use DateTime;
 
 use Exception;
+
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -130,9 +131,9 @@ class MemberController extends AbstractController
 
         $grade_kyu_history = $this->getDoctrine()->getRepository(GradeKyu::class)->findBy(['grade_kyu_member' => $member->getMemberId()], ['grade_kyu_rank' => 'ASC']);
 
-        $open_session = $this->getDoctrine()->getRepository(GradeSession::class)->getOpenSession($today->format('Y-m-d'));
+        $open_session = $this->getDoctrine()->getRepository(GradeSession::class)->getOpenSession($today->format('Y-m-d'), 1);
 
-        if ($open_session == null)
+        if (($open_session == null) || ($grade_dan_history[0]['Type'] == 2) || ($grade_dan_history[0]['Rank'] >= 14))
         {
             $exam_candidate = false;
         }
@@ -152,7 +153,29 @@ class MemberController extends AbstractController
             $exam_candidate = true;
         }
 
-        return $this->render('Member/detail_grade.html.twig', array('member' => $member, 'club' => $club, 'grade_dan_history' => sizeof($grade_dan_history) == 0 ? null : $grade_dan_history, 'grade_kyu_history' => sizeof($grade_kyu_history) == 0 ? null : $grade_kyu_history, 'exam_candidate' => $exam_candidate, 'list' => new ListData()));
+        $open_session = $this->getDoctrine()->getRepository(GradeSession::class)->getOpenSession($today->format('Y-m-d'), 2);
+
+        if ($open_session == null)
+        {
+            $kagami_candidate = false;
+        }
+        elseif (isset($grade_dan_history[0]['Session']))
+        {
+            if ($grade_dan_history[0]['Session'] == $open_session[0]->getGradeSessionId())
+            {
+                $kagami_candidate = false;
+            }
+            else
+            {
+                $kagami_candidate = true;
+            }
+        }
+        else
+        {
+            $kagami_candidate = true;
+        }
+
+        return $this->render('Member/detail_grade.html.twig', array('member' => $member, 'club' => $club, 'grade_dan_history' => sizeof($grade_dan_history) == 0 ? null : $grade_dan_history, 'grade_kyu_history' => sizeof($grade_kyu_history) == 0 ? null : $grade_kyu_history, 'exam_candidate' => $exam_candidate, 'kagami_candidate' => $kagami_candidate, 'list' => new ListData()));
     }
 
     /**
@@ -235,7 +258,7 @@ class MemberController extends AbstractController
     }
 
     /**
-     * @Route("/{club<\d+>}/modifier/{member<\d+>}/candidature", name="exam_application")
+     * @Route("/{club<\d+>}/modifier/{member<\d+>}/candidature_examen", name="exam_application")
      * @param Request $request
      * @param Club $club
      * @param Member $member
@@ -245,7 +268,7 @@ class MemberController extends AbstractController
     {
         $today = new DateTime('today');
 
-        $exam   = $this->getDoctrine()->getRepository(GradeSession::class)->getOpenSession($today->format('Y-m-d'));
+        $exam   = $this->getDoctrine()->getRepository(GradeSession::class)->getOpenSession($today->format('Y-m-d'), 1);
 
         if (!is_object($member->getMemberLastGradeDan()))
         {
@@ -253,11 +276,15 @@ class MemberController extends AbstractController
         }
         elseif ($member->getMemberLastGradeDan()->getGradeDanStatus() == 3)
         {
+            $rank = $member->getMemberLastGradeDan()->getGradeDanRank();
+        }
+        elseif ($member->getMemberLastGradeDan()->getGradeDanStatus() == 5)
+        {
             $rank = $member->getMemberLastGradeDan()->getGradeDanRank() + 1;
         }
         else
         {
-            $rank = $member->getMemberLastGradeDan()->getGradeDanRank();
+            return $this->redirectToRoute('member_detail_grade', array('club' => $club->getClubId(), 'member' => $member->getMemberId()));
         }
 
         $grade = new GradeDan();
@@ -268,7 +295,7 @@ class MemberController extends AbstractController
         $grade->setGradeDanRank($rank);
         $grade->setGradeDanStatus(1);
 
-        $form = $this->createForm(ExamType::class, $grade, array('form' => 'exam_application', 'data_class' => GradeDan::class));
+        $form = $this->createForm(GradeType::class, $grade, array('form' => 'exam_application', 'data_class' => GradeDan::class));
 
         $form->handleRequest($request);
 
@@ -283,6 +310,61 @@ class MemberController extends AbstractController
         }
 
         return $this->render('Member/exam_application.html.twig', array('form' => $form->createView(), 'exam' => $exam[0]));
+    }
+
+    /**
+     * @Route("/{club<\d+>}/modifier/{member<\d+>}/candidature_kagami", name="kagami_application")
+     * @param Request $request
+     * @param Club $club
+     * @param Member $member
+     * @return RedirectResponse|Response
+     */
+    public function kagami_application(Request $request, Club $club, Member $member)
+    {
+        $today  = new DateTime('today');
+
+        $kagami = $this->getDoctrine()->getRepository(GradeSession::class)->getOpenSession($today->format('Y-m-d'), 2);
+
+        if (!is_object($member->getMemberLastGradeDan()))
+        {
+            $rank = 7;
+        }
+        elseif ($member->getMemberLastGradeDan()->getGradeDanStatus() == 3)
+        {
+            $rank = $member->getMemberLastGradeDan()->getGradeDanRank();
+        }
+        elseif (($member->getMemberLastGradeDan()->getGradeDanStatus() == 4) || ($member->getMemberLastGradeDan()->getGradeDanStatus() == 5))
+        {
+            $rank = $member->getMemberLastGradeDan()->getGradeDanRank() + 1;
+        }
+        else
+        {
+            return $this->redirectToRoute('member_detail_grade', array('club' => $club->getClubId(), 'member' => $member->getMemberId()));
+        }
+
+        $grade = new GradeDan();
+
+        $grade->setGradeDanClub($club);
+        $grade->setGradeDanExam($kagami[0]);
+        $grade->setGradeDanMember($member);
+        $grade->setGradeDanRank($rank);
+        $grade->setGradeDanStatus(1);
+
+        $form = $this->createForm(GradeType::class, $grade, array('form' => 'exam_application', 'data_class' => GradeDan::class));
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid())
+        {
+            $entityManager = $this->getDoctrine()->getManager();
+
+            $entityManager->persist($grade);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('member_detail_grade', array('club' => $club->getClubId(), 'member' => $member->getMemberId()));
+        }
+
+        return $this->render('Member/exam_application.html.twig', array('form' => $form->createView(), 'exam' => $kagami[0]));
     }
 
     /**
@@ -497,7 +579,7 @@ class MemberController extends AbstractController
 
             if ($session->get('origin') == 'active')
             {
-                return $this->redirectToredirectToRoute('member_detail_licence', array('club' => $club->getClubId(), 'member' => $member->getMemberId()));
+                return $this->redirectToRoute('member_detail_licence', array('club' => $club->getClubId(), 'member' => $member->getMemberId()));
             }
             else
             {

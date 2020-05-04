@@ -1,0 +1,74 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    AFA-Manager
+{% endblock %}
+
+{% block stylesheets %}
+{% endblock %}
+
+{% block body %}
+    <h1>Détails session</h1>
+    {% if candidates != null %}
+        <h2>Membres proposés</h2>
+        <table>
+            <tr>
+                <th>Prénom</th>
+                <th>Nom</th>
+                <th>Grade proposé</th>
+                <th>Commandes</th>
+            </tr>
+            {% for candidate in candidates %}
+                <tr>
+                    <td>{{ candidate.getGradeDanMember().getMemberFirstName() }}</td>
+                    <td>{{ candidate.getGradeDanMember().getMemberName() }}</td>
+                    <td>{{ listData.getGrade(candidate.getGradeDanRank()) }}</td>
+                    <td><a href="{{ path('grade_kagami_candidate_detail', {'session': session.gradeSessionId(), 'member': candidate.getGradeDanMember().getMemberId(), 'grade': candidate.getGradeDanId()}) }}">Résultats</a></td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% endif %}
+    {% if refused != null %}
+        <h2>Candidats refusé</h2>
+        <table>
+            <tr>
+                <th>Prénom</th>
+                <th>Nom</th>
+                <th>Grade raté</th>
+                <th>Commandes</th>
+            </tr>
+            {% for candidate in refused %}
+                <tr>
+                    <td>{{ candidate.getGradeDanMember().getMemberFirstName() }}</td>
+                    <td>{{ candidate.getGradeDanMember().getMemberName() }}</td>
+                    <td>{{ listData.getGrade(candidate.getGradeDanMember().getMemberLastGradeDan().getGradeDanRank()) }}</td>
+                    <td><a href="{{ path('grade_kagami_candidate_detail_update', {'session': session.gradeSessionId(), 'member': candidate.getGradeDanMember().getMemberId(), 'grade': candidate.getGradeDanId()}) }}">Modifier</a></td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% endif %}
+    {% if promoted != null %}
+        <h2>Membres promus</h2>
+        <table>
+            <tr>
+                <th>Prénom</th>
+                <th>Nom</th>
+                <th>Grade obtenu</th>
+                <th>N° Diplôme</th>
+                <th>Commandes</th>
+            </tr>
+            {% for candidate in promoted %}
+                <tr>
+                    <td>{{ candidate.getGradeDanMember().getMemberFirstName() }}</td>
+                    <td>{{ candidate.getGradeDanMember().getMemberName() }}</td>
+                    <td>{{ listData.getGrade(candidate.getGradeDanMember().getMemberLastGradeDan().getGradeDanRank()) }}</td>
+                    <td>{{ candidate.getGradeDanCertificate() }}</td>
+                    <td><a href="{{ path('grade_kagami_candidate_detail_update', {'session': session.gradeSessionId(), 'member': candidate.getGradeDanMember().getMemberId(), 'grade': candidate.getGradeDanId()}) }}">Modifier</a></td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% endif %}
+{% endblock %}
+
+{% block javascripts %}
+{% endblock %}

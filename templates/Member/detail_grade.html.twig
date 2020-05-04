@@ -27,6 +27,9 @@
     {% if exam_candidate %}
         <a href="{{ path('member_exam_application', {'club': club.getClubId(), 'member': member.getMemberId()}) }}">Candidature examen fédéral</a>
     {% endif %}
+    {% if kagami_candidate %}
+        <a href="{{ path('member_kagami_application', {'club': club.getClubId(), 'member': member.getMemberId()}) }}">Soumettre au prochain Kagami</a>
+    {% endif %}
     {% if grade_dan_history is not null %}
         <h2>Historique grade Dan</h2>
         <table>
