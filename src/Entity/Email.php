@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use DateTime;
+use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 
 use Symfony\Component\Validator\Constraints as Assert;
@@ -57,12 +58,12 @@ class Email
         return $this->email_id;
     }
 
-    public function getEmailCreationDate(): ?\DateTimeInterface
+    public function getEmailCreationDate(): ?DateTimeInterface
     {
         return $this->email_creation_date;
     }
 
-    public function setEmailCreationDate(\DateTimeInterface $email_creation_date): self
+    public function setEmailCreationDate(DateTimeInterface $email_creation_date): self
     {
         $this->email_creation_date = $email_creation_date;
 

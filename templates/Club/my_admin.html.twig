@@ -8,7 +8,7 @@
 {% endblock %}
 
 {% block body %}
-    <h1>{{ club.getClubName()|title }}</h1>
+    <h1>{{ club.getClubName()|title }} n°{{ club.getClubId() }}</h1>
     <h2>Dojo(s)</h2>
     <table>
         <tr>
@@ -30,7 +30,7 @@
                 <td>{{ address.getTrainingAddressTatamis() }}</td>
                 <td>{% if address.getTrainingAddressDEA() %}Oui{% else %}Non{% endif %}</td>
                 <td>{% if address.getTrainingAddressDEA() %}{{ address.getTrainingAddressDEAFormation()|date("d/m/Y") }}{% else %}N/A{% endif %}</td>
-                <td><a href="{{ path('club_address_update', {'club': club.getClubId(), 'address': address.getTrainingAddressId()}) }}">Modifier</a> - <a href="{{ path('club_address_delete', {'club': club.getClubId(), 'address': address.getTrainingAddressId()}) }}">Supprimer</a></td>
+                <td><a href="{{ path('club_dojo_update', {'address': address.getTrainingAddressId()}) }}">Modifier</a> - <a href="{{ path('club_dojo_delete', {'address': address.getTrainingAddressId()}) }}">Supprimer</a></td>
             </tr>
         {% endfor %}
         <tr>
@@ -41,7 +41,7 @@
             <td></td>
             <td></td>
             <td></td>
-            <td><a href="{{ path('club_address_add', {'club': club.getClubId()}) }}">Ajouter</a></td>
+            <td><a href="{{ path('club_dojo_add') }}">Ajouter</a></td>
         </tr>
     </table>
     <h2>Horaire cours</h2>
@@ -61,7 +61,7 @@
                 <td>{{ training.getTrainingEndingHour()|date('H:i') }}</td>
                 <td>{{ listData.getTrainingType(training.getTrainingType()) }}</td>
                 <td>{{ training.getTrainingAddress().getTrainingAddressName() }}</td>
-                <td><a href="{{ path('club_training_update', {'club': club.getClubId(), 'training': training.getTrainingId()}) }}">Modifier</a> - <a href="{{ path('club_training_delete', {'club': club.getClubId(), 'training': training.getTrainingId()}) }}">Supprimer</a></td>
+                <td><a href="{{ path('club_training_update', {'training': training.getTrainingId()}) }}">Modifier</a> - <a href="{{ path('club_training_delete', {'training': training.getTrainingId()}) }}">Supprimer</a></td>
             </tr>
         {% endfor %}
         <tr>
@@ -70,7 +70,7 @@
             <td></td>
             <td></td>
             <td></td>
-            <td><a href="{{ path('club_training_add', {'club': club.getClubId()}) }}">Ajouter</a></td>
+            <td><a href="{{ path('club_training_add') }}">Ajouter</a></td>
         </tr>
     </table>
     <h2>Professeur(s) & Assistant(s) AFA</h2>
@@ -90,7 +90,7 @@
                 <td>{{ teacher.Firstname }}</td>
                 <td>{{ teacher.Name }}</td>
                 <td>{{ listData.getGrade(teacher.Dan) }}</td>
-                <td><a href="{{ path('club_teacher_afa_update', {'club': club.getClubId(), 'teacher': teacher.Id}) }}">Modifier</a> - <a href="{{ path('club_teacher_afa_delete', {'club': club.getClubId(), 'teacher': teacher.Id}) }}">Supprimer</a></td>
+                <td><a href="{{ path('club_teacher_afa_update', {'teacher': teacher.Id}) }}">Modifier</a> - <a href="{{ path('club_teacher_afa_delete', {'teacher': teacher.Id}) }}">Supprimer</a></td>
             </tr>
         {% endfor %}
         <tr>
@@ -99,7 +99,7 @@
             <td></td>
             <td></td>
             <td></td>
-            <td><a href="{{ path('club_teacher_afa_add', {'club': club.getClubId()}) }}">Ajouter</a></td>
+            <td><a href="{{ path('club_teacher_afa_add') }}">Ajouter</a></td>
         </tr>
     </table>
     <h2>Professeur(s) & Assistant(s) Autre</h2>
@@ -123,7 +123,7 @@
                 <td>{{ listData.getGrade(teacher.Grade) }}</td>
                 <td>{% if teacher.GradeTitleAikikai != null %}{{ listData.getGradeTitleAikikai(teacher.GradeTitleAikikai) }}{% endif %}</td>
                 <td>{% if teacher.GradeTitleAdeps != null %}{{ listData.getGradeTitleAdeps(teacher.GradeTitleAdeps) }}{% endif %}</td>
-                <td><a href="{{ path('club_teacher_foreign_update', {'club': club.getClubId(), 'teacher': teacher.Id}) }}">Modifier</a> - <a href="{{ path('club_teacher_foreign_delete', {'club': club.getClubId(), 'teacher': teacher.Id}) }}">Supprimer</a></td>
+                <td><a href="{{ path('club_teacher_foreign_update', {'teacher': teacher.Id}) }}">Modifier</a> - <a href="{{ path('club_teacher_foreign_delete', {'teacher': teacher.Id}) }}">Supprimer</a></td>
             </tr>
         {% endfor %}
         <tr>
@@ -134,7 +134,7 @@
             <td></td>
             <td></td>
             <td></td>
-            <td><a href="{{ path('club_teacher_foreign_add', {'club': club.getClubId()}) }}">Ajouter</a></td>
+            <td><a href="{{ path('club_teacher_foreign_add') }}">Ajouter</a></td>
         </tr>
     </table>
 {% endblock %}

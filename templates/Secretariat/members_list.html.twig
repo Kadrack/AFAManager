@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    AFA-Manager
+{% endblock %}
+
+{% block stylesheets %}
+{% endblock %}
+
+{% block body %}
+    <h1>{{ club.getClubName()|title }}</h1>
+    <h2>Liste des Membres</h2>
+    <h2><a href="{{ path('secretariat_member_create', {'club': club.getClubId()}) }}">Ajouter</a></h2>
+    <table>
+        <tr>
+            <th>#</th>
+            <th>Licence n°</th>
+            <th>Prénom</th>
+            <th>Nom</th>
+            <th>Echéance</th>
+            <th>Commande</th>
+        </tr>
+        {% for member in members %}
+            {% if member.Id != null %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ member.Id }}</td>
+                    <td>{{ member.FirstName|title }}</td>
+                    <td>{{ member.Name|title }}</td>
+                    <td>{{ member.Deadline|date("d/m/Y") }}</td>
+                    <td><a href="{{ path('secretariat_member_licence_detail', {'club': club.getClubId(), 'member': member.Id}) }}">Licence</a> - <a href="{{ path('secretariat_member_personal_detail', {'club': club.getClubId(), 'member': member.Id}) }}">Données personnelles</a></td>
+                </tr>
+            {% endif %}
+        {% endfor %}
+    </table>
+{% endblock %}
+
+{% block javascripts %}
+{% endblock %}

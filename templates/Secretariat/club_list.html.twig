@@ -1,0 +1,52 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    AFA-Manager
+{% endblock %}
+
+{% block stylesheets %}
+{% endblock %}
+
+{% block body %}
+    <h1>Liste des clubs</h1>
+    <h2><a href="{{ path('secretariat_club_create') }}">Ajouter</a></h2>
+    <table>
+        {% for active in active_clubs %}
+            <tr>
+                <td colspan="3"><h2>{{ active.province }}</h2></td>
+            </tr>
+            <tr>
+                <th>Numéro</th>
+                <th>Nom</th>
+                <th>Commandes</th>
+            </tr>
+            {% for club in active.Clubs %}
+                <tr>
+                    <td>{{ club.Id }}</td>
+                    <td>{{ club.Name|title }}</td>
+                    <td><a href="{{ path('secretariat_association_details', {'club': club.Id}) }}">Association</a> - <a href="{{ path('secretariat_members_active', {'club': club.Id}) }}">Membres Actifs</a> - <a href="{{ path('secretariat_members_ancient', {'club': club.Id}) }}">Membres Inactifs</a> - <a href="{{ path('secretariat_club_disaffiliate', {'club': club.Id}) }}">Désaffilier</a></td>
+                </tr>
+            {% endfor %}
+        {% endfor %}
+        {% if inactive_clubs != null %}
+            <tr>
+                <td colspan="3"><h2>Clubs Inactifs</h2></td>
+            </tr>
+            <tr>
+                <th>Numéro</th>
+                <th>Nom</th>
+                <th>Commandes</th>
+            </tr>
+            {% for club in inactive_clubs %}
+                <tr>
+                    <td>{{ club.Id }}</td>
+                    <td>{{ club.Name }}</td>
+                    <td><a href="{{ path('club_reassign', {'club': club.Id}) }}">Activer</a> - <a href="{{ path('club_detail_association', {'club': club.Id}) }}">Association</a> - <a href="{{ path('club_detail_class', {'club': club.Id}) }}">Cours</a> - <a href="{{ path('club_active_members', {'club': club.Id}) }}">Membres Actifs</a> - <a href="{{ path('club_inactive_members', {'club': club.Id}) }}">Membres Inactifs</a></td>
+                </tr>
+            {% endfor %}
+        {% endif %}
+    </table>
+{% endblock %}
+
+{% block javascripts %}
+{% endblock %}

@@ -4,6 +4,10 @@ namespace App\Service;
 
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
+/**
+ * Class PhotoUploader
+ * @package App\Service
+ */
 class PhotoUploader
 {
     private $image;
@@ -16,6 +20,11 @@ class PhotoUploader
 
     private $width;
 
+    /**
+     * PhotoUploader constructor.
+     * @param $targetDirectory
+     * @param $salt
+     */
     public function __construct($targetDirectory, $salt)
     {
         $this->salt = $salt;
@@ -27,6 +36,12 @@ class PhotoUploader
         $this->width = 90;
     }
 
+    /**
+     * @param UploadedFile $file
+     * @param string $old
+     * @param int $compression
+     * @return string
+     */
     public function upload(UploadedFile $file, string $old = "", int $compression = 75)
     {
         $extension = $file->guessExtension();
@@ -80,7 +95,7 @@ class PhotoUploader
             imagepng($this->image, $this->targetDirectory.'/'.$fileName);
         }
 
-        if ($old != '')
+        if (($old != '') && ($old != 'nophoto.png'))
         {
             unlink($this->targetDirectory.'/'.$old);
             unlink($this->targetDirectory.'/original/'.$old);

@@ -436,8 +436,8 @@ class Member
         if ($this->member_grades_title->contains($gradeTitle)) {
             $this->member_grades_title->removeElement($gradeTitle);
             // set the owning side to null (unless already changed)
-            if ($gradeTitle->getGradeKyuMember() === $this) {
-                $gradeTitle->setGradeKyuMember(null);
+            if ($gradeTitle->getGradeTitleMember() === $this) {
+                $gradeTitle->setGradeTitleMember(null);
             }
         }
 
@@ -487,7 +487,7 @@ class Member
     {
         if (!$this->member_teachers->contains($memberTeacher)) {
             $this->member_teachers[] = $memberTeacher;
-            $memberTeacher->setTeacherMember($this);
+            $memberTeacher->setClubTeacherMember($this);
         }
 
         return $this;
@@ -498,8 +498,8 @@ class Member
         if ($this->member_teachers->contains($memberTeacher)) {
             $this->member_teachers->removeElement($memberTeacher);
             // set the owning side to null (unless already changed)
-            if ($memberTeacher->getTeacherMember() === $this) {
-                $memberTeacher->setTeacherMember(null);
+            if ($memberTeacher->getClubTeacherMember() === $this) {
+                $memberTeacher->setClubTeacherMember(null);
             }
         }
 

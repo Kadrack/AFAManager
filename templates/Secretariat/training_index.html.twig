@@ -9,6 +9,7 @@
 
 {% block body %}
     <h1>Liste des stages</h1>
+    <h2><a href="{{ path('secretariat_training_create') }}">Ajouter</a></h2>
     <table>
         <tr>
             <th>Date</th>
@@ -23,7 +24,7 @@
                 <td>{{ training.training_name }}</td>
                 <td>{{ training.training_total_sessions }}</td>
                 <td>{{ listData.getTrainingType(training.training_type) }}</td>
-                <td><a href="{{ path('training_attendance_add', {'training': training.training_id}) }}">Membres</a> - <a href="{{ path('training_attendance_foreign_add', {'training': training.training_id}) }}">Non AFA</a></td>
+                <td><a href="{{ path('secretariat_training_detail', {'training': training.training_id}) }}">Modifier</a></td>
             </tr>
         {% endfor %}
     </table>

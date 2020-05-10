@@ -81,7 +81,6 @@ class MemberType extends AbstractType
             ->add('MemberCity', TextType::class, array('label' => 'Localité : '))
             ->add('MemberCountry', CountryType::class, array('label' => 'Pays : ', 'choice_translation_locale' => 'fr', 'preferred_choices' => array('BE', 'FR')))
             ->add('MemberEmail', EmailType::class, array('label' => 'Email : '))
-            ->add('MemberComment', TextareaType::class, array('label' => 'Commentaire : ', 'required' => false))
             ->add('Submit', SubmitType::class, array('label' => 'Modifier'))
         ;
     }

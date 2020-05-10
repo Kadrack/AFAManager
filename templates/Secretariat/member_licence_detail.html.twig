@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    AFA-Manager
+{% endblock %}
+
+{% block stylesheets %}
+{% endblock %}
+
+{% block body %}
+    <h1>{{ member.getMemberFirstname() }} {{ member.getMemberName() }}</h1>
+    <h2>Historique Licence n° {{ member.getMemberId() }}</h2>
+    <table>
+        <tr>
+            <th>Echéance</th>
+            <th>Club</th>
+            <th>Commande</th>
+        </tr>
+        {% if next_renew %}
+            <tr>
+                <td></td>
+                <td></td>
+                <td><a href="{{ path('secretariat_member_licence_renew', {'club': club.getClubId(), 'member': member.getMemberId()}) }}">Renouveller</a></td>
+            </tr>
+        {% endif %}
+        {% for licence in licence_history %}
+            <tr>
+                <td>{{ licence.getMemberLicenceDeadline()|date("d/m/Y") }}</td>
+                <td>{{ licence.getMemberLicenceClub().getClubId() }} - {{ licence.getMemberLicenceClub().getClubName() }}</td>
+                <td><a href="{{ path('secretariat_member_licence_renew_update', {'club': club.getClubId(), 'member': member.getMemberId(), 'renew': licence.getMemberLicenceId()}) }}">Modifier</a></td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}
+
+{% block javascripts %}
+{% endblock %}

@@ -1,0 +1,105 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    AFA-Manager
+{% endblock %}
+
+{% block stylesheets %}
+{% endblock %}
+
+{% block body %}
+    <h1>{{ club.getClubName()|title }} n°{{ club.getClubId() }}</h1>
+    {% if addresses != null %}
+    <h2>Dojo(s)</h2>
+    <table>
+        <tr>
+            <th>Salle</th>
+            <th>Adresse</th>
+            <th>Code postal</th>
+            <th>Localité</th>
+            <th>Tatamis (m²)</th>
+            <th>DEA</th>
+        </tr>
+        {% for address in addresses %}
+            <tr>
+                <td>{{ address.getTrainingAddressName() }}</td>
+                <td>{{ address.getTrainingAddressStreet() }}</td>
+                <td>{{ address.getTrainingAddressZip() }}</td>
+                <td>{{ address.getTrainingAddressCity() }}</td>
+                <td>{{ address.getTrainingAddressTatamis() }}</td>
+                <td>{% if address.getTrainingAddressDEA() %}Oui{% else %}Non{% endif %}</td>
+            </tr>
+        {% endfor %}
+    </table>
+    {% endif %}
+    {% if trainings != null %}
+    <h2>Horaire cours</h2>
+    <table>
+        <tr>
+            <th>Jour</th>
+            <th>Début</th>
+            <th>Fin</th>
+            <th>Type</th>
+            <th>Salle</th>
+        </tr>
+        {% for training in trainings %}
+            <tr>
+                <td>{{ listData.getDay(training.getTrainingDay()) }}</td>
+                <td>{{ training.getTrainingStartingHour()|date('H:i') }}</td>
+                <td>{{ training.getTrainingEndingHour()|date('H:i') }}</td>
+                <td>{{ listData.getTrainingType(training.getTrainingType()) }}</td>
+                <td>{{ training.getTrainingAddress().getTrainingAddressName() }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+    {% endif %}
+    {% if afa_teachers != null %}
+    <h2>Professeur(s) & Assistant(s) AFA</h2>
+    <table>
+        <tr>
+            <th>Titre</th>
+            <th>Type</th>
+            <th>Prénom</th>
+            <th>Nom</th>
+            <th>Grade</th>
+        </tr>
+        {% for teacher in afa_teachers %}
+            <tr>
+                <td>{{ listData.getTeacherTitle(teacher.Title) }}</td>
+                <td>{{ listData.getTeacherType(teacher.Type) }}</td>
+                <td>{{ teacher.Firstname }}</td>
+                <td>{{ teacher.Name }}</td>
+                <td>{{ listData.getGrade(teacher.Dan) }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+    {% endif %}
+    {% if foreign_teachers != null %}
+    <h2>Professeur(s) & Assistant(s) Autre</h2>
+    <table>
+        <tr>
+            <th>Titre</th>
+            <th>Type</th>
+            <th>Prénom</th>
+            <th>Nom</th>
+            <th>Grade</th>
+            <th>Enseignement Aïkikaï</th>
+            <th>Enseignement ADEPS</th>
+        </tr>
+        {% for teacher in foreign_teachers %}
+            <tr>
+                <td>{{ listData.getTeacherTitle(teacher.Title) }}</td>
+                <td>{{ listData.getTeacherType(teacher.Type) }}</td>
+                <td>{{ teacher.Firstname }}</td>
+                <td>{{ teacher.Name }}</td>
+                <td>{{ listData.getGrade(teacher.Grade) }}</td>
+                <td>{% if teacher.GradeTitleAikikai != null %}{{ listData.getGradeTitleAikikai(teacher.GradeTitleAikikai) }}{% endif %}</td>
+                <td>{% if teacher.GradeTitleAdeps != null %}{{ listData.getGradeTitleAdeps(teacher.GradeTitleAdeps) }}{% endif %}</td>
+            </tr>
+        {% endfor %}
+    </table>
+    {% endif %}
+{% endblock %}
+
+{% block javascripts %}
+{% endblock %}

@@ -33,14 +33,14 @@ class ClubType extends AbstractType
             case 'detail_association':
                 $this->detailAssociation($builder);
                 break;
-            case 'address_create':
-                $this->addressCreate($builder);
+            case 'dojo_create':
+                $this->dojoCreate($builder);
                 break;
-            case 'address_delete':
-                $this->addressDelete($builder);
+            case 'dojo_delete':
+                $this->dojoDelete($builder);
                 break;
-            case 'address_update':
-                $this->addressUpdate($builder);
+            case 'dojo_update':
+                $this->dojoUpdate($builder);
                 break;
             case 'history_entry':
                 $this->historyEntry($builder);
@@ -132,7 +132,7 @@ class ClubType extends AbstractType
         ;
     }
 
-    private function addressCreate(FormBuilderInterface $builder)
+    private function dojoCreate(FormBuilderInterface $builder)
     {
         $builder
             ->add('TrainingAddressName', TextType::class, array('label' => 'Lieu : ', 'required' => false))
@@ -147,7 +147,7 @@ class ClubType extends AbstractType
         ;
     }
 
-    private function addressUpdate(FormBuilderInterface $builder)
+    private function dojoUpdate(FormBuilderInterface $builder)
     {
         $builder
             ->add('TrainingAddressName', TextType::class, array('label' => 'Lieu : ', 'required' => false))
@@ -162,7 +162,7 @@ class ClubType extends AbstractType
         ;
     }
 
-    private function addressDelete(FormBuilderInterface $builder)
+    private function dojoDelete(FormBuilderInterface $builder)
     {
         $builder
             ->add('TrainingAddressName', TextType::class, array('label' => 'Lieu : ', 'required' => false, 'disabled' => true))

@@ -9,8 +9,7 @@
 
 {% block body %}
     <h1>{{ club.getClubName()|title }}</h1>
-    <h2>Membres actifs</h2>
-    <h2><a href="{{ path('member_create', {'club': club.getClubId()}) }}">Ajouter</a></h2>
+    <h2>Liste des Membres</h2>
     <table>
         <tr>
             <th>#</th>
@@ -18,7 +17,6 @@
             <th>Prénom</th>
             <th>Nom</th>
             <th>Echéance</th>
-            <th>Commande</th>
         </tr>
         {% for member in members %}
             {% if member.Id != null %}
@@ -28,7 +26,6 @@
                     <td>{{ member.FirstName|title }}</td>
                     <td>{{ member.Name|title }}</td>
                     <td>{{ member.Deadline|date("d/m/Y") }}</td>
-                    <td><a href="{{ path('member_detail_licence', {'club': club.getClubId(), 'member': member.Id}) }}">Licence</a> - <a href="{{ path('member_detail_grade', {'club': club.getClubId(), 'member': member.Id}) }}">Grades</a> - <a href="{{ path('member_detail_title', {'club': club.getClubId(), 'member': member.Id}) }}">Titres</a> - <a href="{{ path('member_detail_personal', {'club': club.getClubId(), 'member': member.Id}) }}">Données personnelles</a></td>
                 </tr>
             {% endif %}
         {% endfor %}

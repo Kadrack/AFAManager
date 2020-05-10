@@ -14,6 +14,8 @@ use App\Entity\Training;
 use App\Entity\TrainingAttendance;
 use App\Entity\TrainingSession;
 
+use DateTime;
+
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 use Symfony\Component\Routing\Annotation\Route;
@@ -50,7 +52,7 @@ class ConvertController extends AbstractController
             $club->setClubName(utf8_encode($name));
             $club->setClubIban(utf8_encode($bank));
             $club->setClubUrl(utf8_encode($url));
-            $club->setClubCreation(new \DateTime($creation));
+            $club->setClubCreation(new DateTime($creation));
             $club->setClubEmailPublic(utf8_encode($email));
             $club->setClubEmailContact(utf8_encode($email_renew));
             $club->setClubAddress(utf8_encode($address));
@@ -89,7 +91,7 @@ class ConvertController extends AbstractController
             $history = new ClubHistory();
 
             $history->setClubHistoryStatus(1);
-            $history->setClubHistoryUpdate(new \DateTime($affiliation));
+            $history->setClubHistoryUpdate(new DateTime($affiliation));
 
             $club->addClubHistories($history);
             $club->setClubLastHistory($history);
@@ -125,7 +127,7 @@ class ConvertController extends AbstractController
 
         mysqli_close($old_db);
 
-        return $this->redirectToRoute('import_index');;
+        return $this->redirectToRoute('import_index');
     }
 
     /**
@@ -161,7 +163,7 @@ class ConvertController extends AbstractController
                 $member->setMemberCountry("BE");
                 $member->setMemberAddress("Aucune");
                 $member->setMemberCity("Aucune");
-                $member->setMemberBirthday(new \DateTime('today'));
+                $member->setMemberBirthday(new DateTime('today'));
 
                 $entityManager->persist($member);
             }
@@ -178,7 +180,7 @@ class ConvertController extends AbstractController
             $member->setMemberZip(utf8_encode($code_postale));
             $member->setMemberCity(utf8_encode($localite));
             $member->setMemberEmail(utf8_encode($email));
-            $member->setMemberBirthday(new \DateTime($date_de_naissance));
+            $member->setMemberBirthday(new DateTime($date_de_naissance));
             $member->setMemberComment(utf8_encode($memo));
 
             switch ($pays_id)
@@ -213,15 +215,15 @@ class ConvertController extends AbstractController
 
             $first = false;
 
-            if (($date_debut_pratique != null) AND ($date_debut_pratique != '0000-00-00') AND (new \DateTime($date_nouvelle_echeance) > new \DateTime('+1 year ' . $date_debut_pratique)))
+            if (($date_debut_pratique != null) AND ($date_debut_pratique != '0000-00-00') AND (new DateTime($date_nouvelle_echeance) > new DateTime('+1 year ' . $date_debut_pratique)))
             {
                 $licence = new MemberLicence();
 
                 $licence->setMemberLicenceStatus(0);
                 $licence->setMemberLicenceClub($club);
-                $licence->setMemberLicenceUpdate(new \DateTime('today'));
-                $licence->setMemberLicenceMedicalCertificate(new \DateTime($date_debut_pratique));
-                $licence->setMemberLicenceDeadline(new \DateTime('+1 year ' . $licence->getMemberLicenceMedicalCertificate()->format('Y-m-d')));
+                $licence->setMemberLicenceUpdate(new DateTime('today'));
+                $licence->setMemberLicenceMedicalCertificate(new DateTime($date_debut_pratique));
+                $licence->setMemberLicenceDeadline(new DateTime('+1 year ' . $licence->getMemberLicenceMedicalCertificate()->format('Y-m-d')));
 
                 $member->addMemberLicences($licence);
                 $member->setMemberFirstLicence($licence);
@@ -236,9 +238,9 @@ class ConvertController extends AbstractController
 
                 $licence->setMemberLicenceStatus(1);
                 $licence->setMemberLicenceClub($club);
-                $licence->setMemberLicenceUpdate(new \DateTime('today'));
-                $licence->setMemberLicenceDeadline(new \DateTime($date_nouvelle_echeance));
-                $licence->setMemberLicenceMedicalCertificate(new \DateTime($date_certificat_medical));
+                $licence->setMemberLicenceUpdate(new DateTime('today'));
+                $licence->setMemberLicenceDeadline(new DateTime($date_nouvelle_echeance));
+                $licence->setMemberLicenceMedicalCertificate(new DateTime($date_certificat_medical));
 
                 $member->addMemberLicences($licence);
                 $member->setMemberLastLicence($licence);
@@ -288,7 +290,7 @@ class ConvertController extends AbstractController
 
             $kyu->setGradeKyuMember($member);
             $kyu->setGradeKyuRank($grade_no);
-            $kyu->setGradeKyuDate(new \DateTime($date_examen));
+            $kyu->setGradeKyuDate(new DateTime($date_examen));
 
             switch ($federation_id)
             {
@@ -349,7 +351,7 @@ class ConvertController extends AbstractController
 
             $date == null ? $date = '1900-01-01' : $date;
 
-            $session = $this->getDoctrine()->getRepository(GradeSession::class)->findOneBy(['grade_session_date' => new \DateTime($date), 'grade_session_type' => $type]);
+            $session = $this->getDoctrine()->getRepository(GradeSession::class)->findOneBy(['grade_session_date' => new DateTime($date), 'grade_session_type' => $type]);
 
             $session == null ? $create = true : $create = false;
 
@@ -358,9 +360,9 @@ class ConvertController extends AbstractController
                 $session = new GradeSession();
 
                 $session->setGradeSessionType($type);
-                $session->setGradeSessionDate(new \DateTime($date));
-                $session->setGradeSessionCandidateOpen(new \DateTime($date));
-                $session->setGradeSessionCandidateClose(new \DateTime($date));
+                $session->setGradeSessionDate(new DateTime($date));
+                $session->setGradeSessionCandidateOpen(new DateTime($date));
+                $session->setGradeSessionCandidateClose(new DateTime($date));
 
                 $entityManager->persist($session);
                 $entityManager->flush();
@@ -407,7 +409,7 @@ class ConvertController extends AbstractController
 
             $date == null ? $date = '1900-01-01' : $date;
 
-            $session = $this->getDoctrine()->getRepository(GradeSession::class)->findOneBy(['grade_session_date' => new \DateTime($date), 'grade_session_type' => $type]);
+            $session = $this->getDoctrine()->getRepository(GradeSession::class)->findOneBy(['grade_session_date' => new DateTime($date), 'grade_session_type' => $type]);
 
             $member = $this->getDoctrine()->getRepository(Member::class)->findOneBy(['member_id' => $licence_id]);
 
@@ -462,7 +464,7 @@ class ConvertController extends AbstractController
 
             $date == null ? $date = '1900-01-01' : $date;
 
-            $session = $this->getDoctrine()->getRepository(GradeSession::class)->findOneBy(['grade_session_date' => new \DateTime($date), 'grade_session_type' => $type]);
+            $session = $this->getDoctrine()->getRepository(GradeSession::class)->findOneBy(['grade_session_date' => new DateTime($date), 'grade_session_type' => $type]);
 
             $session == null ? $create = true : $create = false;
 
@@ -471,9 +473,9 @@ class ConvertController extends AbstractController
                 $session = new GradeSession();
 
                 $session->setGradeSessionType($type);
-                $session->setGradeSessionDate(new \DateTime($date));
-                $session->setGradeSessionCandidateOpen(new \DateTime($date));
-                $session->setGradeSessionCandidateClose(new \DateTime($date));
+                $session->setGradeSessionDate(new DateTime($date));
+                $session->setGradeSessionCandidateOpen(new DateTime($date));
+                $session->setGradeSessionCandidateClose(new DateTime($date));
 
                 $entityManager->persist($session);
                 $entityManager->flush();
@@ -508,7 +510,7 @@ class ConvertController extends AbstractController
 
             $date == null ? $date = '1900-01-01' : $date;
 
-            $session = $this->getDoctrine()->getRepository(GradeSession::class)->findOneBy(['grade_session_date' => new \DateTime($date), 'grade_session_type' => $type]);
+            $session = $this->getDoctrine()->getRepository(GradeSession::class)->findOneBy(['grade_session_date' => new DateTime($date), 'grade_session_type' => $type]);
 
             $member = $this->getDoctrine()->getRepository(Member::class)->findOneBy(['member_id' => $licence_id]);
 
@@ -559,7 +561,7 @@ class ConvertController extends AbstractController
 
             $date == null ? $date = '1900-01-01' : $date;
 
-            $session = $this->getDoctrine()->getRepository(GradeSession::class)->findOneBy(['grade_session_date' => new \DateTime($date), 'grade_session_type' => $type]);
+            $session = $this->getDoctrine()->getRepository(GradeSession::class)->findOneBy(['grade_session_date' => new DateTime($date), 'grade_session_type' => $type]);
 
             $session == null ? $create = true : $create = false;
 
@@ -568,9 +570,9 @@ class ConvertController extends AbstractController
                 $session = new GradeSession();
 
                 $session->setGradeSessionType($type);
-                $session->setGradeSessionDate(new \DateTime($date));
-                $session->setGradeSessionCandidateOpen(new \DateTime($date));
-                $session->setGradeSessionCandidateClose(new \DateTime($date));
+                $session->setGradeSessionDate(new DateTime($date));
+                $session->setGradeSessionCandidateOpen(new DateTime($date));
+                $session->setGradeSessionCandidateClose(new DateTime($date));
 
                 $entityManager->persist($session);
                 $entityManager->flush();
@@ -605,7 +607,7 @@ class ConvertController extends AbstractController
 
             $date == null ? $date = '1900-01-01' : $date;
 
-            $session = $this->getDoctrine()->getRepository(GradeSession::class)->findOneBy(['grade_session_date' => new \DateTime($date), 'grade_session_type' => $type]);
+            $session = $this->getDoctrine()->getRepository(GradeSession::class)->findOneBy(['grade_session_date' => new DateTime($date), 'grade_session_type' => $type]);
 
             $member = $this->getDoctrine()->getRepository(Member::class)->findOneBy(['member_id' => $licence_id]);
 
@@ -715,7 +717,7 @@ class ConvertController extends AbstractController
                 $session->setTraining($stage);
                 $session->setTrainingSessionOldId($stage_id);
                 $session->setTrainingSessionDuration($nombre_heures*60);
-                $session->setTrainingSessionDate(new \DateTime($date_stage));
+                $session->setTrainingSessionDate(new DateTime($date_stage));
 
                 $stage->setTrainingFirstSession($session);
 

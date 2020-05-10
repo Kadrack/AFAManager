@@ -9,7 +9,9 @@ use App\Entity\TrainingSession;
 
 use App\Form\TrainingType;
 
-use App\Service\ListData;
+use DateTime;
+
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
@@ -21,231 +23,24 @@ use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @Route("/stage", name="training_")
+ *
+ * @IsGranted("ROLE_STAGES")
  */
 class TrainingController extends AbstractController
 {
     /**
      * @Route("/", name="index")
      */
-    public function index()
+    public function stageIndex()
     {
         $trainings = $this->getDoctrine()->getRepository(Training::class)->getActiveTrainings();
 
-        return $this->render('Training/training_index.html.twig', array('trainings' => count($trainings) == 0 ? null : $trainings, 'listData' => new ListData()));
-    }
-
-    /**
-     * @Route("/creer", name="create")
-     * @param Request $request
-     * @return RedirectResponse|Response
-     */
-    public function create(Request $request)
-    {
-        $form = $this->createForm(TrainingType::class, new Training());
-
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid())
-        {
-            $training = $form->getData();
-
-            $session = $training->getSession();
-
-            $duration = date_diff($session->getTrainingSessionEndingHour(), $session->getTrainingSessionStartingHour());
-
-            $session->setTrainingSessionDuration($duration->format('%h')*60 + $duration->format('%i'));
-
-            $training->addTrainingSessions($session);
-            $training->setTrainingFirstSession($session);
-            $training->setTrainingTotalSessions(1);
-
-            $entityManager = $this->getDoctrine()->getManager();
-
-            $entityManager->persist($training);
-            $entityManager->flush();
-
-            return $this->redirectToRoute('training_index');
-        }
-
-        return $this->render('Training/training_create.html.twig', array('form' => $form->createView()));
-    }
-
-    /**
-     * @Route("/{training<\d+>}/detail", name="detail")
-     * @param Training $training
-     * @return Response
-     */
-    public function detail(Training $training)
-    {
-        $sessions = $this->getDoctrine()->getRepository(TrainingSession::class)->getTrainingSessions($training->getTrainingId());
-
-        return $this->render('Training/training_detail.html.twig', array('training' => $training, 'sessions' => $sessions, 'listData' => new ListData()));
-    }
-
-    /**
-     * @Route("/{training<\d+>}/modifier", name="update")
-     * @param Request $request
-     * @param Training $training
-     * @return RedirectResponse|Response
-     */
-    public function update(Request $request, Training $training)
-    {
-        $form = $this->createForm(TrainingType::class, $training, array('form' => 'training_update'));
-
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid())
-        {
-            $entityManager = $this->getDoctrine()->getManager();
-
-            $entityManager->flush();
-
-            return $this->redirectToRoute('training_index');
-        }
-
-        return $this->render('Training/training_update.html.twig', array('form' => $form->createView()));
-    }
-
-    /**
-     * @Route("/{training<\d+>}/supprimer", name="delete")
-     * @param Request $request
-     * @param Training $training
-     * @return RedirectResponse|Response
-     */
-    public function delete(Request $request, Training $training)
-    {
-        $form = $this->createForm(TrainingType::class, $training, array('form' => 'training_delete'));
-
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid())
-        {
-            $entityManager = $this->getDoctrine()->getManager();
-
-            $entityManager->remove($training);
-            $entityManager->flush();
-
-            return $this->redirectToRoute('training_index');
-        }
-
-        return $this->render('Training/training_update.html.twig', array('form' => $form->createView()));
-    }
-
-    /**
-     * @Route("/{training<\d+>}/ajouter-session", name="session_add")
-     * @param Request $request
-     * @param Training $training
-     * @return RedirectResponse|Response
-     */
-    public function sessionAdd(Request $request, Training $training)
-    {
-        $form = $this->createForm(TrainingType::class, new TrainingSession(), array('form' => 'session_add', 'data_class' => TrainingSession::class));
-
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid())
-        {
-            $session = $form->getData();
-
-            $duration = date_diff($session->getTrainingSessionEndingHour(), $session->getTrainingSessionStartingHour());
-
-            $session->setTrainingSessionDuration($duration->format('%h')*60 + $duration->format('%i'));
-            $session->setTraining($training);
-
-            $training->setTrainingTotalSessions($training->getTrainingTotalSessions() + 1);
-
-            $entityManager = $this->getDoctrine()->getManager();
-
-            $entityManager->persist($session);
-            $entityManager->flush();
-
-            return $this->redirectToRoute('training_detail', array('training' => $training->getTrainingId()));
-        }
-
-        return $this->render('Training/session_add.html.twig', array('form' => $form->createView()));
-    }
-
-    /**
-     * @Route("/{training<\d+>}/modifier-session/{session<\d+>}", name="session_update")
-     * @param Request $request
-     * @param Training $training
-     * @param TrainingSession $session
-     * @return RedirectResponse|Response
-     */
-    public function sessionUpdate(Request $request, Training $training, TrainingSession $session)
-    {
-        $form = $this->createForm(TrainingType::class, $session, array('form' => 'session_add', 'data_class' => TrainingSession::class));
-
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid())
-        {
-            $session = $form->getData();
-
-            $duration = date_diff($session->getTrainingSessionEndingHour(), $session->getTrainingSessionStartingHour());
-
-            $session->setTrainingSessionDuration($duration->format('%h')*60 + $duration->format('%i'));
-
-            $entityManager = $this->getDoctrine()->getManager();
-
-            $entityManager->flush();
-
-            return $this->redirectToRoute('training_detail', array('training' => $training->getTrainingId()));
-        }
-
-        return $this->render('Training/session_update.html.twig', array('form' => $form->createView()));
-    }
-
-    /**
-     * @Route("/{training<\d+>}/supprimer-session/{session<\d+>}", name="session_delete")
-     * @param Request $request
-     * @param Training $training
-     * @param TrainingSession $session
-     * @return RedirectResponse|Response
-     */
-    public function sessionDelete(Request $request, Training $training, TrainingSession $session)
-    {
-        $form = $this->createForm(TrainingType::class, $session, array('form' => 'session_delete', 'data_class' => TrainingSession::class));
-
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid())
-        {
-            $entityManager = $this->getDoctrine()->getManager();
-
-            if (count($training->getTrainingSessions()) == 1)
-            {
-                $entityManager->remove($training);
-
-                $index = true;
-            }
-            else
-            {
-                $entityManager->remove($session);
-
-                $training->setTrainingTotalSessions($training->getTrainingTotalSessions() - 1);
-
-                $index = false;
-            }
-
-            $entityManager->flush();
-
-            if ($index)
-            {
-                return $this->redirectToRoute('training_index');
-            }
-            else
-            {
-                return $this->redirectToRoute('training_detail', array('training' => $training->getTrainingId()));
-            }
-
-        }
-
-        return $this->render('Training/session_update.html.twig', array('form' => $form->createView()));
+        return $this->render('Training/training_index.html.twig', array('trainings' => count($trainings) == 0 ? null : $trainings));
     }
 
     /**
      * @Route("/{training<\d+>}/ajouter-pratiquant", name="attendance_add")
+     *
      * @param Request $request
      * @param Training $training
      * @return RedirectResponse|Response
@@ -275,6 +70,7 @@ class TrainingController extends AbstractController
                 $attendance[$i] = new TrainingAttendance();
 
                 $attendance[$i]->setTraining($training);
+                /** @var Member $member */
                 $attendance[$i]->setTrainingAttendanceMember($member);
                 $attendance[$i]->setTrainingAttendanceUnique($unique);
                 $attendance[$i]->setTrainingAttendanceSession($session);
@@ -315,11 +111,12 @@ class TrainingController extends AbstractController
 
         $practitioners_sessions = $this->getDoctrine()->getRepository(TrainingAttendance::class)->getPractitionersSessions($training->getTrainingId());
 
-        return $this->render('Training/attendance_add.html.twig', array('form' => $form->createView(), 'training' => $training, 'practitioners' => $practitioners, 'practitioners_sessions' => $practitioners_sessions, 'listData' => new ListData(), 'total_card' => $card, 'total_cash' => $cash, 'today' => new \DateTime()));
+        return $this->render('Training/attendance_add.html.twig', array('form' => $form->createView(), 'training' => $training, 'practitioners' => $practitioners, 'practitioners_sessions' => $practitioners_sessions, 'total_card' => $card, 'total_cash' => $cash, 'today' => new DateTime()));
     }
 
     /**
      * @Route("/{training<\d+>}/ajouter-pratiquant-non-afa", name="attendance_foreign_add")
+     *
      * @param Request $request
      * @param Training $training
      * @return RedirectResponse|Response
@@ -389,6 +186,6 @@ class TrainingController extends AbstractController
 
         $practitioners_sessions = $this->getDoctrine()->getRepository(TrainingAttendance::class)->getForeignPractitionersSessions($training->getTrainingId());
 
-        return $this->render('Training/attendance_foreign_add.html.twig', array('form' => $form->createView(), 'training' => $training, 'practitioners' => $practitioners, 'practitioners_sessions' => $practitioners_sessions, 'listData' => new ListData(), 'total_card' => $card, 'total_cash' => $cash));
+        return $this->render('Training/attendance_foreign_add.html.twig', array('form' => $form->createView(), 'training' => $training, 'practitioners' => $practitioners, 'practitioners_sessions' => $practitioners_sessions, 'total_card' => $card, 'total_cash' => $cash));
     }
 }

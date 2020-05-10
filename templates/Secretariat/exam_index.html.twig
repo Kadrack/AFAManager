@@ -8,20 +8,23 @@
 {% endblock %}
 
 {% block body %}
-    <h1>Promotions Kagami Biraki</h1>
+    <h1>Passages de grade Dan</h1>
+    <h2><a href="{{ path('secretariat_exam_create') }}">Nouvelle session</a></h2>
     {% if sessions != null %}
-        <h2>Liste promotion</h2>
+        <h2>Liste sessions</h2>
         <table>
             <tr>
                 <th>Date</th>
-                <th>Ouverture propositions</th>
+                <th>Ouverture inscription</th>
+                <th>Fermeture inscription</th>
                 <th>Commandes</th>
             </tr>
             {%  for session in sessions %}
                 <tr>
                     <td>{{ session.getGradeSessionDate()|date("d/m/Y") }}</td>
                     <td>{{ session.getGradeSessionCandidateOpen()|date("d/m/Y") }}</td>
-                    <td><a href="{{ path('grade_kagami_detail', {'session': session.getGradeSessionId()}) }}">Détails</a></td>
+                    <td>{{ session.getGradeSessionCandidateClose()|date("d/m/Y") }}</td>
+                    <td><a href="{{ path('secretariat_exam_update', {'session': session.getGradeSessionId()}) }}">Modifier</a></td>
                 </tr>
             {% endfor %}
         </table>

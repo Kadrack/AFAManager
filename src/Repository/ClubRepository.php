@@ -50,20 +50,4 @@ class ClubRepository extends ServiceEntityRepository
             ->getQuery()
             ->getArrayResult();
     }
-
-    public function getClubsTotalMembers(): ?array
-    {
-        $qb = $this->createQueryBuilder('c');
-
-        $today = new DateTime('today');
-
-        return $qb->select('c.club_id AS Id', 'c.club_name AS Name', 'c.club_province AS Province', $qb->expr()->count('(l.licence_club)').' AS Members')
-                ->join(MemberLicence::class, 'l', 'WITH', $qb->expr()->eq('l.licence_club', 'c.club_id'))
-                ->join(Member::class, 'm', 'WITH', $qb->expr()->eq('m.member_id', 'l.licence_member'))
-                ->where($qb->expr()->gt('l.licence_deadline', "'".$today->format('Y-m-d')."'"))
-                ->andWhere($qb->expr()->orX($qb->expr()->eq('l.licence_status', 1), $qb->expr()->eq('l.licence_status', 3)))
-                //->groupBy('c.club_province')
-                ->getQuery()
-                ->getArrayResult();        
-    }    
 }

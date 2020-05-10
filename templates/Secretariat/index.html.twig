@@ -8,8 +8,11 @@
 {% endblock %}
 
 {% block body %}
-    <h1>Liste</h1>
-    <h2><a href="{{ path('secretariat_supporter_index') }}">Sympathisants</a></h2>
+    <a href="{{ path('secretariat_supporter_index') }}">Sympathisants</a><br />
+    <a href="{{ path('secretariat_club_list') }}">Les Clubs</a><br />
+    <a href="{{ path('secretariat_exam_index') }}">Examens Fédéraux</a><br />
+    <a href="{{ path('secretariat_kagami_index') }}">Kagami Biraki</a><br />
+    <a href="{{ path('secretariat_training_index') }}">Stages</a><br />
 {% endblock %}
 
 {% block javascripts %}

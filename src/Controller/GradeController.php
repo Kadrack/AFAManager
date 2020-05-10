@@ -8,7 +8,7 @@ use App\Entity\Member;
 
 use App\Form\GradeType;
 
-use App\Service\ListData;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
@@ -19,6 +19,8 @@ use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @Route("/grade", name="grade_")
+ *
+ * @IsGranted("ROLE_CFG")
  */
 class GradeController extends AbstractController
 {
@@ -32,7 +34,7 @@ class GradeController extends AbstractController
 
     /**
      * @Route("/session-examen", name="exam_index")
-     */    
+     */
     public function exam_index()
     {
         $sessions = $this->getDoctrine()->getRepository(GradeSession::class)->findBy(['grade_session_type' => 1], ['grade_session_date' => 'DESC', 'grade_session_type' => 'DESC']);
@@ -41,59 +43,8 @@ class GradeController extends AbstractController
     }
 
     /**
-     * @Route("/session-examen/creer", name="exam_create")
-     * @param Request $request
-     * @return RedirectResponse|Response
-     */
-    public function exam_create(Request $request)
-    {
-        $form = $this->createForm(GradeType::class, new GradeSession());
-
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid())
-        {
-            $session = $form->getData();
-
-            $session->setGradeSessionType(1);
-
-            $entityManager = $this->getDoctrine()->getManager();
-
-            $entityManager->persist($session);
-            $entityManager->flush();
-
-            return $this->redirectToRoute('grade_exam_index');
-        }
-
-        return $this->render('Grade/Exam/create.html.twig', array('form' => $form->createView()));
-    }
-
-    /**
-     * @Route("/session-examen/{session<\d+>}/modifier", name="exam_update")
-     * @param Request $request
-     * @param GradeSession $session
-     * @return RedirectResponse|Response
-     */
-    public function exam_update(Request $request, GradeSession $session)
-    {
-        $form = $this->createForm(GradeType::class, $session, array('form' => 'exam_update'));
-
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid())
-        {
-            $entityManager = $this->getDoctrine()->getManager();
-
-            $entityManager->flush();
-
-            return $this->redirectToRoute('grade_exam_index', array('session' => $session->getGradeSessionId()));
-        }
-
-        return $this->render('Grade/Exam/update.html.twig', array('form' => $form->createView()));
-    }
-
-    /**
      * @Route("/session-examen/{session<\d+>}/detail", name="exam_detail")
+     *
      * @param GradeSession $session
      * @return Response
      */
@@ -132,11 +83,12 @@ class GradeController extends AbstractController
             $i++;
         }
 
-        return $this->render('Grade/Exam/detail.html.twig', array('session' => $session, 'applicants' => $applicants, 'candidates' => $candidates, 'promoted' => $promoted_filtered, 'refused' => $refused, 'listData' => new ListData()));
+        return $this->render('Grade/Exam/detail.html.twig', array('session' => $session, 'applicants' => $applicants, 'candidates' => $candidates, 'promoted' => $promoted_filtered, 'refused' => $refused));
     }
 
     /**
      * @Route("/session-examen/{session<\d+>}/postulant/{member<\d+>}/grade/{grade<\d+>}/detail", name="exam_applicant_detail")
+     *
      * @param Request $request
      * @param GradeSession $session
      * @param Member $member
@@ -165,6 +117,7 @@ class GradeController extends AbstractController
 
     /**
      * @Route("/session-examen/{session<\d+>}/candidat/{member<\d+>}/grade/{grade<\d+>}/detail", name="exam_candidate_detail")
+     *
      * @param Request $request
      * @param GradeSession $session
      * @param Member $member
@@ -193,6 +146,7 @@ class GradeController extends AbstractController
 
     /**
      * @Route("/session-examen/{session<\d+>}/candidat/{member<\d+>}/grade/{grade<\d+>}/detail_update", name="exam_candidate_detail_update")
+     *
      * @param Request $request
      * @param GradeSession $session
      * @param Member $member
@@ -231,6 +185,7 @@ class GradeController extends AbstractController
 
     /**
      * @Route("/session-examen/{session<\d+>}/candidat/{member<\d+>}/grade/{grade<\d+>}/ajouter_aikikai", name="exam_candidate_add_aikikai")
+     *
      * @param Request $request
      * @param GradeSession $session
      * @param Member $member
@@ -269,6 +224,7 @@ class GradeController extends AbstractController
 
     /**
      * @Route("/session-examen/{session<\d+>}/candidat/{member<\d+>}/grade/{grade<\d+>}/detail_aikikai", name="exam_candidate_detail_aikikai")
+     *
      * @param Request $request
      * @param GradeSession $session
      * @param Member $member
@@ -306,60 +262,8 @@ class GradeController extends AbstractController
     }
 
     /**
-     * @Route("/kagami/creer", name="kagami_create")
-     * @param Request $request
-     * @return RedirectResponse|Response
-     */
-    public function kagami_create(Request $request)
-    {
-        $form = $this->createForm(GradeType::class, new GradeSession(), array('form' => 'kagami_create'));
-
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid())
-        {
-            $session = $form->getData();
-
-            $session->setGradeSessionType(2);
-            $session->setGradeSessionCandidateClose($form->get('GradeSessionDate')->getData());
-
-            $entityManager = $this->getDoctrine()->getManager();
-
-            $entityManager->persist($session);
-            $entityManager->flush();
-
-            return $this->redirectToRoute('grade_kagami_index');
-        }
-
-        return $this->render('Grade/Kagami/create.html.twig', array('form' => $form->createView()));
-    }
-
-    /**
-     * @Route("/kagami/{session<\d+>}/modifier", name="kagami_update")
-     * @param Request $request
-     * @param GradeSession $session
-     * @return RedirectResponse|Response
-     */
-    public function kagami_update(Request $request, GradeSession $session)
-    {
-        $form = $this->createForm(GradeType::class, $session, array('form' => 'kagami_update'));
-
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid())
-        {
-            $entityManager = $this->getDoctrine()->getManager();
-
-            $entityManager->flush();
-
-            return $this->redirectToRoute('grade_kagami_index', array('session' => $session->getGradeSessionId()));
-        }
-
-        return $this->render('Grade/Kagami/update.html.twig', array('form' => $form->createView()));
-    }
-
-    /**
      * @Route("/kagami/{session<\d+>}/detail", name="kagami_detail")
+     *
      * @param GradeSession $session
      * @return Response
      */
@@ -371,11 +275,12 @@ class GradeController extends AbstractController
 
         $promoted   = $this->getDoctrine()->getRepository(GradeDan::class)->findBy(['grade_dan_status' => array(4,5), 'grade_dan_exam' => $session->getGradeSessionId()], ['grade_dan_rank' => 'ASC']);
 
-        return $this->render('Grade/Kagami/detail.html.twig', array('session' => $session, 'candidates' => $candidates, 'refused' => $refused, 'promoted' => $promoted, 'listData' => new ListData()));
+        return $this->render('Grade/Kagami/detail.html.twig', array('session' => $session, 'candidates' => $candidates, 'refused' => $refused, 'promoted' => $promoted));
     }
 
     /**
      * @Route("/kagami/{session<\d+>}/candidat/{member<\d+>}/grade/{grade<\d+>}/detail", name="kagami_candidate_detail")
+     *
      * @param Request $request
      * @param GradeSession $session
      * @param Member $member
@@ -404,6 +309,7 @@ class GradeController extends AbstractController
 
     /**
      * @Route("/kagami/{session<\d+>}/candidat/{member<\d+>}/grade/{grade<\d+>}/detail_update", name="kagami_candidate_detail_update")
+     *
      * @param Request $request
      * @param GradeSession $session
      * @param Member $member

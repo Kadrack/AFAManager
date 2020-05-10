@@ -12,18 +12,31 @@
 
             <div class="navbar" id="navbarColor02">
                 <ul class="navbar-nav mr-auto">
+                    {% if is_granted('ROLE_MEMBER') %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ path('member_index') }}">Membre</a>
+                        </li>
+                    {% endif %}
+                    {% if is_granted('ROLE_CLUB') %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ path('club_index') }}">Club</a>
+                        </li>
+                    {% endif %}
+                    {% if is_granted('ROLE_CFG') %}
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ path('club_index') }}">Clubs & Membres</a>
+                        <a class="nav-link" href="{{ path('grade_index') }}">CFG</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ path('grade_index') }}">Grades Dan</a>
-                    </li>
+                    {% endif %}
+                    {% if is_granted('ROLE_STAGES') %}
                     <li class="nav-item">
                         <a class="nav-link" href="{{ path('training_index') }}">Stages</a>
                     </li>
+                    {% endif %}
+                    {% if is_granted('ROLE_SECRETARIAT') %}
                     <li class="nav-item">
                         <a class="nav-link" href="{{ path('secretariat_index') }}">Secrétariat</a>
                     </li>
+                    {% endif %}
                 </ul>
             </div>
         </nav>

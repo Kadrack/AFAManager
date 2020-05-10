@@ -50,16 +50,4 @@ class MemberRepository extends ServiceEntityRepository
             ->getQuery()
             ->getArrayResult();
     }
-
-    public function getClubMemberDetail(Club $club, int $member_id): ?array
-    {
-        $qb = $this->createQueryBuilder('m');
-        
-        return $qb->select('m')
-                ->join(MemberLicence::class, 'l', 'WITH', $qb->expr()->eq('m.member_id', 'l.licence_member'))
-                ->where($qb->expr()->eq('m.member_id', $member_id))
-                ->andWhere('l.licence_club', $club->getClubId())
-                ->getQuery()
-                ->getResult();
-    }
 }

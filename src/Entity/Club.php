@@ -404,7 +404,7 @@ class Club
     {
         if (!$this->club_addresses->contains($trainingAddress)) {
             $this->club_addresses[] = $trainingAddress;
-            $trainingAddress->setClubAddressClub($this);
+            $trainingAddress->setTrainingAddressClub($this);
         }
 
         return $this;
@@ -415,8 +415,8 @@ class Club
         if ($this->club_addresses->contains($trainingAddress)) {
             $this->club_addresses->removeElement($trainingAddress);
             // set the owning side to null (unless already changed)
-            if ($trainingAddress->getClubAddressClub() === $this) {
-                $trainingAddress->setClubAddressClub(null);
+            if ($trainingAddress->getTrainingAddressClub() === $this) {
+                $trainingAddress->setTrainingAddressClub(null);
             }
         }
 

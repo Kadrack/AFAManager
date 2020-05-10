@@ -9,7 +9,6 @@
 
 {% block body %}
     <h1>Passages de grade Dan</h1>
-    <h2><a href="{{ path('grade_exam_create') }}">Nouvelle session</a></h2>
     {% if sessions != null %}
         <h2>Liste sessions</h2>
         <table>
@@ -24,7 +23,7 @@
                     <td>{{ session.getGradeSessionDate()|date("d/m/Y") }}</td>
                     <td>{{ session.getGradeSessionCandidateOpen()|date("d/m/Y") }}</td>
                     <td>{{ session.getGradeSessionCandidateClose()|date("d/m/Y") }}</td>
-                    <td><a href="{{ path('grade_exam_detail', {'session': session.getGradeSessionId()}) }}">Détails</a> - <a href="{{ path('grade_exam_update', {'session': session.getGradeSessionId()}) }}">Modifier</a></td>
+                    <td><a href="{{ path('grade_exam_detail', {'session': session.getGradeSessionId()}) }}">Détails</a></td>
                 </tr>
             {% endfor %}
         </table>
