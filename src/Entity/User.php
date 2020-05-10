@@ -29,7 +29,7 @@ class User implements UserInterface
     private $login;
 
     /**
-     * @ORM\Column(type="json", nullable=true)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $roles = [];
 
