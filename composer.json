@@ -6,6 +6,7 @@
         "ext-ctype": "*",
         "ext-gd": "*",
         "ext-iconv": "*",
+        "ext-json": "*",
         "laminas/laminas-code": "^3.4",
         "laminas/laminas-eventmanager": "^3.2",
         "sensio/framework-extra-bundle": "^5.1",
