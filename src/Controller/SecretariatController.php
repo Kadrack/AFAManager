@@ -706,7 +706,7 @@ class SecretariatController extends AbstractController
             return $this->redirectToRoute('secretariat_exam_index');
         }
 
-        return $this->render('Grade/Exam/create.html.twig', array('form' => $form->createView()));
+        return $this->render('Secretariat/exam_create.html.twig', array('form' => $form->createView()));
     }
 
     /**
@@ -1014,7 +1014,7 @@ class SecretariatController extends AbstractController
 
             if ($index)
             {
-                return $this->redirectToRoute('training_index');
+                return $this->redirectToRoute('secretariat_training_index');
             }
             else
             {
