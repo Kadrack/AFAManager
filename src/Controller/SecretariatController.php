@@ -10,15 +10,16 @@ use App\Entity\Member;
 use App\Entity\MemberLicence;
 use App\Entity\MemberPrintout;
 use App\Entity\SecretariatSupporter;
-
 use App\Entity\Training;
 use App\Entity\TrainingSession;
+use App\Entity\User;
+
 use App\Form\ClubType;
 use App\Form\GradeType;
 use App\Form\MemberType;
 use App\Form\SecretariatType;
-
 use App\Form\TrainingType;
+
 use App\Service\ListData;
 use App\Service\PhotoUploader;
 
@@ -43,6 +44,23 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class SecretariatController extends AbstractController
 {
+    /** @var Club $club */
+    private $club;
+
+    /** @var Member $member */
+    private $member;
+
+    /** @var User $user */
+    private $user;
+
+    public function __construct()
+    {
+        $this->user = $this->getUser();
+
+        $this->club   = $this->user->getUserClub();
+        $this->member = $this->user->getUserMember();
+    }
+
     /**
      * @Route("/", name="index")
      */

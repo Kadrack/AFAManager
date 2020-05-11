@@ -23,7 +23,7 @@ class EmailType extends AbstractType
             ->add('Submit', SubmitType::class, array('label' => 'Envoyer'))
         ;
     }
-    
+
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array('data_class' => Email::class));

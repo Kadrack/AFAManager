@@ -64,7 +64,7 @@ class TrainingType extends AbstractType
                 $this->trainingCreate($builder);
         }
     }
-    
+
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array('data_class' => Training::class, 'form' => '', 'choices' => null));

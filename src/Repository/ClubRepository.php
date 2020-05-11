@@ -4,10 +4,6 @@ namespace App\Repository;
 
 use App\Entity\Club;
 use App\Entity\ClubHistory;
-use App\Entity\MemberLicence;
-use App\Entity\Member;
-
-use DateTime;
 
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 

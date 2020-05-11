@@ -44,7 +44,7 @@ class MemberType extends AbstractType
                 $this->create($builder);
         }
     }
-    
+
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array('data_class' => Member::class, 'form' => ''));

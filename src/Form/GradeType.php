@@ -50,7 +50,7 @@ class GradeType extends AbstractType
                 $this->exam_create($builder);
         }
     }
-    
+
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array('data_class' => GradeSession::class, 'form' => ''));

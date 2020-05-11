@@ -31,7 +31,7 @@ class SecretariatType extends AbstractType
                 null;
         }
     }
-    
+
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array('data_class' => '', 'form' => ''));

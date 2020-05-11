@@ -2,10 +2,12 @@
 // src/Controller/ClubController.php
 namespace App\Controller;
 
+use App\Entity\Club;
 use App\Entity\ClubTeacher;
 use App\Entity\Member;
 use App\Entity\Training;
 use App\Entity\TrainingAddress;
+use App\Entity\User;
 
 use App\Form\ClubType;
 
@@ -28,6 +30,19 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class ClubController extends AbstractController
 {
+    /** @var User $user */
+    private $user;
+
+    /** @var Club $club */
+    private $club;
+
+    public function __construct()
+    {
+        $this->user = $this->getUser();
+
+        $this->club = $this->user->getUserClub();
+    }
+
     /**
      * @Route("/", name="index")
      */
@@ -42,7 +57,7 @@ class ClubController extends AbstractController
      */
     public function myAdmin()
     {
-        $club = $this->getUser()->getUserClub();
+        $club = $this->club;
 
         $addresses = $this->getDoctrine()->getRepository(TrainingAddress::class)->findBy(['training_address_club' => $club->getClubId()]);
 
@@ -62,7 +77,7 @@ class ClubController extends AbstractController
      */
     public function addressAdd(Request $request)
     {
-        $club = $this->getUser()->getUserClub();
+        $club = $this->club;
 
         $form = $this->createForm(ClubType::class, new TrainingAddress(), array('form' => 'dojo_create', 'data_class' => TrainingAddress::class));
 
@@ -98,8 +113,6 @@ class ClubController extends AbstractController
      */
     public function addressUpdate(Request $request, TrainingAddress $address)
     {
-        $club = $this->getUser()->getUserClub();
-
         $form = $this->createForm(ClubType::class, $address, array('form' => 'dojo_update', 'data_class' => TrainingAddress::class));
 
         $form->handleRequest($request);
@@ -124,8 +137,6 @@ class ClubController extends AbstractController
      */
     public function addressDelete(Request $request, TrainingAddress $address)
     {
-        $club = $this->getUser()->getUserClub();
-
         $form = $this->createForm(ClubType::class, $address, array('form' => 'dojo_delete', 'data_class' => TrainingAddress::class));
 
         $form->handleRequest($request);
@@ -150,7 +161,7 @@ class ClubController extends AbstractController
      */
     public function trainingAdd(Request $request)
     {
-        $club = $this->getUser()->getUserClub();
+        $club = $this->club;
 
         $form = $this->createForm(ClubType::class, new Training(), array('form' => 'training_create', 'data_class' => Training::class, 'choices' => $club->getClubAddresses()));
 
@@ -181,8 +192,6 @@ class ClubController extends AbstractController
      */
     public function trainingUpdate(Request $request, Training $training)
     {
-        $club = $this->getUser()->getUserClub();
-
         $form = $this->createForm(ClubType::class, $training, array('form' => 'training_update', 'data_class' => Training::class));
 
         $form->handleRequest($request);
@@ -207,8 +216,6 @@ class ClubController extends AbstractController
      */
     public function trainingDelete(Request $request, Training $training)
     {
-        $club = $this->getUser()->getUserClub();
-
         $form = $this->createForm(ClubType::class, $training, array('form' => 'training_delete', 'data_class' => Training::class));
 
         $form->handleRequest($request);
@@ -233,7 +240,7 @@ class ClubController extends AbstractController
      */
     public function teacherAFAAdd(Request $request)
     {
-        $club = $this->getUser()->getUserClub();
+        $club = $this->club;
 
         $form = $this->createForm(ClubType::class, new ClubTeacher(), array('form' => 'teacher_afa_create', 'data_class' => ClubTeacher::class));
 
@@ -277,7 +284,7 @@ class ClubController extends AbstractController
      */
     public function teacherAFAUpdate(Request $request, ClubTeacher $teacher)
     {
-        $club = $this->getUser()->getUserClub();
+        $club = $this->club;
 
         $form = $this->createForm(ClubType::class, $teacher, array('form' => 'teacher_afa_update', 'data_class' => ClubTeacher::class));
 
@@ -312,7 +319,7 @@ class ClubController extends AbstractController
      */
     public function teacherAFADelete(Request $request, ClubTeacher $teacher)
     {
-        $club = $this->getUser()->getUserClub();
+        $club = $this->club;
 
         $form = $this->createForm(ClubType::class, $teacher, array('form' => 'teacher_afa_delete', 'data_class' => ClubTeacher::class));
 
@@ -350,7 +357,7 @@ class ClubController extends AbstractController
      */
     public function teacherForeignAdd(Request $request)
     {
-        $club = $this->getUser()->getUserClub();
+        $club = $this->club;
 
         $form = $this->createForm(ClubType::class, new ClubTeacher(), array('form' => 'teacher_foreign_create', 'data_class' => ClubTeacher::class));
 
@@ -386,7 +393,7 @@ class ClubController extends AbstractController
      */
     public function teacherForeignUpdate(Request $request, ClubTeacher $teacher)
     {
-        $club = $this->getUser()->getUserClub();
+        $club = $this->club;
 
         $form = $this->createForm(ClubType::class, $teacher, array('form' => 'teacher_foreign_update', 'data_class' => ClubTeacher::class));
 
@@ -417,7 +424,7 @@ class ClubController extends AbstractController
      */
     public function teacherForeignDelete(Request $request, ClubTeacher $teacher)
     {
-        $club = $this->getUser()->getUserClub();
+        $club = $this->club;
 
         $form = $this->createForm(ClubType::class, $teacher, array('form' => 'teacher_foreign_delete', 'data_class' => ClubTeacher::class));
 
@@ -451,7 +458,7 @@ class ClubController extends AbstractController
      */
     public function associationDetails(Request $request)
     {
-        $club = $this->getUser()->getUserClub();
+        $club = $this->club;
 
         $form = $this->createForm(ClubType::class, $club, array('form' => 'detail_association'));
 
@@ -475,7 +482,7 @@ class ClubController extends AbstractController
      */
     public function activeMembers()
     {
-        $club = $this->getUser()->getUserClub();
+        $club = $this->club;
 
         $today = new DateTime('today');
 
