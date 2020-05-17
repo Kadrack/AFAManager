@@ -12,7 +12,7 @@
     <h2>Données personnelles</h2>
     {{ form_start(form) }}
     <img alt="" src=" {{ asset('uploads/photos/'~member.getMemberPhoto()) }}" /><br />
-    {{ form_widget(form.MemberPhoto) }}
+    {{ form_widget(form.MemberModificationPhoto) }}
     <table>
         <tr>
             <th>Adresse</th>
@@ -21,9 +21,9 @@
             <th>Commande</th>
         </tr>
         <tr>
-            <td>{{ form_widget(form.MemberAddress) }}</td>
-            <td>{{ form_widget(form.MemberZip) }} - {{ form_widget(form.MemberCity) }} - {{ form_widget(form.MemberCountry) }}</td>
-            <td>{{ form_widget(form.MemberEmail) }}</td>
+            <td>{{ form_widget(form.MemberModificationAddress) }}</td>
+            <td>{{ form_widget(form.MemberModificationZip) }} - {{ form_widget(form.MemberModificationCity) }} - {{ form_widget(form.MemberModificationCountry) }}</td>
+            <td>{{ form_widget(form.MemberModificationEmail) }}</td>
             <td>{{ form_end(form) }}</td>
         </tr>
     </table>

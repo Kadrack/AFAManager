@@ -120,6 +120,12 @@ class Member
     private $member_last_grade_kyu;
 
     /**
+     * @ORM\OneToOne(targetEntity="App\Entity\MemberModification")
+     * @ORM\JoinColumn(nullable=true, name="member_join_member_modification", referencedColumnName="member_modification_id")
+     */
+    private $member_modification;
+
+    /**
      * @ORM\OneToMany(targetEntity="App\Entity\GradeDan", mappedBy="grade_dan_member", orphanRemoval=true, cascade={"persist"})
      */
     private $member_exams;
@@ -347,6 +353,18 @@ class Member
     public function setMemberLastGradeKyu(?GradeKyu $member_last_grade_kyu): self
     {
         $this->member_last_grade_kyu = $member_last_grade_kyu;
+
+        return $this;
+    }
+
+    public function getMemberModification(): ?MemberModification
+    {
+        return $this->member_modification;
+    }
+
+    public function setMemberModification(?MemberModification $member_modification): self
+    {
+        $this->member_modification = $member_modification;
 
         return $this;
     }

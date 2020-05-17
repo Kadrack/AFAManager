@@ -75,12 +75,12 @@ class MemberType extends AbstractType
     private function update(FormBuilderInterface $builder)
     {
         $builder
-            ->add('MemberPhoto', FileType::class, array('label' => 'Photo : ', 'required' => false, 'mapped' => false))
-            ->add('MemberAddress', TextType::class, array('label' => 'Adresse : '))
-            ->add('MemberZip', IntegerType::class, array('label' => 'Code postal : '))
-            ->add('MemberCity', TextType::class, array('label' => 'Localité : '))
-            ->add('MemberCountry', CountryType::class, array('label' => 'Pays : ', 'choice_translation_locale' => 'fr', 'preferred_choices' => array('BE', 'FR')))
-            ->add('MemberEmail', EmailType::class, array('label' => 'Email : '))
+            ->add('MemberModificationPhoto', FileType::class, array('label' => 'Photo : ', 'required' => false, 'mapped' => false))
+            ->add('MemberModificationAddress', TextType::class, array('label' => 'Adresse : '))
+            ->add('MemberModificationZip', IntegerType::class, array('label' => 'Code postal : '))
+            ->add('MemberModificationCity', TextType::class, array('label' => 'Localité : '))
+            ->add('MemberModificationCountry', CountryType::class, array('label' => 'Pays : ', 'choice_translation_locale' => 'fr', 'preferred_choices' => array('BE', 'FR')))
+            ->add('MemberModificationEmail', EmailType::class, array('label' => 'Email : '))
             ->add('Submit', SubmitType::class, array('label' => 'Modifier'))
         ;
     }

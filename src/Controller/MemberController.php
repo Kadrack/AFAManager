@@ -10,6 +10,7 @@ use App\Entity\GradeSession;
 use App\Entity\GradeTitle;
 use App\Entity\Member;
 use App\Entity\MemberLicence;
+use App\Entity\MemberModification;
 use App\Entity\Training;
 use App\Entity\TrainingAddress;
 
@@ -57,18 +58,47 @@ class MemberController extends AbstractController
 
         $member = $this->getUser()->getUserMember();
 
-        $form = $this->createForm(MemberType::class, $member, array('form' => 'update'));
+        $member_modification = new MemberModification();
+
+        if ($member->getMemberModification() == null)
+        {
+            $member_modification->setMemberModificationId($member->getMemberId());
+            $member_modification->setMemberModificationFirstname($member->getMemberFirstName());
+            $member_modification->setMemberModificationName($member->getMemberName());
+            $member_modification->setMemberModificationPhoto($member->getMemberPhoto());
+            $member_modification->setMemberModificationSex($member->getMemberSex());
+            $member_modification->setMemberModificationAddress($member->getMemberAddress());
+            $member_modification->setMemberModificationZip($member->getMemberZip());
+            $member_modification->setMemberModificationCity($member->getMemberCity());
+            $member_modification->setMemberModificationCountry($member->getMemberCountry());
+            $member_modification->setMemberModificationEmail($member->getMemberEmail());
+            $member_modification->setMemberModificationBirthday($member->getMemberBirthday());
+            //$member_modification->setMemberModificationComment($member->getMemberComment());
+        }
+        else
+        {
+            $member_modification = $member->getMemberModification();
+        }
+
+        $form = $this->createForm(MemberType::class, $member_modification, array('form' => 'update', 'data_class' => MemberModification::class));
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid())
         {
-            if ($form['MemberPhoto']->getData() != null)
+            if ($form['MemberModificationPhoto']->getData() != null)
             {
-                $member->setMemberPhoto($photoUploader->upload($form['MemberPhoto']->getData(), $member->getMemberPhoto()));
+                $member_modification->setMemberModificationPhoto($photoUploader->upload($form['MemberModificationPhoto']->getData(), $member_modification->getMemberModificationPhoto()));
             }
 
             $entityManager = $this->getDoctrine()->getManager();
+
+            if ($member->getMemberModification() == null)
+            {
+                $member->setMemberModification($member_modification);
+
+                $entityManager->persist($member_modification);
+            }
 
             $entityManager->flush();
         }
