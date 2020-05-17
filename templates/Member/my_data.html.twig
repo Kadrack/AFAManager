@@ -10,9 +10,7 @@
 {% block body %}
     <h1>{{ member.getMemberFirstname()|title }} {{ member.getMemberName()|title }}</h1>
     <h2>Données personnelles</h2>
-    {{ form_start(form) }}
     <img alt="" src=" {{ asset('uploads/photos/'~member.getMemberPhoto()) }}" /><br />
-    {{ form_widget(form.MemberModificationPhoto) }}
     <table>
         <tr>
             <th>Adresse</th>
@@ -21,12 +19,28 @@
             <th>Commande</th>
         </tr>
         <tr>
-            <td>{{ form_widget(form.MemberModificationAddress) }}</td>
-            <td>{{ form_widget(form.MemberModificationZip) }} - {{ form_widget(form.MemberModificationCity) }} - {{ form_widget(form.MemberModificationCountry) }}</td>
-            <td>{{ form_widget(form.MemberModificationEmail) }}</td>
-            <td>{{ form_end(form) }}</td>
+            <td>{{ member.getMemberAddress() }}</td>
+            <td>{{ member.getMemberZip() }} - {{ member.getMemberCity() }} - {{ member.getMemberCountry() }}</td>
+            <td>{{ member.getMemberEmail() }}</td>
+            <td><a href="{{ path('member_my_data_update') }}">Modifier</a></td>
         </tr>
     </table>
+    {% if member.getMemberModification() != null %}
+    <h2>Modification en attente de validation</h2>
+    <img alt="" src=" {{ asset('uploads/photos/'~member.getMemberModification().getMemberModificationPhoto()) }}" /><br />
+    <table>
+        <tr>
+            <th>Adresse</th>
+            <th>Localité</th>
+            <th>Email</th>
+        </tr>
+        <tr>
+            <td>{{ member.getMemberModification().getMemberModificationAddress() }}</td>
+            <td>{{ member.getMemberModification().getMemberModificationZip() }} - {{ member.getMemberModification().getMemberModificationCity() }} - {{ member.getMemberModification().getMemberModificationCountry() }}</td>
+            <td>{{ member.getMemberModification().getMemberModificationEmail() }}</td>
+        </tr>
+    </table>
+    {% endif %}
 {% endblock %}
 
 {% block javascripts %}

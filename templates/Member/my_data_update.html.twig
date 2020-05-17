@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    AFA-Manager
+{% endblock %}
+
+{% block stylesheets %}
+{% endblock %}
+
+{% block body %}
+    <h1>{{ member.getMemberFirstname()|title }} {{ member.getMemberName()|title }}</h1>
+    <h2>Données personnelles</h2>
+    {{ form_start(form) }}
+    <img alt="" src=" {{ asset('uploads/photos/'~member.getMemberPhoto()) }}" /><br />
+    {{ form_widget(form.MemberModificationPhoto) }}
+    <table>
+        <tr>
+            <th>Adresse</th>
+            <th>Localité</th>
+            <th>Email</th>
+            <th>Commande</th>
+        </tr>
+        <tr>
+            <td>{{ form_widget(form.MemberModificationAddress) }}</td>
+            <td>{{ form_widget(form.MemberModificationZip) }} - {{ form_widget(form.MemberModificationCity) }} - {{ form_widget(form.MemberModificationCountry) }}</td>
+            <td>{{ form_widget(form.MemberModificationEmail) }}</td>
+            <td>{{ form_end(form) }}</td>
+        </tr>
+    </table>
+{% endblock %}
+
+{% block javascripts %}
+{% endblock %}

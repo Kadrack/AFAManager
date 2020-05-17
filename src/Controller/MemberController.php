@@ -48,11 +48,24 @@ class MemberController extends AbstractController
 
     /**
      * @Route("/mes_donnees", name="my_data")
+     * @return Response
+     */
+    public function myData()
+    {
+        $club   = $this->getUser()->getUserClub();
+
+        $member = $this->getUser()->getUserMember();
+
+        return $this->render('Member/my_data.html.twig', array('member' => $member, 'club' => $club));
+    }
+
+    /**
+     * @Route("/mes_donnees/modifier", name="my_data_update")
      * @param Request $request
      * @param PhotoUploader $photoUploader
      * @return Response
      */
-    public function myData(Request $request, PhotoUploader $photoUploader)
+    public function myDataUpdate(Request $request, PhotoUploader $photoUploader)
     {
         $club   = $this->getUser()->getUserClub();
 
@@ -101,9 +114,11 @@ class MemberController extends AbstractController
             }
 
             $entityManager->flush();
+
+            return $this->render('Member/my_data.html.twig', array('member' => $member, 'club' => $club));
         }
 
-        return $this->render('Member/my_data.html.twig', array('form' => $form->createView(), 'member' => $member, 'club' => $club));
+        return $this->render('Member/my_data_update.html.twig', array('form' => $form->createView(), 'member' => $member, 'club' => $club));
     }
 
     /**
