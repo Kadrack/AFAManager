@@ -13,7 +13,6 @@ use App\Entity\MemberLicence;
 use App\Entity\Training;
 use App\Entity\TrainingAddress;
 
-use App\Entity\User;
 use App\Form\GradeType;
 use App\Form\MemberType;
 
@@ -38,23 +37,6 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class MemberController extends AbstractController
 {
-    /** @var Club $club */
-    private $club;
-
-    /** @var Member $member */
-    private $member;
-
-    /** @var User $user */
-    private $user;
-
-    public function __construct()
-    {
-        $this->user = $this->getUser();
-
-        $this->club   = $this->user->getUserClub();
-        $this->member = $this->user->getUserMember();
-    }
-
     /**
      * @Route("/", name="index")
      */
@@ -71,9 +53,9 @@ class MemberController extends AbstractController
      */
     public function myData(Request $request, PhotoUploader $photoUploader)
     {
-        $club = $this->club;
+        $club   = $this->getUser()->getUserClub();
 
-        $member = $this->member;
+        $member = $this->getUser()->getUserMember();
 
         $form = $this->createForm(MemberType::class, $member, array('form' => 'update'));
 
@@ -100,9 +82,9 @@ class MemberController extends AbstractController
      */
     public function myGrades()
     {
-        $club = $this->club;
+        $club   = $this->getUser()->getUserClub();
 
-        $member = $this->member;
+        $member = $this->getUser()->getUserMember();
 
         $today = new DateTime('today');
 
@@ -163,9 +145,9 @@ class MemberController extends AbstractController
      */
     public function myLicence()
     {
-        $club = $this->club;
+        $club   = $this->getUser()->getUserClub();
 
-        $member = $this->member;
+        $member = $this->getUser()->getUserMember();
 
         $licence_history = $this->getDoctrine()->getRepository(MemberLicence::class)->findBy(['member_licence' => $member->getMemberId()], ['member_licence_id' => 'DESC']);
 
@@ -182,9 +164,9 @@ class MemberController extends AbstractController
     {
         $today  = new DateTime('today');
 
-        $club   = $this->club;
+        $club   = $this->getUser()->getUserClub();
 
-        $member = $this->member;
+        $member = $this->getUser()->getUserMember();
 
         $exam   = $this->getDoctrine()->getRepository(GradeSession::class)->getOpenSession($today->format('Y-m-d'), $type);
 
@@ -240,7 +222,7 @@ class MemberController extends AbstractController
      */
     public function myClub()
     {
-        $club = $this->club;
+        $club   = $this->getUser()->getUserClub();
 
         $addresses = $this->getDoctrine()->getRepository(TrainingAddress::class)->findBy(['training_address_club' => $club->getClubId()]);
 

@@ -38,7 +38,7 @@ class ListData
      */
     public function getCountryName(string $country)
     {
-        $countries = Countries::getNames();
+        $countries = Countries::getNames('fr');
 
         return $countries[$country];
     }
