@@ -41,7 +41,7 @@
                 <tr>
                     <td>{{ club.Id }}</td>
                     <td>{{ club.Name }}</td>
-                    <td><a href="{{ path('club_reassign', {'club': club.Id}) }}">Activer</a> - <a href="{{ path('club_detail_association', {'club': club.Id}) }}">Association</a> - <a href="{{ path('club_detail_class', {'club': club.Id}) }}">Cours</a> - <a href="{{ path('club_active_members', {'club': club.Id}) }}">Membres Actifs</a> - <a href="{{ path('club_inactive_members', {'club': club.Id}) }}">Membres Inactifs</a></td>
+                    <td><a href="{{ path('secretariat_club_reassign', {'club': club.Id}) }}">Affilier</a> - <a href="{{ path('secretariat_association_details', {'club': club.Id}) }}">Association</a> - <a href="{{ path('secretariat_members_active', {'club': club.Id}) }}">Membres Actifs</a> - <a href="{{ path('secretariat_members_ancient', {'club': club.Id}) }}">Membres Inactifs</a></td>
                 </tr>
             {% endfor %}
         {% endif %}

@@ -74,7 +74,7 @@ class GradeType extends AbstractType
     private function exam_application(FormBuilderInterface $builder)
     {
         $builder
-            ->add('GradeDanComment', TextareaType::class, array('label' => 'Commentaire : ', 'required' => false))
+            ->add('GradeComment', TextareaType::class, array('label' => 'Commentaire : ', 'required' => false))
             ->add('Submit', SubmitType::class, array('label' => 'Valider'))
         ;
     }
@@ -82,7 +82,7 @@ class GradeType extends AbstractType
     private function exam_applicant_validation(FormBuilderInterface $builder)
     {
         $builder
-            ->add('GradeDanComment', TextareaType::class, array('label' => 'Commentaire : ', 'required' => false))
+            ->add('GradeComment', TextareaType::class, array('label' => 'Commentaire : ', 'required' => false))
             ->add('Submit', SubmitType::class, array('label' => 'Valider'))
         ;
     }
@@ -105,9 +105,9 @@ class GradeType extends AbstractType
     private function exam_candidate_result(FormBuilderInterface $builder)
     {
         $builder
-            ->add('GradeDanStatus', ChoiceType::class, array('label' => 'Résultat : ', 'multiple' => false, 'expanded' => true, 'choices' => array('Refusé' => 3, 'Promu' => 4)))
-            ->add('GradeDanCertificate', TextType::class, array('label' => 'N° Diplôme : ', 'required' => false))
-            ->add('GradeDanComment', TextareaType::class, array('label' => 'Commentaire : ', 'required' => false))
+            ->add('GradeStatus', ChoiceType::class, array('label' => 'Résultat : ', 'multiple' => false, 'expanded' => true, 'choices' => array('Refusé' => 3, 'Promu' => 4)))
+            ->add('GradeCertificate', TextType::class, array('label' => 'N° Diplôme : ', 'required' => false))
+            ->add('GradeComment', TextareaType::class, array('label' => 'Commentaire : ', 'required' => false))
             ->add('Submit', SubmitType::class, array('label' => 'Valider'))
         ;
     }
@@ -115,8 +115,8 @@ class GradeType extends AbstractType
     private function exam_candidate_aikikai(FormBuilderInterface $builder)
     {
         $builder
-            ->add('GradeDanCertificate', TextType::class, array('label' => 'N° certificat : '))
-            ->add('GradeDanComment', TextareaType::class, array('label' => 'Commentaire : ', 'required' => false))
+            ->add('GradeCertificate', TextType::class, array('label' => 'N° certificat : '))
+            ->add('GradeComment', TextareaType::class, array('label' => 'Commentaire : ', 'required' => false))
             ->add('Submit', SubmitType::class, array('label' => 'Valider'))
         ;
     }
@@ -145,9 +145,9 @@ class GradeType extends AbstractType
     private function kagami_candidate_result(FormBuilderInterface $builder)
     {
         $builder
-            ->add('GradeDanStatus', ChoiceType::class, array('label' => 'Résultat : ', 'multiple' => false, 'expanded' => true, 'choices' => array('Refusé' => 3, 'Promu' => 4)))
-            ->add('GradeDanCertificate', TextType::class, array('label' => 'N° Diplôme : ', 'required' => false))
-            ->add('GradeDanComment', TextareaType::class, array('label' => 'Commentaire : ', 'required' => false))
+            ->add('GradeStatus', ChoiceType::class, array('label' => 'Résultat : ', 'multiple' => false, 'expanded' => true, 'choices' => array('Refusé' => 3, 'Promu' => 4)))
+            ->add('GradeCertificate', TextType::class, array('label' => 'N° Diplôme : ', 'required' => false))
+            ->add('GradeComment', TextareaType::class, array('label' => 'Commentaire : ', 'required' => false))
             ->add('Submit', SubmitType::class, array('label' => 'Valider'))
         ;
     }

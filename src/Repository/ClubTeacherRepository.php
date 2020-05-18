@@ -4,7 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Club;
 use App\Entity\ClubTeacher;
-use App\Entity\GradeDan;
+use App\Entity\Grade;
 use App\Entity\Member;
 
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -28,9 +28,9 @@ class ClubTeacherRepository extends ServiceEntityRepository
     {
         $qb = $this->createQueryBuilder('t');
 
-        return $qb->select('t.club_teacher_id AS Id', 't.club_teacher_title AS Title', 't.club_teacher_type AS Type', 'm.member_firstname AS Firstname', 'm.member_name AS Name', 'd.grade_dan_rank AS Dan')
+        return $qb->select('t.club_teacher_id AS Id', 't.club_teacher_title AS Title', 't.club_teacher_type AS Type', 'm.member_firstname AS Firstname', 'm.member_name AS Name', 'd.grade_rank AS Grade')
             ->join(Member::class, 'm', 'WITH', $qb->expr()->eq('m.member_id', 't.club_teacher_member'))
-            ->join(GradeDan::class, 'd', 'WITH', $qb->expr()->eq('m.member_last_grade_dan', 'd.grade_dan_id'))
+            ->join(Grade::class, 'd', 'WITH', $qb->expr()->eq('m.member_last_grade', 'd.grade_id'))
             ->where($qb->expr()->IsNotNull('t.club_teacher_member'))
             ->andWhere($qb->expr()->eq('t.club_teacher', $club->getClubId()))
             ->orderBy('Title', 'ASC')

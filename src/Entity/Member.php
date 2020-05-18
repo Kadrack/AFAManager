@@ -108,16 +108,10 @@ class Member
     private $member_last_licence;
 
     /**
-     * @ORM\OneToOne(targetEntity="App\Entity\GradeDan")
-     * @ORM\JoinColumn(nullable=true, name="member_join_last_grade_dan", referencedColumnName="grade_dan_id")
+     * @ORM\OneToOne(targetEntity="App\Entity\Grade")
+     * @ORM\JoinColumn(nullable=true, name="member_join_last_grade", referencedColumnName="grade_id")
      */
-    private $member_last_grade_dan;
-
-    /**
-     * @ORM\OneToOne(targetEntity="App\Entity\GradeKyu")
-     * @ORM\JoinColumn(nullable=true, name="member_join_last_kyu", referencedColumnName="grade_kyu_id")
-     */
-    private $member_last_grade_kyu;
+    private $member_last_grade;
 
     /**
      * @ORM\OneToOne(targetEntity="App\Entity\MemberModification", orphanRemoval=true, cascade={"persist", "remove"})
@@ -126,14 +120,9 @@ class Member
     private $member_modification;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\GradeDan", mappedBy="grade_dan_member", orphanRemoval=true, cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="App\Entity\Grade", mappedBy="grade_member", orphanRemoval=true, cascade={"persist"})
      */
-    private $member_exams;
-
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\GradeKyu", mappedBy="grade_kyu_member", orphanRemoval=true, cascade={"persist"})
-     */
-    private $member_grades_kyu;
+    private $member_grades;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\GradeTitle", mappedBy="grade_title_member", orphanRemoval=true, cascade={"persist"})
@@ -157,8 +146,7 @@ class Member
 
     public function __construct()
     {
-        $this->member_exams                = new ArrayCollection();
-        $this->member_grades_kyu           = new ArrayCollection();
+        $this->member_grades               = new ArrayCollection();
         $this->member_grades_title         = new ArrayCollection();
         $this->member_licences             = new ArrayCollection();
         $this->member_teachers             = new ArrayCollection();
@@ -333,26 +321,14 @@ class Member
         return $this;
     }
 
-    public function getMemberLastGradeDan(): ?GradeDan
+    public function getMemberLastGrade(): ?Grade
     {
-        return $this->member_last_grade_dan;
+        return $this->member_last_grade;
     }
 
-    public function setMemberLastGradeDan(?GradeDan $member_last_grade_dan): self
+    public function setMemberLastGrade(?Grade $member_last_grade): self
     {
-        $this->member_last_grade_dan = $member_last_grade_dan;
-
-        return $this;
-    }
-
-    public function getMemberLastGradeKyu(): ?GradeKyu
-    {
-        return $this->member_last_grade_kyu;
-    }
-
-    public function setMemberLastGradeKyu(?GradeKyu $member_last_grade_kyu): self
-    {
-        $this->member_last_grade_kyu = $member_last_grade_kyu;
+        $this->member_last_grade = $member_last_grade;
 
         return $this;
     }
@@ -370,61 +346,30 @@ class Member
     }
 
     /**
-     * @return Collection|GradeDan[]
+     * @return Collection|Grade[]
      */
-    public function getMemberExams(): Collection
+    public function getMemberGrades(): Collection
     {
-        return $this->member_exams;
+        return $this->member_grades;
     }
 
-    public function addMemberExams(GradeDan $gradeDan): self
+    public function addMemberGrades(Grade $grade): self
     {
-        if (!$this->member_exams->contains($gradeDan)) {
-            $this->member_exams[] = $gradeDan;
-            $gradeDan->setGradeDanMember($this);
+        if (!$this->member_grades->contains($grade)) {
+            $this->member_grades[] = $grade;
+            $grade->setGradeMember($this);
         }
 
         return $this;
     }
 
-    public function removeMemberExams(GradeDan $gradeDan): self
+    public function removeMemberGrades(Grade $grade): self
     {
-        if ($this->member_exams->contains($gradeDan)) {
-            $this->member_exams->removeElement($gradeDan);
+        if ($this->member_grades->contains($grade)) {
+            $this->member_grades->removeElement($grade);
             // set the owning side to null (unless already changed)
-            if ($gradeDan->getGradeDanMember() === $this) {
-                $gradeDan->setGradeDanMember(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|GradeKyu[]
-     */
-    public function getMemberGradesKyu(): Collection
-    {
-        return $this->member_grades_kyu;
-    }
-
-    public function addMemberGradesKyu(GradeKyu $gradeKyu): self
-    {
-        if (!$this->member_grades_kyu->contains($gradeKyu)) {
-            $this->member_grades_kyu[] = $gradeKyu;
-            $gradeKyu->setGradeKyuMember($this);
-        }
-
-        return $this;
-    }
-
-    public function removeMemberGradesKyu(GradeKyu $gradeKyu): self
-    {
-        if ($this->member_grades_kyu->contains($gradeKyu)) {
-            $this->member_grades_kyu->removeElement($gradeKyu);
-            // set the owning side to null (unless already changed)
-            if ($gradeKyu->getGradeKyuMember() === $this) {
-                $gradeKyu->setGradeKyuMember(null);
+            if ($grade->getGradeMember() === $this) {
+                $grade->setGradeMember(null);
             }
         }
 

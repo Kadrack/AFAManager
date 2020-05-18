@@ -22,7 +22,7 @@ class ListData
         {
             return $types;
         }
-        else if ($type > 2)
+        else if ($type > sizeof($types))
         {
             return "Autre";
         }
@@ -55,7 +55,7 @@ class ListData
         {
             return $days;
         }
-        else if ($day > 7)
+        else if ($day > sizeof($days))
         {
             return "Autre";
         }
@@ -71,13 +71,13 @@ class ListData
      */
     public function getExamResult(int $result)
     {
-        $results = array('Postulant' => 1, 'Candidat' => 2, 'Refusé' => 3, 'Promu' => 4, 'Promu ' => 5);
+        $results = array('Postulant' => 1, 'Candidat' => 2, 'Refusé' => 3, 'Réussi' => 4, 'Promu' => 5, 'En Attente' => 6, 'Reconnu' => 7);
 
         if ($result == 0)
         {
             return $results;
         }
-        else if ($result > 5)
+        else if ($result > sizeof($results))
         {
             return "Autre";
         }
@@ -99,7 +99,7 @@ class ListData
         {
             return $types;
         }
-        else if ($type > 5)
+        else if ($type > sizeof($types))
         {
             return "Autre";
         }
@@ -113,7 +113,7 @@ class ListData
      * @param int $grade
      * @return array|false|int|string|void
      */
-    public function getGrade(int $grade)
+    public function getGrade(int $grade = 0)
     {
         if ($grade == 0)
         {
@@ -161,7 +161,7 @@ class ListData
         {
             return $titles;
         }
-        else if ($title > 3)
+        else if ($title > sizeof($titles))
         {
             return "Autre";
         }
@@ -205,7 +205,7 @@ class ListData
         {
             return $types;
         }
-        else if ($type > 3)
+        else if ($type > sizeof($types))
         {
             return "Autre";
         }
@@ -227,7 +227,7 @@ class ListData
         {
             return $provinces;
         }
-        else if ($province > 7)
+        else if ($province > sizeof($provinces))
         {
             return "Autre";
         }
@@ -249,7 +249,7 @@ class ListData
         {
             return $sexes;
         }
-        else if ($sex > 3)
+        else if ($sex > sizeof($sexes))
         {
             return "Autre";
         }
@@ -271,7 +271,7 @@ class ListData
         {
             return $titles;
         }
-        else if ($title > 3)
+        else if ($title > sizeof($titles))
         {
             return "Autre";
         }
@@ -293,7 +293,7 @@ class ListData
         {
             return $types;
         }
-        else if ($type > 3)
+        else if ($type > sizeof($types))
         {
             return "Autre";
         }
@@ -315,7 +315,7 @@ class ListData
         {
             return $types;
         }
-        else if ($type > 5)
+        else if ($type > sizeof($types))
         {
             return "Autre";
         }

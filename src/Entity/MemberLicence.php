@@ -40,10 +40,10 @@ class MemberLicence
     private $member_licence_status;
 
     /**
-     * @ORM\OneToOne(targetEntity="App\Entity\GradeKyu")
-     * @ORM\JoinColumn(nullable=true, name="member_licence_join_grade_kyu", referencedColumnName="grade_kyu_id")
+     * @ORM\OneToOne(targetEntity="App\Entity\Grade")
+     * @ORM\JoinColumn(nullable=true, name="member_licence_join_grade", referencedColumnName="grade_id")
      */
-    private $member_licence_grade_kyu;
+    private $member_licence_grade;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Club", inversedBy="club_licences", cascade={"persist"})
@@ -110,14 +110,14 @@ class MemberLicence
         return $this;
     }
 
-    public function getMemberLicenceGradeKyu(): ?GradeKyu
+    public function getMemberLicenceGrade(): ?Grade
     {
-        return $this->member_licence_grade_kyu;
+        return $this->member_licence_grade;
     }
 
-    public function setMemberLicenceGradeKyu(?GradeKyu $member_licence_grade_kyu): self
+    public function setMemberLicenceGrade(?Grade $member_licence_grade): self
     {
-        $this->member_licence_grade_kyu = $member_licence_grade_kyu;
+        $this->member_licence_grade = $member_licence_grade;
 
         return $this;
     }

@@ -73,9 +73,9 @@ class GradeSession
     private $grade_session_comment;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\GradeDan", mappedBy="grade_dan_exam", orphanRemoval=true, cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="App\Entity\Grade", mappedBy="grade_exam", orphanRemoval=true, cascade={"persist"})
      */
-    private $grade_session_grades_dan;
+    private $grade_session_grades;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\GradeTitle", mappedBy="grade_title_exam", orphanRemoval=true, cascade={"persist"})
@@ -84,8 +84,8 @@ class GradeSession
 
     public function __construct()
     {
-        $this->grade_session_grades_dan = new ArrayCollection();
-        $this->grade_session_titles     = new ArrayCollection();
+        $this->grade_session_grades = new ArrayCollection();
+        $this->grade_session_titles = new ArrayCollection();
     }
 
     public function getGradeSessionId(): ?int
@@ -209,30 +209,30 @@ class GradeSession
     }
 
     /**
-     * @return Collection|GradeDan[]
+     * @return Collection|Grade[]
      */
-    public function getGradeSessionGradesDan(): Collection
+    public function getGradeSessionGrades(): Collection
     {
-        return $this->grade_session_grades_dan;
+        return $this->grade_session_grades;
     }
 
-    public function addGradeSessionGradesDan(GradeDan $gradeDan): self
+    public function addGradeSessionGrades(Grade $grade): self
     {
-        if (!$this->grade_session_grades_dan->contains($gradeDan)) {
-            $this->grade_session_grades_dan[] = $gradeDan;
-            $gradeDan->setGradeDanExam($this);
+        if (!$this->grade_session_grades->contains($grade)) {
+            $this->grade_session_grades[] = $grade;
+            $grade->setGradeExam($this);
         }
 
         return $this;
     }
 
-    public function removeGradeSessionGradesDan(GradeDan $gradeDan): self
+    public function removeGradeSessionGrades(Grade $grade): self
     {
-        if ($this->grade_session_grades_dan->contains($gradeDan)) {
-            $this->grade_session_grades_dan->removeElement($gradeDan);
+        if ($this->grade_session_grades->contains($grade)) {
+            $this->grade_session_grades->removeElement($grade);
             // set the owning side to null (unless already changed)
-            if ($gradeDan->getGradeDanExam() === $this) {
-                $gradeDan->setGradeDanExam(null);
+            if ($grade->getGradeExam() === $this) {
+                $grade->setGradeExam(null);
             }
         }
 

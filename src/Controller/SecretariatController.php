@@ -4,7 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Club;
 use App\Entity\ClubHistory;
-use App\Entity\GradeKyu;
+use App\Entity\Grade;
 use App\Entity\GradeSession;
 use App\Entity\Member;
 use App\Entity\MemberLicence;
@@ -157,7 +157,7 @@ class SecretariatController extends AbstractController
 
             $club['Province'] = $provinces->getProvince($club['Province']);
 
-            $active_clubs[$club['Province']]['Clubs'][$club['Name']] = $club;
+            $active_clubs[$club['Province']]['Clubs'][$club['Id']] = $club;
 
             if (!isset($active_clubs[$club['Province']]['name']))
             {
@@ -360,17 +360,26 @@ class SecretariatController extends AbstractController
             $member->setMemberLastLicence($licence);
             $member->setMemberPhoto($form['MemberPhoto']->getData() == null ? 'nophoto.png' : $photoUploader->upload($form['MemberPhoto']->getData()));
 
-            if ($form->get('GradeKyuRank')->getData() != null)
+            if ($form->get('GradeRank')->getData() != null)
             {
-                $grade = new GradeKyu();
+                $grade = new Grade();
 
-                $grade->setGradeKyuRank($form->get('GradeKyuRank')->getData());
-                $grade->setGradeKyuMember($member);
+                $grade->setGradeRank($form->get('GradeRank')->getData());
+                $grade->setGradeMember($member);
 
-                $member->setMemberLastGradeKyu($grade);
-                $member->addMemberGradesKyu($grade);
+                if ($grade->getGradeRank() < 7)
+                {
+                    $grade->setGradeStatus(4);
+                }
+                else
+                {
+                    $grade->setGradeStatus(6);
+                }
 
-                $licence->setMemberLicenceGradeKyu($grade);
+                $member->setMemberLastGrade($grade);
+                $member->addMemberGrades($grade);
+
+                $licence->setMemberLicenceGrade($grade);
             }
 
             $stamp = new MemberPrintout();
@@ -470,15 +479,15 @@ class SecretariatController extends AbstractController
         $licence_new->setMemberLicenceDeadline(new DateTime('+1 year '.$licence_old->getMemberLicenceDeadline()->format('Y-m-d')));
         $licence_new->setMemberLicenceStatus(1);
 
-        if ($member->getMemberLastGradeDan() != null)
+        if ($member->getMemberLastGrade() != null)
         {
             $kyu = false;
         }
-        else if ($member->getMemberLastGradeKyu() == null)
+        else if ($member->getMemberLastGrade() == null)
         {
             $kyu = true;
         }
-        else if ($member->getMemberLastGradeKyu()->getGradeKyuRank() > 6)
+        else if ($member->getMemberLastGrade()->getGradeRank() > 6)
         {
             $kyu = false;
         }
@@ -491,7 +500,7 @@ class SecretariatController extends AbstractController
         {
             $form = $this->createForm(MemberType::class, $licence_new, array('form' => 'licence_renew_kyu', 'data_class' => MemberLicence::class));
 
-            $form->get('GradeKyuRank')->setData($licence_old->getMemberLicenceGradeKyu() == null ? null : $licence_old->getMemberLicenceGradeKyu()->getGradeKyuRank());
+            $form->get('GradeRank')->setData($licence_old->getMemberLicenceGrade() == null ? null : $licence_old->getMemberLicenceGrade()->getGradeRank());
         }
         else
         {
@@ -525,13 +534,13 @@ class SecretariatController extends AbstractController
 
             if ($kyu)
             {
-                if (($licence_old->getMemberLicenceGradeKyu() == null) and ($form->get('GradeKyuRank')->getData() != null))
+                if (($licence_old->getMemberLicenceGrade() == null) and ($form->get('GradeRank')->getData() != null))
                 {
                     $update = true;
                 }
-                else if ($licence_old->getMemberLicenceGradeKyu() != null)
+                else if ($licence_old->getMemberLicenceGrade() != null)
                 {
-                    $update = $licence_old->getMemberLicenceGradeKyu()->getGradeKyuRank() < $form->get('GradeKyuRank')->getData();
+                    $update = $licence_old->getMemberLicenceGrade()->getGradeRank() < $form->get('GradeRank')->getData();
                 }
                 else
                 {
@@ -540,14 +549,14 @@ class SecretariatController extends AbstractController
 
                 if ($update)
                 {
-                    $grade = new GradeKyu();
+                    $grade = new Grade();
 
-                    $grade->setGradeKyuRank($form->get('GradeKyuRank')->getData());
-                    $grade->setGradeKyuMember($member);
+                    $grade->setGradeRank($form->get('GradeRank')->getData());
+                    $grade->setGradeMember($member);
 
-                    $member->setMemberLastGradeKyu($grade);
+                    $member->setMemberLastGrade($grade);
 
-                    $licence_new->setMemberLicenceGradeKyu($grade);
+                    $licence_new->setMemberLicenceGrade($grade);
 
                     $entityManager->persist($grade);
                 }
@@ -584,19 +593,19 @@ class SecretariatController extends AbstractController
      */
     public function memberLicenceRenewUpdate(SessionInterface $session, Request $request, Club $club, Member $member, MemberLicence $renew)
     {
-        $grade = $renew->getMemberLicenceGradeKyu() == null ? new GradeKyu() : $renew->getMemberLicenceGradeKyu();
+        $grade = $renew->getMemberLicenceGrade() == null ? new Grade() : $renew->getMemberLicenceGrade();
 
-        $kyus = $member->getMemberGradesKyu();
+        $kyus = $member->getMemberGrades();
 
-        if ($member->getMemberLastGradeDan() != null)
+        if ($member->getMemberLastGrade() != null)
         {
             $kyu = false;
         }
-        else if ($member->getMemberLastGradeKyu() == null)
+        else if ($member->getMemberLastGrade() == null)
         {
             $kyu = true;
         }
-        else if ($member->getMemberLastGradeKyu()->getGradeKyuRank() > 6)
+        else if ($member->getMemberLastGrade()->getGradeRank() > 6)
         {
             $kyu = false;
         }
@@ -609,7 +618,7 @@ class SecretariatController extends AbstractController
         {
             $form = $this->createForm(MemberType::class, $renew, array('form' => 'licence_renew_kyu', 'data_class' => MemberLicence::class));
 
-            $form->get('GradeKyuRank')->setData($member->getMemberLastGradeKyu() == null ? null : $member->getMemberLastGradeKyu()->getGradeKyuRank());
+            $form->get('GradeRank')->setData($member->getMemberLastGrade() == null ? null : $member->getMemberLastGrade()->getGradeRank());
         }
         else
         {
@@ -624,13 +633,13 @@ class SecretariatController extends AbstractController
 
             if ($kyu)
             {
-                if ($grade->getGradeKyuRank() != $form->get('GradeKyuRank')->getData())
+                if ($grade->getGradeRank() != $form->get('GradeRank')->getData())
                 {
                     $update = true;
 
                     foreach ($kyus as $kyu)
                     {
-                        if ($kyu->getGradeKyuRank() == $form->get('GradeKyuRank')->getData())
+                        if ($kyu->getGradeRank() == $form->get('GradeRank')->getData())
                         {
                             $update = false;
                         }
@@ -638,15 +647,15 @@ class SecretariatController extends AbstractController
 
                     if ($update)
                     {
-                        $grade->setGradeKyuRank($form->get('GradeKyuRank')->getData());
+                        $grade->setGradeRank($form->get('GradeRank')->getData());
 
-                        $grade->setGradeKyuMember($member);
+                        $grade->setGradeMember($member);
 
-                        if ($renew->getMemberLicenceGradeKyu() == null)
+                        if ($renew->getMemberLicenceGrade() == null)
                         {
-                            $member->setMemberLastGradeKyu($grade);
+                            $member->setMemberLastGrade($grade);
 
-                            $renew->setMemberLicenceGradeKyu($grade);
+                            $renew->setMemberLicenceGrade($grade);
 
                             $entityManager->persist($grade);
                         }

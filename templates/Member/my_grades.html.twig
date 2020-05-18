@@ -9,35 +9,22 @@
 
 {% block body %}
     <h1>{{ member.getMemberFirstname()|title }} {{ member.getMemberName()|title }}</h1>
-    <h2>Historique grade Kyu</h2>
-    <table>
-        <tr>
-            <th>Grade</th>
-            <th>Date</th>
-        </tr>
-        {% for grade in grade_kyu_history %}
-            <tr>
-                <td>{{ listData.getGrade(grade.getGradeKyuRank()) }}</td>
-                <td>{% if grade.getGradeKyuDate() != null %}{{ grade.getGradeKyuDate()|date("d/m/Y") }}{% endif %}</td>
-            </tr>
-        {% endfor %}
-    </table>
-    <h2>Historique grade Dan</h2>
+    <h2>Historique des grades</h2>
     {% if exam_candidate %}<a href="{{ path('member_application', {'type': 1}) }}">Candidature au prochain examen fédéral</a> {% endif %}{% if kagami_candidate %}<a href="{{ path('member_application', {'type': 2}) }}">Soumettre une candidature au prochain Kagami</a>{% endif %}
     <table>
         <tr>
             <th>Grade</th>
             <th>Date</th>
-            <th>Résultat</th>
             <th>N° Diplôme</th>
+            <th>Résultat</th>
             <th>Type</th>
         </tr>
-        {% for grade in grade_dan_history %}
+        {% for grade in grade_history %}
             <tr>
                 <td>{{ listData.getGrade(grade.Rank) }}</td>
                 <td>{{ grade.Date|date("d/m/Y") }}</td>
-                <td>{{ listData.getExamResult(grade.Result) }}</td>
                 <td>{{ grade.Certificate }}</td>
+                <td>{{ listData.getExamResult(grade.Result) }}</td>
                 <td>{{ listData.getExamType(grade.Type) }}</td>
             </tr>
         {% endfor %}

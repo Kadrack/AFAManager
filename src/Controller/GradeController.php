@@ -2,7 +2,7 @@
 // src/Controller/GradeController.php
 namespace App\Controller;
 
-use App\Entity\GradeDan;
+use App\Entity\Grade;
 use App\Entity\GradeSession;
 use App\Entity\Member;
 
@@ -50,34 +50,34 @@ class GradeController extends AbstractController
      */
     public function exam_detail(GradeSession $session)
     {
-        $applicants = $this->getDoctrine()->getRepository(GradeDan::class)->findBy(['grade_dan_status' => 1, 'grade_dan_exam' => $session->getGradeSessionId()], ['grade_dan_rank' => 'ASC']);
+        $applicants = $this->getDoctrine()->getRepository(Grade::class)->findBy(['grade_status' => 1, 'grade_exam' => $session->getGradeSessionId()], ['grade_rank' => 'ASC']);
 
-        $candidates = $this->getDoctrine()->getRepository(GradeDan::class)->findBy(['grade_dan_status' => 2, 'grade_dan_exam' => $session->getGradeSessionId()], ['grade_dan_rank' => 'ASC']);
+        $candidates = $this->getDoctrine()->getRepository(Grade::class)->findBy(['grade_status' => 2, 'grade_exam' => $session->getGradeSessionId()], ['grade_rank' => 'ASC']);
 
-        $refused    = $this->getDoctrine()->getRepository(GradeDan::class)->findBy(['grade_dan_status' => 3, 'grade_dan_exam' => $session->getGradeSessionId()], ['grade_dan_rank' => 'ASC']);
+        $refused    = $this->getDoctrine()->getRepository(Grade::class)->findBy(['grade_status' => 3, 'grade_exam' => $session->getGradeSessionId()], ['grade_rank' => 'ASC']);
 
-        $promoted   = $this->getDoctrine()->getRepository(GradeDan::class)->findBy(['grade_dan_status' => array(4,5), 'grade_dan_exam' => $session->getGradeSessionId()], ['grade_dan_rank' => 'ASC']);
+        $promoted   = $this->getDoctrine()->getRepository(Grade::class)->findBy(['grade_status' => array(4,5), 'grade_exam' => $session->getGradeSessionId()], ['grade_rank' => 'ASC']);
 
         $promoted_filtered = array(); $i = 0;
 
         foreach ($promoted as $promote)
         {
-            if ($promote->getGradeDanStatus() == 4)
+            if ($promote->getGradeStatus() == 4)
             {
-                $promoted_filtered[$i]['Grade_Id']  = $promote->getGradeDanId();
+                $promoted_filtered[$i]['Grade_Id']  = $promote->getGradeId();
 
-                $promoted_filtered[$i]['Id']        = $promote->getGradeDanMember()->getMemberId();
-                $promoted_filtered[$i]['Name']      = $promote->getGradeDanMember()->getMemberName();
-                $promoted_filtered[$i]['FirstName'] = $promote->getGradeDanMember()->getMemberFirstName();
-                $promoted_filtered[$i]['Grade']     = $promote->getGradeDanMember()->getMemberLastGradeDan()->getGradeDanRank();
+                $promoted_filtered[$i]['Id']        = $promote->getGradeMember()->getMemberId();
+                $promoted_filtered[$i]['Name']      = $promote->getGradeMember()->getMemberName();
+                $promoted_filtered[$i]['FirstName'] = $promote->getGradeMember()->getMemberFirstName();
+                $promoted_filtered[$i]['Grade']     = $promote->getGradeMember()->getMemberLastGrade()->getGradeRank();
 
                 $promoted_filtered[$i]['Aikikai_Certificate'] = null;
-                $promoted_filtered[$i]['Federal_Certificate'] = $promote->getGradeDanCertificate();
+                $promoted_filtered[$i]['Federal_Certificate'] = $promote->getGradeCertificate();
             }
             else
             {
-                $promoted_filtered[$i-1]['Grade_Aikikai_Id']    = $promote->getGradeDanId();
-                $promoted_filtered[$i-1]['Aikikai_Certificate'] = $promote->getGradeDanCertificate();
+                $promoted_filtered[$i-1]['Grade_Aikikai_Id']    = $promote->getGradeId();
+                $promoted_filtered[$i-1]['Aikikai_Certificate'] = $promote->getGradeCertificate();
             }
 
             $i++;
@@ -92,18 +92,18 @@ class GradeController extends AbstractController
      * @param Request $request
      * @param GradeSession $session
      * @param Member $member
-     * @param GradeDan $grade
+     * @param Grade $grade
      * @return RedirectResponse|Response
      */
-    public function exam_applicant_detail(Request $request, GradeSession $session, Member $member, GradeDan $grade)
+    public function exam_applicant_detail(Request $request, GradeSession $session, Member $member, Grade $grade)
     {
-        $form = $this->createForm(GradeType::class, $grade, array('form' => 'exam_applicant_validation', 'data_class' => GradeDan::class));
+        $form = $this->createForm(GradeType::class, $grade, array('form' => 'exam_applicant_validation', 'data_class' => Grade::class));
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid())
         {
-            $grade->setGradeDanStatus(2);
+            $grade->setGradeStatus(2);
 
             $entityManager = $this->getDoctrine()->getManager();
 
@@ -121,18 +121,18 @@ class GradeController extends AbstractController
      * @param Request $request
      * @param GradeSession $session
      * @param Member $member
-     * @param GradeDan $grade
+     * @param Grade $grade
      * @return RedirectResponse|Response
      */
-    public function exam_candidate_detail(Request $request, GradeSession $session, Member $member, GradeDan $grade)
+    public function exam_candidate_detail(Request $request, GradeSession $session, Member $member, Grade $grade)
     {
-        $form = $this->createForm(GradeType::class, $grade, array('form' => 'exam_candidate_result', 'data_class' => GradeDan::class));
+        $form = $this->createForm(GradeType::class, $grade, array('form' => 'exam_candidate_result', 'data_class' => Grade::class));
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid())
         {
-            $member->setMemberLastGradeDan($grade);
+            $member->setMemberLastGrade($grade);
 
             $entityManager = $this->getDoctrine()->getManager();
 
@@ -150,12 +150,12 @@ class GradeController extends AbstractController
      * @param Request $request
      * @param GradeSession $session
      * @param Member $member
-     * @param GradeDan $grade
+     * @param Grade $grade
      * @return RedirectResponse|Response
      */
-    public function exam_candidate_detail_update(Request $request, GradeSession $session, Member $member, GradeDan $grade)
+    public function exam_candidate_detail_update(Request $request, GradeSession $session, Member $member, Grade $grade)
     {
-        $form = $this->createForm(GradeType::class, $grade, array('form' => 'exam_candidate_result', 'data_class' => GradeDan::class));
+        $form = $this->createForm(GradeType::class, $grade, array('form' => 'exam_candidate_result', 'data_class' => Grade::class));
 
         $form->handleRequest($request);
 
@@ -163,11 +163,11 @@ class GradeController extends AbstractController
         {
             $entityManager = $this->getDoctrine()->getManager();
 
-            if ($grade->getGradeDanStatus() == 3)
+            if ($grade->getGradeStatus() == 3)
             {
-                $member->setMemberLastGradeDan($grade);
+                $member->setMemberLastGrade($grade);
 
-                $grade_aikikai = $this->getDoctrine()->getRepository(GradeDan::class)->findOneBy(['grade_dan_member' => $member->getMemberId(), 'grade_dan_exam' => $session->getGradeSessionId(), 'grade_dan_status' => 5]);
+                $grade_aikikai = $this->getDoctrine()->getRepository(Grade::class)->findOneBy(['grade_member' => $member->getMemberId(), 'grade_exam' => $session->getGradeSessionId(), 'grade_status' => 5]);
 
                 if ($grade_aikikai != null)
                 {
@@ -189,26 +189,26 @@ class GradeController extends AbstractController
      * @param Request $request
      * @param GradeSession $session
      * @param Member $member
-     * @param GradeDan $grade
+     * @param Grade $grade
      * @return RedirectResponse|Response
      */
-    public function exam_candidate_add_aikikai(Request $request, GradeSession $session, Member $member, GradeDan $grade)
+    public function exam_candidate_add_aikikai(Request $request, GradeSession $session, Member $member, Grade $grade)
     {
-        $grade_aikikai = new GradeDan();
+        $grade_aikikai = new Grade();
 
-        $grade_aikikai->setGradeDanRank($grade->getGradeDanRank() + 1);
-        $grade_aikikai->setGradeDanStatus($grade->getGradeDanStatus() + 1);
-        $grade_aikikai->setGradeDanClub($grade->getGradeDanClub());
-        $grade_aikikai->setGradeDanExam($grade->getGradeDanExam());
-        $grade_aikikai->setGradeDanMember($grade->getGradeDanMember());
+        $grade_aikikai->setGradeRank($grade->getGradeRank() + 1);
+        $grade_aikikai->setGradeStatus($grade->getGradeStatus() + 1);
+        $grade_aikikai->setGradeClub($grade->getGradeClub());
+        $grade_aikikai->setGradeExam($grade->getGradeExam());
+        $grade_aikikai->setGradeMember($grade->getGradeMember());
 
-        $form = $this->createForm(GradeType::class, $grade_aikikai, array('form' => 'exam_candidate_aikikai', 'data_class' => GradeDan::class));
+        $form = $this->createForm(GradeType::class, $grade_aikikai, array('form' => 'exam_candidate_aikikai', 'data_class' => Grade::class));
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid())
         {
-            $member->setMemberLastGradeDan($grade_aikikai);
+            $member->setMemberLastGrade($grade_aikikai);
 
             $entityManager = $this->getDoctrine()->getManager();
 
@@ -228,18 +228,18 @@ class GradeController extends AbstractController
      * @param Request $request
      * @param GradeSession $session
      * @param Member $member
-     * @param GradeDan $grade
+     * @param Grade $grade
      * @return RedirectResponse|Response
      */
-    public function exam_candidate_detail_aikikai(Request $request, GradeSession $session, Member $member, GradeDan $grade)
+    public function exam_candidate_detail_aikikai(Request $request, GradeSession $session, Member $member, Grade $grade)
     {
-        $form = $this->createForm(GradeType::class, $grade, array('form' => 'exam_candidate_aikikai', 'data_class' => GradeDan::class));
+        $form = $this->createForm(GradeType::class, $grade, array('form' => 'exam_candidate_aikikai', 'data_class' => Grade::class));
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid())
         {
-            $member->setMemberLastGradeDan($grade);
+            $member->setMemberLastGrade($grade);
 
             $entityManager = $this->getDoctrine()->getManager();
 
@@ -269,11 +269,11 @@ class GradeController extends AbstractController
      */
     public function kagami_detail(GradeSession $session)
     {
-        $candidates = $this->getDoctrine()->getRepository(GradeDan::class)->findBy(['grade_dan_status' => 1, 'grade_dan_exam' => $session->getGradeSessionId()], ['grade_dan_rank' => 'ASC']);
+        $candidates = $this->getDoctrine()->getRepository(Grade::class)->findBy(['grade_status' => 1, 'grade_exam' => $session->getGradeSessionId()], ['grade_rank' => 'ASC']);
 
-        $refused    = $this->getDoctrine()->getRepository(GradeDan::class)->findBy(['grade_dan_status' => 3, 'grade_dan_exam' => $session->getGradeSessionId()], ['grade_dan_rank' => 'ASC']);
+        $refused    = $this->getDoctrine()->getRepository(Grade::class)->findBy(['grade_status' => 3, 'grade_exam' => $session->getGradeSessionId()], ['grade_rank' => 'ASC']);
 
-        $promoted   = $this->getDoctrine()->getRepository(GradeDan::class)->findBy(['grade_dan_status' => array(4,5), 'grade_dan_exam' => $session->getGradeSessionId()], ['grade_dan_rank' => 'ASC']);
+        $promoted   = $this->getDoctrine()->getRepository(Grade::class)->findBy(['grade_status' => array(4,5), 'grade_exam' => $session->getGradeSessionId()], ['grade_rank' => 'ASC']);
 
         return $this->render('Grade/Kagami/detail.html.twig', array('session' => $session, 'candidates' => $candidates, 'refused' => $refused, 'promoted' => $promoted));
     }
@@ -284,18 +284,18 @@ class GradeController extends AbstractController
      * @param Request $request
      * @param GradeSession $session
      * @param Member $member
-     * @param GradeDan $grade
+     * @param Grade $grade
      * @return RedirectResponse|Response
      */
-    public function kagami_candidate_detail(Request $request, GradeSession $session, Member $member, GradeDan $grade)
+    public function kagami_candidate_detail(Request $request, GradeSession $session, Member $member, Grade $grade)
     {
-        $form = $this->createForm(GradeType::class, $grade, array('form' => 'kagami_candidate_result', 'data_class' => GradeDan::class));
+        $form = $this->createForm(GradeType::class, $grade, array('form' => 'kagami_candidate_result', 'data_class' => Grade::class));
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid())
         {
-            $member->setMemberLastGradeDan($grade);
+            $member->setMemberLastGrade($grade);
 
             $entityManager = $this->getDoctrine()->getManager();
 
@@ -313,12 +313,12 @@ class GradeController extends AbstractController
      * @param Request $request
      * @param GradeSession $session
      * @param Member $member
-     * @param GradeDan $grade
+     * @param Grade $grade
      * @return RedirectResponse|Response
      */
-    public function kagami_candidate_detail_update(Request $request, GradeSession $session, Member $member, GradeDan $grade)
+    public function kagami_candidate_detail_update(Request $request, GradeSession $session, Member $member, Grade $grade)
     {
-        $form = $this->createForm(GradeType::class, $grade, array('form' => 'kagami_candidate_result', 'data_class' => GradeDan::class));
+        $form = $this->createForm(GradeType::class, $grade, array('form' => 'kagami_candidate_result', 'data_class' => Grade::class));
 
         $form->handleRequest($request);
 

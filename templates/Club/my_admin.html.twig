@@ -89,7 +89,7 @@
                 <td>{{ listData.getTeacherType(teacher.Type) }}</td>
                 <td>{{ teacher.Firstname }}</td>
                 <td>{{ teacher.Name }}</td>
-                <td>{{ listData.getGrade(teacher.Dan) }}</td>
+                <td>{{ listData.getGrade(teacher.Grade) }}</td>
                 <td><a href="{{ path('club_teacher_afa_update', {'teacher': teacher.Id}) }}">Modifier</a> - <a href="{{ path('club_teacher_afa_delete', {'teacher': teacher.Id}) }}">Supprimer</a></td>
             </tr>
         {% endfor %}

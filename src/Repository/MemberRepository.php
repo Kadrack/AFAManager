@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Club;
+use App\Entity\Grade;
 use App\Entity\Member;
 use App\Entity\MemberLicence;
 
@@ -28,8 +29,9 @@ class MemberRepository extends ServiceEntityRepository
     {
         $qb = $this->createQueryBuilder('m');
 
-        return $qb->select('m.member_firstname AS FirstName', 'm.member_name AS Name', 'm.member_id AS Id', 'l.member_licence_deadline AS Deadline')
-            ->innerJoin(MemberLicence::class, 'l', 'WITH', $qb->expr()->eq('m.member_id', 'l.member_licence'))
+        return $qb->select('m.member_id AS Id', 'm.member_firstname AS FirstName', 'm.member_name AS Name', 'g.grade_rank AS Grade','l.member_licence_deadline AS Deadline')
+            ->join(MemberLicence::class, 'l', 'WITH', $qb->expr()->eq('m.member_id', 'l.member_licence'))
+            ->join(Grade::class, 'g', 'WITH', $qb->expr()->eq('m.member_last_grade', 'g.grade_id'))
             ->where($qb->expr()->eq('l.member_licence_club', $club->getClubId()))
             ->andWhere($qb->expr()->gt('l.member_licence_deadline', "'".$today."'"))
             ->andWhere($qb->expr()->eq('l.member_licence_status', 1))

@@ -65,7 +65,7 @@ class MemberType extends AbstractType
             ->add('MemberCountry', CountryType::class, array('label' => 'Pays : ', 'choice_translation_locale' => 'fr', 'preferred_choices' => array('BE', 'FR')))
             ->add('MemberEmail', EmailType::class, array('label' => 'Email : '))
             ->add('MemberBirthday', BirthdayType::class, array('label' => 'Date de naissance : ', 'widget' => 'single_text'))
-            ->add('GradeKyuRank', ChoiceType::class, array('label' => 'Grade : ', 'placeholder' => 'Choississez un grade', 'choices' => $list->getGradeKyu(), 'required' => false, 'mapped' => false))
+            ->add('GradeRank', ChoiceType::class, array('label' => 'Grade : ', 'placeholder' => 'Choississez un grade', 'choices' => $list->getGrade(), 'required' => false, 'mapped' => false))
             ->add('MemberLicenceMedicalCertificate', DateType::class, array('label' => 'Date certificat : ', 'widget' => 'single_text', 'mapped' => false))
             ->add('MemberComment', TextareaType::class, array('label' => 'Commentaire : ', 'required' => false))
             ->add('Submit', SubmitType::class, array('label' => 'Ajouter'))

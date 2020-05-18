@@ -15,12 +15,14 @@
         <tr>
             <th>Adresse</th>
             <th>Localité</th>
+            <th>Pays</th>
             <th>Email</th>
             <th>Commande</th>
         </tr>
         <tr>
             <td>{{ member.getMemberAddress() }}</td>
-            <td>{{ member.getMemberZip() }} - {{ member.getMemberCity() }} - {{ member.getMemberCountry() }}</td>
+            <td>{{ member.getMemberZip() }} {{ member.getMemberCity() }}</td>
+            <td>{{ listData.getCountryName(member.getMemberCountry()) }}</td>
             <td>{{ member.getMemberEmail() }}</td>
             <td><a href="{{ path('member_my_data_update') }}">Modifier</a></td>
         </tr>
@@ -32,11 +34,13 @@
         <tr>
             <th>Adresse</th>
             <th>Localité</th>
+            <th>Pays</th>
             <th>Email</th>
         </tr>
         <tr>
             <td>{{ member.getMemberModification().getMemberModificationAddress() }}</td>
-            <td>{{ member.getMemberModification().getMemberModificationZip() }} - {{ member.getMemberModification().getMemberModificationCity() }} - {{ member.getMemberModification().getMemberModificationCountry() }}</td>
+            <td>{{ member.getMemberModification().getMemberModificationZip() }} {{ member.getMemberModification().getMemberModificationCity() }}</td>
+            <td>{{ listData.getCountryName(member.getMemberModification().getMemberModificationCountry()) }}</td>
             <td>{{ member.getMemberModification().getMemberModificationEmail() }}</td>
         </tr>
     </table>

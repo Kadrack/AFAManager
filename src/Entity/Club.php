@@ -130,9 +130,9 @@ class Club
     private $club_addresses;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\GradeDan", mappedBy="grade_dan_club", orphanRemoval=true, cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="App\Entity\Grade", mappedBy="grade_club", orphanRemoval=true, cascade={"persist"})
      */
-    private $club_grades_dan;
+    private $club_grades;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\ClubHistory", mappedBy="club_history", orphanRemoval=true, cascade={"persist"})
@@ -156,12 +156,12 @@ class Club
 
     public function __construct()
     {
-        $this->club_addresses  = new ArrayCollection();
-        $this->club_grades_dan = new ArrayCollection();
-        $this->club_histories  = new ArrayCollection();
-        $this->club_licences   = new ArrayCollection();
-        $this->club_teachers   = new ArrayCollection();
-        $this->club_trainings  = new ArrayCollection();
+        $this->club_addresses = new ArrayCollection();
+        $this->club_grades    = new ArrayCollection();
+        $this->club_histories = new ArrayCollection();
+        $this->club_licences  = new ArrayCollection();
+        $this->club_teachers  = new ArrayCollection();
+        $this->club_trainings = new ArrayCollection();
     }
 
     public function getClubId(): ?int
@@ -424,30 +424,30 @@ class Club
     }
 
     /**
-     * @return Collection|GradeDan[]
+     * @return Collection|Grade[]
      */
-    public function getClubGradesDan(): Collection
+    public function getClubGrades(): Collection
     {
-        return $this->club_grades_dan;
+        return $this->club_grades;
     }
 
-    public function addClubGradesDan(GradeDan $gradeDan): self
+    public function addClubGrades(Grade $grade): self
     {
-        if (!$this->club_grades_dan->contains($gradeDan)) {
-            $this->club_grades_dan[] = $gradeDan;
-            $gradeDan->setGradeDanClub($this);
+        if (!$this->club_grades->contains($grade)) {
+            $this->club_grades[] = $grade;
+            $grade->setGradeClub($this);
         }
 
         return $this;
     }
 
-    public function removeClubGradesDan(GradeDan $gradeDan): self
+    public function removeClubGrades(Grade $grade): self
     {
-        if ($this->club_grades_dan->contains($gradeDan)) {
-            $this->club_grades_dan->removeElement($gradeDan);
+        if ($this->club_grades->contains($grade)) {
+            $this->club_grades->removeElement($grade);
             // set the owning side to null (unless already changed)
-            if ($gradeDan->getGradeDanClub() === $this) {
-                $gradeDan->setGradeDanClub(null);
+            if ($grade->getGradeClub() === $this) {
+                $grade->setGradeClub(null);
             }
         }
 

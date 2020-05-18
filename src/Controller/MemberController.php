@@ -4,8 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Club;
 use App\Entity\ClubTeacher;
-use App\Entity\GradeDan;
-use App\Entity\GradeKyu;
+use App\Entity\Grade;
 use App\Entity\GradeSession;
 use App\Entity\GradeTitle;
 use App\Entity\Member;
@@ -127,19 +126,17 @@ class MemberController extends AbstractController
 
         $today = new DateTime('today');
 
-        $grade_dan_history = $this->getDoctrine()->getRepository(GradeDan::class)->getGradeDanHistory($member->getMemberId());
-
-        $grade_kyu_history = $this->getDoctrine()->getRepository(GradeKyu::class)->findBy(['grade_kyu_member' => $member->getMemberId()], ['grade_kyu_rank' => 'ASC']);
+        $grade_history = $this->getDoctrine()->getRepository(Grade::class)->getGradeHistory($member->getMemberId());
 
         $open_session = $this->getDoctrine()->getRepository(GradeSession::class)->getOpenSession($today->format('Y-m-d'), 1);
 
-        if (($open_session == null) || ($grade_dan_history[0]['Type'] == 2) || ($grade_dan_history[0]['Rank'] >= 14))
+        if (($open_session == null) || ($grade_history[0]['Type'] == 2) || ($grade_history[0]['Rank'] >= 14))
         {
             $exam_candidate = false;
         }
-        elseif (isset($grade_dan_history[0]['Session']))
+        elseif (isset($grade_history[0]['Session']))
         {
-            if ($grade_dan_history[0]['Session'] == $open_session[0]->getGradeSessionId())
+            if ($grade_history[0]['Session'] == $open_session[0]->getGradeSessionId())
             {
                 $exam_candidate = false;
             }
@@ -159,9 +156,9 @@ class MemberController extends AbstractController
         {
             $kagami_candidate = false;
         }
-        elseif (isset($grade_dan_history[0]['Session']))
+        elseif (isset($grade_history[0]['Session']))
         {
-            if ($grade_dan_history[0]['Session'] == $open_session[0]->getGradeSessionId())
+            if ($grade_history[0]['Session'] == $open_session[0]->getGradeSessionId())
             {
                 $kagami_candidate = false;
             }
@@ -175,7 +172,15 @@ class MemberController extends AbstractController
             $kagami_candidate = true;
         }
 
-        return $this->render('Member/my_grades.html.twig', array('member' => $member, 'club' => $club, 'grade_dan_history' => sizeof($grade_dan_history) == 0 ? null : $grade_dan_history, 'grade_kyu_history' => sizeof($grade_kyu_history) == 0 ? null : $grade_kyu_history, 'exam_candidate' => $exam_candidate, 'kagami_candidate' => $kagami_candidate));
+        for ($i = 0; $i < sizeof($grade_history); $i++)
+        {
+            if ($grade_history[$i]['Type'] == null)
+            {
+                $grade_history[$i]['Type'] = 1;
+            }
+        }
+
+        return $this->render('Member/my_grades.html.twig', array('member' => $member, 'club' => $club, 'grade_history' => $grade_history, 'exam_candidate' => $exam_candidate, 'kagami_candidate' => $kagami_candidate));
     }
 
     /**
