@@ -6,6 +6,7 @@ use App\Entity\Club;
 use App\Entity\Member;
 use App\Entity\MemberLicence;
 
+use App\Entity\MemberModification;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 use Doctrine\Persistence\ManagerRegistry;
@@ -26,6 +27,7 @@ class MemberRepository extends ServiceEntityRepository
     public function getClubActiveMembers(Club $club, string $today): ?array
     {
         $qb = $this->createQueryBuilder('m');
+
         return $qb->select('m.member_firstname AS FirstName', 'm.member_name AS Name', 'm.member_id AS Id', 'l.member_licence_deadline AS Deadline')
             ->innerJoin(MemberLicence::class, 'l', 'WITH', $qb->expr()->eq('m.member_id', 'l.member_licence'))
             ->where($qb->expr()->eq('l.member_licence_club', $club->getClubId()))
@@ -40,6 +42,7 @@ class MemberRepository extends ServiceEntityRepository
     public function getClubInactiveMembers(Club $club, string $today): ?array
     {
         $qb = $this->createQueryBuilder('m');
+
         return $qb->select('m.member_firstname AS FirstName', 'm.member_name AS Name', 'm.member_id AS Id', 'l.member_licence_deadline AS Deadline', 'l.member_licence_id AS Licence')
             ->innerJoin(MemberLicence::class, 'l', 'WITH', $qb->expr()->eq('m.member_id', 'l.member_licence'))
             ->where($qb->expr()->eq('l.member_licence_club', $club->getClubId()))
@@ -47,6 +50,17 @@ class MemberRepository extends ServiceEntityRepository
             ->andWhere($qb->expr()->eq('l.member_licence_status', 1))
             ->orderBy('FirstName', 'ASC')
             ->addOrderBy('Name', 'ASC')
+            ->getQuery()
+            ->getArrayResult();
+    }
+
+    public function getMemberModification(): ?array
+    {
+        $qb = $this->createQueryBuilder('m');
+
+        return $qb->select('m.member_id AS Member', 'm.member_firstname AS FirstName', 'm.member_name AS Name', 'l.member_modification_address AS Address', 'l.member_modification_zip AS Zip', 'l.member_modification_city AS City', 'l.member_modification_country AS Country', 'l.member_modification_email AS Email')
+            ->join(MemberModification::class, 'l', 'WITH', $qb->expr()->eq('m.member_modification', 'l.member_modification_id'))
+            ->where($qb->expr()->isNotNull('m.member_modification'))
             ->getQuery()
             ->getArrayResult();
     }

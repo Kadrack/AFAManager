@@ -76,11 +76,11 @@ class MemberType extends AbstractType
     {
         $builder
             ->add('MemberModificationPhoto', FileType::class, array('label' => 'Photo : ', 'required' => false, 'mapped' => false))
-            ->add('MemberModificationAddress', TextType::class, array('label' => 'Adresse : '))
-            ->add('MemberModificationZip', IntegerType::class, array('label' => 'Code postal : '))
-            ->add('MemberModificationCity', TextType::class, array('label' => 'Localité : '))
+            ->add('MemberModificationAddress', TextType::class, array('label' => 'Adresse : ', 'required' => false))
+            ->add('MemberModificationZip', IntegerType::class, array('label' => 'Code postal : ', 'required' => false))
+            ->add('MemberModificationCity', TextType::class, array('label' => 'Localité : ', 'required' => false))
             ->add('MemberModificationCountry', CountryType::class, array('label' => 'Pays : ', 'choice_translation_locale' => 'fr', 'preferred_choices' => array('BE', 'FR')))
-            ->add('MemberModificationEmail', EmailType::class, array('label' => 'Email : '))
+            ->add('MemberModificationEmail', EmailType::class, array('label' => 'Email : ', 'required' => false))
             ->add('Submit', SubmitType::class, array('label' => 'Modifier'))
         ;
     }

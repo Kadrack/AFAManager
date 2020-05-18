@@ -8,6 +8,7 @@ use App\Entity\GradeKyu;
 use App\Entity\GradeSession;
 use App\Entity\Member;
 use App\Entity\MemberLicence;
+use App\Entity\MemberModification;
 use App\Entity\MemberPrintout;
 use App\Entity\SecretariatSupporter;
 use App\Entity\Training;
@@ -1024,5 +1025,81 @@ class SecretariatController extends AbstractController
         }
 
         return $this->render('Secretariat/training_session_update.html.twig', array('form' => $form->createView()));
+    }
+
+    /**
+     * @Route("/liste_validations_modifications_membres", name="member_modification_validation_index")
+     */
+    public function memberModificationValidationIndex()
+    {
+        $modifications = $this->getDoctrine()->getRepository(Member::class)->getMemberModification();
+
+        return $this->render('Secretariat/member_modification_validation_index.html.twig', array('modifications' => $modifications));
+    }
+
+    /**
+     * @Route("/validation_modifications_membre/{member<\d+>}", name="member_modification_validation_validate")
+     *
+     * @param Request $request
+     * @param Member $member
+     * @return RedirectResponse|Response
+     */
+    public function memberModificationValidationValidate(Request $request, Member $member)
+    {
+        $modification = $member->getMemberModification();
+
+        $form = $this->createForm(SecretariatType::class, $modification, array('form' => 'modification_validate', 'data_class' => MemberModification::class));
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid())
+        {
+            $modification = $form->getData();
+
+            $modification->getMemberModificationAddress() != null ? $member->setMemberAddress($modification->getMemberModificationAddress()) : null;
+            $modification->getMemberModificationZip()     != null ? $member->setMemberZip($modification->getMemberModificationZip()) : null;
+            $modification->getMemberModificationCity()    != null ? $member->setMemberCity($modification->getMemberModificationCity()) : null;
+            $modification->getMemberModificationCountry() != null ? $member->setMemberCountry($modification->getMemberModificationCountry()) : null;
+            $modification->getMemberModificationEmail()   != null ? $member->setMemberEmail($modification->getMemberModificationEmail()) : null;
+
+            $member->setMemberModification(null);
+
+            $entityManager = $this->getDoctrine()->getManager();
+
+            $entityManager->flush();
+
+            return $this->redirectToRoute('secretariat_member_modification_validation_index');
+        }
+
+        return $this->render('Secretariat/member_modification_validation_validate.html.twig', array('form' => $form->createView()));
+    }
+
+    /**
+     * @Route("/annulation_modifications_membre/{member<\d+>}", name="member_modification_validation_cancel")
+     *
+     * @param Request $request
+     * @param Member $member
+     * @return RedirectResponse|Response
+     */
+    public function memberModificationValidationCancel(Request $request, Member $member)
+    {
+        $modification = $member->getMemberModification();
+
+        $form = $this->createForm(SecretariatType::class, $modification, array('form' => 'modification_validate', 'data_class' => MemberModification::class));
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid())
+        {
+            $member->setMemberModification(null);
+
+            $entityManager = $this->getDoctrine()->getManager();
+
+            $entityManager->flush();
+
+            return $this->redirectToRoute('secretariat_member_modification_validation_index');
+        }
+
+        return $this->render('Secretariat/member_modification_validation_cancel.html.twig', array('form' => $form->createView()));
     }
 }

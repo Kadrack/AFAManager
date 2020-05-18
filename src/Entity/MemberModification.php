@@ -19,27 +19,27 @@ class MemberModification
     private $member_modification_id;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $member_modification_firstname;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $member_modification_name;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $member_modification_photo;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", nullable=true)
      */
     private $member_modification_sex;
 
     /**
-     * @ORM\Column(type="text")
+     * @ORM\Column(type="text", nullable=true)
      */
     private $member_modification_address;
 
@@ -49,12 +49,12 @@ class MemberModification
     private $member_modification_zip;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $member_modification_city;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $member_modification_country;
 
@@ -64,7 +64,7 @@ class MemberModification
     private $member_modification_email;
 
     /**
-     * @ORM\Column(type="date")
+     * @ORM\Column(type="date", nullable=true)
      */
     private $member_modification_birthday;
     
@@ -174,9 +174,16 @@ class MemberModification
         return $this->member_modification_country;
     }
 
-    public function setMemberModificationCountry(string $member_modification_country): self
+    public function setMemberModificationCountry(string $member_modification_country = ""): self
     {
-        $this->member_modification_country = $member_modification_country;
+        if ($member_modification_country == "")
+        {
+            $this->member_modification_country = null;
+        }
+        else
+        {
+            $this->member_modification_country = $member_modification_country;
+        }
 
         return $this;
     }

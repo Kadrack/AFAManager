@@ -71,22 +71,11 @@ class MemberController extends AbstractController
 
         $member = $this->getUser()->getUserMember();
 
-        $member_modification = new MemberModification();
-
         if ($member->getMemberModification() == null)
         {
+            $member_modification = new MemberModification();
+
             $member_modification->setMemberModificationId($member->getMemberId());
-            $member_modification->setMemberModificationFirstname($member->getMemberFirstName());
-            $member_modification->setMemberModificationName($member->getMemberName());
-            $member_modification->setMemberModificationPhoto($member->getMemberPhoto());
-            $member_modification->setMemberModificationSex($member->getMemberSex());
-            $member_modification->setMemberModificationAddress($member->getMemberAddress());
-            $member_modification->setMemberModificationZip($member->getMemberZip());
-            $member_modification->setMemberModificationCity($member->getMemberCity());
-            $member_modification->setMemberModificationCountry($member->getMemberCountry());
-            $member_modification->setMemberModificationEmail($member->getMemberEmail());
-            $member_modification->setMemberModificationBirthday($member->getMemberBirthday());
-            //$member_modification->setMemberModificationComment($member->getMemberComment());
         }
         else
         {
@@ -111,6 +100,11 @@ class MemberController extends AbstractController
                 $member->setMemberModification($member_modification);
 
                 $entityManager->persist($member_modification);
+            }
+
+            if ($form['MemberModificationCountry']->getData() == $member->getMemberCountry())
+            {
+                $member_modification->setMemberModificationCountry();
             }
 
             $entityManager->flush();

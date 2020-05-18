@@ -2,15 +2,19 @@
 // src/Form/SecretariatType.php
 namespace App\Form;
 
-use Symfony\Component\OptionsResolver\OptionsResolver;
-
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\FormBuilderInterface;
 
+use Symfony\Component\Form\Extension\Core\Type\CountryType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+
+use Symfony\Component\Form\FormBuilderInterface;
+
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class SecretariatType extends AbstractType
 {
@@ -26,6 +30,12 @@ class SecretariatType extends AbstractType
                 break;
             case 'supporter_update':
                 $this->supporterUpdate($builder);
+                break;
+            case 'modification_validate':
+                $this->modificationValidate($builder);
+                break;
+            case 'modification_cancel':
+                $this->modificationCancel($builder);
                 break;
             default:
                 null;
@@ -70,6 +80,32 @@ class SecretariatType extends AbstractType
             ->add('SecretariatSupporterCity', TextType::class, array('label' => 'Localité : ', 'disabled' => true))
             ->add('SecretariatSupporterComment', TextareaType::class, array('label' => 'Commentaire : ', 'required' => false, 'disabled' => true))
             ->add('Submit', SubmitType::class, array('label' => 'Effacer'))
+        ;
+    }
+
+    private function modificationValidate(FormBuilderInterface $builder)
+    {
+        $builder
+            ->add('MemberModificationPhoto', FileType::class, array('label' => 'Photo : ', 'required' => false, 'mapped' => false, 'disabled' => true))
+            ->add('MemberModificationAddress', TextType::class, array('label' => 'Adresse : ', 'required' => false, 'disabled' => true))
+            ->add('MemberModificationZip', IntegerType::class, array('label' => 'Code postal : ', 'required' => false, 'disabled' => true))
+            ->add('MemberModificationCity', TextType::class, array('label' => 'Localité : ', 'required' => false, 'disabled' => true))
+            ->add('MemberModificationCountry', CountryType::class, array('label' => 'Pays : ', 'choice_translation_locale' => 'fr', 'preferred_choices' => array('BE', 'FR'), 'disabled' => true))
+            ->add('MemberModificationEmail', EmailType::class, array('label' => 'Email : ', 'required' => false, 'disabled' => true))
+            ->add('Submit', SubmitType::class, array('label' => 'Valider'))
+        ;
+    }
+
+    private function modificationCancel(FormBuilderInterface $builder)
+    {
+        $builder
+            ->add('MemberModificationPhoto', FileType::class, array('label' => 'Photo : ', 'required' => false, 'mapped' => false, 'disabled' => true))
+            ->add('MemberModificationAddress', TextType::class, array('label' => 'Adresse : ', 'required' => false, 'disabled' => true))
+            ->add('MemberModificationZip', IntegerType::class, array('label' => 'Code postal : ', 'required' => false, 'disabled' => true))
+            ->add('MemberModificationCity', TextType::class, array('label' => 'Localité : ', 'required' => false, 'disabled' => true))
+            ->add('MemberModificationCountry', CountryType::class, array('label' => 'Pays : ', 'choice_translation_locale' => 'fr', 'preferred_choices' => array('BE', 'FR'), 'disabled' => true))
+            ->add('MemberModificationEmail', EmailType::class, array('label' => 'Email : ', 'required' => false, 'disabled' => true))
+            ->add('Submit', SubmitType::class, array('label' => 'Valider'))
         ;
     }
 }

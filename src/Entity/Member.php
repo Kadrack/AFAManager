@@ -120,7 +120,7 @@ class Member
     private $member_last_grade_kyu;
 
     /**
-     * @ORM\OneToOne(targetEntity="App\Entity\MemberModification")
+     * @ORM\OneToOne(targetEntity="App\Entity\MemberModification", orphanRemoval=true, cascade={"persist", "remove"})
      * @ORM\JoinColumn(nullable=true, name="member_join_member_modification", referencedColumnName="member_modification_id")
      */
     private $member_modification;

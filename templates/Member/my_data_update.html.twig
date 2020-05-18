@@ -11,16 +11,29 @@
     <h1>{{ member.getMemberFirstname()|title }} {{ member.getMemberName()|title }}</h1>
     <h2>Données personnelles</h2>
     {{ form_start(form) }}
-    <img alt="" src=" {{ asset('uploads/photos/'~member.getMemberPhoto()) }}" /><br />
+    {% if member.getMemberModification() != null %}
+    {% if member.getMemberModification().getMemberModificationPhoto() != null %}
+    <img alt="" src=" {{ asset('uploads/photos/'~member.getMemberModification().getMemberModificationPhoto()) }}" /><br />
+    {% endif %}
+    {% endif %}
     {{ form_widget(form.MemberModificationPhoto) }}
     <table>
         <tr>
+            <th></th>
             <th>Adresse</th>
             <th>Localité</th>
             <th>Email</th>
             <th>Commande</th>
         </tr>
         <tr>
+            <td>Données actuelle</td>
+            <td>{{ member.getMemberAddress() }}</td>
+            <td>{{ member.getMemberZip() }} - {{ member.getMemberCity() }} - {{ member.getMemberCountry() }}</td>
+            <td>{{ member.getMemberEmail() }}</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>Modification</td>
             <td>{{ form_widget(form.MemberModificationAddress) }}</td>
             <td>{{ form_widget(form.MemberModificationZip) }} - {{ form_widget(form.MemberModificationCity) }} - {{ form_widget(form.MemberModificationCountry) }}</td>
             <td>{{ form_widget(form.MemberModificationEmail) }}</td>
