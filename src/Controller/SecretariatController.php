@@ -358,6 +358,7 @@ class SecretariatController extends AbstractController
 
             $member->setMemberFirstLicence($licence);
             $member->setMemberLastLicence($licence);
+            $member->setMemberActualClub($club);
             $member->setMemberPhoto($form['MemberPhoto']->getData() == null ? 'nophoto.png' : $photoUploader->upload($form['MemberPhoto']->getData()));
 
             if ($form->get('GradeRank')->getData() != null)

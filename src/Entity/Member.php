@@ -108,13 +108,13 @@ class Member
     private $member_last_licence;
 
     /**
-     * @ORM\OneToOne(targetEntity="App\Entity\Club")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Club")
      * @ORM\JoinColumn(nullable=false, name="member_join_member_actual_club", referencedColumnName="club_id")
      */
     private $member_actual_club;
 
     /**
-     * @ORM\OneToOne(targetEntity="App\Entity\Grade")
+     * @ORM\OneToOne(targetEntity="App\Entity\Grade", cascade={"persist"})
      * @ORM\JoinColumn(nullable=true, name="member_join_last_grade", referencedColumnName="grade_id")
      */
     private $member_last_grade;
