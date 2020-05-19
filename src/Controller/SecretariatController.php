@@ -850,7 +850,7 @@ class SecretariatController extends AbstractController
             $entityManager->persist($training);
             $entityManager->flush();
 
-            return $this->redirectToRoute('training_index');
+            return $this->redirectToRoute('secretariat_training_index');
         }
 
         return $this->render('Secretariat/training_create.html.twig', array('form' => $form->createView()));

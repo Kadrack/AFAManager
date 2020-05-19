@@ -6,8 +6,11 @@ use App\Entity\Club;
 use App\Entity\Grade;
 use App\Entity\Member;
 use App\Entity\MemberLicence;
-
 use App\Entity\MemberModification;
+use App\Entity\Training;
+use App\Entity\TrainingAttendance;
+use App\Entity\TrainingSession;
+
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 use Doctrine\Persistence\ManagerRegistry;
@@ -23,6 +26,22 @@ class MemberRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Member::class);
+    }
+
+    public function getMemberAttendances(int $member_id): ?array
+    {
+        $qb = $this->createQueryBuilder('m');
+
+        return $qb->select('t.training_id AS Id', 't.training_name AS Name', 's.training_session_date AS Date', 'sum(s.training_session_duration) AS Duration')
+            ->join(TrainingAttendance::class, 'a', 'WITH', $qb->expr()->eq('m.member_id', 'a.training_attendance_member'))
+            ->join(TrainingSession::class, 's', 'WITH', $qb->expr()->eq('a.training_attendance_session', 's.training_session_id'))
+            ->join(Training::class, 't', 'WITH', $qb->expr()->eq('a.training', 't.training_id'))
+            ->where($qb->expr()->eq('m.member_id', $member_id))
+            ->groupBy('Id')
+            ->orderBy('Date', 'DESC')
+            ->getQuery()
+            ->getArrayResult();
+
     }
 
     public function getClubActiveMembers(Club $club, string $today): ?array

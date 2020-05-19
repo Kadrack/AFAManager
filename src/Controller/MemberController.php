@@ -199,6 +199,54 @@ class MemberController extends AbstractController
     }
 
     /**
+     * @Route("/mes_stages", name="my_stages")
+     * @return Response
+     */
+    public function myStages()
+    {
+        $club   = $this->getUser()->getUserClub();
+
+        $member = $this->getUser()->getUserMember();
+
+        $stage_history = $this->getDoctrine()->getRepository(Member::class)->getMemberAttendances($member->getMemberId());
+
+        $grade_history = $this->getDoctrine()->getRepository(Grade::class)->getGradeHistory($member->getMemberId());
+
+        $stage_count = 0; $grade_count = 0;
+
+        $history = array();
+
+        $total = 0;
+
+        while (isset($grade_history[$grade_count]))
+        {
+            $history[$grade_count]['Rank'] = $grade_history[$grade_count]['Rank'];
+
+            $history[$grade_count]['Total'] = 0;
+
+            if ($grade_history[$grade_count]['Date'] < $stage_history[$stage_count]['Date'])
+            {
+                while (isset($stage_history[$stage_count]))
+                {
+                    $stage_history[$stage_count]['Duration'] = $stage_history[$stage_count]['Duration'] / 60;
+
+                    $history[$grade_count]['Stage'][] = $stage_history[$stage_count];
+
+                    $history[$grade_count]['Total'] = $history[$grade_count]['Total'] + $stage_history[$stage_count]['Duration'];
+
+                    $stage_count++;
+                }
+            }
+
+            $total = $total + $history[$grade_count]['Total'];
+
+            $grade_count++;
+        }
+
+        return $this->render('Member/my_stages.html.twig', array('member' => $member, 'club' => $club, 'history' => $history, 'total' => $total));
+    }
+
+    /**
      * @Route("/candidature/{type<\d+>}", name="application")
      * @param Request $request
      * @param int $type
@@ -235,15 +283,16 @@ class MemberController extends AbstractController
             return $this->redirectToRoute('member_my_data');
         }
 
-        $grade = new GradeDan();
+        $grade = new Grade();
 
-        $grade->setGradeDanClub($club);
-        $grade->setGradeDanExam($exam[0]);
-        $grade->setGradeDanMember($member);
-        $grade->setGradeDanRank($rank);
-        $grade->setGradeDanStatus(1);
+        $grade->setGradeClub($club);
+        $grade->setGradeDate(new DateTime('today'));
+        $grade->setGradeExam($exam[0]);
+        $grade->setGradeMember($member);
+        $grade->setGradeRank($rank);
+        $grade->setGradeStatus(1);
 
-        $form = $this->createForm(GradeType::class, $grade, array('form' => 'exam_application', 'data_class' => GradeDan::class));
+        $form = $this->createForm(GradeType::class, $grade, array('form' => 'exam_application', 'data_class' => Grade::class));
 
         $form->handleRequest($request);
 
