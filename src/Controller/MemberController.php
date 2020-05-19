@@ -81,7 +81,7 @@ class MemberController extends AbstractController
             $member_modification = $member->getMemberModification();
         }
 
-        $form = $this->createForm(MemberType::class, $member_modification, array('form' => 'update', 'data_class' => MemberModification::class));
+        $form = $this->createForm(MemberType::class, $member_modification, array('form' => 'update_validation', 'data_class' => MemberModification::class));
 
         $form->handleRequest($request);
 
@@ -212,11 +212,7 @@ class MemberController extends AbstractController
 
         $grade_history = $this->getDoctrine()->getRepository(Grade::class)->getGradeHistory($member->getMemberId());
 
-        $stage_count = 0; $grade_count = 0;
-
-        $history = array();
-
-        $total = 0;
+        $stage_count = 0; $grade_count = 0; $total = 0; $history = array();
 
         while (isset($grade_history[$grade_count]))
         {

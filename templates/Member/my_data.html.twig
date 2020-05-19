@@ -40,7 +40,7 @@
         <tr>
             <td>{{ member.getMemberModification().getMemberModificationAddress() }}</td>
             <td>{{ member.getMemberModification().getMemberModificationZip() }} {{ member.getMemberModification().getMemberModificationCity() }}</td>
-            <td>{{ listData.getCountryName(member.getMemberModification().getMemberModificationCountry()) }}</td>
+            <td>{% if member.getMemberModification().getMemberModificationCountry() != null %}{{ listData.getCountryName(member.getMemberModification().getMemberModificationCountry()) }}{% endif %}</td>
             <td>{{ member.getMemberModification().getMemberModificationEmail() }}</td>
         </tr>
     </table>
