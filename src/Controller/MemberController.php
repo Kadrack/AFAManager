@@ -220,17 +220,20 @@ class MemberController extends AbstractController
 
             $history[$grade_count]['Total'] = 0;
 
-            if ($grade_history[$grade_count]['Date'] < $stage_history[$stage_count]['Date'])
+            if (isset($stage_history[$stage_count]))
             {
-                while (isset($stage_history[$stage_count]))
+                if ($grade_history[$grade_count]['Date'] < $stage_history[$stage_count]['Date'])
                 {
-                    $stage_history[$stage_count]['Duration'] = $stage_history[$stage_count]['Duration'] / 60;
+                    while (isset($stage_history[$stage_count]))
+                    {
+                        $stage_history[$stage_count]['Duration'] = $stage_history[$stage_count]['Duration'] / 60;
 
-                    $history[$grade_count]['Stage'][] = $stage_history[$stage_count];
+                        $history[$grade_count]['Stage'][] = $stage_history[$stage_count];
 
-                    $history[$grade_count]['Total'] = $history[$grade_count]['Total'] + $stage_history[$stage_count]['Duration'];
+                        $history[$grade_count]['Total'] = $history[$grade_count]['Total'] + $stage_history[$stage_count]['Duration'];
 
-                    $stage_count++;
+                        $stage_count++;
+                    }
                 }
             }
 
