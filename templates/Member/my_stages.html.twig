@@ -12,6 +12,7 @@
     <h2>Historique des stages ({{ total }} h)</h2>
     {% for grade in history %}
     <h3>{{ listData.getGrade(grade.Rank) }} ({{ grade.Total }} h)</h3>
+    {% if grade.Stage is defined %}
     <table>
         <tr>
             <th>Nom</th>
@@ -26,6 +27,7 @@
         </tr>
         {% endfor %}
     </table>
+    {% endif %}
     {% endfor %}
 {% endblock %}
 
