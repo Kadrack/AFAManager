@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    AFA-Manager
+{% endblock %}
+
+{% block stylesheets %}
+{% endblock %}
+
+{% block body %}
+    <h1>{{ member.getMemberFirstname()|title }} {{ member.getMemberName()|title }}</h1>
+    <h2>Historique des grades</h2>
+    {% if exam_candidate %}<a href="{{ path('club_member_application', {'member': member.memberId(), 'type': 1}) }}">Candidature au prochain examen fédéral</a> {% endif %}{% if kagami_candidate %}<a href="{{ path('club_member_application', {'member': member.memberId(), 'type': 2}) }}">Soumettre une candidature au prochain Kagami</a> {% endif %}{% if kyu_candidate %}<a href="{{ path('club_member_add_kyu', {'member': member.memberId()}) }}">Ajouter un grade Kyu</a> {% endif %}
+    <table>
+        <tr>
+            <th>Grade</th>
+            <th>Date</th>
+            <th>N° Diplôme</th>
+            <th>Résultat</th>
+            <th>Type</th>
+        </tr>
+        {% for grade in grade_history %}
+            <tr>
+                <td>{{ listData.getGrade(grade.Rank) }}</td>
+                <td>{{ grade.Date|date("d/m/Y") }}</td>
+                <td>{{ grade.Certificate }}</td>
+                <td>{{ listData.getExamResult(grade.Result) }}</td>
+                <td>{{ listData.getExamType(grade.Type) }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}
+
+{% block javascripts %}
+{% endblock %}

@@ -366,6 +366,8 @@ class SecretariatController extends AbstractController
 
                 $grade->setGradeRank($form->get('GradeRank')->getData());
                 $grade->setGradeMember($member);
+                $grade->setGradeDate($licence->getMemberLicenceUpdate());
+                $grade->setGradeClub($club);
 
                 if ($grade->getGradeRank() < 7)
                 {

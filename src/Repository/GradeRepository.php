@@ -30,6 +30,7 @@ class GradeRepository extends ServiceEntityRepository
             ->leftJoin(GradeSession::class, 'e', 'WITH', $qb->expr()->eq('r.grade_exam', 'e.grade_session_id'))
             ->where($qb->expr()->eq('r.grade_member', $member_id))
             ->orderBy('e.grade_session_date', 'DESC')
+            ->addOrderBy('Date', 'DESC')
             ->getQuery()
             ->getArrayResult();
     }

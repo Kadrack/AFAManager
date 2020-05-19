@@ -108,6 +108,12 @@ class Member
     private $member_last_licence;
 
     /**
+     * @ORM\OneToOne(targetEntity="App\Entity\Club")
+     * @ORM\JoinColumn(nullable=false, name="member_join_member_actual_club", referencedColumnName="club_id")
+     */
+    private $member_actual_club;
+
+    /**
      * @ORM\OneToOne(targetEntity="App\Entity\Grade")
      * @ORM\JoinColumn(nullable=true, name="member_join_last_grade", referencedColumnName="grade_id")
      */
@@ -317,6 +323,18 @@ class Member
     public function setMemberLastLicence(?MemberLicence $member_last_licence): self
     {
         $this->member_last_licence = $member_last_licence;
+
+        return $this;
+    }
+
+    public function getMemberActualClub(): ?Club
+    {
+        return $this->member_actual_club;
+    }
+
+    public function setMemberActualClub(?Club $member_actual_club): self
+    {
+        $this->member_actual_club = $member_actual_club;
 
         return $this;
     }

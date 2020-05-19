@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\GradeSession;
 
+use App\Service\ListData;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 use Symfony\Component\Form\AbstractType;
@@ -45,6 +46,9 @@ class GradeType extends AbstractType
                 break;
             case 'kagami_candidate_result':
                 $this->kagami_candidate_result($builder);
+                break;
+            case 'add_kyu':
+                $this->addKyu($builder);
                 break;
             default:
                 $this->exam_create($builder);
@@ -149,6 +153,18 @@ class GradeType extends AbstractType
             ->add('GradeCertificate', TextType::class, array('label' => 'N° Diplôme : ', 'required' => false))
             ->add('GradeComment', TextareaType::class, array('label' => 'Commentaire : ', 'required' => false))
             ->add('Submit', SubmitType::class, array('label' => 'Valider'))
+        ;
+    }
+
+    private function addKyu(FormBuilderInterface $builder)
+    {
+        $list = new ListData();
+
+        $builder
+            ->add('GradeRank', ChoiceType::class, array('label' => 'Grade : ', 'placeholder' => 'Choississez un grade', 'choices' => $list->getGradeKyu()))
+            ->add('GradeDate', DateType::class, array('label' => 'Date : ', 'widget' => 'single_text'))
+            ->add('GradeComment', TextareaType::class, array('label' => 'Commentaire : ', 'required' => false))
+            ->add('Submit', SubmitType::class, array('label' => 'Ajouter'))
         ;
     }
 }

@@ -265,17 +265,17 @@ class MemberController extends AbstractController
         {
             $rank = 7;
         }
-        elseif ($member->getMemberLastGradeDan()->getGradeDanStatus() == 3)
+        elseif ($member->getMemberLastGrade()->getGradeStatus() == 3)
         {
-            $rank = $member->getMemberLastGradeDan()->getGradeDanRank();
+            $rank = $member->getMemberLastGrade()->getGradeRank();
         }
-        elseif ($member->getMemberLastGradeDan()->getGradeDanStatus() == 5)
+        elseif ($member->getMemberLastGrade()->getGradeStatus() == 5)
         {
-            $rank = $member->getMemberLastGradeDan()->getGradeDanRank() + 1;
+            $rank = $member->getMemberLastGrade()->getGradeRank() + 1;
         }
-        elseif (($member->getMemberLastGradeDan()->getGradeDanStatus() == 4) && ($type == 2))
+        elseif (($member->getMemberLastGrade()->getGradeStatus() == 4) && ($type == 2))
         {
-            $rank = $member->getMemberLastGradeDan()->getGradeDanRank() + 1;
+            $rank = $member->getMemberLastGrade()->getGradeRank() + 1;
         }
         else
         {
