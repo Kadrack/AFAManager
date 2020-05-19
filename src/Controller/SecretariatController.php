@@ -361,29 +361,28 @@ class SecretariatController extends AbstractController
             $member->setMemberActualClub($club);
             $member->setMemberPhoto($form['MemberPhoto']->getData() == null ? 'nophoto.png' : $photoUploader->upload($form['MemberPhoto']->getData()));
 
-            if ($form->get('GradeRank')->getData() != null)
+            $grade = new Grade();
+
+            $rank = $form->get('GradeRank')->getData() == null ? 1 : $form->get('GradeRank')->getData();
+
+            $grade->setGradeRank($rank);
+            $grade->setGradeMember($member);
+            $grade->setGradeDate($licence->getMemberLicenceUpdate());
+            $grade->setGradeClub($club);
+
+            if ($grade->getGradeRank() < 7)
             {
-                $grade = new Grade();
-
-                $grade->setGradeRank($form->get('GradeRank')->getData());
-                $grade->setGradeMember($member);
-                $grade->setGradeDate($licence->getMemberLicenceUpdate());
-                $grade->setGradeClub($club);
-
-                if ($grade->getGradeRank() < 7)
-                {
-                    $grade->setGradeStatus(4);
-                }
-                else
-                {
-                    $grade->setGradeStatus(6);
-                }
-
-                $member->setMemberLastGrade($grade);
-                $member->addMemberGrades($grade);
-
-                $licence->setMemberLicenceGrade($grade);
+                $grade->setGradeStatus(4);
             }
+            else
+            {
+                $grade->setGradeStatus(6);
+            }
+
+            $member->setMemberLastGrade($grade);
+            $member->addMemberGrades($grade);
+
+            $licence->setMemberLicenceGrade($grade);
 
             $stamp = new MemberPrintout();
 
