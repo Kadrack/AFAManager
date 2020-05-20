@@ -81,7 +81,7 @@ class MemberController extends AbstractController
             $member_modification = $member->getMemberModification();
         }
 
-        $form = $this->createForm(MemberType::class, $member_modification, array('form' => 'update_validation', 'data_class' => MemberModification::class));
+        $form = $this->createForm(MemberType::class, $member_modification, array('form' => 'update', 'data_class' => MemberModification::class));
 
         $form->handleRequest($request);
 

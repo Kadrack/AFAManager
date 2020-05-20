@@ -28,7 +28,7 @@
         <tr>
             <td>Données actuelle</td>
             <td>{{ member.getMemberAddress() }}</td>
-            <td>{{ member.getMemberZip() }} - {{ member.getMemberCity() }} - {{ member.getMemberCountry() }}</td>
+            <td>{{ member.getMemberZip() }} {{ member.getMemberCity() }} - {{ listData.countryName(member.getMemberCountry()) }}</td>
             <td>{{ member.getMemberEmail() }}</td>
             <td></td>
         </tr>
