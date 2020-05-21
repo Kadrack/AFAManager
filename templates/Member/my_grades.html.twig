@@ -10,7 +10,7 @@
 {% block body %}
     <h1>{{ member.getMemberFirstname()|title }} {{ member.getMemberName()|title }}</h1>
     <h2>Historique des grades</h2>
-    {% if exam_candidate %}<a href="{{ path('member_application', {'type': 1}) }}">Candidature au prochain examen fédéral</a> {% endif %}{% if kagami_candidate %}<a href="{{ path('member_application', {'type': 2}) }}">Soumettre une candidature au prochain Kagami</a>{% endif %}
+    {% if member_tool.getGrades().exam %}<a href="{{ path('member_my_application', {'type': 1}) }}">Candidature au prochain examen fédéral</a> {% endif %}{% if member_tool.getGrades().kagami %}<a href="{{ path('member_my_application', {'type': 2}) }}">Soumettre une candidature au prochain Kagami</a>{% endif %}
     <table>
         <tr>
             <th>Grade</th>
@@ -19,7 +19,7 @@
             <th>Résultat</th>
             <th>Type</th>
         </tr>
-        {% for grade in grade_history %}
+        {% for grade in member_tool.getGrades().history %}
             <tr>
                 <td>{{ listData.getGrade(grade.Rank) }}</td>
                 <td>{{ grade.Date|date("d/m/Y") }}</td>

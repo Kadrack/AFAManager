@@ -25,14 +25,22 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
+/**
+ * Class MemberType
+ * @package App\Form
+ */
 class MemberType extends AbstractType
 {
+    /**
+     * @param FormBuilderInterface $builder
+     * @param array $options
+     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         switch ($options['form'])
         {
-            case 'update':
-                $this->update($builder);
+            case 'my_data_update':
+                $this->myDataUpdate($builder);
                 break;
             case 'licence_renew':
                 $this->licenceRenew($builder);
@@ -45,9 +53,28 @@ class MemberType extends AbstractType
         }
     }
 
+    /**
+     * @param OptionsResolver $resolver
+     */
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array('data_class' => Member::class, 'form' => ''));
+    }
+
+    /**
+     * @param FormBuilderInterface $builder
+     */
+    private function myDataUpdate(FormBuilderInterface $builder)
+    {
+        $builder
+            ->add('MemberModificationPhoto', FileType::class, array('label' => 'Photo : ', 'required' => false, 'mapped' => false))
+            ->add('MemberModificationAddress', TextType::class, array('label' => 'Adresse : ', 'required' => false))
+            ->add('MemberModificationZip', IntegerType::class, array('label' => 'Code postal : ', 'required' => false))
+            ->add('MemberModificationCity', TextType::class, array('label' => 'Localité : ', 'required' => false))
+            ->add('MemberModificationCountry', CountryType::class, array('label' => 'Pays : ', 'choice_translation_locale' => 'fr', 'preferred_choices' => array('BE', 'FR')))
+            ->add('MemberModificationEmail', EmailType::class, array('label' => 'Email : ', 'required' => false))
+            ->add('Submit', SubmitType::class, array('label' => 'Modifier'))
+        ;
     }
 
     private function create(FormBuilderInterface $builder)
@@ -69,19 +96,6 @@ class MemberType extends AbstractType
             ->add('MemberLicenceMedicalCertificate', DateType::class, array('label' => 'Date certificat : ', 'widget' => 'single_text', 'mapped' => false))
             ->add('MemberComment', TextareaType::class, array('label' => 'Commentaire : ', 'required' => false))
             ->add('Submit', SubmitType::class, array('label' => 'Ajouter'))
-        ;
-    }
-
-    private function update(FormBuilderInterface $builder)
-    {
-        $builder
-            ->add('MemberModificationPhoto', FileType::class, array('label' => 'Photo : ', 'required' => false, 'mapped' => false))
-            ->add('MemberModificationAddress', TextType::class, array('label' => 'Adresse : ', 'required' => false))
-            ->add('MemberModificationZip', IntegerType::class, array('label' => 'Code postal : ', 'required' => false))
-            ->add('MemberModificationCity', TextType::class, array('label' => 'Localité : ', 'required' => false))
-            ->add('MemberModificationCountry', CountryType::class, array('label' => 'Pays : ', 'choice_translation_locale' => 'fr', 'preferred_choices' => array('BE', 'FR')))
-            ->add('MemberModificationEmail', EmailType::class, array('label' => 'Email : ', 'required' => false))
-            ->add('Submit', SubmitType::class, array('label' => 'Modifier'))
         ;
     }
 

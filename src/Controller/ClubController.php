@@ -12,6 +12,7 @@ use App\Entity\TrainingAddress;
 use App\Form\ClubType;
 use App\Form\GradeType;
 
+use App\Service\ClubTools;
 use DateTime;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -40,30 +41,24 @@ class ClubController extends AbstractController
     }
 
     /**
-     * @Route("/mon_administration", name="my_admin")
+     * @Route("/index_dojo", name="dojo_index")
      * @return Response
      */
-    public function myAdmin()
+    public function dojoIndex()
     {
         $club = $this->getUser()->getUserClub();
 
-        $addresses = $this->getDoctrine()->getRepository(TrainingAddress::class)->findBy(['training_address_club' => $club->getClubId()]);
+        $club_tools = new ClubTools($this->getDoctrine()->getManager(), $club);
 
-        $trainings = $this->getDoctrine()->getRepository(Training::class)->findBy(['training_club' => $club->getClubId()], ['training_day' => 'ASC', 'training_starting_hour' => 'ASC']);
-
-        $afa_teachers = $this->getDoctrine()->getRepository(ClubTeacher::class)->getAFATeachers($club);
-
-        $foreign_teachers = $this->getDoctrine()->getRepository(ClubTeacher::class)->getForeignTeachers($club);
-
-        return $this->render('Club/my_admin.html.twig', array('club' => $club, 'addresses' => $addresses, 'trainings' => $trainings, 'afa_teachers' => $afa_teachers, 'foreign_teachers' => $foreign_teachers));
+        return $this->render('Club/Dojo/index.html.twig', array('club' => $club, 'club_tools' => $club_tools));
     }
 
     /**
-     * @Route("/ajouter_dojo", name="dojo_add")
+     * @Route("/ajouter_dojo", name="dojo_address_add")
      * @param Request $request
      * @return RedirectResponse|Response
      */
-    public function addressAdd(Request $request)
+    public function dojoAddressAdd(Request $request)
     {
         $club = $this->getUser()->getUserClub();
 
@@ -87,19 +82,19 @@ class ClubController extends AbstractController
             $entityManager->persist($address);
             $entityManager->flush();
 
-            return $this->redirectToRoute('club_my_admin');
+            return $this->redirectToRoute('club_dojo_index');
         }
 
-        return $this->render('Club/dojo_add.html.twig', array('form' => $form->createView()));
+        return $this->render('Club/Dojo/address_add.html.twig', array('form' => $form->createView()));
     }
 
     /**
-     * @Route("/modifier_dojo/{address<\d+>}", name="dojo_update")
+     * @Route("/modifier_dojo/{address<\d+>}", name="dojo_address_update")
      * @param Request $request
      * @param TrainingAddress $address
      * @return RedirectResponse|Response
      */
-    public function addressUpdate(Request $request, TrainingAddress $address)
+    public function dojoAddressUpdate(Request $request, TrainingAddress $address)
     {
         $form = $this->createForm(ClubType::class, $address, array('form' => 'dojo_update', 'data_class' => TrainingAddress::class));
 
@@ -111,19 +106,19 @@ class ClubController extends AbstractController
 
             $entityManager->flush();
 
-            return $this->redirectToRoute('club_my_admin');
+            return $this->redirectToRoute('club_dojo_index');
         }
 
-        return $this->render('Club/dojo_update.html.twig', array('form' => $form->createView()));
+        return $this->render('Club/Dojo/address_update.html.twig', array('form' => $form->createView()));
     }
 
     /**
-     * @Route("/supprimer_dojo/{address<\d+>}", name="dojo_delete")
+     * @Route("/supprimer_dojo/{address<\d+>}", name="dojo_address_delete")
      * @param Request $request
      * @param TrainingAddress $address
      * @return RedirectResponse|Response
      */
-    public function addressDelete(Request $request, TrainingAddress $address)
+    public function dojoAddressDelete(Request $request, TrainingAddress $address)
     {
         $form = $this->createForm(ClubType::class, $address, array('form' => 'dojo_delete', 'data_class' => TrainingAddress::class));
 
@@ -136,18 +131,18 @@ class ClubController extends AbstractController
             $entityManager->remove($address);
             $entityManager->flush();
 
-            return $this->redirectToRoute('club_my_admin');
+            return $this->redirectToRoute('club_dojo_index');
         }
 
-        return $this->render('Club/dojo_delete.html.twig', array('form' => $form->createView()));
+        return $this->render('Club/Dojo/address_delete.html.twig', array('form' => $form->createView()));
     }
 
     /**
-     * @Route("/ajouter_horaire", name="training_add")
+     * @Route("/ajouter_horaire", name="dojo_training_add")
      * @param Request $request
      * @return RedirectResponse|Response
      */
-    public function trainingAdd(Request $request)
+    public function dojoTrainingAdd(Request $request)
     {
         $club = $this->getUser()->getUserClub();
 
@@ -166,19 +161,19 @@ class ClubController extends AbstractController
             $entityManager->persist($training);
             $entityManager->flush();
 
-            return $this->redirectToRoute('club_my_admin');
+            return $this->redirectToRoute('club_dojo_index');
         }
 
-        return $this->render('Club/training_add.html.twig', array('form' => $form->createView()));
+        return $this->render('Club/Dojo/training_add.html.twig', array('form' => $form->createView()));
     }
 
     /**
-     * @Route("/modifier_horaire/{training<\d+>}", name="training_update")
+     * @Route("/modifier_horaire/{training<\d+>}", name="dojo_training_update")
      * @param Request $request
      * @param Training $training
      * @return RedirectResponse|Response
      */
-    public function trainingUpdate(Request $request, Training $training)
+    public function dojoTrainingUpdate(Request $request, Training $training)
     {
         $form = $this->createForm(ClubType::class, $training, array('form' => 'training_update', 'data_class' => Training::class));
 
@@ -190,19 +185,19 @@ class ClubController extends AbstractController
 
             $entityManager->flush();
 
-            return $this->redirectToRoute('club_my_admin');
+            return $this->redirectToRoute('club_dojo_index');
         }
 
-        return $this->render('Club/training_update.html.twig', array('form' => $form->createView()));
+        return $this->render('Club/Dojo/training_update.html.twig', array('form' => $form->createView()));
     }
 
     /**
-     * @Route("/supprimer_horaire/{training<\d+>}", name="training_delete")
+     * @Route("/supprimer_horaire/{training<\d+>}", name="dojo_training_delete")
      * @param Request $request
      * @param Training $training
      * @return RedirectResponse|Response
      */
-    public function trainingDelete(Request $request, Training $training)
+    public function dojoTrainingDelete(Request $request, Training $training)
     {
         $form = $this->createForm(ClubType::class, $training, array('form' => 'training_delete', 'data_class' => Training::class));
 
@@ -215,18 +210,18 @@ class ClubController extends AbstractController
             $entityManager->remove($training);
             $entityManager->flush();
 
-            return $this->redirectToRoute('club_my_admin');
+            return $this->redirectToRoute('club_dojo_index');
         }
 
-        return $this->render('Club/training_delete.html.twig', array('form' => $form->createView()));
+        return $this->render('Club/Dojo/training_delete.html.twig', array('form' => $form->createView()));
     }
 
     /**
-     * @Route("/ajouter_professeur_afa", name="teacher_afa_add")
+     * @Route("/ajouter_professeur_afa", name="dojo_teacher_afa_add")
      * @param Request $request
      * @return RedirectResponse|Response
      */
-    public function teacherAFAAdd(Request $request)
+    public function dojoTeacherAFAAdd(Request $request)
     {
         $club = $this->getUser()->getUserClub();
 
@@ -258,19 +253,19 @@ class ClubController extends AbstractController
                 $entityManager->flush();
             }
 
-            return $this->redirectToRoute('club_my_admin');
+            return $this->redirectToRoute('club_dojo_index');
         }
 
-        return $this->render('Club/teacher_afa_add.html.twig', array('form' => $form->createView()));
+        return $this->render('Club/Dojo/teacher_afa_add.html.twig', array('form' => $form->createView()));
     }
 
     /**
-     * @Route("/modifier_professeur_afa/{teacher<\d+>}", name="teacher_afa_update")
+     * @Route("/modifier_professeur_afa/{teacher<\d+>}", name="dojo_teacher_afa_update")
      * @param Request $request
      * @param ClubTeacher $teacher
      * @return RedirectResponse|Response
      */
-    public function teacherAFAUpdate(Request $request, ClubTeacher $teacher)
+    public function dojoTeacherAFAUpdate(Request $request, ClubTeacher $teacher)
     {
         $club = $this->getUser()->getUserClub();
 
@@ -293,19 +288,19 @@ class ClubController extends AbstractController
 
             $entityManager->flush();
 
-            return $this->redirectToRoute('club_my_admin');
+            return $this->redirectToRoute('club_dojo_index');
         }
 
-        return $this->render('Club/teacher_afa_update.html.twig', array('form' => $form->createView()));
+        return $this->render('Club/Dojo/teacher_afa_update.html.twig', array('form' => $form->createView()));
     }
 
     /**
-     * @Route("/supprimer_professeur_afa/{teacher<\d+>}", name="teacher_afa_delete")
+     * @Route("/supprimer_professeur_afa/{teacher<\d+>}", name="dojo_teacher_afa_delete")
      * @param Request $request
      * @param ClubTeacher $teacher
      * @return RedirectResponse|Response
      */
-    public function teacherAFADelete(Request $request, ClubTeacher $teacher)
+    public function dojoTeacherAFADelete(Request $request, ClubTeacher $teacher)
     {
         $club = $this->getUser()->getUserClub();
 
@@ -332,18 +327,18 @@ class ClubController extends AbstractController
             $entityManager->remove($teacher);
             $entityManager->flush();
 
-            return $this->redirectToRoute('club_my_admin');
+            return $this->redirectToRoute('club_dojo_index');
         }
 
-        return $this->render('Club/teacher_afa_delete.html.twig', array('form' => $form->createView()));
+        return $this->render('Club/Dojo/teacher_afa_delete.html.twig', array('form' => $form->createView()));
     }
 
     /**
-     * @Route("/ajouter_professeur_etranger", name="teacher_foreign_add")
+     * @Route("/ajouter_professeur_etranger", name="dojo_teacher_foreign_add")
      * @param Request $request
      * @return RedirectResponse|Response
      */
-    public function teacherForeignAdd(Request $request)
+    public function dojoTeacherForeignAdd(Request $request)
     {
         $club = $this->getUser()->getUserClub();
 
@@ -367,19 +362,19 @@ class ClubController extends AbstractController
             $entityManager->persist($teacher);
             $entityManager->flush();
 
-            return $this->redirectToRoute('club_my_admin');
+            return $this->redirectToRoute('club_dojo_index');
         }
 
-        return $this->render('Club/teacher_afa_add.html.twig', array('form' => $form->createView()));
+        return $this->render('Club/Dojo/teacher_foreign_add.html.twig', array('form' => $form->createView()));
     }
 
     /**
-     * @Route("/modifier_professeur_etranger/{teacher<\d+>}", name="teacher_foreign_update")
+     * @Route("/modifier_professeur_etranger/{teacher<\d+>}", name="dojo_teacher_foreign_update")
      * @param Request $request
      * @param ClubTeacher $teacher
      * @return RedirectResponse|Response
      */
-    public function teacherForeignUpdate(Request $request, ClubTeacher $teacher)
+    public function dojoTeacherForeignUpdate(Request $request, ClubTeacher $teacher)
     {
         $club = $this->getUser()->getUserClub();
 
@@ -398,19 +393,19 @@ class ClubController extends AbstractController
 
             $entityManager->flush();
 
-            return $this->redirectToRoute('club_my_admin');
+            return $this->redirectToRoute('club_dojo_index');
         }
 
-        return $this->render('Club/teacher_afa_update.html.twig', array('form' => $form->createView()));
+        return $this->render('Club/Dojo/teacher_foreign_update.html.twig', array('form' => $form->createView()));
     }
 
     /**
-     * @Route("/supprimer_professeur_etranger/{teacher<\d+>}", name="teacher_foreign_delete")
+     * @Route("/supprimer_professeur_etranger/{teacher<\d+>}", name="dojo_teacher_foreign_delete")
      * @param Request $request
      * @param ClubTeacher $teacher
      * @return RedirectResponse|Response
      */
-    public function teacherForeignDelete(Request $request, ClubTeacher $teacher)
+    public function dojoTeacherForeignDelete(Request $request, ClubTeacher $teacher)
     {
         $club = $this->getUser()->getUserClub();
 
@@ -433,10 +428,10 @@ class ClubController extends AbstractController
             $entityManager->remove($teacher);
             $entityManager->flush();
 
-            return $this->redirectToRoute('club_my_admin');
+            return $this->redirectToRoute('club_dojo_index');
         }
 
-        return $this->render('Club/teacher_afa_delete.html.twig', array('form' => $form->createView()));
+        return $this->render('Club/Dojo/teacher_foreign_delete.html.twig', array('form' => $form->createView()));
     }
 
     /**
@@ -625,7 +620,7 @@ class ClubController extends AbstractController
             return $this->redirectToRoute('club_members_list');
         }
 
-        return $this->render('Club/member_application.html.twig', array('form' => $form->createView(), 'exam' => $exam[0], 'type' => $type));
+        return $this->render('Club/member_exam_application.html.twig', array('form' => $form->createView(), 'exam' => $exam[0], 'type' => $type));
     }
 
     /**

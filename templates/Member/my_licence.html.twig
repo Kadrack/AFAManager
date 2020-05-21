@@ -15,7 +15,7 @@
             <th>Echéance</th>
             <th>Club</th>
         </tr>
-        {% for licence in licence_history %}
+        {% for licence in member_tools.getLicences().history %}
             <tr>
                 <td>{{ licence.getMemberLicenceDeadline()|date("d/m/Y") }}</td>
                 <td>{{ licence.getMemberLicenceClub().getClubId() }} - {{ licence.getMemberLicenceClub().getClubName() }}</td>

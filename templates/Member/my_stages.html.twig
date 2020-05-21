@@ -9,8 +9,8 @@
 
 {% block body %}
     <h1>{{ member.getMemberFirstname()|title }} {{ member.getMemberName()|title }}</h1>
-    <h2>Historique des stages ({{ total }} h)</h2>
-    {% for grade in history %}
+    <h2>Historique des stages ({{ member_tools.getStages().total }} h)</h2>
+    {% for grade in member_tools.getStages().history %}
     <h3>{{ listData.getGrade(grade.Rank) }} ({{ grade.Total }} h)</h3>
     {% if grade.Stage is defined %}
     <table>
