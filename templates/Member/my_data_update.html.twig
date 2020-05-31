@@ -17,28 +17,38 @@
     {% endif %}
     {% endif %}
     {{ form_widget(form.MemberModificationPhoto) }}
-    <table>
-        <tr>
-            <th></th>
-            <th>Adresse</th>
-            <th>Localité</th>
-            <th>Email</th>
-            <th>Commande</th>
-        </tr>
-        <tr>
-            <td>Données actuelle</td>
-            <td>{{ member.getMemberAddress() }}</td>
-            <td>{{ member.getMemberZip() }} {{ member.getMemberCity() }} - {{ listData.countryName(member.getMemberCountry()) }}</td>
-            <td>{{ member.getMemberEmail() }}</td>
-            <td></td>
-        </tr>
-        <tr>
-            <td>Modification</td>
-            <td>{{ form_widget(form.MemberModificationAddress) }}</td>
-            <td>{{ form_widget(form.MemberModificationZip) }} - {{ form_widget(form.MemberModificationCity) }} - {{ form_widget(form.MemberModificationCountry) }}</td>
-            <td>{{ form_widget(form.MemberModificationEmail) }}</td>
-            <td>{{ form_end(form) }}</td>
-        </tr>
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th scope="col"></th>
+                <th scope="col">Adresse</th>
+                <th scope="col">Code postal</th>
+                <th scope="col">Localité</th>
+                <th scope="col">Pays</th>
+                <th scope="col">Email</th>
+                <th scope="col">Commande</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th scope="row">Données actuelle</th>
+                <td>{{ member.getMemberAddress() }}</td>
+                <td>{{ member.getMemberZip() }}</td>
+                <td>{{ member.getMemberCity() }}</td>
+                <td>{{ listData.countryName(member.getMemberCountry()) }}</td>
+                <td>{{ member.getMemberEmail() }}</td>
+                <td></td>
+            </tr>
+            <tr>
+                <th scope="row">Modification</th>
+                <td>{{ form_widget(form.MemberModificationAddress) }}</td>
+                <td>{{ form_widget(form.MemberModificationZip) }}</td>
+                <td>{{ form_widget(form.MemberModificationCity) }}</td>
+                <td>{{ form_widget(form.MemberModificationCountry) }}</td>
+                <td>{{ form_widget(form.MemberModificationEmail) }}</td>
+                <td>{{ form_end(form) }}</td>
+            </tr>
+        </tbody>
     </table>
 {% endblock %}
 

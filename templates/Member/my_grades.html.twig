@@ -11,14 +11,17 @@
     <h1>{{ member.getMemberFirstname()|title }} {{ member.getMemberName()|title }}</h1>
     <h2>Historique des grades</h2>
     {% if member_tool.getGrades().exam %}<a href="{{ path('member_my_application', {'type': 1}) }}">Candidature au prochain examen fédéral</a> {% endif %}{% if member_tool.getGrades().kagami %}<a href="{{ path('member_my_application', {'type': 2}) }}">Soumettre une candidature au prochain Kagami</a>{% endif %}
-    <table>
-        <tr>
-            <th>Grade</th>
-            <th>Date</th>
-            <th>N° Diplôme</th>
-            <th>Résultat</th>
-            <th>Type</th>
-        </tr>
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th scope="col">Grade</th>
+                <th scope="col">Date</th>
+                <th scope="col">N° Diplôme</th>
+                <th scope="col">Résultat</th>
+                <th scope="col">Type</th>
+            </tr>
+        </thead>
+        <tbody>
         {% for grade in member_tool.getGrades().history %}
             <tr>
                 <td>{{ listData.getGrade(grade.Rank) }}</td>
@@ -28,6 +31,7 @@
                 <td>{{ listData.getExamType(grade.Type) }}</td>
             </tr>
         {% endfor %}
+        </tbody>
     </table>
 {% endblock %}
 

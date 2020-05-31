@@ -13,19 +13,23 @@
     {% for grade in member_tools.getStages().history %}
     <h3>{{ listData.getGrade(grade.Rank) }} ({{ grade.Total }} h)</h3>
     {% if grade.Stage is defined %}
-    <table>
-        <tr>
-            <th>Nom</th>
-            <th>Date</th>
-            <th>Durée</th>
-        </tr>
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th scope="col">Nom</th>
+                <th scope="col">Date</th>
+                <th scope="col">Durée</th>
+            </tr>
+        </thead>
+        <tbody>
         {% for stage in grade.Stage %}
-        <tr>
-            <td>{{ stage.Name }}</td>
-            <td>{{ stage.Date|date("d/m/Y") }}</td>
-            <td>{{ stage.Duration }}</td>
-        </tr>
+            <tr>
+                <td>{{ stage.Name }}</td>
+                <td>{{ stage.Date|date("d/m/Y") }}</td>
+                <td>{{ stage.Duration }}</td>
+            </tr>
         {% endfor %}
+        </tbody>
     </table>
     {% endif %}
     {% endfor %}

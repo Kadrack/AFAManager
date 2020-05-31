@@ -71,13 +71,17 @@ class MemberTools
 
         $open_session = $this->em->getRepository(GradeSession::class)->getOpenSession($today->format('Y-m-d'), $type);
 
-        if (($open_session == null) || ($this->grades[0]->getGradeStatus() == 2) || ($this->grades[0]->getGradeRank() >= 14))
+        if ($open_session == null)
         {
             $is_candidate = false;
         }
         elseif ($this->grades[0] != null)
         {
-            if ($this->grades[0]->getGradeId() == $open_session[0]->getGradeSessionId())
+            if (($this->grades[0]->getGradeStatus() == 2) || ($this->grades[0]->getGradeRank() >= 14))
+            {
+                $is_candidate = false;
+            }
+            elseif ($this->grades[0]->getGradeId() == $open_session[0]->getGradeSessionId())
             {
                 $is_candidate = false;
             }

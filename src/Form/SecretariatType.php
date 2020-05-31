@@ -37,6 +37,9 @@ class SecretariatType extends AbstractType
             case 'modification_cancel':
                 $this->modificationCancel($builder);
                 break;
+            case 'member_update':
+                $this->memberUpdate($builder);
+                break;
             default:
                 null;
         }
@@ -106,6 +109,19 @@ class SecretariatType extends AbstractType
             ->add('MemberModificationCountry', CountryType::class, array('label' => 'Pays : ', 'choice_translation_locale' => 'fr', 'preferred_choices' => array('BE', 'FR'), 'disabled' => true))
             ->add('MemberModificationEmail', EmailType::class, array('label' => 'Email : ', 'required' => false, 'disabled' => true))
             ->add('Submit', SubmitType::class, array('label' => 'Valider'))
+        ;
+    }
+
+    private function memberUpdate(FormBuilderInterface $builder)
+    {
+        $builder
+            ->add('MemberPhoto', FileType::class, array('label' => 'Photo : ', 'required' => false, 'mapped' => false))
+            ->add('MemberAddress', TextType::class, array('label' => 'Adresse : '))
+            ->add('MemberZip', IntegerType::class, array('label' => 'Code postal : '))
+            ->add('MemberCity', TextType::class, array('label' => 'Localité : '))
+            ->add('MemberCountry', CountryType::class, array('label' => 'Pays : ', 'choice_translation_locale' => 'fr', 'preferred_choices' => array('BE', 'FR')))
+            ->add('MemberEmail', EmailType::class, array('label' => 'Email : '))
+            ->add('Submit', SubmitType::class, array('label' => 'Modifier'))
         ;
     }
 }

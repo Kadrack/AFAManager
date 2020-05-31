@@ -574,9 +574,9 @@ class ClubController extends AbstractController
             return $this->redirectToRoute('club_members_list');
         }
 
-        $exam   = $this->getDoctrine()->getRepository(GradeSession::class)->getOpenSession($today->format('Y-m-d'), $type);
+        $exam = $this->getDoctrine()->getRepository(GradeSession::class)->getOpenSession($today->format('Y-m-d'), $type);
 
-        if (!is_object($member->getMemberLastGrade()))
+        if ($member->getMemberLastGrade()->getGradeRank() <= 6)
         {
             $rank = 7;
         }

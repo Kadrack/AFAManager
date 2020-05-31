@@ -436,7 +436,7 @@ class SecretariatController extends AbstractController
      */
     public function memberPersonalDetail(Request $request, PhotoUploader $photoUploader, Club $club, Member $member)
     {
-        $form = $this->createForm(MemberType::class, $member, array('form' => 'update'));
+        $form = $this->createForm(SecretariatType::class, $member, array('form' => 'member_update', 'data_class' => Member::class));
 
         $form->handleRequest($request);
 

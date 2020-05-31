@@ -11,15 +11,18 @@
     <h1>{{ club.getClubName()|title }} n°{{ club.getClubId() }}</h1>
     {% if club_tools.getDetails().Dojos != null %}
     <h2>Dojo(s)</h2>
-    <table>
-        <tr>
-            <th>Salle</th>
-            <th>Adresse</th>
-            <th>Code postal</th>
-            <th>Localité</th>
-            <th>Tatamis (m²)</th>
-            <th>DEA</th>
-        </tr>
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th scope="col">Salle</th>
+                <th scope="col">Adresse</th>
+                <th scope="col">Code postal</th>
+                <th scope="col">Localité</th>
+                <th scope="col">Tatamis (m²)</th>
+                <th scope="col">DEA</th>
+            </tr>
+        </thead>
+        <tbody>
         {% for dojo in club_tools.getDetails().Dojos %}
             <tr>
                 <td>{{ dojo.getTrainingAddressName() }}</td>
@@ -30,18 +33,22 @@
                 <td>{% if dojo.getTrainingAddressDEA() %}Oui{% else %}Non{% endif %}</td>
             </tr>
         {% endfor %}
+        </tbody>
     </table>
     {% endif %}
     {% if club_tools.getDetails().Trainings != null %}
     <h2>Horaire cours</h2>
-    <table>
-        <tr>
-            <th>Jour</th>
-            <th>Début</th>
-            <th>Fin</th>
-            <th>Type</th>
-            <th>Salle</th>
-        </tr>
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th scope="col">Jour</th>
+                <th scope="col">Début</th>
+                <th scope="col">Fin</th>
+                <th scope="col">Type</th>
+                <th scope="col">Salle</th>
+            </tr>
+        </thead>
+        <tbody>
         {% for training in club_tools.getDetails().Trainings %}
             <tr>
                 <td>{{ listData.getDay(training.getTrainingDay()) }}</td>
@@ -51,18 +58,22 @@
                 <td>{{ training.getTrainingAddress().getTrainingAddressName() }}</td>
             </tr>
         {% endfor %}
+        </tbody>
     </table>
     {% endif %}
     {% if club_tools.getDetails().AFA_teachers != null %}
     <h2>Professeur(s) & Assistant(s) AFA</h2>
-    <table>
-        <tr>
-            <th>Titre</th>
-            <th>Type</th>
-            <th>Prénom</th>
-            <th>Nom</th>
-            <th>Grade</th>
-        </tr>
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th scope="col">Titre</th>
+                <th scope="col">Type</th>
+                <th scope="col">Prénom</th>
+                <th scope="col">Nom</th>
+                <th scope="col">Grade</th>
+            </tr>
+        </thead>
+        <tbody>
         {% for teacher in club_tools.getDetails().AFA_teachers %}
             <tr>
                 <td>{{ listData.getTeacherTitle(teacher.Title) }}</td>
@@ -72,20 +83,24 @@
                 <td>{{ listData.getGrade(teacher.Grade) }}</td>
             </tr>
         {% endfor %}
+        </tbody>
     </table>
     {% endif %}
     {% if club_tools.getDetails().Foreign_teachers != null %}
     <h2>Professeur(s) & Assistant(s) Autre</h2>
-    <table>
-        <tr>
-            <th>Titre</th>
-            <th>Type</th>
-            <th>Prénom</th>
-            <th>Nom</th>
-            <th>Grade</th>
-            <th>Enseignement Aïkikaï</th>
-            <th>Enseignement ADEPS</th>
-        </tr>
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th scope="col">Titre</th>
+                <th scope="col">Type</th>
+                <th scope="col">Prénom</th>
+                <th scope="col">Nom</th>
+                <th scope="col">Grade</th>
+                <th scope="col">Enseignement Aïkikaï</th>
+                <th scope="col">Enseignement ADEPS</th>
+            </tr>
+        </thead>
+        <tbody>
         {% for teacher in club_tools.getDetails().Foreign_teachers %}
             <tr>
                 <td>{{ listData.getTeacherTitle(teacher.Title) }}</td>
@@ -96,6 +111,7 @@
                 <td>{% if teacher.GradeTitleAikikai != null %}{{ listData.getGradeTitleAikikai(teacher.GradeTitleAikikai) }}{% endif %}</td>
                 <td>{% if teacher.GradeTitleAdeps != null %}{{ listData.getGradeTitleAdeps(teacher.GradeTitleAdeps) }}{% endif %}</td>
             </tr>
+        </tbody>
         {% endfor %}
     </table>
     {% endif %}
