@@ -13,6 +13,7 @@ use App\Form\ClubType;
 use App\Form\GradeType;
 
 use App\Service\ClubTools;
+use App\Service\MemberTools;
 use DateTime;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -475,13 +476,32 @@ class ClubController extends AbstractController
     }
 
     /**
+     * @Route("/detail_licence/{member<\d+>}", name="licence_detail")
+     * @param Member $member
+     * @return Response
+     */
+    public function licenceDetail(Member $member)
+    {
+        $club = $this->getUser()->getUserClub();
+
+        if ($member->getMemberActualClub() != $club)
+        {
+            return $this->redirectToRoute('club_members_list');
+        }
+
+        $member_tools = new MemberTools($this->getDoctrine()->getManager(), $member);
+
+        return $this->render('Club/Secretariat/licence_detail.html.twig', array('member' => $member, 'member_tools' => $member_tools));
+    }
+
+    /**
      * @Route("/detail_grades/{member<\d+>}", name="grades_detail")
      * @param Member $member
      * @return Response
      */
     public function gradesDetail(Member $member)
     {
-        $club   = $this->getUser()->getUserClub();
+        $club = $this->getUser()->getUserClub();
 
         if ($member->getMemberActualClub() != $club)
         {

@@ -37,7 +37,7 @@ class ClubTools
         $this->lessons = null;
     }
 
-    public function getDetails(): ?array
+    public function getLessonsDetails(): ?array
     {
         if ($this->lessons != null)
         {

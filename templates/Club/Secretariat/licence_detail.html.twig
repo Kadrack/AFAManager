@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    AFA-Manager
+{% endblock %}
+
+{% block stylesheets %}
+{% endblock %}
+
+{% block body %}
+    <h1>{{ member.getMemberFirstname()|title }} {{ member.getMemberName()|title }}</h1>
+    <h2>Historique Licence n° {{ member.getMemberId() }}</h2>
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th scope="col">Echéance</th>
+                <th scope="col">Club</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for licence in member_tools.getLicences().history %}
+            <tr>
+                <td>{{ licence.getMemberLicenceDeadline()|date("d/m/Y") }}</td>
+                <td>{{ licence.getMemberLicenceClub().getClubId() }} - {{ licence.getMemberLicenceClub().getClubName() }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}
+
+{% block javascripts %}
+{% endblock %}

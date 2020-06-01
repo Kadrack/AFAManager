@@ -115,7 +115,7 @@ class MemberController extends AbstractController
 
         $member_tools = new MemberTools($this->getDoctrine()->getManager(), $member);
 
-        return $this->render('Member/my_grades.html.twig', array('member' => $member, 'member_tool' => $member_tools));
+        return $this->render('Member/my_grades.html.twig', array('member' => $member, 'member_tools' => $member_tools));
     }
 
     /**
