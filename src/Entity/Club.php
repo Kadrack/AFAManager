@@ -82,23 +82,7 @@ class Club
      *
      * @Assert\Email()
      */
-
     private $club_email_public;
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-
-    private $club_president;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $club_treasurer;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $club_secretary;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -304,42 +288,6 @@ class Club
     public function setClubEmailPublic(?string $club_email_public): self
     {
         $this->club_email_public = $club_email_public;
-
-        return $this;
-    }
-
-    public function getClubPresident(): ?string
-    {
-        return $this->club_president;
-    }
-
-    public function setClubPresident(?string $club_president): self
-    {
-        $this->club_president = $club_president;
-
-        return $this;
-    }
-
-    public function getClubTreasurer(): ?string
-    {
-        return $this->club_treasurer;
-    }
-
-    public function setClubTreasurer(?string $club_treasurer): self
-    {
-        $this->club_treasurer = $club_treasurer;
-
-        return $this;
-    }
-
-    public function getClubSecretary(): ?string
-    {
-        return $this->club_secretary;
-    }
-
-    public function setClubSecretary(?string $club_secretary): self
-    {
-        $this->club_secretary = $club_secretary;
 
         return $this;
     }

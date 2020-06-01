@@ -456,7 +456,7 @@ class ClubController extends AbstractController
             return $this->redirectToRoute('club_index');
         }
 
-        return $this->render('Club/association_details.html.twig', array('form' => $form->createView(), 'club' => $club));
+        return $this->render('Club/Secretariat/association_details.html.twig', array('form' => $form->createView(), 'club' => $club));
     }
 
     /**

@@ -103,9 +103,6 @@ class ClubType extends AbstractType
             ->add('ClubIban', TextType::class, array('label' => 'N° IBAN : ', 'required' => false))
             ->add('ClubUrl', UrlType::class, array('label' => 'Site internet : ', 'required' => false))
             ->add('ClubEmailPublic', EmailType::class, array('label' => 'Email publique : ', 'required' => false))
-            ->add('ClubPresident', TextType::class, array('label' => 'Président (Prénom Nom) : ', 'required' => false))
-            ->add('ClubTreasurer', TextType::class, array('label' => 'Trésorier (Prénom Nom) : ', 'required' => false))
-            ->add('ClubSecretary', TextType::class, array('label' => 'Secrétaire (Prénom Nom) : ', 'required' => false))
             ->add('ClubEmailContact', EmailType::class, array('label' => 'Email secrétariat : ', 'required' => false))
             ->add('ClubComment', TextareaType::class, array('label' => 'Commentaire : ', 'required' => false))
             ->add('Submit', SubmitType::class, array('label' => 'Ajouter'))
@@ -122,9 +119,8 @@ class ClubType extends AbstractType
             ->add('ClubZip', IntegerType::class)
             ->add('ClubCity', TextType::class)
             ->add('ClubType', ChoiceType::class, array('placeholder' => 'Choississez une fonction', 'choices' => $list->getClubType(0)))
-            ->add('ClubPresident', TextType::class, array('required' => false))
-            ->add('ClubTreasurer', TextType::class, array('required' => false))
-            ->add('ClubSecretary', TextType::class, array('required' => false))
+            ->add('ClubBceNumber', IntegerType::class, array('label' => 'N° Entreprise : ', 'required' => false))
+            ->add('ClubIban', TextType::class, array('label' => 'N° IBAN : ', 'required' => false))
             ->add('ClubEmailContact', EmailType::class)
             ->add('ClubUrl', UrlType::class, array('required' => false))
             ->add('ClubEmailPublic', EmailType::class, array('required' => false))
@@ -204,6 +200,7 @@ class ClubType extends AbstractType
 
         $builder
             ->add('ClubTeacherTitle', ChoiceType::class, array('label' => 'Fonction : ', 'placeholder' => 'Choississez un jour', 'choices' => $list->getTeacherTitle(0)))
+            ->add('ClubTeacherType', ChoiceType::class, array('label' => 'Type : ', 'placeholder' => 'Choississez un type', 'choices' => $list->getTeacherType(0)))
             ->add('ClubTeacherMember', IntegerType::class, array('label' => 'N° Licence : ', 'mapped' => false, 'disabled' => true))
             ->add('ClubTeacherFirstname', TextType::class, array('label' => 'Prénom : ', 'mapped' => false, 'disabled' => true))
             ->add('ClubTeacherName', TextType::class, array('label' => 'Nom : ', 'mapped' => false, 'disabled' => true))
@@ -217,6 +214,7 @@ class ClubType extends AbstractType
 
         $builder
             ->add('ClubTeacherTitle', ChoiceType::class, array('label' => 'Fonction : ', 'placeholder' => 'Choississez un jour', 'choices' => $list->getTeacherTitle(0), 'disabled' => true))
+            ->add('ClubTeacherType', ChoiceType::class, array('label' => 'Type : ', 'placeholder' => 'Choississez un type', 'choices' => $list->getTeacherType(0), 'disabled' => true))
             ->add('ClubTeacherMember', IntegerType::class, array('label' => 'N° Licence : ', 'mapped' => false, 'disabled' => true))
             ->add('ClubTeacherFirstname', TextType::class, array('label' => 'Prénom : ', 'mapped' => false, 'disabled' => true))
             ->add('ClubTeacherName', TextType::class, array('label' => 'Nom : ', 'mapped' => false, 'disabled' => true))

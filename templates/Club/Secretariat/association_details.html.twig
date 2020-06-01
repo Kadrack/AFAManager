@@ -25,30 +25,21 @@
             <td>{{ form_widget(form.ClubCity) }}</td>
         </tr>
     </table>
-    <h2>Comité</h2>
+    <h2>Détails association</h2>
     <table>
         <tr>
             <th>Type Association</th>
-            <th>Président</th>
-            <th>Trésorier</th>
-            <th>Secrétaire</th>
+            <th>N° entreprise</th>
+            <th>N° de compte (IBAN)</th>
             <th>Email de contact</th>
+            <th>Site internet</th>
+            <th>Email publique</th>
         </tr>
         <tr>
             <td>{{ form_widget(form.ClubType) }}</td>
-            <td>{{ form_widget(form.ClubPresident) }}</td>
-            <td>{{ form_widget(form.ClubTreasurer) }}</td>
-            <td>{{ form_widget(form.ClubSecretary) }}</td>
+            <td>{{ form_widget(form.ClubBceNumber) }}</td>
+            <td>{{ form_widget(form.ClubIban) }}</td>
             <td>{{ form_widget(form.ClubEmailContact) }}</td>
-        </tr>
-    </table>
-    <h2>Internet</h2>
-    <table>
-        <tr>
-            <th>URL</th>
-            <th>Email</th>
-        </tr>
-        <tr>
             <td>{{ form_widget(form.ClubUrl) }}</td>
             <td>{{ form_widget(form.ClubEmailPublic) }}</td>
         </tr>

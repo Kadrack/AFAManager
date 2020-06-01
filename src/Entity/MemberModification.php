@@ -116,6 +116,11 @@ class MemberModification
 
     public function setMemberModificationPhoto(string $member_modification_photo): self
     {
+        if ($member_modification_photo == null)
+        {
+            $member_modification_photo = 'nophoto.png';
+        }
+
         $this->member_modification_photo = $member_modification_photo;
 
         return $this;
