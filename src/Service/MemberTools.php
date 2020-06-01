@@ -5,8 +5,8 @@ namespace App\Service;
 use App\Entity\Grade;
 use App\Entity\GradeSession;
 use App\Entity\Member;
-
 use App\Entity\MemberLicence;
+
 use DateTime;
 
 use Doctrine\Persistence\ObjectManager;

@@ -9,7 +9,7 @@
 
 {% block body %}
     <h1>{{ club.getClubName()|title }} n°{{ club.getClubId() }}</h1>
-    {% if club_tools.getDetails().Dojos != null %}
+    {% if club_tools.getLessonsDetails().Dojos != null %}
     <h2>Dojo(s)</h2>
     <table class="table table-hover">
         <thead>
@@ -23,7 +23,7 @@
             </tr>
         </thead>
         <tbody>
-        {% for dojo in club_tools.getDetails().Dojos %}
+        {% for dojo in club_tools.getLessonsDetails().Dojos %}
             <tr>
                 <td>{{ dojo.getTrainingAddressName() }}</td>
                 <td>{{ dojo.getTrainingAddressStreet() }}</td>
@@ -36,7 +36,7 @@
         </tbody>
     </table>
     {% endif %}
-    {% if club_tools.getDetails().Trainings != null %}
+    {% if club_tools.getLessonsDetails().Trainings != null %}
     <h2>Horaire cours</h2>
     <table class="table table-hover">
         <thead>
@@ -49,7 +49,7 @@
             </tr>
         </thead>
         <tbody>
-        {% for training in club_tools.getDetails().Trainings %}
+        {% for training in club_tools.getLessonsDetails().Trainings %}
             <tr>
                 <td>{{ listData.getDay(training.getTrainingDay()) }}</td>
                 <td>{{ training.getTrainingStartingHour()|date('H:i') }}</td>
@@ -61,7 +61,7 @@
         </tbody>
     </table>
     {% endif %}
-    {% if club_tools.getDetails().AFA_teachers != null %}
+    {% if club_tools.getLessonsDetails().AFA_teachers != null %}
     <h2>Professeur(s) & Assistant(s) AFA</h2>
     <table class="table table-hover">
         <thead>
@@ -74,7 +74,7 @@
             </tr>
         </thead>
         <tbody>
-        {% for teacher in club_tools.getDetails().AFA_teachers %}
+        {% for teacher in club_tools.getLessonsDetails().AFA_teachers %}
             <tr>
                 <td>{{ listData.getTeacherTitle(teacher.Title) }}</td>
                 <td>{{ listData.getTeacherType(teacher.Type) }}</td>
@@ -86,7 +86,7 @@
         </tbody>
     </table>
     {% endif %}
-    {% if club_tools.getDetails().Foreign_teachers != null %}
+    {% if club_tools.getLessonsDetails().Foreign_teachers != null %}
     <h2>Professeur(s) & Assistant(s) Autre</h2>
     <table class="table table-hover">
         <thead>
@@ -101,7 +101,7 @@
             </tr>
         </thead>
         <tbody>
-        {% for teacher in club_tools.getDetails().Foreign_teachers %}
+        {% for teacher in club_tools.getLessonsDetails().Foreign_teachers %}
             <tr>
                 <td>{{ listData.getTeacherTitle(teacher.Title) }}</td>
                 <td>{{ listData.getTeacherType(teacher.Type) }}</td>
