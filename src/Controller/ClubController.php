@@ -14,6 +14,7 @@ use App\Form\GradeType;
 
 use App\Service\ClubTools;
 use App\Service\MemberTools;
+
 use DateTime;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -457,14 +458,14 @@ class ClubController extends AbstractController
             return $this->redirectToRoute('club_index');
         }
 
-        return $this->render('Club/Secretariat/association_details.html.twig', array('form' => $form->createView(), 'club' => $club));
+        return $this->render('Club/Association/details.html.twig', array('form' => $form->createView(), 'club' => $club));
     }
 
     /**
      * @Route("/liste_des_membres", name="members_list")
      * @return Response
      */
-    public function activeMembers()
+    public function membersList()
     {
         $club = $this->getUser()->getUserClub();
 
@@ -472,15 +473,15 @@ class ClubController extends AbstractController
 
         $members = $this->getDoctrine()->getRepository(Member::class)->getClubActiveMembers($club, $today->format('Y-m-d'));
 
-        return $this->render('Club/members_list.html.twig', array('members' => $members, 'club' => $club));
+        return $this->render('Club/Member/list.html.twig', array('members' => $members, 'club' => $club));
     }
 
     /**
-     * @Route("/detail_licence/{member<\d+>}", name="licence_detail")
+     * @Route("/detail_licence/{member<\d+>}", name="member_licence_detail")
      * @param Member $member
      * @return Response
      */
-    public function licenceDetail(Member $member)
+    public function memberLicenceDetail(Member $member)
     {
         $club = $this->getUser()->getUserClub();
 
@@ -491,15 +492,15 @@ class ClubController extends AbstractController
 
         $member_tools = new MemberTools($this->getDoctrine()->getManager(), $member);
 
-        return $this->render('Club/Secretariat/licence_detail.html.twig', array('member' => $member, 'member_tools' => $member_tools));
+        return $this->render('Club/Member/licence_detail.html.twig', array('member' => $member, 'member_tools' => $member_tools));
     }
 
     /**
-     * @Route("/detail_grades/{member<\d+>}", name="grades_detail")
+     * @Route("/detail_grades/{member<\d+>}", name="member_grades_detail")
      * @param Member $member
      * @return Response
      */
-    public function gradesDetail(Member $member)
+    public function memberGradesDetail(Member $member)
     {
         $club = $this->getUser()->getUserClub();
 
@@ -508,72 +509,9 @@ class ClubController extends AbstractController
             return $this->redirectToRoute('club_members_list');
         }
 
-        $today = new DateTime('today');
+        $member_tools = new MemberTools($this->getDoctrine()->getManager(), $member);
 
-        $grade_history = $this->getDoctrine()->getRepository(Grade::class)->getGradeHistory($member->getMemberId());
-
-        $open_session = $this->getDoctrine()->getRepository(GradeSession::class)->getOpenSession($today->format('Y-m-d'), 1);
-
-        if (($open_session == null) || ($grade_history[0]['Type'] == 2) || ($grade_history[0]['Rank'] >= 14))
-        {
-            $exam_candidate = false;
-        }
-        elseif (isset($grade_history[0]['Session']))
-        {
-            if ($grade_history[0]['Session'] == $open_session[0]->getGradeSessionId())
-            {
-                $exam_candidate = false;
-            }
-            else
-            {
-                $exam_candidate = true;
-            }
-        }
-        else
-        {
-            $exam_candidate = true;
-        }
-
-        $open_session = $this->getDoctrine()->getRepository(GradeSession::class)->getOpenSession($today->format('Y-m-d'), 2);
-
-        if ($open_session == null)
-        {
-            $kagami_candidate = false;
-        }
-        elseif (isset($grade_history[0]['Session']))
-        {
-            if ($grade_history[0]['Session'] == $open_session[0]->getGradeSessionId())
-            {
-                $kagami_candidate = false;
-            }
-            else
-            {
-                $kagami_candidate = true;
-            }
-        }
-        else
-        {
-            $kagami_candidate = true;
-        }
-
-        $count_kyus = 0;
-
-        for ($i = 0; $i < sizeof($grade_history); $i++)
-        {
-            if ($grade_history[$i]['Type'] == null)
-            {
-                $grade_history[$i]['Type'] = 1;
-            }
-
-            if ($grade_history[$i]['Rank'] < 7)
-            {
-                $count_kyus++;
-            }
-        }
-
-        $count_kyus >= 6 ? $kyu_candidate = false : $kyu_candidate = true;
-
-        return $this->render('Club/grade_detail.html.twig', array('member' => $member, 'club' => $club, 'grade_history' => $grade_history, 'exam_candidate' => $exam_candidate, 'kagami_candidate' => $kagami_candidate, 'kyu_candidate' => $kyu_candidate));
+        return $this->render('Club/Member/grade_detail.html.twig', array('member' => $member, 'member_tools' => $member_tools));
     }
 
     /**
@@ -640,7 +578,7 @@ class ClubController extends AbstractController
             return $this->redirectToRoute('club_members_list');
         }
 
-        return $this->render('Club/member_exam_application.html.twig', array('form' => $form->createView(), 'exam' => $exam[0], 'type' => $type));
+        return $this->render('Club/Member/exam_application.html.twig', array('form' => $form->createView(), 'exam' => $exam[0], 'type' => $type));
     }
 
     /**
@@ -691,9 +629,9 @@ class ClubController extends AbstractController
             $entityManager->persist($grade);
             $entityManager->flush();
 
-            return $this->redirectToRoute('club_grades_detail', array('member' => $member->getMemberId()));
+            return $this->redirectToRoute('club_member_grades_detail', array('member' => $member->getMemberId()));
         }
 
-        return $this->render('Club/member_add_kyu.html.twig', array('form' => $form->createView()));
+        return $this->render('Club/Member/add_kyu.html.twig', array('form' => $form->createView()));
     }
 }

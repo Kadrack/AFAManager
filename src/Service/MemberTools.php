@@ -52,6 +52,8 @@ class MemberTools
 
         $grade_history = $this->em->getRepository(Grade::class)->getGradeHistory($this->member->getMemberId());
 
+        $this->grades = array('history' => $grade_history);
+
         for ($i = 0; $i < sizeof($grade_history); $i++)
         {
             if ($grade_history[$i]['Type'] == null)
@@ -60,12 +62,29 @@ class MemberTools
             }
         }
 
-        $this->grades = array('history' => $grade_history, 'exam' => $this->isCandidate(1), 'kagami' => $this->isCandidate(2));
+        $this->grades = array('history' => $grade_history, 'exam' => $this->isCandidateDan(1), 'kagami' => $this->isCandidateDan(2), 'kyu' => $this->isCandidateKyu());
 
         return $this->grades;
     }
 
-    private function isCandidate(int $type): bool
+    private function isCandidateKyu(): bool
+    {
+        $count_kyus = 0;
+
+        for ($i = 0; $i < sizeof($this->grades['history']); $i++)
+        {
+            if ($this->grades['history'][$i]['Rank'] < 7)
+            {
+                $count_kyus++;
+            }
+        }
+
+        $count_kyus >= 6 ? $kyu_candidate = false : $kyu_candidate = true;
+
+        return $kyu_candidate;
+    }
+
+    private function isCandidateDan(int $type): bool
     {
         $today = new DateTime('today');
 
@@ -75,13 +94,13 @@ class MemberTools
         {
             $is_candidate = false;
         }
-        elseif ($this->grades[0] != null)
+        elseif ($this->grades['history'][0] != null)
         {
-            if (($this->grades[0]->getGradeStatus() == 2) || ($this->grades[0]->getGradeRank() >= 14))
+            if (($this->grades['history'][0]['Result'] == 2) || ($this->grades['history'][0]['Result'] == 6) || ($this->grades['history'][0]['Rank'] >= 14))
             {
                 $is_candidate = false;
             }
-            elseif ($this->grades[0]->getGradeId() == $open_session[0]->getGradeSessionId())
+            elseif ($this->grades['history'][0]['Session'] == $open_session[0]->getGradeSessionId())
             {
                 $is_candidate = false;
             }
