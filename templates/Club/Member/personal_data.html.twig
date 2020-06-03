@@ -1,0 +1,57 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    AFA-Manager
+{% endblock %}
+
+{% block stylesheets %}
+{% endblock %}
+
+{% block body %}
+    <h1>{{ member.getMemberFirstname()|title }} {{ member.getMemberName()|title }}</h1>
+    <h2>Données personnelles</h2>
+    <img alt="" src=" {{ asset('uploads/photos/'~member.getMemberPhoto()) }}" /><br />
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th scope="col">Adresse</th>
+                <th scope="col">Localité</th>
+                <th scope="col">Pays</th>
+                <th scope="col">Email</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{ member.getMemberAddress() }}</td>
+                <td>{{ member.getMemberZip() }} {{ member.getMemberCity() }}</td>
+                <td>{{ listData.getCountryName(member.getMemberCountry()) }}</td>
+                <td>{{ member.getMemberEmail() }}</td>
+            </tr>
+        </tbody>
+    </table>
+    {% if member.getMemberModification() != null %}
+    <h2>Modification en attente de validation</h2>
+    <img alt="" src=" {{ asset('uploads/photos/'~member.getMemberModification().getMemberModificationPhoto()) }}" /><br />
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th scope="col">Adresse</th>
+                <th scope="col">Localité</th>
+                <th scope="col">Pays</th>
+                <th scope="col">Email</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{ member.getMemberModification().getMemberModificationAddress() }}</td>
+                <td>{{ member.getMemberModification().getMemberModificationZip() }} {{ member.getMemberModification().getMemberModificationCity() }}</td>
+                <td>{% if member.getMemberModification().getMemberModificationCountry() != null %}{{ listData.getCountryName(member.getMemberModification().getMemberModificationCountry()) }}{% endif %}</td>
+                <td>{{ member.getMemberModification().getMemberModificationEmail() }}</td>
+            </tr>
+        </tbody>
+    </table>
+    {% endif %}
+{% endblock %}
+
+{% block javascripts %}
+{% endblock %}

@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use App\Entity\ClubTeacher;
 use App\Entity\Grade;
-use App\Entity\GradeSession;
 use App\Entity\Member;
 use App\Entity\Training;
 use App\Entity\TrainingAddress;
@@ -477,6 +476,25 @@ class ClubController extends AbstractController
     }
 
     /**
+     * @Route("/donnees_personnelles/{member<\d+>}", name="member_personal_data")
+     * @param Member $member
+     * @return Response
+     */
+    public function memberPersonalData(Member $member)
+    {
+        $club = $this->getUser()->getUserClub();
+
+        if ($member->getMemberActualClub() != $club)
+        {
+            return $this->redirectToRoute('club_members_list');
+        }
+
+        $member_tools = new MemberTools($this->getDoctrine()->getManager(), $member);
+
+        return $this->render('Club/Member/personal_data.html.twig', array('member' => $member, 'member_tools' => $member_tools));
+    }
+
+    /**
      * @Route("/detail_licence/{member<\d+>}", name="member_licence_detail")
      * @param Member $member
      * @return Response
@@ -523,46 +541,27 @@ class ClubController extends AbstractController
      */
     public function memberApplication(Request $request, Member $member, int $type)
     {
-        $today  = new DateTime('today');
-
-        $club   = $this->getUser()->getUserClub();
+        $club = $this->getUser()->getUserClub();
 
         if ($member->getMemberActualClub() != $club)
         {
             return $this->redirectToRoute('club_members_list');
         }
 
-        $exam = $this->getDoctrine()->getRepository(GradeSession::class)->getOpenSession($today->format('Y-m-d'), $type);
+        $member_tools = new MemberTools($this->getDoctrine()->getManager(), $member);
 
-        if ($member->getMemberLastGrade()->getGradeRank() <= 6)
+        if ($type == 1)
         {
-            $rank = 7;
+            $grade = $member_tools->getGrades()['exam']['grade'];
         }
-        elseif ($member->getMemberLastGrade()->getGradeStatus() == 3)
+        elseif ($type == 2)
         {
-            $rank = $member->getMemberLastGrade()->getGradeRank();
-        }
-        elseif ($member->getMemberLastGrade()->getGradeStatus() == 5)
-        {
-            $rank = $member->getMemberLastGrade()->getGradeRank() + 1;
-        }
-        elseif (($member->getMemberLastGrade()->getGradeStatus() == 4) && ($type == 2))
-        {
-            $rank = $member->getMemberLastGrade()->getGradeRank() + 1;
+            $grade = $member_tools->getGrades()['kagami']['grade'];
         }
         else
         {
             return $this->redirectToRoute('club_members_list');
         }
-
-        $grade = new Grade();
-
-        $grade->setGradeClub($club);
-        $grade->setGradeDate(new DateTime('today'));
-        $grade->setGradeExam($exam[0]);
-        $grade->setGradeMember($member);
-        $grade->setGradeRank($rank);
-        $grade->setGradeStatus(1);
 
         $form = $this->createForm(GradeType::class, $grade, array('form' => 'exam_application', 'data_class' => Grade::class));
 
@@ -578,7 +577,7 @@ class ClubController extends AbstractController
             return $this->redirectToRoute('club_members_list');
         }
 
-        return $this->render('Club/Member/exam_application.html.twig', array('form' => $form->createView(), 'exam' => $exam[0], 'type' => $type));
+        return $this->render('Club/Member/exam_application.html.twig', array('form' => $form->createView(), 'exam' => $grade->getGradeExam(), 'type' => $type));
     }
 
     /**
@@ -589,7 +588,7 @@ class ClubController extends AbstractController
      */
     public function memberAddKyu(Request $request, Member $member)
     {
-        $club   = $this->getUser()->getUserClub();
+        $club = $this->getUser()->getUserClub();
 
         if ($member->getMemberActualClub() != $club)
         {

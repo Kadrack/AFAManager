@@ -52,17 +52,19 @@ class MemberTools
 
         $grade_history = $this->em->getRepository(Grade::class)->getGradeHistory($this->member->getMemberId());
 
-        $this->grades = array('history' => $grade_history);
+        $this->grades['history'] = $grade_history;
 
-        for ($i = 0; $i < sizeof($grade_history); $i++)
+        for ($i = 0; $i < sizeof($this->grades['history']); $i++)
         {
-            if ($grade_history[$i]['Type'] == null)
+            if ($this->grades['history'][$i]['Type'] == null)
             {
-                $grade_history[$i]['Type'] = 1;
+                $this->grades['history'][$i]['Type'] = 1;
             }
         }
 
-        $this->grades = array('history' => $grade_history, 'exam' => $this->isCandidateDan(1), 'kagami' => $this->isCandidateDan(2), 'kyu' => $this->isCandidateKyu());
+        $this->grades['exam']   = $this->isCandidateDan(1);
+        $this->grades['kagami'] = $this->isCandidateDan(2);
+        $this->grades['kyu']    = $this->isCandidateKyu();
 
         return $this->grades;
     }
@@ -84,7 +86,7 @@ class MemberTools
         return $kyu_candidate;
     }
 
-    private function isCandidateDan(int $type): bool
+    private function isCandidateDan(int $type): array
     {
         $today = new DateTime('today');
 
@@ -114,7 +116,57 @@ class MemberTools
             $is_candidate = true;
         }
 
-        return $is_candidate;
+        if ($is_candidate)
+        {
+            $next_grade = $this->nextGrade($type, $open_session[0]);
+        }
+        else
+        {
+            $next_grade = 0;
+        }
+
+        return array('candidate' => $is_candidate, 'grade' => $next_grade);
+    }
+
+    private function nextGrade(int $type, GradeSession $session): ?Grade
+    {
+        $rank = 0;
+
+        if ($this->member->getMemberLastGrade()->getGradeRank() <= 6)
+        {
+            $rank = 7;
+        }
+        elseif ($this->member->getMemberLastGrade()->getGradeStatus() == 3)
+        {
+            $rank = $this->member->getMemberLastGrade()->getGradeRank();
+        }
+        elseif ($this->member->getMemberLastGrade()->getGradeStatus() == 5)
+        {
+            $rank = $this->member->getMemberLastGrade()->getGradeRank() + 1;
+        }
+        elseif (($this->member->getMemberLastGrade()->getGradeStatus() == 4) && ($type == 2))
+        {
+            $rank = $this->member->getMemberLastGrade()->getGradeRank() + 1;
+        }
+
+        if ($rank != 0)
+        {
+            $grade = new Grade();
+
+            $grade->setGradeClub($this->member->getMemberActualClub());
+            $grade->setGradeDate(new DateTime('today'));
+            $grade->setGradeExam($session);
+            $grade->setGradeMember($this->member);
+            $grade->setGradeRank($rank);
+            $grade->setGradeStatus(1);
+
+            return $grade;
+        }
+        else
+        {
+            return null;
+        }
+
     }
 
     public function getLicences(): ?array

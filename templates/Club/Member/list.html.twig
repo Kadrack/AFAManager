@@ -27,7 +27,7 @@
                     <td>{{ member.Name|title }}</td>
                     <td>{{ listData.grade(member.Grade) }}</td>
                     <td>{{ member.Deadline|date("d/m/Y") }}</td>
-                    <td><a href="{{ path('club_member_grades_detail', {'member': member.Id}) }}">Grades</a> - <a href="{{ path('club_member_licence_detail', {'member': member.Id}) }}">Licence</a> - Détails</td>
+                    <td><a href="{{ path('club_member_grades_detail', {'member': member.Id}) }}">Grades</a> - <a href="{{ path('club_member_licence_detail', {'member': member.Id}) }}">Licence</a> - <a href="{{ path('club_member_personal_data', {'member': member.Id}) }}">Données personnelles</a></td>
                 </tr>
             {% endif %}
         {% endfor %}
