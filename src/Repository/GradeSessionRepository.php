@@ -21,12 +21,12 @@ class GradeSessionRepository extends ServiceEntityRepository
         parent::__construct($registry, GradeSession::class);
     }
 
-    public function getOpenSession(string $today, int $type): ?array
+    public function getOpenSession(string $today): ?array
     {
         $qb = $this->createQueryBuilder('e');
 
         return $qb->select()
-            ->where($qb->expr()->eq('e.grade_session_type', $type))
+            ->where($qb->expr()->eq('e.grade_session_type', 1))
             ->andWhere($qb->expr()->gt("'".$today."'", 'e.grade_session_candidate_open'))
             ->andWhere($qb->expr()->lt("'".$today."'", 'e.grade_session_candidate_close'))
             ->getQuery()

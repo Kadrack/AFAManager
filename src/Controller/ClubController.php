@@ -583,13 +583,12 @@ class ClubController extends AbstractController
     }
 
     /**
-     * @Route("/membre/{member<\d+>}/candidature/{type<\d+>}", name="member_application")
+     * @Route("/membre/{member<\d+>}/candidature", name="member_application")
      * @param Request $request
      * @param Member $member
-     * @param int $type
      * @return RedirectResponse|Response
      */
-    public function memberApplication(Request $request, Member $member, int $type)
+    public function memberApplication(Request $request, Member $member)
     {
         $club = $this->getUser()->getUserClub();
 
@@ -600,18 +599,7 @@ class ClubController extends AbstractController
 
         $member_tools = new MemberTools($this->getDoctrine()->getManager(), $member);
 
-        if ($type == 1)
-        {
-            $grade = $member_tools->getGrades()['exam']['grade'];
-        }
-        elseif ($type == 2)
-        {
-            $grade = $member_tools->getGrades()['kagami']['grade'];
-        }
-        else
-        {
-            return $this->redirectToRoute('club_members_list');
-        }
+        $grade = $member_tools->getGrades()['exam']['grade'];
 
         $form = $this->createForm(GradeType::class, $grade, array('form' => 'exam_application', 'data_class' => Grade::class));
 
@@ -627,7 +615,7 @@ class ClubController extends AbstractController
             return $this->redirectToRoute('club_members_list');
         }
 
-        return $this->render('Club/Member/exam_application.html.twig', array('form' => $form->createView(), 'exam' => $grade->getGradeExam(), 'type' => $type));
+        return $this->render('Club/Member/exam_application.html.twig', array('form' => $form->createView(), 'exam' => $grade->getGradeExam()));
     }
 
     /**

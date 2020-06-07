@@ -8,7 +8,7 @@
 {% endblock %}
 
 {% block body %}
-    <h1>Candidature {% if type == 1 %}examen fédéral{% endif %}{% if type == 2 %}Kagami Biraki{% endif %}</h1>
+    <h1>Candidature examen fédéral</h1>
 
     <h2>Détails session</h2>
 
@@ -16,11 +16,9 @@
         <thead>
             <tr>
                 <th scope="col">Date</th>
-                {% if type == 1 %}
                 <th scope="col">Adresse</th>
                 <th scope="col">Code postal</th>
                 <th scope="col">Localité</th>
-                {% endif %}
                 <th scope="col">Ouverture inscription</th>
                 <th scope="col">Fermeture inscription</th>
             </tr>
@@ -28,11 +26,9 @@
         <tbody>
             <tr>
                 <td>{{ exam.getGradeSessionDate()|date("d/m/Y") }}</td>
-                {% if type == 1 %}
                 <td>{{ exam.getGradeSessionStreet() }}</td>
                 <td>{{ exam.getGradeSessionZip() }}</td>
                 <td>{{ exam.getGradeSessionCity() }}</td>
-                {% endif %}
                 <td>{{ exam.getGradeSessionCandidateOpen()|date("d/m/Y") }}</td>
                 <td>{{ exam.getGradeSessionCandidateClose()|date("d/m/Y") }}</td>
             </tr>

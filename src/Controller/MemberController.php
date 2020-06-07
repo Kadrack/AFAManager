@@ -152,43 +152,11 @@ class MemberController extends AbstractController
      */
     public function myApplication(Request $request, int $type)
     {
-        $today  = new DateTime('today');
-
-        $club   = $this->getUser()->getUserClub();
-
         $member = $this->getUser()->getUserMember();
 
-        $exam   = $this->getDoctrine()->getRepository(GradeSession::class)->getOpenSession($today->format('Y-m-d'), $type);
+        $member_tools = new MemberTools($this->getDoctrine()->getManager(), $member);
 
-        if (!is_object($member->getMemberLastGrade()))
-        {
-            $rank = 7;
-        }
-        elseif ($member->getMemberLastGrade()->getGradeStatus() == 3)
-        {
-            $rank = $member->getMemberLastGrade()->getGradeRank();
-        }
-        elseif ($member->getMemberLastGrade()->getGradeStatus() == 5)
-        {
-            $rank = $member->getMemberLastGrade()->getGradeRank() + 1;
-        }
-        elseif (($member->getMemberLastGrade()->getGradeStatus() == 4) && ($type == 2))
-        {
-            $rank = $member->getMemberLastGrade()->getGradeRank() + 1;
-        }
-        else
-        {
-            return $this->redirectToRoute('member_my_data');
-        }
-
-        $grade = new Grade();
-
-        $grade->setGradeClub($club);
-        $grade->setGradeDate(new DateTime('today'));
-        $grade->setGradeExam($exam[0]);
-        $grade->setGradeMember($member);
-        $grade->setGradeRank($rank);
-        $grade->setGradeStatus(1);
+        $grade = $member_tools->getGrades()['exam']['grade'];
 
         $form = $this->createForm(GradeType::class, $grade, array('form' => 'exam_application', 'data_class' => Grade::class));
 
@@ -204,7 +172,7 @@ class MemberController extends AbstractController
             return $this->redirectToRoute('member_my_data');
         }
 
-        return $this->render('Member/my_application.html.twig', array('form' => $form->createView(), 'exam' => $exam[0], 'type' => $type));
+        return $this->render('Member/my_application.html.twig', array('form' => $form->createView(), 'exam' => $grade->getGradeExam()));
     }
 
     /**

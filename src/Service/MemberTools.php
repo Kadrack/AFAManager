@@ -62,9 +62,8 @@ class MemberTools
             }
         }
 
-        $this->grades['exam']   = $this->isCandidateDan(1);
-        $this->grades['kagami'] = $this->isCandidateDan(2);
-        $this->grades['kyu']    = $this->isCandidateKyu();
+        $this->grades['exam'] = $this->isCandidateDan();
+        $this->grades['kyu']  = $this->isCandidateKyu();
 
         return $this->grades;
     }
@@ -86,11 +85,11 @@ class MemberTools
         return $kyu_candidate;
     }
 
-    private function isCandidateDan(int $type): array
+    private function isCandidateDan(): array
     {
         $today = new DateTime('today');
 
-        $open_session = $this->em->getRepository(GradeSession::class)->getOpenSession($today->format('Y-m-d'), $type);
+        $open_session = $this->em->getRepository(GradeSession::class)->getOpenSession($today->format('Y-m-d'));
 
         if ($open_session == null)
         {
@@ -118,7 +117,7 @@ class MemberTools
 
         if ($is_candidate)
         {
-            $next_grade = $this->nextGrade($type, $open_session[0]);
+            $next_grade = $this->nextGrade($open_session[0]);
         }
         else
         {
@@ -128,7 +127,7 @@ class MemberTools
         return array('candidate' => $is_candidate, 'grade' => $next_grade);
     }
 
-    private function nextGrade(int $type, GradeSession $session): ?Grade
+    private function nextGrade(GradeSession $session): ?Grade
     {
         $rank = 0;
 
@@ -141,10 +140,6 @@ class MemberTools
             $rank = $this->member->getMemberLastGrade()->getGradeRank();
         }
         elseif ($this->member->getMemberLastGrade()->getGradeStatus() == 5)
-        {
-            $rank = $this->member->getMemberLastGrade()->getGradeRank() + 1;
-        }
-        elseif (($this->member->getMemberLastGrade()->getGradeStatus() == 4) && ($type == 2))
         {
             $rank = $this->member->getMemberLastGrade()->getGradeRank() + 1;
         }
