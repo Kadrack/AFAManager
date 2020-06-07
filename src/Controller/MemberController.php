@@ -213,7 +213,7 @@ class MemberController extends AbstractController
      */
     public function myClub()
     {
-        $club   = $this->getUser()->getUserClub();
+        $club = $this->getUser()->getUserMember()->getMemberActualClub();
 
         $club_tools = new ClubTools($this->getDoctrine()->getManager(), $club);
 
