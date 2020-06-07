@@ -56,7 +56,7 @@ class User implements UserInterface
     private $user_member;
 
     /**
-     * @ORM\OneToOne(targetEntity="App\Entity\Club")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Club")
      * @ORM\JoinColumn(nullable=true, name="user_join_club", referencedColumnName="club_id")
      */
     private $user_club;

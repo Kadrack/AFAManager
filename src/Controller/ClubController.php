@@ -7,9 +7,11 @@ use App\Entity\Grade;
 use App\Entity\Member;
 use App\Entity\Training;
 use App\Entity\TrainingAddress;
+use App\Entity\User;
 
 use App\Form\ClubType;
 use App\Form\GradeType;
+use App\Form\UserType;
 
 use App\Service\ClubTools;
 use App\Service\MemberTools;
@@ -26,6 +28,8 @@ use Symfony\Component\HttpFoundation\Response;
 
 use Symfony\Component\Routing\Annotation\Route;
 
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+
 /**
  * @Route("/club", name="club_")
  *
@@ -33,6 +37,13 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class ClubController extends AbstractController
 {
+    private $passwordEncoder;
+
+    public function __construct(UserPasswordEncoderInterface $passwordEncoder)
+    {
+        $this->passwordEncoder = $passwordEncoder;
+    }
+
     /**
      * @Route("/", name="index")
      */
@@ -492,6 +503,45 @@ class ClubController extends AbstractController
         $member_tools = new MemberTools($this->getDoctrine()->getManager(), $member);
 
         return $this->render('Club/Member/personal_data.html.twig', array('member' => $member, 'member_tools' => $member_tools));
+    }
+
+    /**
+     * @Route("/creer_login/{member<\d+>}", name="member_login_create")
+     * @param Request $request
+     * @param Member $member
+     * @return Response
+     */
+    public function memberLoginCreate(Request $request, Member $member)
+    {
+        $club = $this->getUser()->getUserClub();
+
+        if ($member->getMemberActualClub() != $club)
+        {
+            return $this->redirectToRoute('club_members_list');
+        }
+
+        $user = new User();
+
+        $form = $this->createForm(UserType::class, $user, array('form' => 'create', 'data_class' => User::class));
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid())
+        {
+            $user->setPassword($this->passwordEncoder->encodePassword($user, 'Test1883'));
+            $user->setUserClub($club);
+            $user->setUserMember($member);
+            $user->setUserStatus(1);
+
+            $entityManager = $this->getDoctrine()->getManager();
+
+            $entityManager->persist($user);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('club_members_list');
+        }
+
+        return $this->render('Club/Member/login_create.html.twig', array('form' => $form->createView(), 'user' => $user));
     }
 
     /**
