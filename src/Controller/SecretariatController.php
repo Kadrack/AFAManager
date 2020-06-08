@@ -781,6 +781,7 @@ class SecretariatController extends AbstractController
             $training->addTrainingSessions($session);
             $training->setTrainingFirstSession($session);
             $training->setTrainingTotalSessions(1);
+            $training->setTrainingType(4);
 
             $entityManager = $this->getDoctrine()->getManager();
 

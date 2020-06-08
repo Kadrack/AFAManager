@@ -154,7 +154,6 @@ class TrainingType extends AbstractType
         $list = new ListData();
 
         $builder
-            ->add('TrainingType', ChoiceType::class, array('label' => 'Type de stage : ', 'placeholder' => 'Choississez un type', 'choices' => $list->getTrainingType(0)))
             ->add('TrainingName', TextType::class, array('label' => 'Nom : '))
             ->add('TrainingPlace', TextType::class, array('label' => 'Lieu : ', 'required' => false))
             ->add('TrainingStreet', TextType::class, array('label' => 'Adresse : '))
