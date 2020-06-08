@@ -92,6 +92,11 @@ class User implements UserInterface
             $roles[] = 'ROLE_MEMBER';
         }
 
+        if ($this->getUserClub() != null)
+        {
+            $role[] = 'ROLE_CLUB';
+        }
+
         return array_unique($roles);
     }
 

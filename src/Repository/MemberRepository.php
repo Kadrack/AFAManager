@@ -10,6 +10,7 @@ use App\Entity\MemberModification;
 use App\Entity\Training;
 use App\Entity\TrainingAttendance;
 use App\Entity\TrainingSession;
+use App\Entity\User;
 
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
@@ -48,9 +49,10 @@ class MemberRepository extends ServiceEntityRepository
     {
         $qb = $this->createQueryBuilder('m');
 
-        return $qb->select('m.member_id AS Id', 'm.member_firstname AS FirstName', 'm.member_name AS Name', 'g.grade_rank AS Grade','l.member_licence_deadline AS Deadline')
+        return $qb->select('m.member_id AS Id', 'm.member_firstname AS FirstName', 'm.member_name AS Name', 'g.grade_rank AS Grade', 'l.member_licence_deadline AS Deadline', 'u.id AS User')
             ->join(MemberLicence::class, 'l', 'WITH', $qb->expr()->eq('m.member_id', 'l.member_licence'))
             ->join(Grade::class, 'g', 'WITH', $qb->expr()->eq('m.member_last_grade', 'g.grade_id'))
+            ->leftJoin(User::class, 'u', 'WITH', $qb->expr()->eq('m.member_id', 'u.user_member'))
             ->where($qb->expr()->eq('l.member_licence_club', $club->getClubId()))
             ->andWhere($qb->expr()->gt('l.member_licence_deadline', "'".$today."'"))
             ->andWhere($qb->expr()->eq('l.member_licence_status', 1))
