@@ -10,7 +10,7 @@
 {% block body %}
     <h1>{{ member.getMemberFirstname()|title }} {{ member.getMemberName()|title }}</h1>
     <h2>Historique des grades</h2>
-    {% if member_tools.getGrades().exam %}<a href="{{ path('member_my_application', {'type': 1}) }}">Candidature au prochain examen fédéral</a> {% endif %}
+    {% if member_tools.getGrades().exam.candidate %}<a href="{{ path('member_my_application', {'type': 1}) }}">Candidature au prochain examen fédéral</a> {% endif %}
     <table class="table table-hover">
         <thead>
             <tr>
