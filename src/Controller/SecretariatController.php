@@ -751,7 +751,7 @@ class SecretariatController extends AbstractController
      */
     public function trainingIndex()
     {
-        $trainings = $this->getDoctrine()->getRepository(Training::class)->getActiveTrainings();
+        $trainings = $this->getDoctrine()->getRepository(Training::class)->getActiveTrainings(4);
 
         return $this->render('Secretariat/training_index.html.twig', array('trainings' => count($trainings) == 0 ? null : $trainings));
     }

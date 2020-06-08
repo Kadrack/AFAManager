@@ -22,13 +22,14 @@ class TrainingRepository extends ServiceEntityRepository
         parent::__construct($registry, Training::class);
     }
 
-    public function getActiveTrainings(): ?array
+    public function getActiveTrainings(int $type): ?array
     {
         $qb = $this->createQueryBuilder('t');
 
-        return $qb->select('t.training_id', 's.training_session_date', 't.training_name', 't.training_total_sessions', 't.training_type')
+        return $qb->select('t.training_id', 's.training_session_date', 't.training_name', 't.training_total_sessions')
             ->join(TrainingSession::class, 's', 'WITH', $qb->expr()->eq('t.training_id', 's.training'))
             ->groupBy('t.training_id')
+            ->where($qb->expr()->eq('t.training_type', $type))
             ->orderBy('s.training_session_date', 'DESC')
             ->getQuery()
             ->getArrayResult();
