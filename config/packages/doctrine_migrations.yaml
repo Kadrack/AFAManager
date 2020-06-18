@@ -1,6 +1,11 @@
 doctrine_migrations:
-    dir_name: '%kernel.project_dir%/src/Migrations'
+    # dir_name: '%kernel.project_dir%/src/Migrations'
     # namespace is arbitrary but should be different from App\Migrations
     # as migrations classes should NOT be autoloaded
-    namespace: DoctrineMigrations
-    table_name: afamanager_migration_versions
+    # namespace: DoctrineMigrations
+    # table_name: afamanager_migration_versions
+
+  storage:
+    # Default (SQL table) metadata storage configuration
+        table_storage:
+            table_name: 'afamanager_migration_versions'
