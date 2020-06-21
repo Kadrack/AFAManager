@@ -196,14 +196,17 @@ class SecretariatController extends AbstractController
 
     /**
      * @Route("/liste_membres/{club<\d+>}", name="members_active")
+     * @param SessionInterface $session
      * @param Club $club
      * @return Response
      */
-    public function membersActive(Club $club)
+    public function membersActive(SessionInterface $session, Club $club)
     {
         $today = new DateTime('today');
 
         $members = $this->getDoctrine()->getRepository(Member::class)->getClubActiveMembers($club, $today->format('Y-m-d'));
+
+        $session->set('origin', 'active');
 
         return $this->render('Secretariat/members_list.html.twig', array('members' => $members, 'club' => $club));
     }
@@ -420,7 +423,7 @@ class SecretariatController extends AbstractController
     {
         $licence_history = $this->getDoctrine()->getRepository(MemberLicence::class)->findBy(['member_licence' => $member->getMemberId()], ['member_licence_id' => 'DESC']);
 
-        $next_renew = $licence_history[0]->getMemberLicenceDeadline() > new DateTime('-3 month today');
+        $next_renew = $licence_history[0]->getMemberLicenceDeadline() < new DateTime('+3 month today');
 
         return $this->render('Secretariat/member_licence_detail.html.twig', array('member' => $member, 'club' => $club, 'licence_history' => $licence_history, 'next_renew' => $next_renew));
     }
