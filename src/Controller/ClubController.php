@@ -39,6 +39,10 @@ class ClubController extends AbstractController
 {
     private $passwordEncoder;
 
+    /**
+     * ClubController constructor.
+     * @param UserPasswordEncoderInterface $passwordEncoder
+     */
     public function __construct(UserPasswordEncoderInterface $passwordEncoder)
     {
         $this->passwordEncoder = $passwordEncoder;

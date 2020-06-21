@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use App\Entity\Grade;
-use App\Entity\GradeSession;
 use App\Entity\MemberModification;
 
 use App\Form\GradeType;
@@ -12,8 +11,6 @@ use App\Form\MemberType;
 use App\Service\ClubTools;
 use App\Service\MemberTools;
 use App\Service\PhotoUploader;
-
-use DateTime;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
@@ -147,10 +144,9 @@ class MemberController extends AbstractController
     /**
      * @Route("/ma_candidature/{type<\d+>}", name="my_application")
      * @param Request $request
-     * @param int $type
      * @return RedirectResponse|Response
      */
-    public function myApplication(Request $request, int $type)
+    public function myApplication(Request $request)
     {
         $member = $this->getUser()->getUserMember();
 
