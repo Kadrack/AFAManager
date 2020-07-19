@@ -25,7 +25,7 @@ class CommissionMember
     private $commission_member_date_in;
 
     /**
-     * @ORM\Column(type="date")
+     * @ORM\Column(type="date", nullable=true)
      */
     private $commission_member_date_out;
 
