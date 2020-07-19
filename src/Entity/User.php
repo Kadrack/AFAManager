@@ -99,7 +99,7 @@ class User implements UserInterface
 
         foreach ($this->getUserMember()->getMemberCommissions() as $commission)
         {
-            if (!is_null($commission->getCommissionMemberDateOut()))
+            if (is_null($commission->getCommissionMemberDateOut()))
             {
                 $roles[] = $commission->getCommission()->getCommissionRole();
             }
