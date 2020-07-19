@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\CommissionMember;
+use App\Entity\Member;
 
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
@@ -19,5 +20,19 @@ class CommissionMemberRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, CommissionMember::class);
+    }
+
+    public function getCommissionMembers(int $commission): ?array
+    {
+        $qb = $this->createQueryBuilder('c');
+
+        return $qb->select('c.commission_member_id AS Id', 'm.member_firstname AS Firstname', 'm.member_name AS Name')
+            ->join(Member::class, 'm', 'WITH', $qb->expr()->eq('c.commission_member', 'm.member_id'))
+            ->where($qb->expr()->eq('c.commission', $commission))
+            ->andWhere($qb->expr()->isNull('c.commission_member_date_out'))
+            ->orderBy('m.member_firstname', 'ASC')
+            ->addOrderBy('m.member_name', 'ASC')
+            ->getQuery()
+            ->getArrayResult();
     }
 }

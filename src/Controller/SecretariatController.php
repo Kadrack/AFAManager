@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Club;
 use App\Entity\ClubHistory;
 use App\Entity\Commission;
+use App\Entity\CommissionMember;
 use App\Entity\Grade;
 use App\Entity\GradeSession;
 use App\Entity\Member;
@@ -1104,5 +1105,18 @@ class SecretariatController extends AbstractController
         }
 
         return $this->render('Secretariat/commission_add.html.twig', array('form' => $form->createView()));
+    }
+
+    /**
+     * @Route("/detail_commission/{commission<\d+>}", name="commission_detail")
+     *
+     * @param Commission $commission
+     * @return Response
+     */
+    public function commissionDetail(Commission $commission)
+    {
+        $members = $this->getDoctrine()->getRepository(CommissionMember::class)->getCommissionMembers($commission->getCommissionId());
+
+        return $this->render('Secretariat/commission_detail.html.twig', array('members' => $members, 'name' => $commission->getCommissionName()));
     }
 }
