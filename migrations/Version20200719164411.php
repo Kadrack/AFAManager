@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20200719110216 extends AbstractMigration
+final class Version20200719164411 extends AbstractMigration
 {
     public function getDescription() : string
     {
@@ -23,7 +23,8 @@ final class Version20200719110216 extends AbstractMigration
         $this->addSql('CREATE TABLE afamanager_club (club_id INT NOT NULL, club_join_club_last_history INT DEFAULT NULL, club_join_club_main_teacher INT DEFAULT NULL, club_name VARCHAR(255) NOT NULL, club_address VARCHAR(255) DEFAULT NULL, club_zip INT DEFAULT NULL, club_city VARCHAR(255) DEFAULT NULL, club_province INT DEFAULT NULL, club_creation DATE DEFAULT NULL, club_type INT DEFAULT NULL, club_bce_number VARCHAR(255) DEFAULT NULL, club_iban VARCHAR(255) DEFAULT NULL, club_url VARCHAR(255) DEFAULT NULL, club_email_public VARCHAR(255) DEFAULT NULL, club_email_contact VARCHAR(255) DEFAULT NULL, club_comment LONGTEXT DEFAULT NULL, UNIQUE INDEX UNIQ_4E5E06CCBF36FF2B (club_join_club_last_history), UNIQUE INDEX UNIQ_4E5E06CCBABDBC14 (club_join_club_main_teacher), PRIMARY KEY(club_id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE afamanager_club_history (club_history_id INT AUTO_INCREMENT NOT NULL, club_history_join_club INT NOT NULL, club_history_update DATE NOT NULL, club_history_status INT NOT NULL, club_history_comment LONGTEXT DEFAULT NULL, INDEX IDX_CC6C79DB6893800E (club_history_join_club), PRIMARY KEY(club_history_id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE afamanager_club_teacher (club_teacher_id INT AUTO_INCREMENT NOT NULL, club_teacher_join_club INT NOT NULL, club_teacher_join_member INT DEFAULT NULL, club_teacher_firstname VARCHAR(255) DEFAULT NULL, club_teacher_name VARCHAR(255) DEFAULT NULL, club_teacher_grade INT DEFAULT NULL, club_teacher_grade_title_aikikai INT DEFAULT NULL, club_teacher_grade_title_adeps INT DEFAULT NULL, club_teacher_title INT NOT NULL, club_teacher_type INT NOT NULL, club_teacher_comment LONGTEXT DEFAULT NULL, INDEX IDX_5B20AF4584B19FF7 (club_teacher_join_club), INDEX IDX_5B20AF457EA29C62 (club_teacher_join_member), PRIMARY KEY(club_teacher_id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
-        $this->addSql('CREATE TABLE afamanager_commission (commission_id INT NOT NULL, commission_name VARCHAR(255) NOT NULL, commission_role VARCHAR(255) NOT NULL, PRIMARY KEY(commission_id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE afamanager_commission (commission_id INT AUTO_INCREMENT NOT NULL, commission_name VARCHAR(255) NOT NULL, commission_role VARCHAR(255) NOT NULL, PRIMARY KEY(commission_id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE afamanager_commission_member (commission_member_id INT AUTO_INCREMENT NOT NULL, commission_member_join_commission INT NOT NULL, commission_member_join_member INT NOT NULL, commission_member_date_in DATE NOT NULL, commission_member_date_out DATE NOT NULL, INDEX IDX_FB98DA5B40693046 (commission_member_join_commission), INDEX IDX_FB98DA5BDF061EC0 (commission_member_join_member), PRIMARY KEY(commission_member_id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE afamanager_email (email_id INT AUTO_INCREMENT NOT NULL, email_creation_date DATE NOT NULL, email_title VARCHAR(255) NOT NULL, email_from VARCHAR(255) NOT NULL, email_to VARCHAR(255) NOT NULL, email_body LONGTEXT NOT NULL, PRIMARY KEY(email_id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE afamanager_grade (grade_id INT AUTO_INCREMENT NOT NULL, grade_join_club INT DEFAULT NULL, grade_join_grade_session INT DEFAULT NULL, grade_join_member INT NOT NULL, grade_date DATE DEFAULT NULL, grade_rank INT NOT NULL, grade_status INT NOT NULL, grade_certificate VARCHAR(255) DEFAULT NULL, grade_comment LONGTEXT DEFAULT NULL, INDEX IDX_757580815BFFECA0 (grade_join_club), INDEX IDX_75758081C3D6A839 (grade_join_grade_session), INDEX IDX_757580814254A839 (grade_join_member), PRIMARY KEY(grade_id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE afamanager_grade_session (grade_session_id INT AUTO_INCREMENT NOT NULL, grade_session_date DATE NOT NULL, grade_session_type INT NOT NULL, grade_session_place VARCHAR(255) DEFAULT NULL, grade_session_street VARCHAR(255) DEFAULT NULL, grade_session_zip INT DEFAULT NULL, grade_session_city VARCHAR(255) DEFAULT NULL, grade_session_candidate_open DATE NOT NULL, grade_session_candidate_close DATE NOT NULL, grade_session_comment LONGTEXT DEFAULT NULL, PRIMARY KEY(grade_session_id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
@@ -43,6 +44,8 @@ final class Version20200719110216 extends AbstractMigration
         $this->addSql('ALTER TABLE afamanager_club_history ADD CONSTRAINT FK_CC6C79DB6893800E FOREIGN KEY (club_history_join_club) REFERENCES afamanager_club (club_id)');
         $this->addSql('ALTER TABLE afamanager_club_teacher ADD CONSTRAINT FK_5B20AF4584B19FF7 FOREIGN KEY (club_teacher_join_club) REFERENCES afamanager_club (club_id)');
         $this->addSql('ALTER TABLE afamanager_club_teacher ADD CONSTRAINT FK_5B20AF457EA29C62 FOREIGN KEY (club_teacher_join_member) REFERENCES afamanager_member (member_id)');
+        $this->addSql('ALTER TABLE afamanager_commission_member ADD CONSTRAINT FK_FB98DA5B40693046 FOREIGN KEY (commission_member_join_commission) REFERENCES afamanager_commission (commission_id)');
+        $this->addSql('ALTER TABLE afamanager_commission_member ADD CONSTRAINT FK_FB98DA5BDF061EC0 FOREIGN KEY (commission_member_join_member) REFERENCES afamanager_member (member_id)');
         $this->addSql('ALTER TABLE afamanager_grade ADD CONSTRAINT FK_757580815BFFECA0 FOREIGN KEY (grade_join_club) REFERENCES afamanager_club (club_id)');
         $this->addSql('ALTER TABLE afamanager_grade ADD CONSTRAINT FK_75758081C3D6A839 FOREIGN KEY (grade_join_grade_session) REFERENCES afamanager_grade_session (grade_session_id)');
         $this->addSql('ALTER TABLE afamanager_grade ADD CONSTRAINT FK_757580814254A839 FOREIGN KEY (grade_join_member) REFERENCES afamanager_member (member_id)');
@@ -90,11 +93,13 @@ final class Version20200719110216 extends AbstractMigration
         $this->addSql('ALTER TABLE afamanager_user DROP FOREIGN KEY FK_7B23E8F72956F80F');
         $this->addSql('ALTER TABLE afamanager_club DROP FOREIGN KEY FK_4E5E06CCBF36FF2B');
         $this->addSql('ALTER TABLE afamanager_club DROP FOREIGN KEY FK_4E5E06CCBABDBC14');
+        $this->addSql('ALTER TABLE afamanager_commission_member DROP FOREIGN KEY FK_FB98DA5B40693046');
         $this->addSql('ALTER TABLE afamanager_member DROP FOREIGN KEY FK_CBC392551FFB939');
         $this->addSql('ALTER TABLE afamanager_member_licence DROP FOREIGN KEY FK_5CA2852B238C0FE');
         $this->addSql('ALTER TABLE afamanager_grade DROP FOREIGN KEY FK_75758081C3D6A839');
         $this->addSql('ALTER TABLE afamanager_grade_title DROP FOREIGN KEY FK_CBDF190DF9F043E9');
         $this->addSql('ALTER TABLE afamanager_club_teacher DROP FOREIGN KEY FK_5B20AF457EA29C62');
+        $this->addSql('ALTER TABLE afamanager_commission_member DROP FOREIGN KEY FK_FB98DA5BDF061EC0');
         $this->addSql('ALTER TABLE afamanager_grade DROP FOREIGN KEY FK_757580814254A839');
         $this->addSql('ALTER TABLE afamanager_grade_title DROP FOREIGN KEY FK_CBDF190D5B3D454E');
         $this->addSql('ALTER TABLE afamanager_member_licence DROP FOREIGN KEY FK_5CA2852BBEB3B8');
@@ -113,6 +118,7 @@ final class Version20200719110216 extends AbstractMigration
         $this->addSql('DROP TABLE afamanager_club_history');
         $this->addSql('DROP TABLE afamanager_club_teacher');
         $this->addSql('DROP TABLE afamanager_commission');
+        $this->addSql('DROP TABLE afamanager_commission_member');
         $this->addSql('DROP TABLE afamanager_email');
         $this->addSql('DROP TABLE afamanager_grade');
         $this->addSql('DROP TABLE afamanager_grade_session');

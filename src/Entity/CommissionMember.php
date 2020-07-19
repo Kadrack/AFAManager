@@ -14,6 +14,7 @@ class CommissionMember
 {
     /**
      * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
      * @ORM\Column(type="integer")
      */
     private $commission_member_id;

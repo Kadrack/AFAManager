@@ -2,8 +2,11 @@
 // src/Form/SecretariatType.php
 namespace App\Form;
 
+use App\Service\ListData;
+
 use Symfony\Component\Form\AbstractType;
 
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CountryType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
@@ -39,6 +42,9 @@ class SecretariatType extends AbstractType
                 break;
             case 'member_update':
                 $this->memberUpdate($builder);
+                break;
+            case 'commission_create':
+                $this->commissionCreate($builder);
                 break;
             default:
                 null;
@@ -122,6 +128,17 @@ class SecretariatType extends AbstractType
             ->add('MemberCountry', CountryType::class, array('label' => 'Pays : ', 'choice_translation_locale' => 'fr', 'preferred_choices' => array('BE', 'FR')))
             ->add('MemberEmail', EmailType::class, array('label' => 'Email : '))
             ->add('Submit', SubmitType::class, array('label' => 'Modifier'))
+        ;
+    }
+
+    private function commissionCreate(FormBuilderInterface $builder)
+    {
+        $list = new ListData();
+
+        $builder
+            ->add('CommissionName', TextType::class, array('label' => 'Nom : '))
+            ->add('CommissionRole', ChoiceType::class, array('label' => 'Type d\'accès : ', 'placeholder' => 'Choississez un type d\'accès', 'choices' => $list->getAccessType()))
+            ->add('Submit', SubmitType::class, array('label' => 'Ajouter'))
         ;
     }
 }

@@ -94,7 +94,15 @@ class User implements UserInterface
 
         if ($this->getUserClub() != null)
         {
-            $role[] = 'ROLE_CLUB';
+            $roles[] = 'ROLE_CLUB';
+        }
+
+        foreach ($this->getUserMember()->getMemberCommissions() as $commission)
+        {
+            if (!is_null($commission->getCommissionMemberDateOut()))
+            {
+                $roles[] = $commission->getCommission()->getCommissionRole();
+            }
         }
 
         return array_unique($roles);

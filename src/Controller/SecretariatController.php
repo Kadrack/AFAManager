@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Club;
 use App\Entity\ClubHistory;
+use App\Entity\Commission;
 use App\Entity\Grade;
 use App\Entity\GradeSession;
 use App\Entity\Member;
@@ -1051,5 +1052,57 @@ class SecretariatController extends AbstractController
         }
 
         return $this->render('Secretariat/member_modification_validation_cancel.html.twig', array('form' => $form->createView()));
+    }
+
+    /**
+     * @Route("/liste_commission", name="commission_index")
+     */
+    public function commissionIndex()
+    {
+        $commissions = $this->getDoctrine()->getRepository(Commission::class)->findAll(['commission_name' => 'DESC']);
+
+        return $this->render('Secretariat/commission_index.html.twig', array('commissions' => $commissions));
+    }
+
+    /**
+     * @Route("/commission_ajouter", name="commission_create")
+     *
+     * @param Request $request
+     * @return RedirectResponse|Response
+     */
+    public function commissionCreate(Request $request)
+    {
+        $form = $this->createForm(SecretariatType::class, new Commission(), array('form' => 'commission_create', 'data_class' => Commission::class));
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid())
+        {
+            $commission = $form->getData();
+
+            switch($commission->getCommissionRole())
+            {
+                case 1 :
+                    $commission->setCommissionRole(null);
+                    break;
+                case 2 :
+                    $commission->setCommissionRole('ROLE_CFG');
+                    break;
+                case 3 :
+                    $commission->setCommissionRole('ROLE_STAGE');
+                    break;
+                default :
+                    $commission->setCommissionRole(null);
+            }
+
+            $entityManager = $this->getDoctrine()->getManager();
+
+            $entityManager->persist($commission);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('secretariat_commission_index');
+        }
+
+        return $this->render('Secretariat/commission_add.html.twig', array('form' => $form->createView()));
     }
 }

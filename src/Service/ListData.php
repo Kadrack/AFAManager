@@ -11,6 +11,28 @@ use Symfony\Component\Intl\Countries;
 class ListData
 {
     /**
+     * @param int $day
+     * @return false|int|int[]|string|void
+     */
+    public function getAccessType(int $type = 0)
+    {
+        $access = array('Aucun' => 1, 'CFG' => 2, 'Stage' => 3);
+
+        if ($type == 0)
+        {
+            return $access;
+        }
+        else if ($type > sizeof($access))
+        {
+            return "Autre";
+        }
+        else
+        {
+            return array_search($type, $access);
+        }
+    }
+
+    /**
      * @param int $type
      * @return false|int|int[]|string|void
      */
