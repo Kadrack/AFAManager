@@ -1090,7 +1090,7 @@ class SecretariatController extends AbstractController
                     $commission->setCommissionRole('ROLE_CFG');
                     break;
                 case 3 :
-                    $commission->setCommissionRole('ROLE_STAGE');
+                    $commission->setCommissionRole('ROLE_STAGES');
                     break;
                 default :
                     $commission->setCommissionRole(null);
@@ -1117,6 +1117,51 @@ class SecretariatController extends AbstractController
     {
         $members = $this->getDoctrine()->getRepository(CommissionMember::class)->getCommissionMembers($commission->getCommissionId());
 
-        return $this->render('Secretariat/commission_detail.html.twig', array('members' => $members, 'name' => $commission->getCommissionName()));
+        return $this->render('Secretariat/commission_detail.html.twig', array('members' => $members, 'commission' => $commission));
+    }
+
+    /**
+     * @Route("/commission/{commission<\d+>}/ajouter_membre", name="commission_member_add")
+     *
+     * @param Request $request
+     * @param Commission $commission
+     * @return RedirectResponse|Response
+     */
+    public function commissionMemberAdd(Request $request, Commission $commission)
+    {
+        $commission_member = new CommissionMember();
+
+        $form = $this->createForm(SecretariatType::class, $commission_member, array('form' => 'commission_member_add', 'data_class' => CommissionMember::class));
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid())
+        {
+            $today = new DateTime('today');
+
+            $member = $this->getDoctrine()->getRepository(Member::class)->findOneBy(['member_id' => $form->get('MemberLicence')->getData()]);
+
+            if (is_null($member))
+            {
+                return $this->redirectToRoute('secretariat_commission_detail', array('commission' => $commission->getCommissionId()));
+            }
+            elseif (!is_null($this->getDoctrine()->getRepository(CommissionMember::class)->findOneBy(['commission_member' => $form->get('MemberLicence')->getData(), 'commission' => $commission])))
+            {
+                return $this->redirectToRoute('secretariat_commission_detail', array('commission' => $commission->getCommissionId()));
+            }
+
+            $commission_member->setCommission($commission);
+            $commission_member->setCommissionMember($member);
+            $commission_member->setCommissionMemberDateIn($today);
+
+            $entityManager = $this->getDoctrine()->getManager();
+
+            $entityManager->persist($commission_member);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('secretariat_commission_detail', array('commission' => $commission->getCommissionId()));
+        }
+
+        return $this->render('Secretariat/commission_member_add.html.twig', array('form' => $form->createView()));
     }
 }

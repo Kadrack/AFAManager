@@ -46,6 +46,9 @@ class SecretariatType extends AbstractType
             case 'commission_create':
                 $this->commissionCreate($builder);
                 break;
+            case 'commission_member_add':
+                $this->commissionMemberAdd($builder);
+                break;
             default:
                 null;
         }
@@ -138,6 +141,14 @@ class SecretariatType extends AbstractType
         $builder
             ->add('CommissionName', TextType::class, array('label' => 'Nom : '))
             ->add('CommissionRole', ChoiceType::class, array('label' => 'Type d\'accès : ', 'placeholder' => 'Choississez un type d\'accès', 'choices' => $list->getAccessType()))
+            ->add('Submit', SubmitType::class, array('label' => 'Ajouter'))
+        ;
+    }
+
+    private function commissionMemberAdd(FormBuilderInterface $builder)
+    {
+        $builder
+            ->add('MemberLicence', IntegerType::class, array('label' => 'N° de licence : ', 'mapped' => false))
             ->add('Submit', SubmitType::class, array('label' => 'Ajouter'))
         ;
     }

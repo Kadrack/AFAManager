@@ -8,12 +8,17 @@
 {% endblock %}
 
 {% block body %}
-    <h1>{{ name }}</h1>
+    <h1>{{ commission.commissionName() }}</h1>
     <table>
         <tr>
             <th>Nom</th>
             <th>Prénom</th>
             <th>Commandes</th>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td><a href="{{ path('secretariat_commission_member_add', {'commission': commission.commissionId()}) }}">Ajouter</a></td>
         </tr>
         {% for member in members %}
             <tr>
