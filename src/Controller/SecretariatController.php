@@ -54,7 +54,7 @@ class SecretariatController extends AbstractController
     }
 
     /**
-     * @Route("/sympathisant_liste", name="supporter_index")
+     * @Route("/liste_sympathisant", name="supporter_index")
      */
     public function supporterIndex()
     {
@@ -64,7 +64,7 @@ class SecretariatController extends AbstractController
     }
 
     /**
-     * @Route("/sympathisant_ajouter", name="supporter_create")
+     * @Route("/ajouter_sympathisant", name="supporter_create")
      *
      * @param Request $request
      * @return RedirectResponse|Response
@@ -91,7 +91,7 @@ class SecretariatController extends AbstractController
     }
 
     /**
-     * @Route("/sympathisant_modifier/{supporter<\d+>}", name="supporter_update")
+     * @Route("/modifier_sympathisant/{supporter<\d+>}", name="supporter_update")
      *
      * @param Request $request
      * @param SecretariatSupporter $supporter
@@ -116,7 +116,7 @@ class SecretariatController extends AbstractController
     }
 
     /**
-     * @Route("/sympathisant_supprimer/{supporter<\d+>}", name="supporter_delete")
+     * @Route("/supprimer_sympathisant/{supporter<\d+>}", name="supporter_delete")
      *
      * @param Request $request
      * @param SecretariatSupporter $supporter
@@ -227,7 +227,7 @@ class SecretariatController extends AbstractController
     }
 
     /**
-     * @Route("/club_creer", name="club_create")
+     * @Route("/creer_club", name="club_create")
      * @param Request $request
      * @return RedirectResponse|Response
      */
@@ -261,7 +261,7 @@ class SecretariatController extends AbstractController
     }
 
     /**
-     * @Route("/club_desaffilier/{club<\d+>}", name="club_disaffiliate")
+     * @Route("/desaffilier_club/{club<\d+>}", name="club_disaffiliate")
      * @param Request $request
      * @param Club $club
      * @return RedirectResponse|Response
@@ -297,7 +297,7 @@ class SecretariatController extends AbstractController
     }
 
     /**
-     * @Route("/club_reaffilier/{club<\d+>}", name="club_reassign")
+     * @Route("/reaffilier_club/{club<\d+>}", name="club_reassign")
      * @param Request $request
      * @param Club $club
      * @return RedirectResponse|Response
@@ -761,7 +761,7 @@ class SecretariatController extends AbstractController
     }
 
     /**
-     * @Route("/stage/creer", name="training_create")
+     * @Route("/stage_creer", name="training_create")
      *
      * @param Request $request
      * @return RedirectResponse|Response
@@ -799,7 +799,7 @@ class SecretariatController extends AbstractController
     }
 
     /**
-     * @Route("/{training<\d+>}/detail", name="training_detail")
+     * @Route("/stage/{training<\d+>}/detail", name="training_detail")
      *
      * @param Training $training
      * @return Response
@@ -812,7 +812,7 @@ class SecretariatController extends AbstractController
     }
 
     /**
-     * @Route("/{training<\d+>}/modifier", name="training_update")
+     * @Route("/stage/{training<\d+>}/modifier", name="training_update")
      *
      * @param Request $request
      * @param Training $training
@@ -837,7 +837,7 @@ class SecretariatController extends AbstractController
     }
 
     /**
-     * @Route("/{training<\d+>}/supprimer", name="training_delete")
+     * @Route("/stage/{training<\d+>}/supprimer", name="training_delete")
      *
      * @param Request $request
      * @param Training $training
@@ -863,7 +863,7 @@ class SecretariatController extends AbstractController
     }
 
     /**
-     * @Route("/{training<\d+>}/ajouter-session", name="training_session_add")
+     * @Route("/stage/{training<\d+>}/ajouter-session", name="training_session_add")
      *
      * @param Request $request
      * @param Training $training
@@ -898,7 +898,7 @@ class SecretariatController extends AbstractController
     }
 
     /**
-     * @Route("/{training<\d+>}/modifier-session/{session<\d+>}", name="training_session_update")
+     * @Route("/stage/{training<\d+>}/modifier-session/{session<\d+>}", name="training_session_update")
      *
      * @param Request $request
      * @param Training $training
@@ -930,7 +930,7 @@ class SecretariatController extends AbstractController
     }
 
     /**
-     * @Route("/{training<\d+>}/supprimer-session/{session<\d+>}", name="training_session_delete")
+     * @Route("/stage/{training<\d+>}/supprimer-session/{session<\d+>}", name="training_session_delete")
      *
      * @param Request $request
      * @param Training $training
@@ -1065,7 +1065,7 @@ class SecretariatController extends AbstractController
     }
 
     /**
-     * @Route("/commission_ajouter", name="commission_create")
+     * @Route("/ajouter_commission", name="commission_create")
      *
      * @param Request $request
      * @return RedirectResponse|Response
