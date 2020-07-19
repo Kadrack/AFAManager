@@ -2,13 +2,16 @@
 // src/Entity/Commission.php
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+
 use Doctrine\ORM\Mapping as ORM;
 
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Table(name="afamanager_commission")
- * @ORM\Entity(repositoryClass="App\Repository\ClubRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\CommissionRepository")
  */
 class Commission
 {
@@ -30,7 +33,17 @@ class Commission
      */
     private $commission_role;
 
-    public function getClubId(): ?int
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\CommissionMember", mappedBy="commission", orphanRemoval=true, cascade={"persist"})
+     */
+    private $commission_members;
+
+    public function __construct()
+    {
+        $this->commission_members = new ArrayCollection();
+    }
+
+    public function getCommissionId(): ?int
     {
         return $this->commission_id;
     }
@@ -62,6 +75,37 @@ class Commission
     public function setCommissionRole(?string $commission_role): self
     {
         $this->commission_role = $commission_role;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|CommissionMember[]
+     */
+    public function getCommissionMembers(): Collection
+    {
+        return $this->commission_members;
+    }
+
+    public function addCommissionMembers(CommissionMember $commissionMember): self
+    {
+        if (!$this->commission_members->contains($commissionMember)) {
+            $this->commission_members[] = $commissionMember;
+            $commissionMember->setCommission($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMemberGrades(CommissionMember $commissionMember): self
+    {
+        if ($this->commission_members->contains($commissionMember)) {
+            $this->commission_members->removeElement($commissionMember);
+            // set the owning side to null (unless already changed)
+            if ($commissionMember->getCommission() === $this) {
+                $commissionMember->setCommission(null);
+            }
+        }
 
         return $this;
     }

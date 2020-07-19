@@ -126,6 +126,11 @@ class Member
     private $member_modification;
 
     /**
+     * @ORM\OneToMany(targetEntity="App\Entity\CommissionMember", mappedBy="commission_member", orphanRemoval=true, cascade={"persist"})
+     */
+    private $member_commissions;
+
+    /**
      * @ORM\OneToMany(targetEntity="App\Entity\Grade", mappedBy="grade_member", orphanRemoval=true, cascade={"persist"})
      */
     private $member_grades;
@@ -152,6 +157,7 @@ class Member
 
     public function __construct()
     {
+        $this->member_commissions          = new ArrayCollection();
         $this->member_grades               = new ArrayCollection();
         $this->member_grades_title         = new ArrayCollection();
         $this->member_licences             = new ArrayCollection();
@@ -359,6 +365,37 @@ class Member
     public function setMemberModification(?MemberModification $member_modification): self
     {
         $this->member_modification = $member_modification;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|CommissionMember[]
+     */
+    public function getMemberCommissions(): Collection
+    {
+        return $this->member_commissions;
+    }
+
+    public function addMemberCommissions(CommissionMember $commissionMember): self
+    {
+        if (!$this->member_commissions->contains($commissionMember)) {
+            $this->member_commissions[] = $commissionMember;
+            $commissionMember->setCommissionMember($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMemberCommissions(CommissionMember $commissionMember): self
+    {
+        if ($this->member_commissions->contains($commissionMember)) {
+            $this->member_commissions->removeElement($commissionMember);
+            // set the owning side to null (unless already changed)
+            if ($commissionMember->getCommissionMember() === $this) {
+                $commissionMember->setCommissionMember(null);
+            }
+        }
 
         return $this;
     }
