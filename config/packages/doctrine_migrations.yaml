@@ -8,4 +8,3 @@ doctrine_migrations:
         # Default (SQL table) metadata storage configuration
         table_storage:
             table_name: 'afamanager_migration_versions'
-            
