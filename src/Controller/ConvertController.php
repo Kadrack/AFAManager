@@ -4,8 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Club;
 use App\Entity\ClubHistory;
-use App\Entity\GradeDan;
-use App\Entity\GradeKyu;
+use App\Entity\Grade;
 use App\Entity\GradeSession;
 use App\Entity\GradeTitle;
 use App\Entity\Member;
@@ -35,7 +34,7 @@ class ConvertController extends AbstractController
      */
     public function importDojos()
     {
-        $old_db = mysqli_connect("localhost", "root", "", "myafa");
+        $old_db = mysqli_connect("localhost", "root", "", "aikidobekxmydb");
 
         $query = $old_db->stmt_init();
 
@@ -45,22 +44,23 @@ class ConvertController extends AbstractController
 
         $entityManager = $this->getDoctrine()->getManager();
 
-        while ($query->fetch()) {
+        while ($query->fetch())
+        {
             $club = new Club();
 
-            $club->setClubNumber(intval($id));
-            $club->setClubName(utf8_encode($name));
-            $club->setClubIban(utf8_encode($bank));
-            $club->setClubUrl(utf8_encode($url));
+            $club->setClubId(intval($id));
+            $club->setClubName($name);
+            $club->setClubIban($bank);
+            $club->setClubUrl($url);
             $club->setClubCreation(new DateTime($creation));
-            $club->setClubEmailPublic(utf8_encode($email));
-            $club->setClubEmailContact(utf8_encode($email_renew));
-            $club->setClubAddress(utf8_encode($address));
+            $club->setClubEmailPublic($email);
+            $club->setClubEmailContact($email_renew);
+            $club->setClubAddress($address);
             $club->setClubZip(intval($zip));
-            $club->setClubCity(utf8_encode($city));
+            $club->setClubCity($city);
             $club->setClubType($asbl == "ASBL" ? 1 : 2);
-            $club->setClubBceNumber(utf8_encode($bce));
-            $club->setClubComment(utf8_encode($memo));
+            $club->setClubBceNumber($bce);
+            $club->setClubComment($memo);
 
             switch ($province_id) {
                 case 1:
@@ -101,30 +101,6 @@ class ConvertController extends AbstractController
 
         $entityManager->flush();
 
-        $allclub = $this->getDoctrine()->getRepository(Club::class)->findAll();
-
-        foreach ($allclub AS $club) {
-            $query->prepare("SELECT f.fonction_id, p.nom, p.prenom FROM `mysql_administrateur_de_dojo` f JOIN mysql_pratiquant p ON p.licence_id = f.gestionnaire_id WHERE `FONCTION_ID`<=3 AND f.`DOJO_ID`=" . $club->getClubNumber());
-            $query->execute();
-            $query->bind_result($function_id, $function_name, $function_firstname);
-
-            while ($query->fetch()) {
-                switch ($function_id) {
-                    case 1:
-                        $club->setClubSecretary(utf8_encode($function_name) . " " . utf8_encode($function_firstname));
-                        break;
-                    case 2:
-                        $club->setClubPresident(utf8_encode($function_name) . " " . utf8_encode($function_firstname));
-                        break;
-                    case 3:
-                        $club->setClubTreasurer(utf8_encode($function_name) . " " . utf8_encode($function_firstname));
-                        break;
-                }
-            }
-
-            $entityManager->flush();
-        }
-
         mysqli_close($old_db);
 
         return $this->redirectToRoute('import_index');
@@ -135,7 +111,7 @@ class ConvertController extends AbstractController
      */
     public function importPratiquants()
     {
-        $old_db = mysqli_connect("localhost", "root", "", "myafa");
+        $old_db = mysqli_connect("localhost", "root", "", "aikidobekxmydb");
 
         $cpt = 0;
 
@@ -152,6 +128,8 @@ class ConvertController extends AbstractController
 
         while ($query->fetch())
         {
+            $club = $this->getDoctrine()->getRepository(Club::class)->findOneBy(['club_id' => 3037]);
+
             while (++$cpt < $licence_id)
             {
                 $member = new Member();
@@ -164,24 +142,26 @@ class ConvertController extends AbstractController
                 $member->setMemberAddress("Aucune");
                 $member->setMemberCity("Aucune");
                 $member->setMemberBirthday(new DateTime('today'));
+                $member->setMemberActualClub($club);
 
                 $entityManager->persist($member);
             }
 
-            $club = $this->getDoctrine()->getRepository(Club::class)->findOneBy(['club_number' => $dojo_id]);
+            $club = $this->getDoctrine()->getRepository(Club::class)->findOneBy(['club_id' => $dojo_id]);
 
             $member = new Member();
 
-            $member->setMemberFirstname(utf8_encode($prenom));
-            $member->setMemberName(utf8_encode($nom));
+            $member->setMemberFirstname(is_null($prenom) ? "" : $prenom);
+            $member->setMemberName(is_null($nom) ? "" : $nom);
             $member->setMemberPhoto($licence_id . ".jpg");
             $member->setMemberSex($sexe == "M" ? 1 : 2);
-            $member->setMemberAddress(utf8_encode($adresse));
-            $member->setMemberZip(utf8_encode($code_postale));
-            $member->setMemberCity(utf8_encode($localite));
-            $member->setMemberEmail(utf8_encode($email));
+            $member->setMemberAddress(is_null($adresse) ? "" : $adresse);
+            $member->setMemberZip(is_null($code_postale) ? "" : $code_postale);
+            $member->setMemberCity(is_null($localite) ? "" : $localite);
+            $member->setMemberEmail(is_null($email) ? "" : $email);
             $member->setMemberBirthday(new DateTime($date_de_naissance));
-            $member->setMemberComment(utf8_encode($memo));
+            $member->setMemberComment(is_null($memo) ? "" : $memo);
+            $member->setMemberActualClub($club);
 
             switch ($pays_id)
             {
@@ -272,7 +252,7 @@ class ConvertController extends AbstractController
      */
     public function importKyus()
     {
-        $old_db = mysqli_connect("localhost", "root", "", "myafa");
+        $old_db = mysqli_connect("localhost", "root", "", "aikidobekxmydb");
 
         $query = $old_db->stmt_init();
 
@@ -286,25 +266,27 @@ class ConvertController extends AbstractController
         {
             $member = $this->getDoctrine()->getRepository(Member::class)->findOneBy(['member_id' => $licence_id]);
 
-            $kyu = new GradeKyu();
+            $kyu = new Grade();
 
-            $kyu->setGradeKyuMember($member);
-            $kyu->setGradeKyuRank($grade_no);
-            $kyu->setGradeKyuDate(new DateTime($date_examen));
+            $kyu->setGradeMember($member);
+            $kyu->setGradeRank($grade_no);
+            $kyu->setGradeDate(new DateTime($date_examen));
+            $kyu->setGradeStatus(4);
+            $kyu->setGradeClub($member->getMemberActualClub());
 
             switch ($federation_id)
             {
                 case 100:
-                    $kyu->setGradeKyuComment("UBéa");
+                    $kyu->setGradeComment("UBéa");
                     break;
                 case 115:
-                    $kyu->setGradeKyuComment("Aïkido Harmonie");
+                    $kyu->setGradeComment("Aïkido Harmonie");
                     break;
                 default:
-                    $kyu->setGradeKyuComment(null);
+                    $kyu->setGradeComment(null);
             }
 
-            $member->setMemberLastGradeKyu($kyu);
+            $member->setMemberLastGrade($kyu);
 
             $entityManager->persist($kyu);
         }
@@ -321,7 +303,7 @@ class ConvertController extends AbstractController
      */
     public function importDanSession()
     {
-        $old_db = mysqli_connect("localhost", "root", "", "myafa");
+        $old_db = mysqli_connect("localhost", "root", "", "aikidobekxmydb");
 
         $query = $old_db->stmt_init();
 
@@ -379,7 +361,7 @@ class ConvertController extends AbstractController
      */
     public function importGradesDan()
     {
-        $old_db = mysqli_connect("localhost", "root", "", "myafa");
+        $old_db = mysqli_connect("localhost", "root", "", "aikidobekxmydb");
 
         $query = $old_db->stmt_init();
 
@@ -413,23 +395,23 @@ class ConvertController extends AbstractController
 
             $member = $this->getDoctrine()->getRepository(Member::class)->findOneBy(['member_id' => $licence_id]);
 
-            $grade = new GradeDan();
+            $grade = new Grade();
 
-            $grade->setGradeDanStatus(3);
-            $grade->setGradeDanMember($member);
-            $grade->setGradeDanRank($grade_no);
-            $grade->setGradeDanExam($session);
+            $grade->setGradeStatus(4);
+            $grade->setGradeMember($member);
+            $grade->setGradeRank($grade_no);
+            $grade->setGradeExam($session);
 
             if (($grade_no == 7) OR ($grade_no == 9) OR ($grade_no == 11) OR ($grade_no == 13) OR ($grade_no == 15) OR ($grade_no == 17) OR ($grade_no == 19) OR ($grade_no == 21) OR ($grade_no == 23))
             {
-                $grade->setGradeDanCertificate(utf8_encode($diplome_national_no));
+                $grade->setGradeCertificate(utf8_encode($diplome_national_no));
             }
             else
             {
-                $grade->setGradeDanCertificate(utf8_encode($diplome_aikikai_no));
+                $grade->setGradeCertificate(utf8_encode($diplome_aikikai_no));
             }
 
-            $member->setMemberLastGradeDan($grade);
+            $member->setMemberLastGrade($grade);
 
             $entityManager->persist($grade);
         }
@@ -446,7 +428,7 @@ class ConvertController extends AbstractController
      */
     public function importTeachSession()
     {
-        $old_db = mysqli_connect("localhost", "root", "", "myafa");
+        $old_db = mysqli_connect("localhost", "root", "", "aikidobekxmydb");
 
         $query = $old_db->stmt_init();
 
@@ -492,7 +474,7 @@ class ConvertController extends AbstractController
      */
     public function importGradesTeach()
     {
-        $old_db = mysqli_connect("localhost", "root", "", "myafa");
+        $old_db = mysqli_connect("localhost", "root", "", "aikidobekxmydb");
 
         $query = $old_db->stmt_init();
 
@@ -543,7 +525,7 @@ class ConvertController extends AbstractController
      */
     public function importAdepsSession()
     {
-        $old_db = mysqli_connect("localhost", "root", "", "myafa");
+        $old_db = mysqli_connect("localhost", "root", "", "aikidobekxmydb");
 
         $query = $old_db->stmt_init();
 
@@ -589,7 +571,7 @@ class ConvertController extends AbstractController
      */
     public function importGradesAdeps()
     {
-        $old_db = mysqli_connect("localhost", "root", "", "myafa");
+        $old_db = mysqli_connect("localhost", "root", "", "aikidobekxmydb");
 
         $query = $old_db->stmt_init();
 
@@ -640,7 +622,7 @@ class ConvertController extends AbstractController
      */
     public function importStages()
     {
-        $old_db = mysqli_connect("localhost", "root", "", "myafa");
+        $old_db = mysqli_connect("localhost", "root", "", "aikidobekxmydb");
 
         $query = $old_db->stmt_init();
 
@@ -664,7 +646,7 @@ class ConvertController extends AbstractController
             }
             else
             {
-                $club = $this->getDoctrine()->getRepository(Club::class)->findOneBy(['club_number' => $dojo_id]);
+                $club = $this->getDoctrine()->getRepository(Club::class)->findOneBy(['club_id' => $dojo_id]);
 
                 $stage->setTrainingClub($club);
                 $stage->setTrainingType(5);
@@ -685,7 +667,7 @@ class ConvertController extends AbstractController
      */
     public function importStagesSession()
     {
-        $old_db = mysqli_connect("localhost", "root", "", "myafa");
+        $old_db = mysqli_connect("localhost", "root", "", "aikidobekxmydb");
 
         $query = $old_db->stmt_init();
 
@@ -736,7 +718,7 @@ class ConvertController extends AbstractController
      */
     public function importStagesPresence()
     {
-        $old_db = mysqli_connect("localhost", "root", "", "myafa");
+        $old_db = mysqli_connect("localhost", "root", "", "aikidobekxmydb");
 
         $query = $old_db->stmt_init();
 
