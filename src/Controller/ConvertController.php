@@ -391,23 +391,24 @@ class ConvertController extends AbstractController
 
             $date == null ? $date = '1900-01-01' : $date;
 
-            $session = $this->getDoctrine()->getRepository(GradeSession::class)->findOneBy(['grade_session_date' => new DateTime($date), 'grade_session_type' => $type]);
+            //$session = $this->getDoctrine()->getRepository(GradeSession::class)->findOneBy(['grade_session_date' => new DateTime($date), 'grade_session_type' => $type]);
 
             $member = $this->getDoctrine()->getRepository(Member::class)->findOneBy(['member_id' => $licence_id]);
 
             $grade = new Grade();
 
-            $grade->setGradeStatus(4);
             $grade->setGradeMember($member);
             $grade->setGradeRank($grade_no);
-            $grade->setGradeExam($session);
+            //$grade->setGradeExam($session);
 
             if (($grade_no == 7) OR ($grade_no == 9) OR ($grade_no == 11) OR ($grade_no == 13) OR ($grade_no == 15) OR ($grade_no == 17) OR ($grade_no == 19) OR ($grade_no == 21) OR ($grade_no == 23))
             {
+                $grade->setGradeStatus(4);
                 $grade->setGradeCertificate(utf8_encode($diplome_national_no));
             }
             else
             {
+                $grade->setGradeStatus(5);
                 $grade->setGradeCertificate(utf8_encode($diplome_aikikai_no));
             }
 
