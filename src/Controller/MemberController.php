@@ -4,9 +4,11 @@ namespace App\Controller;
 
 use App\Entity\Grade;
 use App\Entity\MemberModification;
+use App\Entity\User;
 
 use App\Form\GradeType;
 use App\Form\MemberType;
+use App\Form\UserType;
 
 use App\Service\ClubTools;
 use App\Service\MemberTools;
@@ -22,6 +24,8 @@ use Symfony\Component\HttpFoundation\Response;
 
 use Symfony\Component\Routing\Annotation\Route;
 
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+
 /**
  * @Route("/membre", name="member_")
  *
@@ -29,6 +33,17 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class MemberController extends AbstractController
 {
+    private $passwordEncoder;
+
+    /**
+     * ClubController constructor.
+     * @param UserPasswordEncoderInterface $passwordEncoder
+     */
+    public function __construct(UserPasswordEncoderInterface $passwordEncoder)
+    {
+        $this->passwordEncoder = $passwordEncoder;
+    }
+
     /**
      * @Route("/", name="index")
      */
@@ -182,5 +197,32 @@ class MemberController extends AbstractController
         $club_tools = new ClubTools($this->getDoctrine()->getManager(), $club);
 
         return $this->render('Member/my_club.html.twig', array('club' => $club, 'club_tools' => $club_tools));
+    }
+
+    /**
+     * @Route("/mon_acces", name="my_access")
+     * @param Request $request
+     * @return Response
+     */
+    public function myAccess(Request $request)
+    {
+        $user = $this->getUser();
+
+        $form = $this->createForm(UserType::class, $user, array('form' => 'my_access', 'data_class' => User::class));
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid())
+        {
+            $user->setPassword($this->passwordEncoder->encodePassword($user, $form['Password']->getData()));
+
+            $entityManager = $this->getDoctrine()->getManager();
+
+            $entityManager->flush();
+
+            return $this->redirectToRoute('member_index');
+        }
+
+        return $this->render('Member/my_access.html.twig', array('form' => $form->createView()));
     }
 }
