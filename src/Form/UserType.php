@@ -10,6 +10,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -28,6 +29,9 @@ class UserType extends AbstractType
     {
         switch ($options['form'])
         {
+            case 'club_manager_create':
+                $this->clubManagerCreate($builder);
+                break;
             case 'my_access':
                 $this->myAccess($builder);
                 break;
@@ -67,6 +71,20 @@ class UserType extends AbstractType
         $builder
             ->add('Password', PasswordType::class, array('label' => 'Nouveau mot de passe : ', 'mapped' => false))
             ->add('Submit', SubmitType::class, array('label' => 'Modifier'))
+        ;
+    }
+
+    /**
+     * @param FormBuilderInterface $builder
+     */
+    private function clubManagerCreate(FormBuilderInterface $builder)
+    {
+        $builder
+
+            ->add('Login', TextType::class, array('label' => 'Login : '))
+            ->add('UserMember', IntegerType::class, array('label' => 'N° de licence : ', 'mapped' => false))
+            ->add('Password', PasswordType::class, array('label' => 'Mot de passe : ', 'mapped' => false))
+            ->add('Submit', SubmitType::class, array('label' => 'Créer'))
         ;
     }
 }

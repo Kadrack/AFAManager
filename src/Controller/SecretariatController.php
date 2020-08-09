@@ -16,12 +16,14 @@ use App\Entity\SecretariatSupporter;
 use App\Entity\Training;
 use App\Entity\TrainingSession;
 
+use App\Entity\User;
 use App\Form\ClubType;
 use App\Form\GradeType;
 use App\Form\MemberType;
 use App\Form\SecretariatType;
 use App\Form\TrainingType;
 
+use App\Form\UserType;
 use App\Service\ListData;
 use App\Service\PhotoUploader;
 
@@ -39,6 +41,8 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 use Symfony\Component\Routing\Annotation\Route;
 
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+
 /**
  * @Route("/secretariat", name="secretariat_")
  *
@@ -46,6 +50,17 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class SecretariatController extends AbstractController
 {
+    private $passwordEncoder;
+
+    /**
+     * ClubController constructor.
+     * @param UserPasswordEncoderInterface $passwordEncoder
+     */
+    public function __construct(UserPasswordEncoderInterface $passwordEncoder)
+    {
+        $this->passwordEncoder = $passwordEncoder;
+    }
+
     /**
      * @Route("/", name="index")
      */
@@ -1163,5 +1178,56 @@ class SecretariatController extends AbstractController
         }
 
         return $this->render('Secretariat/commission_member_add.html.twig', array('form' => $form->createView()));
+    }
+
+    /**
+     * @Route("/creer_gestionnaire_club/{club<\d+>}", name="club_manager_create")
+     * @param Request $request
+     * @param Club $club
+     * @return Response
+     */
+    public function clubManagerCreate(Request $request, Club $club)
+    {
+        $user = new User();
+
+        $form = $this->createForm(UserType::class, $user, array('form' => 'club_manager_create', 'data_class' => User::class));
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid())
+        {
+            $entityManager = $this->getDoctrine()->getManager();
+
+            $member = $this->getDoctrine()->getRepository(Member::class)->findOneBy(['member_id' => $form->get('UserMember')->getData()]);
+
+            if (is_null($member))
+            {
+                return $this->redirectToRoute('secretariat_club_manager_create', array('club' => $club));
+            }
+            elseif (is_null($this->getDoctrine()->getRepository(User::class)->findOneBy(['user_member' => $form->get('UserMember')->getData()])))
+            {
+                $user->setPassword($this->passwordEncoder->encodePassword($user, $form['Password']->getData()));
+                $user->setUserClub($club);
+                $user->setUserMember($member);
+                $user->setUserStatus(1);
+
+                $entityManager->persist($user);
+                $entityManager->flush();
+
+                return $this->redirectToRoute('secretariat_index');
+            }
+            else
+            {
+                $user = $this->getDoctrine()->getRepository(User::class)->findOneBy(['user_member' => $form->get('MemberLicence')->getData()]);
+
+                $user->setUserClub($club);
+
+                $entityManager->flush();
+
+                return $this->redirectToRoute('secretariat_index');
+            }
+        }
+
+        return $this->render('Club/Member/login_create.html.twig', array('form' => $form->createView(), 'user' => $user));
     }
 }
