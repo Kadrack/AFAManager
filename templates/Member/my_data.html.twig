@@ -10,7 +10,7 @@
 {% block body %}
     <h1>{{ member.getMemberFirstname()|title }} {{ member.getMemberName()|title }}</h1>
     <h2>Données personnelles</h2>
-    <img alt="" src=" {{ asset('uploads/photos/'~member.getMemberPhoto()) }}" /><br />
+    <img alt="" src="{{ asset('uploads/photos/'~member.getMemberPhoto()) }}" /><br />
     <table class="table table-hover">
         <thead>
             <tr>
