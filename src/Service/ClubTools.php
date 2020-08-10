@@ -7,7 +7,6 @@ use App\Entity\Club;
 use App\Entity\ClubTeacher;
 use App\Entity\Training;
 use App\Entity\TrainingAddress;
-use DateTime;
 
 use Doctrine\Persistence\ObjectManager;
 
@@ -46,7 +45,7 @@ class ClubTools
 
         $dojos = $this->em->getRepository(TrainingAddress::class)->findBy(['training_address_club' => $this->club->getClubId()]);
 
-        $trainings = $this->em->getRepository(Training::class)->findBy(['training_club' => $this->club->getClubId()], ['training_day' => 'ASC', 'training_starting_hour' => 'ASC']);
+        $trainings = $this->em->getRepository(Training::class)->findBy(['training_club' => $this->club->getClubId(), 'training_type' => 1], ['training_day' => 'ASC', 'training_starting_hour' => 'ASC']);
 
         $afa_teachers = $this->em->getRepository(ClubTeacher::class)->getAFATeachers($this->club);
 

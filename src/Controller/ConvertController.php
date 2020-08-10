@@ -397,7 +397,7 @@ class ConvertController extends AbstractController
 
             $grade = new Grade();
 
-            $grade->setGradeDate($date);
+            $grade->setGradeDate(new DateTime($date));
             $grade->setGradeMember($member);
             $grade->setGradeRank($grade_no);
             //$grade->setGradeExam($session);

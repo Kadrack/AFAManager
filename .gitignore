@@ -1,7 +1,6 @@
 /.idea/
-/.env
 /public/uploads/
-/var/
-/vendor/
 /tests/
 /translations/
+/var/
+/vendor/
