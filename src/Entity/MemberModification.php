@@ -64,6 +64,11 @@ class MemberModification
     private $member_modification_email;
 
     /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $member_modification_phone;
+
+    /**
      * @ORM\Column(type="date", nullable=true)
      */
     private $member_modification_birthday;
@@ -201,6 +206,18 @@ class MemberModification
     public function setMemberModificationEmail(string $member_modification_email): self
     {
         $this->member_modification_email = $member_modification_email;
+
+        return $this;
+    }
+
+    public function getMemberModificationPhone(): ?string
+    {
+        return $this->member_modification_phone;
+    }
+
+    public function setMemberModificationPhone(string $member_modification_phone): self
+    {
+        $this->member_modification_phone = $member_modification_phone;
 
         return $this;
     }

@@ -18,6 +18,7 @@
                 <th scope="col">Localité</th>
                 <th scope="col">Pays</th>
                 <th scope="col">Email</th>
+                <th scope="col">Téléphone</th>
                 <th scope="col">Commande</th>
             </tr>
         </thead>
@@ -27,6 +28,7 @@
                 <td>{{ member.getMemberZip() }} {{ member.getMemberCity() }}</td>
                 <td>{{ listData.getCountryName(member.getMemberCountry()) }}</td>
                 <td>{{ member.getMemberEmail() }}</td>
+                <td>{{ member.getMemberPhone() }}</td>
                 <td><a class="btn btn-primary" href="{{ path('member_my_data_update') }}">Modifier</a></td>
             </tr>
         </tbody>
@@ -41,6 +43,7 @@
                 <th scope="col">Localité</th>
                 <th scope="col">Pays</th>
                 <th scope="col">Email</th>
+                <th scope="col">Téléphone</th>
             </tr>
         </thead>
         <tbody>
@@ -49,6 +52,7 @@
                 <td>{{ member.getMemberModification().getMemberModificationZip() }} {{ member.getMemberModification().getMemberModificationCity() }}</td>
                 <td>{% if member.getMemberModification().getMemberModificationCountry() != null %}{{ listData.getCountryName(member.getMemberModification().getMemberModificationCountry()) }}{% endif %}</td>
                 <td>{{ member.getMemberModification().getMemberModificationEmail() }}</td>
+                <td>{{ member.getMemberModification().getMemberModificationPhone() }}</td>
             </tr>
         </tbody>
     </table>
