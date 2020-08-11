@@ -587,6 +587,18 @@ class ClubController extends AbstractController
     }
 
     /**
+     * @Route("/detail_stages/{member<\d+>}", name="member_stages_detail")
+     * @param Member $member
+     * @return Response
+     */
+    public function memberStagesDetail(Member $member)
+    {
+        $member_tools = new MemberTools($this->getDoctrine()->getManager(), $member);
+
+        return $this->render('Member/my_stages.html.twig', array('member' => $member, 'member_tools' => $member_tools));
+    }
+
+    /**
      * @Route("/membre/{member<\d+>}/candidature", name="member_application")
      * @param Request $request
      * @param Member $member
