@@ -9,6 +9,7 @@
 
 {% block body %}
     <h1>{{ member.getMemberFirstname() }} {{ member.getMemberName() }}</h1>
+    <h2>Début de pratique : {{ member.getMemberFirstLicence().getMemberLicenceMedicalCertificate()|date("d/m/Y") }}</h2>
     <h2>Historique Licence n° {{ member.getMemberId() }}</h2>
     <table>
         <tr>
