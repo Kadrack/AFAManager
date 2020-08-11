@@ -90,7 +90,7 @@ class MemberController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid())
         {
-            if ($form['MemberModificationPhoto']->getData() != 'nophoto.png')
+            if (($form['MemberModificationPhoto']->getData() != 'nophoto.png') && ($member_modification->getMemberModificationPhoto() !== null))
             {
                 $member_modification->setMemberModificationPhoto($photoUploader->upload($form['MemberModificationPhoto']->getData(), $member_modification->getMemberModificationPhoto()));
             }
