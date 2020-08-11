@@ -32,20 +32,18 @@ class ClubTools
         $this->em = $entityManager;
 
         $this->club = $club;
-
-        $this->lessons = null;
     }
 
     public function getLessonsDetails(): ?array
     {
-        if ($this->lessons != null)
+        if ($this->lessons !== null)
         {
             return $this->lessons;
         }
 
         $dojos = $this->em->getRepository(TrainingAddress::class)->findBy(['training_address_club' => $this->club->getClubId()]);
 
-        $trainings = $this->em->getRepository(Training::class)->findBy(['training_club' => $this->club->getClubId(), 'training_type' => 1], ['training_day' => 'ASC', 'training_starting_hour' => 'ASC']);
+        $trainings = $this->em->getRepository(Training::class)->findBy(['training_club' => $this->club->getClubId(), 'training_type' => array(1, 2, 3)], ['training_day' => 'ASC', 'training_starting_hour' => 'ASC']);
 
         $afa_teachers = $this->em->getRepository(ClubTeacher::class)->getAFATeachers($this->club);
 
