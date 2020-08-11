@@ -159,6 +159,7 @@ class ConvertController extends AbstractController
             $member->setMemberZip(is_null($code_postale) ? "" : $code_postale);
             $member->setMemberCity(is_null($localite) ? "" : $localite);
             $member->setMemberEmail(is_null($email) ? "" : $email);
+            $member->setMemberPhone(is_null($gsm) ? "" : $gsm);
             $member->setMemberBirthday(new DateTime($date_de_naissance));
             $member->setMemberComment(is_null($memo) ? "" : $memo);
             $member->setMemberActualClub($club);

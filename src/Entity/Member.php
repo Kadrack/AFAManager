@@ -80,16 +80,21 @@ class Member
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * 
+     *
      * @Assert\Email()
      */
     private $member_email;
 
     /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $member_phone;
+
+    /**
      * @ORM\Column(type="date")
      */
     private $member_birthday;
-    
+
     /**
      * @ORM\Column(type="text", nullable=true)
      */
@@ -285,6 +290,18 @@ class Member
         return $this;
     }
 
+    public function getMemberPhone(): ?string
+    {
+        return $this->member_phone;
+    }
+
+    public function setMemberPhone(string $member_phone): self
+    {
+        $this->member_phone = $member_phone;
+
+        return $this;
+    }
+
     public function getMemberBirthday(): ?DateTimeInterface
     {
         return $this->member_birthday;
@@ -296,7 +313,7 @@ class Member
 
         return $this;
     }
-    
+
     public function getMemberComment(): ?string
     {
         return $this->member_comment;
