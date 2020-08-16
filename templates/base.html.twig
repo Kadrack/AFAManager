@@ -23,7 +23,7 @@
                 <ul class="navbar-nav mr-auto">
                     {% if is_granted('ROLE_MEMBER') %}
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="{{ path('member_index') }}" role="button" aria-haspopup="true" aria-expanded="false">Membre<span class="sr-only">(current)</span></a>
+                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="{{ path('member_index') }}" role="button" aria-haspopup="true" aria-expanded="false">Membre</a>
                              <div class="dropdown-menu" style="">
                                 <a class="dropdown-item" href="{{ path('member_my_data') }}">Mes Données</a>
                                 <a class="dropdown-item" href="{{ path('member_my_grades') }}">Mes Grades</a>
