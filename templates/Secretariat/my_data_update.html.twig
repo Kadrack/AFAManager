@@ -1,0 +1,59 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    AFA-Manager
+{% endblock %}
+
+{% block stylesheets %}
+{% endblock %}
+
+{% block body %}
+    <h1>{{ member.getMemberFirstname()|title }} {{ member.getMemberName()|title }}</h1>
+    <h2>Données personnelles</h2>
+    {{ form_start(form) }}
+    {% if member.getMemberModification() != null %}
+    {% if member.getMemberModification().getMemberModificationPhoto() != null %}
+    <img alt="" src=" {{ asset('uploads/photos/'~member.getMemberModification().getMemberModificationPhoto()) }}" /><br />
+    {% endif %}
+    {% endif %}
+    {{ form_widget(form.MemberModificationPhoto) }}
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th scope="col"></th>
+                <th scope="col">Adresse</th>
+                <th scope="col">Code postal</th>
+                <th scope="col">Localité</th>
+                <th scope="col">Pays</th>
+                <th scope="col">Email</th>
+                <th scope="col">Telephone</th>
+                <th scope="col">Commande</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th scope="row">Données actuelle</th>
+                <td>{{ member.getMemberAddress() }}</td>
+                <td>{{ member.getMemberZip() }}</td>
+                <td>{{ member.getMemberCity() }}</td>
+                <td>{{ listData.countryName(member.getMemberCountry()) }}</td>
+                <td>{{ member.getMemberEmail() }}</td>
+                <td>{{ member.getMemberPhone() }}</td>
+                <td></td>
+            </tr>
+            <tr>
+                <th scope="row">Modification</th>
+                <td>{{ form_widget(form.MemberModificationAddress) }}</td>
+                <td>{{ form_widget(form.MemberModificationZip) }}</td>
+                <td>{{ form_widget(form.MemberModificationCity) }}</td>
+                <td>{{ form_widget(form.MemberModificationCountry) }}</td>
+                <td>{{ form_widget(form.MemberModificationEmail) }}</td>
+                <td>{{ form_widget(form.MemberModificationPhone) }}</td>
+                <td>{{ form_end(form) }}</td>
+            </tr>
+        </tbody>
+    </table>
+{% endblock %}
+
+{% block javascripts %}
+{% endblock %}

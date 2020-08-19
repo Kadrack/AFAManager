@@ -1,0 +1,67 @@
+    {% extends 'base.html.twig' %}
+
+{% block title %}
+    AFA-Manager
+{% endblock %}
+
+{% block stylesheets %}
+{% endblock %}
+
+{% block body %}
+    <h1>{{ member.getMemberFirstname()|title }} {{ member.getMemberName()|title }}</h1>
+    <h2>Données personnelles</h2>
+    <img alt="" src="{{ asset('uploads/photos/'~member.getMemberPhoto()) }}" /><br />
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th scope="col">Adresse</th>
+                <th scope="col">Localité</th>
+                <th scope="col">Pays</th>
+                <th scope="col">E-mail</th>
+                <th scope="col">Téléphone</th>
+                <th scope="col">DDN</th>
+                <th scope="col">Commande</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{ member.getMemberAddress() }}</td>
+                <td>{{ member.getMemberZip() }} {{ member.getMemberCity() }}</td>
+                <td>{{ listData.getCountryName(member.getMemberCountry()) }}</td>
+                <td>{{ member.getMemberEmail() }}</td>
+                <td>{{ member.getMemberPhone() }}</td>
+                <td>{{ member.getMemberBirthday()|date("d/m/Y") }}</td>
+                <td><a class="btn btn-primary" href="{{ path('member_my_data_update') }}">Modifier</a></td>
+            </tr>
+        </tbody>
+    </table>
+    {% if member.getMemberModification() != null %}
+    <h2>Modification en attente de validation</h2>
+    <img alt="" src=" {{ asset('uploads/photos/'~member.getMemberModification().getMemberModificationPhoto()) }}" /><br />
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th scope="col">Adresse</th>
+                <th scope="col">Localité</th>
+                <th scope="col">Pays</th>
+                <th scope="col">Email</th>
+                <th scope="col">Téléphone</th>
+                <th scope="col">DDN</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{ member.getMemberModification().getMemberModificationAddress() }}</td>
+                <td>{{ member.getMemberModification().getMemberModificationZip() }}
+                <td>{{ member.getMemberModification().getMemberModificationCity() }}</td>
+                <td>{% if member.getMemberModification().getMemberModificationCountry() != null %}{{ listData.getCountryName(member.getMemberModification().getMemberModificationCountry()) }}{% endif %}</td>
+                <td>{{ member.getMemberModification().getMemberModificationEmail() }}</td>
+                <td>{{ member.getMemberModification().getMemberModificationPhone() }}</td>
+            </tr>
+        </tbody>
+    </table>
+    {% endif %}
+{% endblock %}
+
+{% block javascripts %}
+{% endblock %}
