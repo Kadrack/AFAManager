@@ -85,14 +85,10 @@
                 </ul>
             </div>
         </nav>
-        <div id="main-content">
     {% endif %}
 
     {% block body %}{% endblock %}
-
-    {% if app.request.pathinfo != '/login' %}
-        </div>
-    {% endif %}
-        {% block javascripts %}{% endblock %}
+        
+    {% block javascripts %}{% endblock %}
     </body>
 </html>
