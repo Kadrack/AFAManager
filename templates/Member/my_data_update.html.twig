@@ -26,6 +26,7 @@
                 <th scope="col">Localité</th>
                 <th scope="col">Pays</th>
                 <th scope="col">Email</th>
+                <th scope="col">N° téléphone</th>
                 <th scope="col">Commande</th>
             </tr>
         </thead>
@@ -37,6 +38,7 @@
                 <td>{{ member.getMemberCity() }}</td>
                 <td>{{ listData.countryName(member.getMemberCountry()) }}</td>
                 <td>{{ member.getMemberEmail() }}</td>
+                <td>{{ member.getMemberPhone() }}</td>
                 <td></td>
             </tr>
             <tr>
@@ -46,6 +48,7 @@
                 <td>{{ form_widget(form.MemberModificationCity) }}</td>
                 <td>{{ form_widget(form.MemberModificationCountry) }}</td>
                 <td>{{ form_widget(form.MemberModificationEmail) }}</td>
+                <td>{{ form_widget(form.MemberModificationPhone) }}</td>
                 <td>{{ form_end(form) }}</td>
             </tr>
         </tbody>
