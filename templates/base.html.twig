@@ -3,14 +3,24 @@
     <head>
         <meta charset="UTF-8">
         <title>{% block title %}AFAManager{% endblock %}</title>
+        <link rel="icon" type="image/svg" href="{{ asset('images/favicon.svg') }}" />
 
+        
         <link rel="stylesheet" type="text/css" href="https://bootswatch.com/4/solar/bootstrap.min.css">
+        <link rel="stylesheet" type="text/css" href="{{ asset('css/style.css') }}">
 
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
         <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+
+        <script src="{{ asset('js/jquery.min.js') }}"></script>
+        <script src="{{ asset('js/jquery.migrate.min.js') }}"></script>
+
         {% block stylesheets %}{% endblock %}
     </head>
+    {% if app.request.pathinfo == '/login' %}
+    <body class="login">
+    {% else %}
     <body>
         <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
             <a class="navbar-brand" href="{{ path('common_index') }}">AFA-Manager</a>
@@ -21,18 +31,37 @@
             <div class="collapse navbar-collapse" id="navbarColor01">
                 <ul class="navbar-nav mr-auto">
                     {% if is_granted('ROLE_MEMBER') %}
-                    <li class="nav-item active">
-                        <a class="nav-link" href="{{ path('member_index') }}">Membre<span class="sr-only">(current)</span></a>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="{{ path('member_index') }}" role="button" aria-haspopup="true" aria-expanded="false">Membre</a>
+                             <div class="dropdown-menu" style="">
+                                <a class="dropdown-item" href="{{ path('member_my_data') }}">Mes Données</a>
+                                <a class="dropdown-item" href="{{ path('member_my_grades') }}">Mes Grades</a>
+                                <a class="dropdown-item" href="{{ path('member_my_stages') }}">Mes Stages</a>
+                                <a class="dropdown-item" href="{{ path('member_my_licence') }}">Ma Licence</a>
+                                <a class="dropdown-item" href="{{ path('member_my_club') }}">Mon Club</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" a href="{{ path('member_my_access') }}">Mon Accès</a>
+                            </div>
                     </li>
                     {% endif %}
+
                     {% if is_granted('ROLE_CLUB') %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ path('club_index') }}">Club</a>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" data-toggle="dropdown"href="{{ path('club_index') }}">Club</a>
+                            <div class="dropdown-menu" style="">
+                                 <a class="dropdown-item" href="{{ path('club_dojo_index') }}">Dojo(s), horaires & professeurs</a>
+                                 <a class="dropdown-item" href="{{ path('club_members_list') }}">Liste des membres</a>
+                                 <a class="dropdown-item" href="{{ path('club_association_details') }}">Détails Association</a>
+                            </div>
                     </li>
                     {% endif %}
+
                     {% if is_granted('ROLE_CFG') %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ path('grade_index') }}">CFG</a>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="{{ path('grade_index') }}">CFG</a>
+                            <div class="dropdown-menu" style="">
+                                <a href="{{ path('grade_exam_index') }}">Examens Fédéraux</a><br />
+                            </div>
                     </li>
                     {% endif %}
                     {% if is_granted('ROLE_STAGES') %}
@@ -41,15 +70,29 @@
                     </li>
                     {% endif %}
                     {% if is_granted('ROLE_SECRETARIAT') %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ path('secretariat_index') }}">Secrétariat</a>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" data-toggle="dropdown"href="{{ path('secretariat_index') }}">Secrétariat</a>
+                            <div class="dropdown-menu">
+                                <a href="{{ path('secretariat_supporter_index') }}">Sympathisants</a><br />
+                                <a href="{{ path('secretariat_club_list') }}">Les Clubs</a><br />
+                                <a href="{{ path('secretariat_exam_index') }}">Examens Fédéraux</a><br />
+                                <a href="{{ path('secretariat_training_index') }}">Stages</a><br />
+                                <a href="{{ path('secretariat_member_modification_validation_index') }}">Modifications en attente</a><br>
+                                <a href="{{ path('secretariat_commission_index') }}">Commissions</a><br />
+                            </div>
                     </li>
                     {% endif %}
                 </ul>
             </div>
         </nav>
-        <div style="text-align: center"><a href="javascript:history.back()">Page précédente</a></div>
-        {% block body %}{% endblock %}
+        <div id="main-content">
+    {% endif %}
+
+    {% block body %}{% endblock %}
+
+    {% if app.request.pathinfo != '/login' %}
+        </div>
+    {% endif %}
         {% block javascripts %}{% endblock %}
     </body>
 </html>
