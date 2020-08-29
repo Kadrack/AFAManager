@@ -1230,4 +1230,29 @@ class SecretariatController extends AbstractController
 
         return $this->render('Club/Member/login_create.html.twig', array('form' => $form->createView(), 'user' => $user));
     }
+
+    /**
+     * @Route("/imprimer_timbres", name="print_stamp")
+     * @param Request $request
+     * @return Response
+     */
+    public function printStamp(Request $request)
+    {
+        $stamps = null;
+
+        $form = $this->createForm(SecretariatType::class, $stamps, array('form' => 'print_stamp', 'data_class' => null));
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid())
+        {
+            $stamps = explode(",", $form->get('MemberList')->getData());
+
+            $members = $this->getDoctrine()->getRepository(Member::class)->findBy(['member_id' => $stamps]);
+
+            return $this->render('Secretariat/Stamps.html.twig', array('members' => $members));
+        }
+
+        return $this->render('Secretariat/Stamp_Form.html.twig', array('form' => $form->createView()));
+    }
 }

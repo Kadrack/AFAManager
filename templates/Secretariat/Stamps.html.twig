@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html >
+<head>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+    <style type="text/css" media="print">
+        <!--
+        .noimprime{
+            display:none;
+        }
+        -->
+    </style>
+    <style type="text/css">
+        h1 {font-size:2em;}
+        p {}
+        tr {font-size:0.6em;}
+        html, body {width:8.5cm;
+            height:5.5cm;
+            margin:0;
+            color:white;
+
+        }
+        @page WordSection1
+        {/*size:1295.3pt 841.9pt;*/
+            width:900px;
+            margin:2cm 1.0cm 2cm 1.0cm;
+            mso-header-margin:35.4pt;
+            mso-footer-margin:35.4pt;
+            mso-paper-source:0;}
+        div.WordSection1
+        {page:WordSection1;}
+
+        .conteneurCarte{position:relative;
+            width:8.5cm;
+            height:5.5cm;
+            color:white;
+            marging:0;
+            padding:0;
+        }
+
+        img.licence{position:absolute;
+            width:8.5cm;
+            height:5.5cm;
+            top:0;
+        }
+
+        .nomPrenom{ /*background-color:red;*/
+            position:absolute;
+            top:1.7cm;
+            width:100%;
+            text-align:center;
+            color:black;
+            font-family: verdana, arial, sans-serif;
+            font-size:0.9em;
+        }
+
+        .club     { /*background-color:red;*/
+            position:absolute;
+            top:2.25cm;
+            width:100%;
+            text-align:center;
+            color:black;
+            font-family: verdana, arial, sans-serif;
+            font-size:0.9em;
+        }
+        .grade  { /*background-color:red;*/
+            position:absolute;
+            top:2.8cm;
+            width:100%;
+            text-align:center;
+            color:black;
+            font-family: verdana, arial, sans-serif;
+            font-size:0.9em;
+        }
+        .echeance  { /*background-color:red;*/
+            position:absolute;
+            top:3.35cm;
+            width:100%;
+            text-align:center;
+            color:black;
+            font-family: verdana, arial, sans-serif;
+            font-size:0.9em;
+        }
+        .float_left{ float:left;
+        }
+        .float_right{ float:right;
+        }
+        .pb {page-break-before: always}
+    </style>
+</head>
+<body>
+    <div class="WordSection1" style="width:700px;" >
+    {% for member in members %}
+        {% if (loop.index == 1) or (loop.index == 3) or (loop.index == 5) or (loop.index == 7) or (loop.index == 9) %}<div class="conteneurCarte float_left" style="width:321px;">{% else %}<div class="conteneurCarte float_right" style="width:321px;">{% endif %}
+            <div>$nbsp;</div>
+            <img class="licence" src="{{ asset('images/timbre.jpg') }}" />
+            <div class="nomPrenom">{{ member.memberFirstname }} {{ member.memberName }}</div>
+            <div class="club">N° {{ member.memberId }} - {{ member.memberActualClub.clubId }}</div>
+            <div class="grade">{{ listData.getGrade(member.memberLastGrade.gradeRank) }}</div>
+            <div class="echeance">Ech.: {{ member.memberLastLicence.memberLicenceDeadline|date("d/m/Y") }}</div>
+        </div>
+    {% endfor %}
+    </div>
+</body>
+</html>

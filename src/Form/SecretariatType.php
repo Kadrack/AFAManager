@@ -49,6 +49,9 @@ class SecretariatType extends AbstractType
             case 'commission_member_add':
                 $this->commissionMemberAdd($builder);
                 break;
+            case 'print_stamp':
+                $this->printStamp($builder);
+                break;
             default:
                 null;
         }
@@ -153,6 +156,14 @@ class SecretariatType extends AbstractType
         $builder
             ->add('MemberLicence', IntegerType::class, array('label' => 'N° de licence : ', 'mapped' => false))
             ->add('Submit', SubmitType::class, array('label' => 'Ajouter'))
+        ;
+    }
+
+    private function printStamp(FormBuilderInterface $builder)
+    {
+        $builder
+            ->add('MemberList', TextType::class, array('label' => 'Liste n° de licence : ', 'mapped' => false))
+            ->add('Submit', SubmitType::class, array('label' => 'Créer les timbres'))
         ;
     }
 }
