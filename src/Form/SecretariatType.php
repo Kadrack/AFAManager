@@ -52,6 +52,9 @@ class SecretariatType extends AbstractType
             case 'print_stamp':
                 $this->printStamp($builder);
                 break;
+            case 'print_card':
+                $this->printCard($builder);
+                break;
             default:
                 null;
         }
@@ -164,6 +167,14 @@ class SecretariatType extends AbstractType
         $builder
             ->add('MemberList', TextType::class, array('label' => 'Liste n° de licence : ', 'mapped' => false))
             ->add('Submit', SubmitType::class, array('label' => 'Créer les timbres'))
+        ;
+    }
+
+    private function printCard(FormBuilderInterface $builder)
+    {
+        $builder
+            ->add('MemberId', TextType::class, array('label' => 'Liste n° de licence : ', 'mapped' => false))
+            ->add('Submit', SubmitType::class, array('label' => 'Créer les cartes'))
         ;
     }
 }

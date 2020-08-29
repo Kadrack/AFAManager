@@ -1255,4 +1255,29 @@ class SecretariatController extends AbstractController
 
         return $this->render('Secretariat/Stamp_Form.html.twig', array('form' => $form->createView()));
     }
+
+    /**
+     * @Route("/imprimer_cartes", name="print_card")
+     * @param Request $request
+     * @return Response
+     */
+    public function printCard(Request $request)
+    {
+        $cards = null;
+
+        $form = $this->createForm(SecretariatType::class, $cards, array('form' => 'print_card', 'data_class' => null));
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid())
+        {
+            $cards = explode(",", $form->get('MemberId')->getData());
+
+            $members = $this->getDoctrine()->getRepository(Member::class)->findBy(['member_id' => $cards]);
+
+            return $this->render('Secretariat/Cards.html.twig', array('members' => $members));
+        }
+
+        return $this->render('Secretariat/Cards_Form.html.twig', array('form' => $form->createView()));
+    }
 }
