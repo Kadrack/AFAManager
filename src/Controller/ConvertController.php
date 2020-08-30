@@ -5,7 +5,6 @@ namespace App\Controller;
 use App\Entity\Club;
 use App\Entity\ClubHistory;
 use App\Entity\Grade;
-use App\Entity\GradeSession;
 use App\Entity\GradeTitle;
 use App\Entity\Member;
 use App\Entity\MemberLicence;
@@ -300,64 +299,6 @@ class ConvertController extends AbstractController
     }
 
     /**
-     * @Route("/import_dan_sessions", name="import_dan_sessions")
-     */
-    public function importDanSession()
-    {
-        $old_db = mysqli_connect("localhost", "root", "", "aikidobekxmydb");
-
-        $query = $old_db->stmt_init();
-
-        $query->prepare("Select * FROM MYSQL_HIST_DES_GRADES WHERE GRADE_NO>6 AND GRADE_NO<23 ORDER BY LICENCE_ID, GRADE_NO");
-        $query->execute();
-        $query->bind_result($licence_id, $grade_no, $date_examen, $date_diplome, $diplome_national_id, $diplome_aikikai_no, $est_recu_par_kagami, $federation_id);
-
-        $entityManager = $this->getDoctrine()->getManager();
-
-        while ($query->fetch())
-        {
-            if (($federation_id == 96) OR ($federation_id == 97))
-            {
-                $type = 1;
-            }
-            else
-            {
-                $type = 5;
-            }
-
-            if (($est_recu_par_kagami == 1) AND ($type == 1))
-            {
-                $type = 2;
-            }
-
-            $date_examen == null ? $date = $date_diplome : $date = $date_examen;
-
-            $date == null ? $date = '1900-01-01' : $date;
-
-            $session = $this->getDoctrine()->getRepository(GradeSession::class)->findOneBy(['grade_session_date' => new DateTime($date), 'grade_session_type' => $type]);
-
-            $session == null ? $create = true : $create = false;
-
-            if ($create)
-            {
-                $session = new GradeSession();
-
-                $session->setGradeSessionType($type);
-                $session->setGradeSessionDate(new DateTime($date));
-                $session->setGradeSessionCandidateOpen(new DateTime($date));
-                $session->setGradeSessionCandidateClose(new DateTime($date));
-
-                $entityManager->persist($session);
-                $entityManager->flush();
-            }
-        }
-
-        mysqli_close($old_db);
-
-        return $this->redirectToRoute('import_index');
-    }
-
-    /**
      * @Route("/import_grades_dan", name="import_grades_dan")
      */
     public function importGradesDan()
@@ -392,8 +333,6 @@ class ConvertController extends AbstractController
 
             $date == null ? $date = '1900-01-01' : $date;
 
-            //$session = $this->getDoctrine()->getRepository(GradeSession::class)->findOneBy(['grade_session_date' => new DateTime($date), 'grade_session_type' => $type]);
-
             $member = $this->getDoctrine()->getRepository(Member::class)->findOneBy(['member_id' => $licence_id]);
 
             $grade = new Grade();
@@ -427,52 +366,6 @@ class ConvertController extends AbstractController
     }
 
     /**
-     * @Route("/import_teach_sessions", name="import_teach_sessions")
-     */
-    public function importTeachSession()
-    {
-        $old_db = mysqli_connect("localhost", "root", "", "aikidobekxmydb");
-
-        $query = $old_db->stmt_init();
-
-        $query->prepare("Select * FROM MYSQL_HIST_DES_GRADES WHERE GRADE_NO>22 AND GRADE_NO<26 ORDER BY LICENCE_ID, GRADE_NO");
-        $query->execute();
-        $query->bind_result($licence_id, $grade_no, $date_examen, $date_diplome, $diplome_national_id, $diplome_aikikai_no, $est_recu_par_kagami, $federation_id);
-
-        $entityManager = $this->getDoctrine()->getManager();
-
-        while ($query->fetch())
-        {
-            $type = 4;
-
-            $date_examen == null ? $date = $date_diplome : $date = $date_examen;
-
-            $date == null ? $date = '1900-01-01' : $date;
-
-            $session = $this->getDoctrine()->getRepository(GradeSession::class)->findOneBy(['grade_session_date' => new DateTime($date), 'grade_session_type' => $type]);
-
-            $session == null ? $create = true : $create = false;
-
-            if ($create)
-            {
-                $session = new GradeSession();
-
-                $session->setGradeSessionType($type);
-                $session->setGradeSessionDate(new DateTime($date));
-                $session->setGradeSessionCandidateOpen(new DateTime($date));
-                $session->setGradeSessionCandidateClose(new DateTime($date));
-
-                $entityManager->persist($session);
-                $entityManager->flush();
-            }
-        }
-
-        mysqli_close($old_db);
-
-        return $this->redirectToRoute('import_index');
-    }
-
-    /**
      * @Route("/import_grades_teach", name="import_grades_teach")
      */
     public function importGradesTeach()
@@ -495,16 +388,14 @@ class ConvertController extends AbstractController
 
             $date == null ? $date = '1900-01-01' : $date;
 
-            $session = $this->getDoctrine()->getRepository(GradeSession::class)->findOneBy(['grade_session_date' => new DateTime($date), 'grade_session_type' => $type]);
-
             $member = $this->getDoctrine()->getRepository(Member::class)->findOneBy(['member_id' => $licence_id]);
 
             $grade = new GradeTitle();
 
             $grade->setGradeTitleStatus(1);
             $grade->setGradeTitleMember($member);
-            $grade->setGradeTitleExam($session);
             $grade->setGradeTitleCertificate(utf8_encode($diplome_national_no));
+            $grade->setGradeTitleDate(new DateTime($date));
 
             switch ($grade_no)
             {
@@ -517,52 +408,6 @@ class ConvertController extends AbstractController
         }
 
         $entityManager->flush();
-
-        mysqli_close($old_db);
-
-        return $this->redirectToRoute('import_index');
-    }
-
-    /**
-     * @Route("/import_adeps_sessions", name="import_adeps_sessions")
-     */
-    public function importAdepsSession()
-    {
-        $old_db = mysqli_connect("localhost", "root", "", "aikidobekxmydb");
-
-        $query = $old_db->stmt_init();
-
-        $query->prepare("Select * FROM MYSQL_HIST_DES_GRADES WHERE GRADE_NO>25 ORDER BY LICENCE_ID, GRADE_NO");
-        $query->execute();
-        $query->bind_result($licence_id, $grade_no, $date_examen, $date_diplome, $diplome_national_id, $diplome_aikikai_no, $est_recu_par_kagami, $federation_id);
-
-        $entityManager = $this->getDoctrine()->getManager();
-
-        while ($query->fetch())
-        {
-            $type = 3;
-
-            $date_examen == null ? $date = $date_diplome : $date = $date_examen;
-
-            $date == null ? $date = '1900-01-01' : $date;
-
-            $session = $this->getDoctrine()->getRepository(GradeSession::class)->findOneBy(['grade_session_date' => new DateTime($date), 'grade_session_type' => $type]);
-
-            $session == null ? $create = true : $create = false;
-
-            if ($create)
-            {
-                $session = new GradeSession();
-
-                $session->setGradeSessionType($type);
-                $session->setGradeSessionDate(new DateTime($date));
-                $session->setGradeSessionCandidateOpen(new DateTime($date));
-                $session->setGradeSessionCandidateClose(new DateTime($date));
-
-                $entityManager->persist($session);
-                $entityManager->flush();
-            }
-        }
 
         mysqli_close($old_db);
 
@@ -592,16 +437,14 @@ class ConvertController extends AbstractController
 
             $date == null ? $date = '1900-01-01' : $date;
 
-            $session = $this->getDoctrine()->getRepository(GradeSession::class)->findOneBy(['grade_session_date' => new DateTime($date), 'grade_session_type' => $type]);
-
             $member = $this->getDoctrine()->getRepository(Member::class)->findOneBy(['member_id' => $licence_id]);
 
             $grade = new GradeTitle();
 
             $grade->setGradeTitleStatus(1);
             $grade->setGradeTitleMember($member);
-            $grade->setGradeTitleExam($session);
             $grade->setGradeTitleCertificate(utf8_encode($diplome_national_no));
+            $grade->setGradeTitleDate(new DateTime($date));
 
             switch ($grade_no)
             {
