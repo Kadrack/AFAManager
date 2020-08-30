@@ -1,51 +1,8 @@
-body, html {
-    height: 100%;
-}
-
-body {
-    background-color: #eeeff3;
-    color: #002b36;
-    font: 1.3em/1.6 'Roboto', Arial, sans-serif;
-}
-
-a{
-    cursor: pointer;
-}
-
-/*********************************************************************************************************************/
-/** login ************************************************************************************************************/
-/*********************************************************************************************************************/
-
-body.login {
-    align-items: center;
-    background: #464d5b url(../images/logo-afa-manager.svg) no-repeat center;
-    background-size: cover;
-    display: flex;
-    height: 100%;
-}
-
 #login-box {
     margin: auto;
     position: relative;
     text-align: center;
     width: 500px;
-}
-
-#login-box .top {
-    background-color: #002b36;
-    border-top-left-radius: 5px;
-    border-top-right-radius: 5px;
-    color: #fff;
-    font-size: 1.5rem;
-    margin-top: 110px;
-    padding: 0 30px 30px 30px;
-}
-
-#login-box .top strong {
-    display: block;
-    font-family: 'GothamRoundedMedium';
-    font-size: 2rem;
-    font-weight: normal;
 }
 
 #login-box form {

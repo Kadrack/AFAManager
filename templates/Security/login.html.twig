@@ -8,10 +8,6 @@
 
 {% block body %}
     <div id="login-box">
-        <div class="top">
-{#            <a href="#"><img class="logo" src="public/img/hiveinvoice-icon.svg" alt="HiveInvoice"></a>#}
-            <strong>LogInToYourAccount</strong>
-        </div>
         <form method="post">
             <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
             {% if error %}
@@ -26,7 +22,7 @@
             <div class="form-group no-label">
                 <label class="required"></label>
                 <div>
-                    <input type="password" name="password" id="inputPassword" class="form-control" placeholder="Password" required>
+                    <input type="password" name="password" id="inputPassword" class="form-control" placeholder="Mot de Passe" required>
                 </div>
             </div>
             <a class="submit">Connexion</a>

@@ -43,7 +43,6 @@
                             </div>
                     </li>
                     {% endif %}
-
                     {% if is_granted('ROLE_CLUB') %}
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" data-toggle="dropdown"href="{{ path('club_index') }}">Club</a>
@@ -54,7 +53,6 @@
                             </div>
                     </li>
                     {% endif %}
-
                     {% if is_granted('ROLE_CFG') %}
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="{{ path('grade_index') }}">CFG</a>
@@ -82,6 +80,11 @@
                                 <a href="{{ path('secretariat_print_card') }}" target="_blank">Impression carte</a><br />
                             </div>
                     </li>
+                    {% endif %}
+                    {% if is_granted('ROLE_USER') %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ path('app_logout') }}">Déconnexion</a>
+                        </li>
                     {% endif %}
                 </ul>
             </div>
