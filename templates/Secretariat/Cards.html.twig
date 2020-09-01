@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html style="width:321px;">
+<head>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+    <style type="text/css" media="print">
+        <!--
+        .noimprime{
+            display:none;
+        }
+        -->
+    </style>
+    <style type="text/css">
+        h1 {font-size:2em;}
+        p {}
+        tr {font-size:0.6em;}
+        html, body {width:8.5cm;
+            height:5.5cm;
+            margin:0;
+            color:white;
+
+        }
+        @page WordSection1
+        {size:595.3pt 841.9pt;
+            margin:2cm 1.0cm 2cm 1.0cm;
+            mso-header-margin:35.4pt;
+            mso-footer-margin:35.4pt;
+            mso-paper-source:0;}
+        div.WordSection1
+        {page:WordSection1;}
+
+        .conteneurCarte{position:relative;
+            width:8.5cm;
+            height:5.5cm;
+            color:white;
+            marging:0;
+            padding:0;
+        }
+        img.photo{position:absolute;
+            width:1.87cm;
+            top:0.70cm;
+            left:6.52cm;
+        }
+
+        img.licence{position:absolute;
+            width:8.6cm;
+            height:5.5cm;
+            top:0;
+        }
+        img.codebarre{position:absolute;
+            width:2.8cm;
+            height:1cm;
+            top:4.25cm;
+            left:5.20cm;
+        }
+
+        .nomPrenom{ /*background-color:red;*/
+            position:absolute;
+            top:3.0cm;
+            width:8.3cm;
+            text-align:right;
+            color:white;
+            font-family: verdana, arial, sans-serif;
+            font-size:0.8em;
+            font-weigth:bold;
+        }
+
+        .club     { /*background-color:red;*/
+            position:absolute;
+            top:3.35cm;
+            width:8.3cm;
+            text-align:right;
+            color:white;
+            font-family: verdana, arial, sans-serif;
+            font-size:0.7em;
+        }
+        .licence  { /*background-color:red;*/
+            position:absolute;
+            top:3.8cm;
+            width:8.2cm;
+            text-align:right;
+            color:red;
+            font-family: verdana, arial, sans-serif;
+            font-size:0.8em;
+            font-weigth:bold;
+        }
+        .pb {page-break-before: always}
+
+    </style>
+</head>
+<body>
+    <div class="WordSection1">
+    {% for member in members %}
+        <div class="conteneurCarte" style="width:321px;">
+            <div>&nbsp;</div>
+            <img class="licence" src="{{ asset('images/licence.jpg') }}" />
+            <img class="photo" src="{{ asset('uploads/photos/'~member.getMemberPhoto()) }}" />
+            <img class="codebarre" src="https://barcode.aikido.be/html/image.php?code=code93&o=1&t=30&r=1&text={{ member.memberId }}&f=&a1=&a2=" />
+            <div class="nomPrenom">{{ member.memberFirstname }} {{ member.memberName }}</div>
+            <div class="club">{{ member.memberActualClub.clubName }} - {{ member.memberActualClub.clubId }}</div>
+            <div class="licence"><b>Licence n° {{ member.memberId }}</b></div>
+        </div>
+        {% if (loop.index == 4) or (loop.index == 8) or (loop.index == 12) or (loop.index == 16) or (loop.index == 20) %}<div class="pb"></div>{% endif %}
+    {% endfor %}
+    </div>
+</body>
+</html>

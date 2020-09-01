@@ -8,6 +8,7 @@ use Symfony\Component\Form\AbstractType;
 
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CountryType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
@@ -48,6 +49,12 @@ class SecretariatType extends AbstractType
                 break;
             case 'commission_member_add':
                 $this->commissionMemberAdd($builder);
+                break;
+            case 'print_stamp':
+                $this->printStamp($builder);
+                break;
+            case 'print_card':
+                $this->printCard($builder);
                 break;
             default:
                 null;
@@ -99,9 +106,13 @@ class SecretariatType extends AbstractType
     {
         $builder
             ->add('MemberModificationPhoto', FileType::class, array('label' => 'Photo : ', 'required' => false, 'mapped' => false, 'disabled' => true))
+            ->add('MemberModificationFirstname', TextType::class, array('label' => 'Prénom : ', 'required' => false, 'disabled' => true))
+            ->add('MemberModificationName', TextType::class, array('label' => 'Nom : ', 'required' => false, 'disabled' => true))
+            ->add('MemberModificationBirthday', DateType::class, array('label' => 'Date de naissance : ', 'widget' => 'single_text', 'required' => false, 'disabled' => true))
             ->add('MemberModificationAddress', TextType::class, array('label' => 'Adresse : ', 'required' => false, 'disabled' => true))
             ->add('MemberModificationZip', IntegerType::class, array('label' => 'Code postal : ', 'required' => false, 'disabled' => true))
             ->add('MemberModificationCity', TextType::class, array('label' => 'Localité : ', 'required' => false, 'disabled' => true))
+            ->add('MemberModificationPhone', TextType::class, array('label' => 'N° téléphone : ', 'required' => false, 'disabled' => true))
             ->add('MemberModificationCountry', CountryType::class, array('label' => 'Pays : ', 'choice_translation_locale' => 'fr', 'preferred_choices' => array('BE', 'FR'), 'disabled' => true))
             ->add('MemberModificationEmail', EmailType::class, array('label' => 'Email : ', 'required' => false, 'disabled' => true))
             ->add('Submit', SubmitType::class, array('label' => 'Valider'))
@@ -112,9 +123,13 @@ class SecretariatType extends AbstractType
     {
         $builder
             ->add('MemberModificationPhoto', FileType::class, array('label' => 'Photo : ', 'required' => false, 'mapped' => false, 'disabled' => true))
+            ->add('MemberModificationFirstname', TextType::class, array('label' => 'Prénom : ', 'required' => false, 'disabled' => true))
+            ->add('MemberModificationName', TextType::class, array('label' => 'Nom : ', 'required' => false, 'disabled' => true))
+            ->add('MemberModificationBirthday', DateType::class, array('label' => 'Date de naissance : ', 'widget' => 'single_text', 'required' => false, 'disabled' => true))
             ->add('MemberModificationAddress', TextType::class, array('label' => 'Adresse : ', 'required' => false, 'disabled' => true))
             ->add('MemberModificationZip', IntegerType::class, array('label' => 'Code postal : ', 'required' => false, 'disabled' => true))
             ->add('MemberModificationCity', TextType::class, array('label' => 'Localité : ', 'required' => false, 'disabled' => true))
+            ->add('MemberModificationPhone', TextType::class, array('label' => 'N° téléphone : ', 'required' => false, 'disabled' => true))
             ->add('MemberModificationCountry', CountryType::class, array('label' => 'Pays : ', 'choice_translation_locale' => 'fr', 'preferred_choices' => array('BE', 'FR'), 'disabled' => true))
             ->add('MemberModificationEmail', EmailType::class, array('label' => 'Email : ', 'required' => false, 'disabled' => true))
             ->add('Submit', SubmitType::class, array('label' => 'Valider'))
@@ -125,9 +140,13 @@ class SecretariatType extends AbstractType
     {
         $builder
             ->add('MemberPhoto', FileType::class, array('label' => 'Photo : ', 'required' => false, 'mapped' => false))
+            ->add('MemberFirstname', TextType::class, array('label' => 'Prénom : '))
+            ->add('MemberName', TextType::class, array('label' => 'Nom : '))
+            ->add('MemberBirthday', DateType::class, array('label' => 'Date de naissance : ', 'widget' => 'single_text'))
             ->add('MemberAddress', TextType::class, array('label' => 'Adresse : '))
             ->add('MemberZip', IntegerType::class, array('label' => 'Code postal : '))
             ->add('MemberCity', TextType::class, array('label' => 'Localité : '))
+            ->add('MemberPhone', TextType::class, array('label' => 'N° téléphone : '))
             ->add('MemberCountry', CountryType::class, array('label' => 'Pays : ', 'choice_translation_locale' => 'fr', 'preferred_choices' => array('BE', 'FR')))
             ->add('MemberEmail', EmailType::class, array('label' => 'Email : '))
             ->add('Submit', SubmitType::class, array('label' => 'Modifier'))
@@ -150,6 +169,22 @@ class SecretariatType extends AbstractType
         $builder
             ->add('MemberLicence', IntegerType::class, array('label' => 'N° de licence : ', 'mapped' => false))
             ->add('Submit', SubmitType::class, array('label' => 'Ajouter'))
+        ;
+    }
+
+    private function printStamp(FormBuilderInterface $builder)
+    {
+        $builder
+            ->add('MemberList', TextType::class, array('label' => 'Liste n° de licence : ', 'mapped' => false))
+            ->add('Submit', SubmitType::class, array('label' => 'Créer les timbres'))
+        ;
+    }
+
+    private function printCard(FormBuilderInterface $builder)
+    {
+        $builder
+            ->add('MemberId', TextType::class, array('label' => 'Liste n° de licence : ', 'mapped' => false))
+            ->add('Submit', SubmitType::class, array('label' => 'Créer les cartes'))
         ;
     }
 }

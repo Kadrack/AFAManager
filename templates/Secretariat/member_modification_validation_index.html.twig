@@ -11,7 +11,9 @@
     <h1>Liste des modifications en attente</h1>
     <table>
         <tr>
+            <th>Prénom</th>
             <th>Nom</th>
+            <th>Date de naissance</th>
             <th>Adresse</th>
             <th>Code postal</th>
             <th>Localité</th>
@@ -21,7 +23,9 @@
         </tr>
         {% for modification in modifications %}
             <tr>
-                <td>{{ modification.FirstName }} {{ modification.Name }}</td>
+                <td>{{ modification.FirstName }} ({{ modification.NewFirstName }})</td>
+                <td>{{ modification.Name }} ({{ modification.NewName }})</td>
+                <td>{% if modification.Birthday != null %}{{ modification.Birthday|date("d/m/Y") }}{% endif %}</td>
                 <td>{{ modification.Address }}</td>
                 <td>{{ modification.Zip }}</td>
                 <td>{{ modification.City }}</td>

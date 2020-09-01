@@ -68,9 +68,13 @@ class MemberType extends AbstractType
     {
         $builder
             ->add('MemberModificationPhoto', FileType::class, array('label' => 'Photo : ', 'required' => false, 'mapped' => false))
+            ->add('MemberModificationFirstname', TextType::class, array('label' => 'Prénom : ', 'required' => false))
+            ->add('MemberModificationName', TextType::class, array('label' => 'Nom : ', 'required' => false))
+            ->add('MemberModificationBirthday', DateType::class, array('label' => 'Date de naissance : ', 'widget' => 'single_text', 'required' => false))
             ->add('MemberModificationAddress', TextType::class, array('label' => 'Adresse : ', 'required' => false))
             ->add('MemberModificationZip', IntegerType::class, array('label' => 'Code postal : ', 'required' => false))
             ->add('MemberModificationCity', TextType::class, array('label' => 'Localité : ', 'required' => false))
+            ->add('MemberModificationPhone', TextType::class, array('label' => 'N° téléphone : ', 'required' => false))
             ->add('MemberModificationCountry', CountryType::class, array('label' => 'Pays : ', 'choice_translation_locale' => 'fr', 'preferred_choices' => array('BE', 'FR')))
             ->add('MemberModificationEmail', EmailType::class, array('label' => 'Email : ', 'required' => false))
             ->add('Submit', SubmitType::class, array('label' => 'Modifier'))
@@ -91,6 +95,7 @@ class MemberType extends AbstractType
             ->add('MemberCity', TextType::class, array('label' => 'Localité : '))
             ->add('MemberCountry', CountryType::class, array('label' => 'Pays : ', 'choice_translation_locale' => 'fr', 'preferred_choices' => array('BE', 'FR')))
             ->add('MemberEmail', EmailType::class, array('label' => 'Email : '))
+            ->add('MemberPhone', TextType::class, array('label' => 'N° téléphone : '))
             ->add('MemberBirthday', BirthdayType::class, array('label' => 'Date de naissance : ', 'widget' => 'single_text'))
             ->add('GradeRank', ChoiceType::class, array('label' => 'Grade : ', 'placeholder' => 'Choississez un grade', 'choices' => $list->getGrade(), 'required' => false, 'mapped' => false))
             ->add('MemberLicenceMedicalCertificate', DateType::class, array('label' => 'Date certificat : ', 'widget' => 'single_text', 'mapped' => false))

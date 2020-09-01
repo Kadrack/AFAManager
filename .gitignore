@@ -9,6 +9,7 @@
 /public/bundles/
 /var/
 /vendor/
+
 /tests/
 /translations/
 ###< symfony/framework-bundle ###
@@ -19,3 +20,5 @@
 /phpunit.xml
 ###< symfony/phpunit-bridge ###
 /composer.phar
+
+.php-version

@@ -474,7 +474,7 @@ class SecretariatController extends AbstractController
             return $this->redirectToRoute('secretariat_members_active', array('club' => $club->getClubId(), 'member' => $member->getMemberId()));
         }
 
-        return $this->render('Secretariat/personal_detail.html.twig', array('form' => $form->createView()));
+        return $this->render('Secretariat/personal_detail.html.twig', array('form' => $form->createView(), 'member' => $member));
     }
 
     /**
@@ -1023,11 +1023,14 @@ class SecretariatController extends AbstractController
         {
             $modification = $form->getData();
 
-            $modification->getMemberModificationAddress() != null ? $member->setMemberAddress($modification->getMemberModificationAddress()) : null;
-            $modification->getMemberModificationZip()     != null ? $member->setMemberZip($modification->getMemberModificationZip()) : null;
-            $modification->getMemberModificationCity()    != null ? $member->setMemberCity($modification->getMemberModificationCity()) : null;
-            $modification->getMemberModificationCountry() != null ? $member->setMemberCountry($modification->getMemberModificationCountry()) : null;
-            $modification->getMemberModificationEmail()   != null ? $member->setMemberEmail($modification->getMemberModificationEmail()) : null;
+            $modification->getMemberModificationFirstname() != null ? $member->setMemberFirstname($modification->getMemberModificationFirstname()) : null;
+            $modification->getMemberModificationName()      != null ? $member->setMemberName($modification->getMemberModificationName()) : null;
+            $modification->getMemberModificationBirthday()  != null ? $member->setMemberBirthday($modification->getMemberModificationBirthday()) : null;
+            $modification->getMemberModificationAddress()   != null ? $member->setMemberAddress($modification->getMemberModificationAddress()) : null;
+            $modification->getMemberModificationZip()       != null ? $member->setMemberZip($modification->getMemberModificationZip()) : null;
+            $modification->getMemberModificationCity()      != null ? $member->setMemberCity($modification->getMemberModificationCity()) : null;
+            $modification->getMemberModificationCountry()   != null ? $member->setMemberCountry($modification->getMemberModificationCountry()) : null;
+            $modification->getMemberModificationEmail()     != null ? $member->setMemberEmail($modification->getMemberModificationEmail()) : null;
 
             $member->setMemberModification(null);
 
@@ -1229,5 +1232,55 @@ class SecretariatController extends AbstractController
         }
 
         return $this->render('Club/Member/login_create.html.twig', array('form' => $form->createView(), 'user' => $user));
+    }
+
+    /**
+     * @Route("/imprimer_timbres", name="print_stamp")
+     * @param Request $request
+     * @return Response
+     */
+    public function printStamp(Request $request)
+    {
+        $stamps = null;
+
+        $form = $this->createForm(SecretariatType::class, $stamps, array('form' => 'print_stamp', 'data_class' => null));
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid())
+        {
+            $stamps = explode(",", $form->get('MemberList')->getData());
+
+            $members = $this->getDoctrine()->getRepository(Member::class)->findBy(['member_id' => $stamps]);
+
+            return $this->render('Secretariat/Stamps.html.twig', array('members' => $members));
+        }
+
+        return $this->render('Secretariat/Stamp_Form.html.twig', array('form' => $form->createView()));
+    }
+
+    /**
+     * @Route("/imprimer_cartes", name="print_card")
+     * @param Request $request
+     * @return Response
+     */
+    public function printCard(Request $request)
+    {
+        $cards = null;
+
+        $form = $this->createForm(SecretariatType::class, $cards, array('form' => 'print_card', 'data_class' => null));
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid())
+        {
+            $cards = explode(",", $form->get('MemberId')->getData());
+
+            $members = $this->getDoctrine()->getRepository(Member::class)->findBy(['member_id' => $cards]);
+
+            return $this->render('Secretariat/Cards.html.twig', array('members' => $members));
+        }
+
+        return $this->render('Secretariat/Cards_Form.html.twig', array('form' => $form->createView()));
     }
 }

@@ -4,14 +4,22 @@
         <meta charset="UTF-8">
         <title>{% block title %}AFAManager{% endblock %}</title>
 
-        
+        <link rel="icon" type="image/svg" href="{{ asset('images/favicon.svg') }}" />
+
         <link rel="stylesheet" type="text/css" href="https://bootswatch.com/4/solar/bootstrap.min.css">
 
         <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+
+        <script src="{{ asset('js/jquery.min.js') }}"></script>
+        <script src="{{ asset('js/jquery.migrate.min.js') }}"></script>
+
         {% block stylesheets %}{% endblock %}
     </head>
+    {% if app.request.pathinfo == '/login' %}
+    <body class="login">
+    {% else %}
     <body>
         <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
             <a class="navbar-brand" href="{{ path('common_index') }}">AFA-Manager</a>
@@ -30,12 +38,9 @@
                                 <a class="dropdown-item" href="{{ path('member_my_stages') }}">Mes Stages</a>
                                 <a class="dropdown-item" href="{{ path('member_my_licence') }}">Ma Licence</a>
                                 <a class="dropdown-item" href="{{ path('member_my_club') }}">Mon Club</a>
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" a href="{{ path('member_my_access') }}">Mon Accès</a>
                             </div>
                     </li>
                     {% endif %}
-
                     {% if is_granted('ROLE_CLUB') %}
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" data-toggle="dropdown"href="{{ path('club_index') }}">Club</a>
@@ -46,7 +51,6 @@
                             </div>
                     </li>
                     {% endif %}
-
                     {% if is_granted('ROLE_CFG') %}
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="{{ path('grade_index') }}">CFG</a>
@@ -70,14 +74,28 @@
                                 <a href="{{ path('secretariat_training_index') }}">Stages</a><br />
                                 <a href="{{ path('secretariat_member_modification_validation_index') }}">Modifications en attente</a><br>
                                 <a href="{{ path('secretariat_commission_index') }}">Commissions</a><br />
+                                <a href="{{ path('secretariat_print_stamp') }}" target="_blank">Impression timbres</a><br />
+                                <a href="{{ path('secretariat_print_card') }}" target="_blank">Impression carte</a><br />
                             </div>
                     </li>
+                    {% endif %}
+                    {% if is_granted('ROLE_USER') %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ path('my_access') }}">Mon Accès</a>
+                        </li>
+                    {% endif %}
+                    {% if is_granted('ROLE_USER') %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ path('app_logout') }}">Déconnexion</a>
+                        </li>
                     {% endif %}
                 </ul>
             </div>
         </nav>
-        
-        {% block body %}{% endblock %}
-        {% block javascripts %}{% endblock %}
+    {% endif %}
+
+    {% block body %}{% endblock %}
+
+    {% block javascripts %}{% endblock %}
     </body>
 </html>

@@ -227,7 +227,7 @@ class MemberModification
         return $this->member_modification_birthday;
     }
 
-    public function setMemberModificationBirthday(DateTimeInterface $member_modification_birthday): self
+    public function setMemberModificationBirthday(?DateTimeInterface $member_modification_birthday): self
     {
         $this->member_modification_birthday = $member_modification_birthday;
 

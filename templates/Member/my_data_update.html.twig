@@ -21,31 +21,43 @@
         <thead>
             <tr>
                 <th scope="col"></th>
+                <th scope="col">Prénom</th>
+                <th scope="col">Nom</th>
+                <th scope="col">Date de naissance</th>
                 <th scope="col">Adresse</th>
                 <th scope="col">Code postal</th>
                 <th scope="col">Localité</th>
                 <th scope="col">Pays</th>
                 <th scope="col">Email</th>
+                <th scope="col">N° téléphone</th>
                 <th scope="col">Commande</th>
             </tr>
         </thead>
         <tbody>
             <tr>
                 <th scope="row">Données actuelle</th>
+                <td>{{ member.getMemberFirstname() }}</td>
+                <td>{{ member.getMemberName() }}</td>
+                <td>{{ member.getMemberBirthday()|date("d/m/Y") }}</td>
                 <td>{{ member.getMemberAddress() }}</td>
                 <td>{{ member.getMemberZip() }}</td>
                 <td>{{ member.getMemberCity() }}</td>
                 <td>{{ listData.countryName(member.getMemberCountry()) }}</td>
                 <td>{{ member.getMemberEmail() }}</td>
+                <td>{{ member.getMemberPhone() }}</td>
                 <td></td>
             </tr>
             <tr>
                 <th scope="row">Modification</th>
+                <td>{{ form_widget(form.MemberModificationFirstname) }}</td>
+                <td>{{ form_widget(form.MemberModificationName) }}</td>
+                <td>{{ form_widget(form.MemberModificationBirthday) }}</td>
                 <td>{{ form_widget(form.MemberModificationAddress) }}</td>
                 <td>{{ form_widget(form.MemberModificationZip) }}</td>
                 <td>{{ form_widget(form.MemberModificationCity) }}</td>
                 <td>{{ form_widget(form.MemberModificationCountry) }}</td>
                 <td>{{ form_widget(form.MemberModificationEmail) }}</td>
+                <td>{{ form_widget(form.MemberModificationPhone) }}</td>
                 <td>{{ form_end(form) }}</td>
             </tr>
         </tbody>

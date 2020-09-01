@@ -1,0 +1,74 @@
+#login-box {
+    margin: auto;
+    position: relative;
+    text-align: center;
+    width: 500px;
+}
+
+#login-box form {
+    background-color: #fff;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    margin-bottom: 20px;
+    padding: 40px;
+}
+
+#login-box input[type=text],
+#login-box input[type=password] {
+    background-color: #ebebf1;
+    font-size: 1.4rem;
+    height: 42px;
+    line-height: 42px;
+}
+
+#login-box a.submit {
+    background-color: #50b62d;
+    border-radius: 3px;
+    color: #fff;
+    display: block;
+    font-size: 1.5rem;
+    margin-top: 30px;
+    padding: 10px 15px;
+    text-decoration: none;
+}
+
+#login-box a.submit:hover {
+    background-color: #4aa82a;
+}
+
+/*********************************************************************************************************************/
+/** main-content *****************************************************************************************************/
+/*********************************************************************************************************************/
+
+#main-content {
+    min-width: 1024px;
+    padding: 110px 100px 100px 100px;
+}
+
+/* For devices smaller than 1700px */
+@media (max-width: 1700px) {
+    #main-content {
+        padding-left: 290px;
+        padding-right: 40px;
+    }
+}
+
+/*********************************************************************************************************************/
+/** form-group *******************************************************************************************************/
+/*********************************************************************************************************************/
+
+.form-group > label.required:after {
+    color: #b41111;
+    content: '\02731';
+    font-size: 0.7rem;
+    margin-left: 5px;
+    vertical-align: text-top;
+}
+
+.form-group.no-label > label {
+    display: none;
+}
+
+.form-group.no-label > label + div {
+    width: 100% !important;
+}

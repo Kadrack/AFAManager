@@ -2,6 +2,8 @@
 // src/Entity/GradeTitle.php
 namespace App\Entity;
 
+use DateTimeInterface;
+
 use Doctrine\ORM\Mapping as ORM;
 
 use Symfony\Component\Validator\Constraints as Assert;
@@ -18,6 +20,11 @@ class GradeTitle
      * @ORM\Column(type="integer")
      */
     private $grade_title_id;
+
+    /**
+     * @ORM\Column(type="date", nullable=true)
+     */
+    private $grade_title_date;
 
     /**
      * @ORM\Column(type="integer")
@@ -49,7 +56,7 @@ class GradeTitle
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\GradeSession", inversedBy="grade_session_titles", cascade={"persist"})
-     * @ORM\JoinColumn(nullable=false, name="grade_title_join_grade_session", referencedColumnName="grade_session_id")
+     * @ORM\JoinColumn(nullable=true, name="grade_title_join_grade_session", referencedColumnName="grade_session_id")
      */
     private $grade_title_exam;
 
@@ -61,6 +68,18 @@ class GradeTitle
     public function setGradeTitleId(int $grade_title_id): self
     {
         $this->grade_title_id = $grade_title_id;
+
+        return $this;
+    }
+
+    public function getGradeTitleDate(): ?DateTimeInterface
+    {
+        return $this->grade_title_date;
+    }
+
+    public function setGradeTitleDate(DateTimeInterface $grade_title_date): self
+    {
+        $this->grade_title_date = $grade_title_date;
 
         return $this;
     }
