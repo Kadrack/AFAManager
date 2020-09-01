@@ -8,6 +8,8 @@
 {% endblock %}
 
 {% block body %}
+    <img alt="" src="{{ asset('uploads/photos/'~member.getMemberPhoto()) }}" /><br />
+
     {{ form_start(form) }}
     {{ form_widget(form) }}
     {{ form_end(form) }}

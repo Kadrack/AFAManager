@@ -474,7 +474,7 @@ class SecretariatController extends AbstractController
             return $this->redirectToRoute('secretariat_members_active', array('club' => $club->getClubId(), 'member' => $member->getMemberId()));
         }
 
-        return $this->render('Secretariat/personal_detail.html.twig', array('form' => $form->createView()));
+        return $this->render('Secretariat/personal_detail.html.twig', array('form' => $form->createView(), 'member' => $member));
     }
 
     /**
