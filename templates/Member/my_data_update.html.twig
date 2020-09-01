@@ -21,6 +21,9 @@
         <thead>
             <tr>
                 <th scope="col"></th>
+                <th scope="col">Prénom</th>
+                <th scope="col">Nom</th>
+                <th scope="col">Date de naissance</th>
                 <th scope="col">Adresse</th>
                 <th scope="col">Code postal</th>
                 <th scope="col">Localité</th>
@@ -33,6 +36,9 @@
         <tbody>
             <tr>
                 <th scope="row">Données actuelle</th>
+                <td>{{ member.getMemberFirstname() }}</td>
+                <td>{{ member.getMemberName() }}</td>
+                <td>{{ member.getMemberBirthday()|date("d/m/Y") }}</td>
                 <td>{{ member.getMemberAddress() }}</td>
                 <td>{{ member.getMemberZip() }}</td>
                 <td>{{ member.getMemberCity() }}</td>
@@ -43,6 +49,9 @@
             </tr>
             <tr>
                 <th scope="row">Modification</th>
+                <td>{{ form_widget(form.MemberModificationFirstname) }}</td>
+                <td>{{ form_widget(form.MemberModificationName) }}</td>
+                <td>{{ form_widget(form.MemberModificationBirthday) }}</td>
                 <td>{{ form_widget(form.MemberModificationAddress) }}</td>
                 <td>{{ form_widget(form.MemberModificationZip) }}</td>
                 <td>{{ form_widget(form.MemberModificationCity) }}</td>

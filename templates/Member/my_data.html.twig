@@ -14,6 +14,7 @@
     <table class="table table-hover">
         <thead>
             <tr>
+                <th scope="col">Date de naissance</th>
                 <th scope="col">Adresse</th>
                 <th scope="col">Localité</th>
                 <th scope="col">Pays</th>
@@ -24,6 +25,7 @@
         </thead>
         <tbody>
             <tr>
+                <td>{{ member.getMemberBirthday()|date("d/m/Y") }}</td>
                 <td>{{ member.getMemberAddress() }}</td>
                 <td>{{ member.getMemberZip() }} {{ member.getMemberCity() }}</td>
                 <td>{{ listData.getCountryName(member.getMemberCountry()) }}</td>
@@ -39,6 +41,9 @@
     <table class="table table-hover">
         <thead>
             <tr>
+                <th scope="col">Prénom</th>
+                <th scope="col">Nom</th>
+                <th scope="col">Date de naissance</th>
                 <th scope="col">Adresse</th>
                 <th scope="col">Localité</th>
                 <th scope="col">Pays</th>
@@ -48,6 +53,9 @@
         </thead>
         <tbody>
             <tr>
+                <td>{{ member.getMemberModification().getMemberModificationFirstname() }}</td>
+                <td>{{ member.getMemberModification().getMemberModificationName() }}</td>
+                <td>{% if member.getMemberModification().getMemberModificationBirthday() != null %}{{ member.getMemberModification().getMemberModificationBirthday()|date("d/m/Y") }}{% endif %}</td>
                 <td>{{ member.getMemberModification().getMemberModificationAddress() }}</td>
                 <td>{{ member.getMemberModification().getMemberModificationZip() }} {{ member.getMemberModification().getMemberModificationCity() }}</td>
                 <td>{% if member.getMemberModification().getMemberModificationCountry() != null %}{{ listData.getCountryName(member.getMemberModification().getMemberModificationCountry()) }}{% endif %}</td>

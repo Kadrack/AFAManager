@@ -1023,11 +1023,14 @@ class SecretariatController extends AbstractController
         {
             $modification = $form->getData();
 
-            $modification->getMemberModificationAddress() != null ? $member->setMemberAddress($modification->getMemberModificationAddress()) : null;
-            $modification->getMemberModificationZip()     != null ? $member->setMemberZip($modification->getMemberModificationZip()) : null;
-            $modification->getMemberModificationCity()    != null ? $member->setMemberCity($modification->getMemberModificationCity()) : null;
-            $modification->getMemberModificationCountry() != null ? $member->setMemberCountry($modification->getMemberModificationCountry()) : null;
-            $modification->getMemberModificationEmail()   != null ? $member->setMemberEmail($modification->getMemberModificationEmail()) : null;
+            $modification->getMemberModificationFirstname() != null ? $member->setMemberFirstname($modification->getMemberModificationFirstname()) : null;
+            $modification->getMemberModificationName()      != null ? $member->setMemberName($modification->getMemberModificationName()) : null;
+            $modification->getMemberModificationBirthday()  != null ? $member->setMemberBirthday($modification->getMemberModificationBirthday()) : null;
+            $modification->getMemberModificationAddress()   != null ? $member->setMemberAddress($modification->getMemberModificationAddress()) : null;
+            $modification->getMemberModificationZip()       != null ? $member->setMemberZip($modification->getMemberModificationZip()) : null;
+            $modification->getMemberModificationCity()      != null ? $member->setMemberCity($modification->getMemberModificationCity()) : null;
+            $modification->getMemberModificationCountry()   != null ? $member->setMemberCountry($modification->getMemberModificationCountry()) : null;
+            $modification->getMemberModificationEmail()     != null ? $member->setMemberEmail($modification->getMemberModificationEmail()) : null;
 
             $member->setMemberModification(null);
 
