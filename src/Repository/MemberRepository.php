@@ -87,4 +87,21 @@ class MemberRepository extends ServiceEntityRepository
             ->getQuery()
             ->getArrayResult();
     }
+
+    public function getClubRenewForms(Club $club, string $start, string $end): ?array
+    {
+        $qb = $this->createQueryBuilder('m');
+
+        return $qb->select('m.member_id AS Id', 'm.member_firstname AS FirstName', 'm.member_name AS Name', 'm.member_sex AS Sex', 'm.member_address AS Address', 'm.member_zip AS Zip', 'm.member_city AS City', 'm.member_country AS Country', 'm.member_phone AS Phone', 'm.member_birthday AS Birthday', 'm.member_email AS Email',  'g.grade_rank AS Grade', 'l.member_licence_deadline AS Deadline')
+            ->join(MemberLicence::class, 'l', 'WITH', $qb->expr()->eq('m.member_id', 'l.member_licence'))
+            ->join(Grade::class, 'g', 'WITH', $qb->expr()->eq('m.member_last_grade', 'g.grade_id'))
+            ->where($qb->expr()->eq('l.member_licence_club', $club->getClubId()))
+            ->andWhere($qb->expr()->gt('l.member_licence_deadline', "'".$start."'"))
+            ->andWhere($qb->expr()->lt('l.member_licence_deadline', "'".$end."'"))
+            ->andWhere($qb->expr()->eq('l.member_licence_status', 1))
+            ->orderBy('FirstName', 'ASC')
+            ->addOrderBy('Name', 'ASC')
+            ->getQuery()
+            ->getArrayResult();
+    }
 }

@@ -30,13 +30,17 @@ use App\Service\PhotoUploader;
 use DateTime;
 
 use Exception;
+
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
+
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 use Symfony\Component\Routing\Annotation\Route;
@@ -1253,10 +1257,10 @@ class SecretariatController extends AbstractController
 
             $members = $this->getDoctrine()->getRepository(Member::class)->findBy(['member_id' => $stamps]);
 
-            return $this->render('Secretariat/Stamps.html.twig', array('members' => $members));
+            return $this->render('stamps.html.twig', array('members' => $members));
         }
 
-        return $this->render('Secretariat/Stamp_Form.html.twig', array('form' => $form->createView()));
+        return $this->render('stamp_form.html.twig', array('form' => $form->createView()));
     }
 
     /**
@@ -1278,9 +1282,99 @@ class SecretariatController extends AbstractController
 
             $members = $this->getDoctrine()->getRepository(Member::class)->findBy(['member_id' => $cards]);
 
-            return $this->render('Secretariat/Cards.html.twig', array('members' => $members));
+            return $this->render('cards.html.twig', array('members' => $members));
         }
 
-        return $this->render('Secretariat/Cards_Form.html.twig', array('form' => $form->createView()));
+        return $this->render('cards_form.html.twig', array('form' => $form->createView()));
+    }
+
+    /**
+     * @Route("/generer_formulaires_renouvellement/{club<\d+>}", name="form_renew_create")
+     * @param Request $request
+     * @param Club $club
+     * @return Response
+     */
+    public function formRenewCreate(Request $request, Club $club)
+    {
+        $period = null;
+
+        $form = $this->createForm(SecretariatType::class, $period, array('form' => 'form_renew_create', 'data_class' => null));
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid())
+        {
+            $output_file = "./licence_out.rtf";
+
+            $fh = fopen($output_file, 'a') or die("can't open file");
+
+            $file = file_get_contents('../private/licence.rtf', true);
+
+            $file = substr($file, 1, strlen($file)-2);
+
+            fwrite($fh, '{');
+
+            $old = array('\{\{TITRE\}\}', '\{\{SEXE\}\}', '\{\{NOM\}\}', '\{\{PRENOM\}\}', '\{\{DOJO_ID\}\}', '\{\{DOJO_NOM\}\}', '\{\{ADRESSE\}\}', '\{\{CODE_POSTALE\}\}', '\{\{LOCALITE\}\}', '\{\{DATE_DE_NAISSANCE\}\}', '\{\{GSM\}\}', '\{\{EMAIL\}\}', '\{\{LICENCE_ID\}\}', '\{\{DATE_ECHEANCE_FR\}\}', '\{\{ENFANT\}\}', '\{\{ADULTE\}\}', '\{\{PAYS\}\}');
+
+            $children_limit = new DateTime('-14 year today');
+
+            $members = $this->getDoctrine()->getRepository(Member::class)->getClubRenewForms($club, $form->get('Start')->getData()->format('Y-m-d'), $form->get('End')->getData()->format('Y-m-d'));
+
+            $i = 0;
+
+            foreach ($members as $member)
+            {
+                if ($i != 0)
+                {
+                    fwrite($fh, '{\page}');
+                }
+
+                $newphrase = '';
+
+                unset($new);
+
+                if ($member['Sex'] == 2)
+                {
+                    $title='Monsieur';
+                    $sex='Masculin';
+                }
+                else
+                {
+                    $title='Madamme';
+                    $sex="Féminin";
+                }
+
+                if ($member['Birthday'] > $children_limit)
+                {
+                    $children='X';
+                    $adult='';
+                }
+                else
+                {
+                    $children='';
+                    $adult='X';
+                }
+
+                $deadline = new DateTime('+1 year '.$member['Deadline']->format('Y-m-d'));
+
+                $new = array($title, utf8_decode($sex), utf8_decode($member['Name']), utf8_decode($member['FirstName']), utf8_decode($club->getClubId()), utf8_decode($club->getClubName()), utf8_decode($member['Address']), utf8_decode($member['Zip']), utf8_decode($member['City']), utf8_decode($member['Birthday']->format('d/m/Y')), utf8_decode($member['Phone']), utf8_decode($member['Email']), utf8_decode($member['Id']), utf8_decode($deadline->format('d/m/Y')), $children, $adult, utf8_decode($member['Country']));
+
+                $newphrase .= str_replace($old, $new, $file);
+
+                fwrite($fh, $newphrase);
+
+                $i++;
+            }
+
+            fwrite($fh, '}');
+            fclose($fh);
+
+            $response = new BinaryFileResponse($output_file);
+            $response->setContentDisposition(ResponseHeaderBag::DISPOSITION_INLINE);
+
+            return $response->deleteFileAfterSend();
+        }
+
+        return $this->render('Secretariat/renew_form.html.twig', array('form' => $form->createView()));
     }
 }

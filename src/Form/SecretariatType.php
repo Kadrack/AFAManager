@@ -56,6 +56,9 @@ class SecretariatType extends AbstractType
             case 'print_card':
                 $this->printCard($builder);
                 break;
+            case 'form_renew_create':
+                $this->formRenewCreate($builder);
+                break;
             default:
                 null;
         }
@@ -185,6 +188,15 @@ class SecretariatType extends AbstractType
         $builder
             ->add('MemberId', TextType::class, array('label' => 'Liste n° de licence : ', 'mapped' => false))
             ->add('Submit', SubmitType::class, array('label' => 'Créer les cartes'))
+        ;
+    }
+
+    private function formRenewCreate(FormBuilderInterface $builder)
+    {
+        $builder
+            ->add('Start', DateType::class, array('label' => 'Echéance du : ', 'widget' => 'single_text', 'mapped' => false))
+            ->add('End', DateType::class, array('label' => 'Echéance au : ', 'widget' => 'single_text', 'mapped' => false))
+            ->add('Submit', SubmitType::class, array('label' => 'Générer les formulaires'))
         ;
     }
 }
