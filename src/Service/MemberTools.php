@@ -198,37 +198,17 @@ class MemberTools
 
         $stage_history = $this->em->getRepository(Member::class)->getMemberAttendances($this->member->getMemberId());
 
-        $grade_history = $this->em->getRepository(Grade::class)->getGradeHistory($this->member->getMemberId());
+        $stage_count = 0; $total = 0; $history = array(); $history['Total'] = 0;
 
-        $stage_count = 0; $grade_count = 0; $total = 0; $history = array();
-
-        while (isset($grade_history[$grade_count]))
+        while (isset($stage_history[$stage_count]))
         {
-            $history[$grade_count]['Rank'] = $grade_history[$grade_count]['Rank'];
+            $stage_history[$stage_count]['Duration'] = $stage_history[$stage_count]['Duration'] / 60;
 
-            $history[$grade_count]['Total'] = 0;
+            $history['Stage'][] = $stage_history[$stage_count];
 
-            while (isset($stage_history[$stage_count]))
-            {
-                if ($grade_history[$grade_count]['Date'] < $stage_history[$stage_count]['Date'])
-                {
-                    $stage_history[$stage_count]['Duration'] = $stage_history[$stage_count]['Duration'] / 60;
+            $total = $total + $stage_history[$stage_count]['Duration'];
 
-                    $history[$grade_count]['Stage'][] = $stage_history[$stage_count];
-
-                    $history[$grade_count]['Total'] = $history[$grade_count]['Total'] + $stage_history[$stage_count]['Duration'];
-
-                    $stage_count++;
-                }
-                else
-                {
-                    break;
-                }
-            }
-
-            $total = $total + $history[$grade_count]['Total'];
-
-            $grade_count++;
+            $stage_count++;
         }
 
         $this->stages = array('history' => $history, 'total' => $total);
