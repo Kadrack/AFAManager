@@ -22,8 +22,8 @@ use App\Form\GradeType;
 use App\Form\MemberType;
 use App\Form\SecretariatType;
 use App\Form\TrainingType;
-
 use App\Form\UserType;
+
 use App\Service\ListData;
 use App\Service\PhotoUploader;
 
@@ -1304,6 +1304,8 @@ class SecretariatController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid())
         {
+            $listData = new ListData();
+
             $output_file = "./licence_out.rtf";
 
             $fh = fopen($output_file, 'a') or die("can't open file");
@@ -1355,7 +1357,7 @@ class SecretariatController extends AbstractController
                     $adult='X';
                 }
 
-                $new = array($title, utf8_decode($sex), utf8_decode($member['Name']), utf8_decode($member['FirstName']), utf8_decode($club->getClubId()), utf8_decode($club->getClubName()), utf8_decode($member['Address']), utf8_decode($member['Zip']), utf8_decode($member['City']), utf8_decode($member['Birthday']->format('d/m/Y')), utf8_decode($member['Phone']), utf8_decode($member['Email']), utf8_decode($member['Id']), utf8_decode($member['Deadline']->format('d/m/Y')), $children, $adult, utf8_decode($member['Country']));
+                $new = array($title, utf8_decode($sex), utf8_decode($member['Name']), utf8_decode($member['FirstName']), utf8_decode($club->getClubId()), utf8_decode($club->getClubName()), utf8_decode($member['Address']), utf8_decode($member['Zip']), utf8_decode($member['City']), utf8_decode($member['Birthday']->format('d/m/Y')), utf8_decode($member['Phone']), utf8_decode($member['Email']), utf8_decode($member['Id']), utf8_decode($member['Deadline']->format('d/m/Y')), $children, $adult, utf8_decode($listData->getCountryName($member['Country'])));
 
                 $newphrase .= str_replace($old, $new, $file);
 
