@@ -1257,10 +1257,10 @@ class SecretariatController extends AbstractController
 
             $members = $this->getDoctrine()->getRepository(Member::class)->findBy(['member_id' => $stamps]);
 
-            return $this->render('stamps.html.twig', array('members' => $members));
+            return $this->render('Secretariat/stamps.html.twig', array('members' => $members));
         }
 
-        return $this->render('stamp_form.html.twig', array('form' => $form->createView()));
+        return $this->render('Secretariat/stamp_form.html.twig', array('form' => $form->createView()));
     }
 
     /**
@@ -1282,10 +1282,10 @@ class SecretariatController extends AbstractController
 
             $members = $this->getDoctrine()->getRepository(Member::class)->findBy(['member_id' => $cards]);
 
-            return $this->render('cards.html.twig', array('members' => $members));
+            return $this->render('Secretariat/cards.html.twig', array('members' => $members));
         }
 
-        return $this->render('cards_form.html.twig', array('form' => $form->createView()));
+        return $this->render('Secretariat/cards_form.html.twig', array('form' => $form->createView()));
     }
 
     /**
