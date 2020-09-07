@@ -58,7 +58,7 @@ class UserType extends AbstractType
     {
         $builder
             ->add('Login', TextType::class, array('label' => 'Login : '))
-            ->add('Email', EmailType::class, array('label' => 'Email : ', 'mapped' => false))
+            ->add('Password', PasswordType::class, array('label' => 'Nouveau mot de passe : ', 'mapped' => false))
             ->add('Submit', SubmitType::class, array('label' => 'Créer'))
         ;
     }

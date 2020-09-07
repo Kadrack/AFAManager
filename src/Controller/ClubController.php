@@ -532,7 +532,7 @@ class ClubController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid())
         {
-            $user->setPassword($this->passwordEncoder->encodePassword($user, 'Test1883'));
+            $user->setPassword($this->passwordEncoder->encodePassword($user, $form['Password']->getData()));
             $user->setUserClub($club);
             $user->setUserMember($member);
             $user->setUserStatus(1);
