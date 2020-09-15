@@ -149,9 +149,9 @@ class SecretariatType extends AbstractType
             ->add('MemberAddress', TextType::class, array('label' => 'Adresse : '))
             ->add('MemberZip', IntegerType::class, array('label' => 'Code postal : '))
             ->add('MemberCity', TextType::class, array('label' => 'Localité : '))
-            ->add('MemberPhone', TextType::class, array('label' => 'N° téléphone : '))
+            ->add('MemberPhone', TextType::class, array('label' => 'N° téléphone : ', 'required' => false))
             ->add('MemberCountry', CountryType::class, array('label' => 'Pays : ', 'choice_translation_locale' => 'fr', 'preferred_choices' => array('BE', 'FR')))
-            ->add('MemberEmail', EmailType::class, array('label' => 'Email : '))
+            ->add('MemberEmail', EmailType::class, array('label' => 'Email : ', 'required' => false))
             ->add('Submit', SubmitType::class, array('label' => 'Modifier'))
         ;
     }
