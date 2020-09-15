@@ -283,7 +283,7 @@ class Member
         return $this->member_email;
     }
 
-    public function setMemberEmail(string $member_email): self
+    public function setMemberEmail(string $member_email): ?self
     {
         $this->member_email = $member_email;
 
@@ -295,7 +295,7 @@ class Member
         return $this->member_phone;
     }
 
-    public function setMemberPhone(string $member_phone): self
+    public function setMemberPhone(string $member_phone): ?self
     {
         $this->member_phone = $member_phone;
 
