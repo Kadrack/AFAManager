@@ -1335,7 +1335,7 @@ class SecretariatController extends AbstractController
 
                 unset($new);
 
-                if ($member['Sex'] == 2)
+                if ($member['Sex'] == 1)
                 {
                     $title='Monsieur';
                     $sex='Masculin';
