@@ -265,7 +265,7 @@ class ListData
      */
     public function getSex(int $sex)
     {
-        $sexes = array('Féminin' => 1, 'Masculin' => 2);
+        $sexes = array('Masculin' => 1, 'Féminin' => 2);
 
         if ($sex == 0)
         {
