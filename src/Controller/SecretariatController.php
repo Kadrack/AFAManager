@@ -227,9 +227,11 @@ class SecretariatController extends AbstractController
 
         $members = $this->getDoctrine()->getRepository(Member::class)->getClubActiveMembers($club, $today->format('Y-m-d'));
 
+        $limit = new DateTime('+3 month today');
+
         $session->set('origin', 'active');
 
-        return $this->render('Secretariat/members_list.html.twig', array('members' => $members, 'club' => $club));
+        return $this->render('Secretariat/members_list.html.twig', array('members' => $members, 'club' => $club, 'limit' => $limit));
     }
 
     /**
@@ -243,7 +245,9 @@ class SecretariatController extends AbstractController
 
         $members = $this->getDoctrine()->getRepository(Member::class)->getClubInactiveMembers($club, $today->format('Y-m-d'));
 
-        return $this->render('Secretariat/members_ancient.html.twig', array('members' => $members == null ? null : $members, 'club' => $club));
+        $limit = new DateTime('+3 month today');
+
+        return $this->render('Secretariat/members_ancient.html.twig', array('members' => $members == null ? null : $members, 'club' => $club, 'limit' => $limit));
     }
 
     /**
@@ -479,6 +483,72 @@ class SecretariatController extends AbstractController
         }
 
         return $this->render('Secretariat/personal_detail.html.twig', array('form' => $form->createView(), 'member' => $member));
+    }
+
+    /**
+     * @Route("/formulaire_renouvellement/{member<\d+>}/club/{club<\d+>}", name="member_form_renew")
+     *
+     * @param Club $club
+     * @param Member $member
+     * @return RedirectResponse|Response
+     */
+    public function memberFormRenew(Club $club, Member $member)
+    {
+        $listData = new ListData();
+
+        $output_file = "./licence_out.rtf";
+
+        $fh = fopen($output_file, 'a') or die("can't open file");
+
+        $file = file_get_contents('../private/licence.rtf', true);
+
+        $file = substr($file, 1, strlen($file)-2);
+
+        fwrite($fh, '{');
+
+        $old = array('\{\{TITRE\}\}', '\{\{SEXE\}\}', '\{\{NOM\}\}', '\{\{PRENOM\}\}', '\{\{DOJO_ID\}\}', '\{\{DOJO_NOM\}\}', '\{\{ADRESSE\}\}', '\{\{CODE_POSTALE\}\}', '\{\{LOCALITE\}\}', '\{\{DATE_DE_NAISSANCE\}\}', '\{\{GSM\}\}', '\{\{EMAIL\}\}', '\{\{LICENCE_ID\}\}', '\{\{DATE_ECHEANCE_FR\}\}', '\{\{ENFANT\}\}', '\{\{ADULTE\}\}', '\{\{PAYS\}\}');
+
+        $children_limit = new DateTime('-14 year today');
+
+        $newphrase = '';
+
+        unset($new);
+
+        if ($member->getMemberSex() == 1)
+        {
+            $title='Monsieur';
+            $sex='Masculin';
+        }
+        else
+        {
+            $title='Madamme';
+            $sex="Féminin";
+        }
+
+        if ($member->getMemberBirthday() > $children_limit)
+        {
+            $children='X';
+            $adult='';
+        }
+        else
+        {
+            $children='';
+            $adult='X';
+        }
+
+        $new = array($title, utf8_decode($sex), utf8_decode($member->getMemberName()), utf8_decode($member->getMemberFirstname()), utf8_decode($club->getClubId()), utf8_decode($club->getClubName()), utf8_decode($member->getMemberAddress()), utf8_decode($member->getMemberZip()), utf8_decode($member->getMemberCity()), utf8_decode($member->getMemberBirthday()->format('d/m/Y')), utf8_decode($member->getMemberPhone()), utf8_decode($member->getMemberEmail()), utf8_decode($member->getMemberId()), utf8_decode($member->getMemberLastLicence()->getMemberLicenceDeadline()->format('d/m/Y')), $children, $adult, utf8_decode($listData->getCountryName($member->getMemberCountry())));
+
+        $newphrase .= str_replace($old, $new, $file);
+
+        fwrite($fh, $newphrase);
+
+        fwrite($fh, '}');
+        fclose($fh);
+
+        $response = new BinaryFileResponse($output_file);
+        $response->setContentDisposition(ResponseHeaderBag::DISPOSITION_INLINE);
+
+        return $response->deleteFileAfterSend();
     }
 
     /**
