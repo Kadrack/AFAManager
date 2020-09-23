@@ -29,36 +29,21 @@
 
             <div class="collapse navbar-collapse" id="navbarColor01">
                 <ul class="navbar-nav mr-auto">
-                    {% if is_granted('ROLE_USER') %}
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="" role="button" aria-haspopup="true" aria-expanded="false">Tutoriels</a>
-                            <div class="dropdown-menu" style="">
-                                {% if is_granted('ROLE_CLUB') %}
-                                <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="" role="button" aria-haspopup="true" aria-expanded="false">Club</a>
-                                <div class="dropdown-menu" style="">
-                                    <a class="dropdown-item" href="{{ asset('tutoriels/club-ajout-salle.mov') }}">Ajouter une salle</a>
-                                    <a class="dropdown-item" href="{{ asset('tutoriels/club-ajout-horaire.mov') }}">Ajouter un horaire</a>
-                                    <a class="dropdown-item" href="{{ asset('tutoriels/club-ajout-professeur.mov') }}">Ajouter un professeur</a>
-                                </div>
-                                {% endif %}
-                            </div>
-                        </li>
-                    {% endif %}
                     {% if is_granted('ROLE_MEMBER') %}
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="{{ path('member_index') }}" role="button" aria-haspopup="true" aria-expanded="false">Membre</a>
-                            <div class="dropdown-menu" style="">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="{{ path('member_index') }}" role="button" aria-haspopup="true" aria-expanded="false">Membre</a>
+                             <div class="dropdown-menu" style="">
                                 <a class="dropdown-item" href="{{ path('member_my_data') }}">Mes Données</a>
                                 <a class="dropdown-item" href="{{ path('member_my_grades') }}">Mes Grades</a>
                                 <a class="dropdown-item" href="{{ path('member_my_stages') }}">Mes Stages</a>
                                 <a class="dropdown-item" href="{{ path('member_my_licence') }}">Ma Licence</a>
                                 <a class="dropdown-item" href="{{ path('member_my_club') }}">Mon Club</a>
                             </div>
-                        </li>
+                    </li>
                     {% endif %}
                     {% if is_granted('ROLE_CLUB') %}
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="{{ path('club_index') }}">Club</a>
+                        <a class="nav-link dropdown-toggle" data-toggle="dropdown"href="{{ path('club_index') }}">Club</a>
                             <div class="dropdown-menu" style="">
                                  <a class="dropdown-item" href="{{ path('club_dojo_index') }}">Dojo(s), horaires & professeurs</a>
                                  <a class="dropdown-item" href="{{ path('club_members_list') }}">Liste des membres</a>
@@ -81,7 +66,7 @@
                     {% endif %}
                     {% if is_granted('ROLE_SECRETARIAT') %}
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="{{ path('secretariat_index') }}">Secrétariat</a>
+                        <a class="nav-link dropdown-toggle" data-toggle="dropdown"href="{{ path('secretariat_index') }}">Secrétariat</a>
                             <div class="dropdown-menu">
                                 <a href="{{ path('secretariat_supporter_index') }}">Sympathisants</a><br />
                                 <a href="{{ path('secretariat_search_members') }}" target="_blank">Recherche membres</a><br />
