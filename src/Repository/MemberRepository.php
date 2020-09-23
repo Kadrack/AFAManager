@@ -15,6 +15,7 @@ use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 use Doctrine\Persistence\ManagerRegistry;
+use phpDocumentor\Reflection\DocBlock\Tags\Var_;
 
 /**
  * @method Member|null find($id, $lockMode = null, $lockVersion = null)
@@ -101,6 +102,29 @@ class MemberRepository extends ServiceEntityRepository
             ->andWhere($qb->expr()->eq('l.member_licence_status', 1))
             ->orderBy('FirstName', 'ASC')
             ->addOrderBy('Name', 'ASC')
+            ->getQuery()
+            ->getArrayResult();
+    }
+
+    public function getFullSearchMembers(string $search): ?array
+    {
+        $qb = $this->createQueryBuilder('m');
+
+        $qb->select('m.member_id AS Id', 'm.member_firstname AS FirstName', 'm.member_name AS Name', 'm.member_birthday AS Birthday', 'l.member_licence_deadline AS Deadline', 'c.club_name AS Club', 'c.club_id AS ClubId')
+            ->join(MemberLicence::class, 'l', 'WITH', $qb->expr()->eq('m.member_last_licence', 'l.member_licence_id'))
+            ->join(Club::class, 'c', 'WITH', $qb->expr()->eq('m.member_actual_club', 'c.club_id'));
+
+        if (ctype_digit($search))
+        {
+            $qb->where($qb->expr()->eq('m.member_id', $search));
+        }
+        else
+        {
+            $qb->where($qb->expr()->like('m.member_name', "'%".$search."%'"));
+        }
+
+        return $qb->orderBy('FirstName', 'ASC')
+            ->addOrderBy('ClubId', 'ASC')
             ->getQuery()
             ->getArrayResult();
     }

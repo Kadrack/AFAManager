@@ -216,6 +216,29 @@ class SecretariatController extends AbstractController
     }
 
     /**
+     * @Route("/rechercher_membres", name="search_members")
+     * @param Request $request
+     * @return Response
+     */
+    public function searchMembers(Request $request)
+    {
+        $search = null; $results = null;
+
+        $form = $this->createForm(SecretariatType::class, $search, array('form' => 'search_members', 'data_class' => null));
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid())
+        {
+            $results = $this->getDoctrine()->getRepository(Member::class)->getFullSearchMembers($form->get('Search')->getData());
+
+            return $this->render('Secretariat/members_search.html.twig', array('form' => $form->createView(), 'results' => $results));
+        }
+
+        return $this->render('Secretariat/members_search.html.twig', array('form' => $form->createView(), 'results' => $results));
+    }
+
+    /**
      * @Route("/liste_membres/{club<\d+>}", name="members_active")
      * @param SessionInterface $session
      * @param Club $club

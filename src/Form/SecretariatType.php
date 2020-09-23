@@ -59,6 +59,9 @@ class SecretariatType extends AbstractType
             case 'form_renew_create':
                 $this->formRenewCreate($builder);
                 break;
+            case 'search_members':
+                $this->searchMembers($builder);
+                break;
             default:
                 null;
         }
@@ -197,6 +200,14 @@ class SecretariatType extends AbstractType
             ->add('Start', DateType::class, array('label' => 'Echéance du : ', 'widget' => 'single_text', 'mapped' => false))
             ->add('End', DateType::class, array('label' => 'Echéance au : ', 'widget' => 'single_text', 'mapped' => false))
             ->add('Submit', SubmitType::class, array('label' => 'Générer les formulaires'))
+        ;
+    }
+
+    private function searchMembers(FormBuilderInterface $builder)
+    {
+        $builder
+            ->add('Search', TextType::class, array('label' => 'N° licence, Nom', 'mapped' => false))
+            ->add('Submit', SubmitType::class, array('label' => 'Rechercher'))
         ;
     }
 }
