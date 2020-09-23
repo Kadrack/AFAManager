@@ -29,6 +29,21 @@
 
             <div class="collapse navbar-collapse" id="navbarColor01">
                 <ul class="navbar-nav mr-auto">
+                    {% if is_granted('ROLE_USER') %}
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="" role="button" aria-haspopup="true" aria-expanded="false">Tutoriels</a>
+                            <div class="dropdown-menu" style="">
+                                {% if is_granted('ROLE_CLUB') %}
+                                <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="" role="button" aria-haspopup="true" aria-expanded="false">Club</a>
+                                <div class="dropdown-menu" style="">
+                                    <a class="dropdown-item" href="{{ asset('tutoriels/club-ajout-salle.mov') }}">Ajouter une salle</a>
+                                    <a class="dropdown-item" href="{{ asset('tutoriels/club-ajout-horaire.mov') }}">Ajouter un horaire</a>
+                                    <a class="dropdown-item" href="{{ asset('tutoriels/club-ajout-professeur.mov') }}">Ajouter un professeur</a>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </li>
+                    {% endif %}
                     {% if is_granted('ROLE_MEMBER') %}
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="{{ path('member_index') }}" role="button" aria-haspopup="true" aria-expanded="false">Membre</a>
