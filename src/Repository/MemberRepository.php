@@ -72,7 +72,8 @@ class MemberRepository extends ServiceEntityRepository
             ->where($qb->expr()->eq('l.member_licence_club', $club->getClubId()))
             ->andWhere($qb->expr()->lte('l.member_licence_deadline', "'".$today."'"))
             ->andWhere($qb->expr()->eq('l.member_licence_status', 1))
-            ->orderBy('FirstName', 'ASC')
+            ->orderBy('Deadline', 'DESC')
+            ->addOrderBy('FirstName', 'ASC')
             ->addOrderBy('Name', 'ASC')
             ->getQuery()
             ->getArrayResult();
