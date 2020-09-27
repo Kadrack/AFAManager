@@ -31,7 +31,6 @@
             <th>Type Association</th>
             <th>N° entreprise</th>
             <th>N° de compte (IBAN)</th>
-            <th>Email de contact</th>
             <th>Site internet</th>
             <th>Email publique</th>
         </tr>
@@ -39,9 +38,27 @@
             <td>{{ form_widget(form.ClubType) }}</td>
             <td>{{ form_widget(form.ClubBceNumber) }}</td>
             <td>{{ form_widget(form.ClubIban) }}</td>
-            <td>{{ form_widget(form.ClubEmailContact) }}</td>
             <td>{{ form_widget(form.ClubUrl) }}</td>
             <td>{{ form_widget(form.ClubEmailPublic) }}</td>
+        </tr>
+    </table>
+    <h2>Correspondant</h2>
+    <table>
+        <tr>
+            <th>Nom</th>
+            <th>Email</th>
+            <th>N° de téléphone</th>
+            <th>Adresse</th>
+            <th>Code postal</th>
+            <th>Localité</th>
+        </tr>
+        <tr>
+            <td>{{ form_widget(form.ClubNameContact) }}</td>
+            <td>{{ form_widget(form.ClubEmailContact) }}</td>
+            <td>{{ form_widget(form.ClubPhoneContact) }}</td>
+            <td>{{ form_widget(form.ClubAddressContact) }}</td>
+            <td>{{ form_widget(form.ClubZipContact) }}</td>
+            <td>{{ form_widget(form.ClubCityContact) }}</td>
         </tr>
     </table>
     {{ form_end(form) }}

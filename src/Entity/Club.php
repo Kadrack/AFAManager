@@ -86,10 +86,35 @@ class Club
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $club_name_contact;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
      *
      * @Assert\Email()
      */
     private $club_email_contact;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $club_phone_contact;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $club_address_contact;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $club_zip_contact;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $club_city_contact;
 
     /**
      * @ORM\Column(type="text", nullable=true)
@@ -292,6 +317,18 @@ class Club
         return $this;
     }
 
+    public function getClubNameContact(): ?string
+    {
+        return $this->club_name_contact;
+    }
+
+    public function setClubNameContact(?string $club_name_contact): self
+    {
+        $this->club_name_contact = $club_name_contact;
+
+        return $this;
+    }
+
     public function getClubEmailContact(): ?string
     {
         return $this->club_email_contact;
@@ -300,6 +337,54 @@ class Club
     public function setClubEmailContact(?string $club_email_contact): self
     {
         $this->club_email_contact = $club_email_contact;
+
+        return $this;
+    }
+
+    public function getClubPhoneContact(): ?string
+    {
+        return $this->club_phone_contact;
+    }
+
+    public function setClubPhoneContact(?string $club_phone_contact): self
+    {
+        $this->club_phone_contact = $club_phone_contact;
+
+        return $this;
+    }
+
+    public function getClubAddressContact(): ?string
+    {
+        return $this->club_address_contact;
+    }
+
+    public function setClubAddressContact(?string $club_address_contact): self
+    {
+        $this->club_address_contact = $club_address_contact;
+
+        return $this;
+    }
+
+    public function getClubZipContact(): ?int
+    {
+        return $this->club_zip_contact;
+    }
+
+    public function setClubZipContact(?int $club_zip_contact): self
+    {
+        $this->club_zip_contact = $club_zip_contact;
+
+        return $this;
+    }
+
+    public function getClubCityContact(): ?string
+    {
+        return $this->club_city_contact;
+    }
+
+    public function setClubCityContact(?string $club_city_contact): self
+    {
+        $this->club_city_contact = $club_city_contact;
 
         return $this;
     }
