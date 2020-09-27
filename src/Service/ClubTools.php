@@ -23,7 +23,7 @@ class ClubTools
     private $em;
 
     /**
-     * MemberTools constructor.
+     * ClubTools constructor.
      * @param ObjectManager $entityManager
      * @param Club $club
      */

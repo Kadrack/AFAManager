@@ -24,7 +24,7 @@
                 <tr>
                     <td>{{ club.Id }}</td>
                     <td>{{ club.Name|title }}</td>
-                    <td><a href="{{ path('secretariat_association_details', {'club': club.Id}) }}">Association</a> - <a href="{{ path('secretariat_members_active', {'club': club.Id}) }}">Membres Actifs</a> - <a href="{{ path('secretariat_form_renew_create', {'club': club.Id}) }}" target="_blank">Formulaires licences</a> - <a href="{{ path('secretariat_members_ancient', {'club': club.Id}) }}">Membres Inactifs</a> - <a href="{{ path('secretariat_club_manager_create', {'club': club.Id}) }}">Créer gestionnaire</a> - <a href="{{ path('secretariat_club_disaffiliate', {'club': club.Id}) }}">Désaffilier</a></td>
+                    <td><a href="{{ path('secretariat_association_details', {'club': club.Id}) }}">Association</a> - <a href="{{ path('secretariat_dojo_index', {'club': club.Id}) }}">Dojo</a> - <a href="{{ path('secretariat_members_active', {'club': club.Id}) }}">Membres Actifs</a> - <a href="{{ path('secretariat_form_renew_create', {'club': club.Id}) }}" target="_blank">Formulaires licences</a> - <a href="{{ path('secretariat_members_ancient', {'club': club.Id}) }}">Membres Inactifs</a> - <a href="{{ path('secretariat_club_manager_create', {'club': club.Id}) }}">Créer gestionnaire</a> - <a href="{{ path('secretariat_club_disaffiliate', {'club': club.Id}) }}">Désaffilier</a></td>
                 </tr>
             {% endfor %}
         {% endfor %}
