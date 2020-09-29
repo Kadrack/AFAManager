@@ -8,6 +8,7 @@ use App\Entity\ClubTeacher;
 use App\Entity\Training;
 use App\Entity\TrainingAddress;
 
+use App\Entity\User;
 use Doctrine\Persistence\ObjectManager;
 
 /**
@@ -19,6 +20,8 @@ class ClubTools
     private $club;
 
     private $lessons;
+
+    private $managers;
 
     private $em;
 
@@ -52,5 +55,19 @@ class ClubTools
         $this->lessons = array('Dojos' => $dojos, 'Trainings' => $trainings, 'AFA_teachers' => $afa_teachers, 'Foreign_teachers' => $foreign_teachers);
 
         return $this->lessons;
+    }
+
+    public function getManagerList(): ?array
+    {
+        if ($this->managers !== null)
+        {
+            return $this->managers;
+        }
+
+        $managers = $this->getDoctrine()->getRepository(User::class)->findBy(['user_club' => $this->club]);
+
+        $this->managers = $managers;
+
+        return $this->managers;
     }
 }

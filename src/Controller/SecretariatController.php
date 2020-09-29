@@ -1672,15 +1672,15 @@ class SecretariatController extends AbstractController
     }
 
     /**
-     * @Route("/list_gestionnaire_club/{club<\d+>}", name="club_manager_index")
+     * @Route("/liste_gestionnaire_club/{club<\d+>}", name="club_manager_index")
      * @param Club $club
      * @return Response
      */
     public function clubManagerIndex(Club $club)
     {
-        $managers = $this->getDoctrine()->getRepository(User::class)->findBy(['user_club' => $club]);
+        $club_tools = new ClubTools($this->getDoctrine()->getManager(), $club);
 
-        return $this->render('Secretariat/Club/Manager/index.html.twig', array('managers' => $managers, 'club' => $club));
+        return $this->render('Secretariat/Club/Manager/index.html.twig', array('club' => $club, 'club_tools' => $club_tools));
     }
 
     /**

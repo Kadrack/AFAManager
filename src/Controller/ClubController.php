@@ -697,4 +697,17 @@ class ClubController extends AbstractController
 
         return $this->render('Club/Member/add_kyu.html.twig', array('form' => $form->createView()));
     }
+
+    /**
+     * @Route("/liste_gestionnaire", name="manager_index")
+     * @return Response
+     */
+    public function managerIndex()
+    {
+        $club = $this->getUser()->getUserClub();
+
+        $club_tools = new ClubTools($this->getDoctrine()->getManager(), $club);
+
+        return $this->render('Club/Manager/index.html.twig', array('club' => $club, 'club_tools' => $club_tools));
+    }
 }
