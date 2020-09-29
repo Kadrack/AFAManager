@@ -29,8 +29,11 @@ class UserType extends AbstractType
     {
         switch ($options['form'])
         {
-            case 'club_manager_create':
-                $this->clubManagerCreate($builder);
+            case 'club_manager_add':
+                $this->clubManagerAdd($builder);
+                break;
+            case 'club_manager_delete':
+                $this->clubManagerDelete($builder);
                 break;
             case 'my_access':
                 $this->myAccess($builder);
@@ -77,7 +80,7 @@ class UserType extends AbstractType
     /**
      * @param FormBuilderInterface $builder
      */
-    private function clubManagerCreate(FormBuilderInterface $builder)
+    private function clubManagerAdd(FormBuilderInterface $builder)
     {
         $builder
 
@@ -85,6 +88,20 @@ class UserType extends AbstractType
             ->add('UserMember', IntegerType::class, array('label' => 'N° de licence : ', 'mapped' => false))
             ->add('Password', PasswordType::class, array('label' => 'Mot de passe : ', 'mapped' => false))
             ->add('Submit', SubmitType::class, array('label' => 'Créer'))
+        ;
+    }
+
+    /**
+     * @param FormBuilderInterface $builder
+     */
+    private function clubManagerDelete(FormBuilderInterface $builder)
+    {
+        $builder
+
+            ->add('Login', TextType::class, array('label' => 'Login : ', 'disabled' => true))
+            ->add('UserMember', IntegerType::class, array('label' => 'N° de licence : ', 'mapped' => false, 'disabled' => true))
+            ->add('Password', PasswordType::class, array('label' => 'Mot de passe : ', 'mapped' => false, 'disabled' => true))
+            ->add('Submit', SubmitType::class, array('label' => 'Supprimer'))
         ;
     }
 }

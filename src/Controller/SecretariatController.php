@@ -1693,7 +1693,7 @@ class SecretariatController extends AbstractController
     {
         $user = new User();
 
-        $form = $this->createForm(UserType::class, $user, array('form' => 'club_manager_create', 'data_class' => User::class));
+        $form = $this->createForm(UserType::class, $user, array('form' => 'club_manager_add', 'data_class' => User::class));
 
         $form->handleRequest($request);
 
@@ -1750,7 +1750,7 @@ class SecretariatController extends AbstractController
      */
     public function clubManagerDelete(Request $request, Club $club, User $user)
     {
-        $form = $this->createForm(UserType::class, $user, array('form' => 'club_manager_create', 'data_class' => User::class));
+        $form = $this->createForm(UserType::class, $user, array('form' => 'club_manager_delete', 'data_class' => User::class));
 
         $form->handleRequest($request);
 
@@ -1765,7 +1765,7 @@ class SecretariatController extends AbstractController
             return $this->redirectToRoute('secretariat_club_manager_index');
         }
 
-        return $this->render('Secretariat/Club/Manager/add.html.twig', array('form' => $form->createView(), 'user' => $user));
+        return $this->render('Secretariat/Club/Manager/delete.html.twig', array('form' => $form->createView(), 'user' => $user));
     }
 
     /**
