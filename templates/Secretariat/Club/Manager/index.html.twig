@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    AFA-Manager
+{% endblock %}
+
+{% block stylesheets %}
+{% endblock %}
+
+{% block body %}
+    <h1>Liste des gestionnaire du club</h1>
+    <table>
+        <tr>
+            <th>Login</th>
+            <th>Prénom</th>
+            <th>Nom</th>
+            <th>Dernière connexion</th>
+            <th>Commandes</th>
+        </tr>
+        {% for manager in managers %}
+            <tr>
+                <td>{{ manager.login|title }}</td>
+                <td>{% if manager.userMember != null %}{{ manager.userMember.getMemberFirstname|title }}{% else %}{{ manager.userFirstname }}{% endif %}</td>
+                <td>{% if manager.userMember != null %}{{ manager.userMember.getMemberName|title }}{% else %}{{ manager.userName|title }}{% endif %}</td>
+                <td>{{ manager.userLastActivity|date("d/m/Y") }}</td>
+                <td><a href="{{ path('secretariat_club_manager_delete', {'club': manager.userClub.getClubId(), 'user': manager.id}) }}">Supprimer</a></td>
+            </tr>
+        {% endfor %}
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td><a href="{{ path('secretariat_dojo_address_add', {'club': club.getClubId()}) }}">Ajouter</a></td>
+        </tr>
+    </table>
+{% endblock %}
+
+{% block javascripts %}
+{% endblock %}

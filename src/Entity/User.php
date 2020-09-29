@@ -31,6 +31,16 @@ class User implements UserInterface
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
+    private $user_firstname;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $user_real_name;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
     private $roles;
 
     /**
@@ -127,6 +137,30 @@ class User implements UserInterface
     public function setPassword(string $password): self
     {
         $this->password = $password;
+
+        return $this;
+    }
+
+    public function getUserFirstname(): ?string
+    {
+        return $this->user_firstname;
+    }
+
+    public function setUserFirstname(string $user_firstname): self
+    {
+        $this->user_firstname = $user_firstname;
+
+        return $this;
+    }
+
+    public function getUserRealName(): ?string
+    {
+        return $this->user_real_name;
+    }
+
+    public function setUserName(string $user_real_name): self
+    {
+        $this->user_real_name = $user_real_name;
 
         return $this;
     }

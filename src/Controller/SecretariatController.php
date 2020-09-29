@@ -1672,12 +1672,24 @@ class SecretariatController extends AbstractController
     }
 
     /**
-     * @Route("/creer_gestionnaire_club/{club<\d+>}", name="club_manager_create")
+     * @Route("/list_gestionnaire_club/{club<\d+>}", name="club_manager_index")
+     * @param Club $club
+     * @return Response
+     */
+    public function clubManagerIndex(Club $club)
+    {
+        $managers = $this->getDoctrine()->getRepository(User::class)->findBy(['user_club' => $club]);
+
+        return $this->render('Secretariat/Club/Manager/index.html.twig', array('managers' => $managers));
+    }
+
+    /**
+     * @Route("/creer_gestionnaire_club/{club<\d+>}", name="club_manager_add")
      * @param Request $request
      * @param Club $club
      * @return Response
      */
-    public function clubManagerCreate(Request $request, Club $club)
+    public function clubManagerAdd(Request $request, Club $club)
     {
         $user = new User();
 
@@ -1693,7 +1705,14 @@ class SecretariatController extends AbstractController
 
             if (is_null($member))
             {
-                return $this->redirectToRoute('secretariat_club_manager_create', array('club' => $club));
+                $user->setPassword($this->passwordEncoder->encodePassword($user, $form['Password']->getData()));
+                $user->setUserClub($club);
+                $user->setUserStatus(1);
+
+                $entityManager->persist($user);
+                $entityManager->flush();
+
+                return $this->redirectToRoute('secretariat_club_manager_index', array('club' => $club));
             }
             elseif (is_null($this->getDoctrine()->getRepository(User::class)->findOneBy(['user_member' => $form->get('UserMember')->getData()])))
             {
@@ -1705,7 +1724,7 @@ class SecretariatController extends AbstractController
                 $entityManager->persist($user);
                 $entityManager->flush();
 
-                return $this->redirectToRoute('secretariat_index');
+                return $this->redirectToRoute('secretariat_club_manager_index', array('club' => $club));
             }
             else
             {
@@ -1715,11 +1734,38 @@ class SecretariatController extends AbstractController
 
                 $entityManager->flush();
 
-                return $this->redirectToRoute('secretariat_index');
+                return $this->redirectToRoute('secretariat_club_manager_index', array('club' => $club));
             }
         }
 
-        return $this->render('Club/Member/login_create.html.twig', array('form' => $form->createView(), 'user' => $user));
+        return $this->render('Secretariat/Club/Manager/add.html.twig', array('form' => $form->createView(), 'user' => $user));
+    }
+
+    /**
+     * @Route("/supprimer_gestionnaire_club/{club<\d+>}/{user<\d+>}", name="club_manager_delete")
+     * @param Request $request
+     * @param Club $club
+     * @param User $user
+     * @return Response
+     */
+    public function clubManagerDelete(Request $request, Club $club, User $user)
+    {
+        $form = $this->createForm(UserType::class, $user, array('form' => 'club_manager_create', 'data_class' => User::class));
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid())
+        {
+            $entityManager = $this->getDoctrine()->getManager();
+
+            $user->setUserClub(null);
+
+            $entityManager->flush();
+
+            return $this->redirectToRoute('secretariat_club_manager_index');
+        }
+
+        return $this->render('Secretariat/Club/Manager/add.html.twig', array('form' => $form->createView(), 'user' => $user));
     }
 
     /**
