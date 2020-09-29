@@ -22,8 +22,8 @@
         </tr>
         {% for member in members %}
             <tr>
-                <td>{{ member.Name }}</td>
-                <td>{{ member.Firstname }}</td>
+                <td>{{ member.Name|title }}</td>
+                <td>{{ member.Firstname|title }}</td>
                 <td></td>
             </tr>
         {% endfor %}
