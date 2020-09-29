@@ -83,7 +83,7 @@ class MemberRepository extends ServiceEntityRepository
     {
         $qb = $this->createQueryBuilder('m');
 
-        return $qb->select('m.member_id AS Member', 'm.member_firstname AS FirstName', 'm.member_name AS Name', 'l.member_modification_firstname AS NewFirstName', 'l.member_modification_name AS NewName', 'l.member_modification_birthday AS Birthday', 'l.member_modification_address AS Address', 'l.member_modification_zip AS Zip', 'l.member_modification_city AS City', 'l.member_modification_country AS Country', 'l.member_modification_email AS Email')
+        return $qb->select('m.member_id AS Member', 'm.member_firstname AS FirstName', 'm.member_name AS Name', 'l.member_modification_firstname AS NewFirstName', 'l.member_modification_name AS NewName', 'l.member_modification_birthday AS Birthday', 'l.member_modification_address AS Address', 'l.member_modification_zip AS Zip', 'l.member_modification_city AS City', 'l.member_modification_country AS Country', 'l.member_modification_email AS Email', 'l.member_modification_phone AS Phone')
             ->join(MemberModification::class, 'l', 'WITH', $qb->expr()->eq('m.member_modification', 'l.member_modification_id'))
             ->where($qb->expr()->isNotNull('m.member_modification'))
             ->getQuery()
