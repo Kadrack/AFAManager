@@ -393,11 +393,10 @@ class SecretariatController extends AbstractController
 
             if ($member != null)
             {
-                $teacher->setClubTeacherFirstname($member->getMemberFirstname());
                 $teacher->setClubTeacherMember($member);
-                $teacher->setClubTeacherName($member->getMemberName());
 
-                if ($form->get('ClubTeacherTitle')->getData() == 1) {
+                if ($form->get('ClubTeacherTitle')->getData() == 1)
+                {
                     $club->setClubMainTeacher($teacher);
                 }
 
