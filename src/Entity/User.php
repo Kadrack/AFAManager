@@ -158,7 +158,7 @@ class User implements UserInterface
         return $this->user_real_name;
     }
 
-    public function setUserName(string $user_real_name): self
+    public function setUserRealName(string $user_real_name): self
     {
         $this->user_real_name = $user_real_name;
 
