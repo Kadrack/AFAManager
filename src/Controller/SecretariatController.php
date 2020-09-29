@@ -1680,7 +1680,7 @@ class SecretariatController extends AbstractController
     {
         $managers = $this->getDoctrine()->getRepository(User::class)->findBy(['user_club' => $club]);
 
-        return $this->render('Secretariat/Club/Manager/index.html.twig', array('managers' => $managers));
+        return $this->render('Secretariat/Club/Manager/index.html.twig', array('managers' => $managers, 'club' => $club));
     }
 
     /**
@@ -1712,7 +1712,7 @@ class SecretariatController extends AbstractController
                 $entityManager->persist($user);
                 $entityManager->flush();
 
-                return $this->redirectToRoute('secretariat_club_manager_index', array('club' => $club));
+                return $this->redirectToRoute('secretariat_club_manager_index', array('club' => $club->getClubId()));
             }
             elseif (is_null($this->getDoctrine()->getRepository(User::class)->findOneBy(['user_member' => $form->get('UserMember')->getData()])))
             {
@@ -1724,21 +1724,21 @@ class SecretariatController extends AbstractController
                 $entityManager->persist($user);
                 $entityManager->flush();
 
-                return $this->redirectToRoute('secretariat_club_manager_index', array('club' => $club));
+                return $this->redirectToRoute('secretariat_club_manager_index', array('club' => $club->getClubId()));
             }
             else
             {
-                $user = $this->getDoctrine()->getRepository(User::class)->findOneBy(['user_member' => $form->get('MemberLicence')->getData()]);
+                $user = $this->getDoctrine()->getRepository(User::class)->findOneBy(['user_member' => $form->get('UserMember')->getData()]);
 
                 $user->setUserClub($club);
 
                 $entityManager->flush();
 
-                return $this->redirectToRoute('secretariat_club_manager_index', array('club' => $club));
+                return $this->redirectToRoute('secretariat_club_manager_index', array('club' => $club->getClubId()));
             }
         }
 
-        return $this->render('Secretariat/Club/Manager/add.html.twig', array('form' => $form->createView(), 'user' => $user));
+        return $this->render('Secretariat/Club/Manager/add.html.twig', array('form' => $form->createView()));
     }
 
     /**
@@ -1762,10 +1762,10 @@ class SecretariatController extends AbstractController
 
             $entityManager->flush();
 
-            return $this->redirectToRoute('secretariat_club_manager_index');
+            return $this->redirectToRoute('secretariat_club_manager_index', array('club' => $club->getClubId()));
         }
 
-        return $this->render('Secretariat/Club/Manager/delete.html.twig', array('form' => $form->createView(), 'user' => $user));
+        return $this->render('Secretariat/Club/Manager/delete.html.twig', array('form' => $form->createView(), 'club' => $club, 'user' => $user));
     }
 
     /**

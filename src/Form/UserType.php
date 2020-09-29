@@ -99,8 +99,6 @@ class UserType extends AbstractType
         $builder
 
             ->add('Login', TextType::class, array('label' => 'Login : ', 'disabled' => true))
-            ->add('UserMember', IntegerType::class, array('label' => 'N° de licence : ', 'mapped' => false, 'disabled' => true))
-            ->add('Password', PasswordType::class, array('label' => 'Mot de passe : ', 'mapped' => false, 'disabled' => true))
             ->add('Submit', SubmitType::class, array('label' => 'Supprimer'))
         ;
     }
