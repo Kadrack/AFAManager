@@ -23,10 +23,10 @@
         </tr>
         {% for address in club_tools.getLessonsDetails().Dojos %}
             <tr>
-                <td>{{ address.getTrainingAddressName() }}</td>
-                <td>{{ address.getTrainingAddressStreet() }}</td>
+                <td>{{ address.getTrainingAddressName()|title }}</td>
+                <td>{{ address.getTrainingAddressStreet()|title }}</td>
                 <td>{{ address.getTrainingAddressZip() }}</td>
-                <td>{{ address.getTrainingAddressCity() }}</td>
+                <td>{{ address.getTrainingAddressCity()|title }}</td>
                 <td>{{ address.getTrainingAddressTatamis() }}</td>
                 <td>{% if address.getTrainingAddressDEA() %}Oui{% else %}Non{% endif %}</td>
                 <td>{% if address.getTrainingAddressDEA() %}{{ address.getTrainingAddressDEAFormation()|date("d/m/Y") }}{% else %}N/A{% endif %}</td>
@@ -60,7 +60,7 @@
                 <td>{{ training.getTrainingStartingHour()|date('H:i') }}</td>
                 <td>{{ training.getTrainingEndingHour()|date('H:i') }}</td>
                 <td>{{ listData.getTrainingType(training.getTrainingType()) }}</td>
-                <td>{{ training.getTrainingAddress().getTrainingAddressName() }}</td>
+                <td>{{ training.getTrainingAddress().getTrainingAddressName()|title }}</td>
                 <td><a href="{{ path('secretariat_dojo_training_update', {'training': training.getTrainingId(), 'club': club.getClubId()}) }}">Modifier</a> - <a href="{{ path('secretariat_dojo_training_delete', {'training': training.getTrainingId(), 'club': club.getClubId()}) }}">Supprimer</a></td>
             </tr>
         {% endfor %}
@@ -87,8 +87,8 @@
             <tr>
                 <td>{{ listData.getTeacherTitle(teacher.Title) }}</td>
                 <td>{{ listData.getTeacherType(teacher.Type) }}</td>
-                <td>{{ teacher.Firstname }}</td>
-                <td>{{ teacher.Name }}</td>
+                <td>{{ teacher.Firstname|title }}</td>
+                <td>{{ teacher.Name|title }}</td>
                 <td>{{ listData.getGrade(teacher.Grade) }}</td>
                 <td><a href="{{ path('secretariat_dojo_teacher_afa_update', {'teacher': teacher.Id, 'club': club.getClubId()}) }}">Modifier</a> - <a href="{{ path('secretariat_dojo_teacher_afa_delete', {'teacher': teacher.Id, 'club': club.getClubId()}) }}">Supprimer</a></td>
             </tr>
@@ -118,8 +118,8 @@
             <tr>
                 <td>{{ listData.getTeacherTitle(teacher.Title) }}</td>
                 <td>{{ listData.getTeacherType(teacher.Type) }}</td>
-                <td>{{ teacher.Firstname }}</td>
-                <td>{{ teacher.Name }}</td>
+                <td>{{ teacher.Firstname|title }}</td>
+                <td>{{ teacher.Name|title }}</td>
                 <td>{{ listData.getGrade(teacher.Grade) }}</td>
                 <td>{% if teacher.GradeTitleAikikai != null %}{{ listData.getGradeTitleAikikai(teacher.GradeTitleAikikai) }}{% endif %}</td>
                 <td>{% if teacher.GradeTitleAdeps != null %}{{ listData.getGradeTitleAdeps(teacher.GradeTitleAdeps) }}{% endif %}</td>
