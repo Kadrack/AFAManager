@@ -26,6 +26,8 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
+
 use Symfony\Component\Routing\Annotation\Route;
 
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
@@ -510,12 +512,15 @@ class ClubController extends AbstractController
 
     /**
      * @Route("/creer_login/{member<\d+>}", name="member_login_create")
+     * @param SessionInterface $session
      * @param Request $request
      * @param Member $member
      * @return Response
      */
-    public function memberLoginCreate(Request $request, Member $member)
+    public function memberLoginCreate(SessionInterface $session, Request $request, Member $member)
     {
+        $session->set('duplicate', false);
+
         $club = $this->getUser()->getUserClub();
 
         if ($member->getMemberActualClub() != $club)
@@ -531,6 +536,13 @@ class ClubController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid())
         {
+            if (!is_null($this->getDoctrine()->getRepository(User::class)->findOneBy(['login' => $form->get('Login')->getData()])))
+            {
+                $session->set('duplicate', true);
+
+                return $this->render('Club/Member/login_create.html.twig', array('form' => $form->createView()));
+            }
+
             $user->setPassword($this->passwordEncoder->encodePassword($user, $form['Password']->getData()));
             $user->setUserMember($member);
             $user->setUserStatus(1);
@@ -543,7 +555,7 @@ class ClubController extends AbstractController
             return $this->redirectToRoute('club_members_list');
         }
 
-        return $this->render('Club/Member/login_create.html.twig', array('form' => $form->createView(), 'user' => $user));
+        return $this->render('Club/Member/login_create.html.twig', array('form' => $form->createView()));
     }
 
     /**

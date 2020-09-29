@@ -8,6 +8,7 @@
 {% endblock %}
 
 {% block body %}
+    {% if app.session.get('duplicate') %}Le login choisi existe déjà, vous devez en choisir un autre{% endif %}
     {{ form_start(form) }}
     {{ form_widget(form) }}
     {{ form_end(form) }}

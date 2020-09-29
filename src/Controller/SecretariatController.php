@@ -1685,12 +1685,15 @@ class SecretariatController extends AbstractController
 
     /**
      * @Route("/creer_gestionnaire_club/{club<\d+>}", name="club_manager_add")
+     * @param SessionInterface $session
      * @param Request $request
      * @param Club $club
      * @return Response
      */
-    public function clubManagerAdd(Request $request, Club $club)
+    public function clubManagerAdd(SessionInterface $session, Request $request, Club $club)
     {
+        $session->set('duplicate', false);
+
         $user = new User();
 
         $form = $this->createForm(UserType::class, $user, array('form' => 'club_manager_add', 'data_class' => User::class));
@@ -1705,6 +1708,13 @@ class SecretariatController extends AbstractController
 
             if (is_null($member))
             {
+                if (!is_null($this->getDoctrine()->getRepository(User::class)->findOneBy(['login' => $form->get('Login')->getData()])))
+                {
+                    $session->set('duplicate', true);
+
+                    return $this->render('Secretariat/Club/Manager/add.html.twig', array('form' => $form->createView()));
+                }
+
                 $user->setPassword($this->passwordEncoder->encodePassword($user, $form['Password']->getData()));
                 $user->setUserClub($club);
                 $user->setUserStatus(1);
@@ -1716,6 +1726,13 @@ class SecretariatController extends AbstractController
             }
             elseif (is_null($this->getDoctrine()->getRepository(User::class)->findOneBy(['user_member' => $form->get('UserMember')->getData()])))
             {
+                if (!is_null($this->getDoctrine()->getRepository(User::class)->findOneBy(['login' => $form->get('Login')->getData()])))
+                {
+                    $session->set('duplicate', true);
+
+                    return $this->render('Secretariat/Club/Manager/add.html.twig', array('form' => $form->createView()));
+                }
+
                 $user->setPassword($this->passwordEncoder->encodePassword($user, $form['Password']->getData()));
                 $user->setUserClub($club);
                 $user->setUserMember($member);
