@@ -83,7 +83,7 @@
                     {% if is_granted('ROLE_SECRETARIAT') %}
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" data-toggle="dropdown"href="{{ path('secretariat_index') }}">Secrétariat</a>
-                            <div class="dropdown-menu">
+                            <div class="dropdown-menu" style="">
                                 <a class="dropdown-item" href="{{ path('secretariat_supporter_index') }}">Sympathisants</a><br />
                                 <a class="dropdown-item" href="{{ path('secretariat_search_members') }}" target="_blank">Recherche membres</a><br />
                                 <a class="dropdown-item" href="{{ path('secretariat_club_list') }}">Les Clubs</a><br />
