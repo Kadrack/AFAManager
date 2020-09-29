@@ -64,7 +64,7 @@ class ClubTools
             return $this->managers;
         }
 
-        $managers = $this->getDoctrine()->getRepository(User::class)->findBy(['user_club' => $this->club]);
+        $managers = $this->em->getRepository(User::class)->findBy(['user_club' => $this->club]);
 
         $this->managers = $managers;
 
