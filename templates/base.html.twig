@@ -58,7 +58,7 @@
                     {% endif %}
                     {% if is_granted('ROLE_CLUB') %}
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" data-toggle="dropdown"href="{{ path('club_index') }}">Club</a>
+                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="{{ path('club_index') }}">Club</a>
                             <div class="dropdown-menu" style="">
                                  <a class="dropdown-item" href="{{ path('club_dojo_index') }}">Dojo(s), horaires & professeurs</a>
                                  <a class="dropdown-item" href="{{ path('club_members_list') }}">Liste des membres</a>
@@ -82,7 +82,7 @@
                     {% endif %}
                     {% if is_granted('ROLE_SECRETARIAT') %}
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" data-toggle="dropdown"href="{{ path('secretariat_index') }}">Secrétariat</a>
+                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="{{ path('secretariat_index') }}">Secrétariat</a>
                             <div class="dropdown-menu" style="">
                                 <a class="dropdown-item" href="{{ path('secretariat_supporter_index') }}">Sympathisants</a><br />
                                 <a class="dropdown-item" href="{{ path('secretariat_search_members') }}" target="_blank">Recherche membres</a><br />
