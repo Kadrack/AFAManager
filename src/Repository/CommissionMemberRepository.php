@@ -26,7 +26,7 @@ class CommissionMemberRepository extends ServiceEntityRepository
     {
         $qb = $this->createQueryBuilder('c');
 
-        return $qb->select('c.commission_member_id AS Id', 'm.member_firstname AS Firstname', 'm.member_name AS Name')
+        return $qb->select('c.commission_member_id', 'm.member_id AS Id', 'm.member_firstname AS Firstname', 'm.member_name AS Name')
             ->join(Member::class, 'm', 'WITH', $qb->expr()->eq('c.commission_member', 'm.member_id'))
             ->where($qb->expr()->eq('c.commission', $commission))
             ->andWhere($qb->expr()->isNull('c.commission_member_date_out'))

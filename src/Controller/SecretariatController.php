@@ -1673,6 +1673,38 @@ class SecretariatController extends AbstractController
     }
 
     /**
+     * @Route("/commission/{commission<\d+>}/supprimer_membre/{member<\d+>}", name="commission_member_delete")
+     *
+     * @param Request $request
+     * @param Commission $commission
+     * @param Member $member
+     * @return RedirectResponse|Response
+     */
+    public function commissionMemberDelete(Request $request, Commission $commission, Member $member)
+    {
+        $commission_member = $this->getDoctrine()->getRepository(CommissionMember::class)->findOneBy(['commission_member' => $member, 'commission' => $commission]);
+
+        $form = $this->createForm(SecretariatType::class, $member, array('form' => 'commission_member_delete', 'data_class' => Member::class));
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid())
+        {
+            $today = new DateTime('today');
+
+            $commission_member->setCommissionMemberDateOut($today);
+
+            $entityManager = $this->getDoctrine()->getManager();
+
+            $entityManager->flush();
+
+            return $this->redirectToRoute('secretariat_commission_detail', array('commission' => $commission->getCommissionId()));
+        }
+
+        return $this->render('Secretariat/commission_member_delete.html.twig', array('form' => $form->createView()));
+    }
+
+    /**
      * @Route("/liste_gestionnaire_club/{club<\d+>}", name="club_manager_index")
      * @param Club $club
      * @return Response

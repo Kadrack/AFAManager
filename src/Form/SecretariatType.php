@@ -50,6 +50,9 @@ class SecretariatType extends AbstractType
             case 'commission_member_add':
                 $this->commissionMemberAdd($builder);
                 break;
+            case 'commission_member_delete':
+                $this->commissionMemberDelete($builder);
+                break;
             case 'print_stamp':
                 $this->printStamp($builder);
                 break;
@@ -175,6 +178,14 @@ class SecretariatType extends AbstractType
         $builder
             ->add('MemberLicence', IntegerType::class, array('label' => 'N° de licence : ', 'mapped' => false))
             ->add('Submit', SubmitType::class, array('label' => 'Ajouter'))
+        ;
+    }
+
+    private function commissionMemberDelete(FormBuilderInterface $builder)
+    {
+        $builder
+            ->add('MemberId', IntegerType::class, array('label' => 'N° de licence : ', 'disabled' => true))
+            ->add('Submit', SubmitType::class, array('label' => 'Supprimer'))
         ;
     }
 
