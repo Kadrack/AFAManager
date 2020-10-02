@@ -29,7 +29,7 @@
                 <td>{{ member.Id }}</td>
                 <td>{{ member.FirstName|title }}</td>
                 <td>{{ member.Name|title }}</td>
-                <td>{{ member.Club|title }}</td>
+                <td>{{ member.ClubId }} - {{ member.Club|title }}</td>
                 <td>{{ member.Deadline|date("d/m/Y") }}</td>
             </tr>
         {% endfor %}
