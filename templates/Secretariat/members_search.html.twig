@@ -26,7 +26,7 @@
         {% for member in results %}
             <tr>
                 <td>{{ loop.index }}</td>
-                <td>{{ member.Id }}</td>
+                <td><a href="{{ path('secretariat_member_personal_detail', {'club': member.ClubId, 'member': member.Id}) }}">{{ member.Id }}</a></td>
                 <td>{{ member.FirstName|title }}</td>
                 <td>{{ member.Name|title }}</td>
                 <td>{{ member.ClubId }} - {{ member.Club|title }}</td>
