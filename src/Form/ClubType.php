@@ -75,6 +75,9 @@ class ClubType extends AbstractType
                 $choices = $options['choices'];
                 $this->trainingUpdate($builder, $choices);
                 break;
+            case 'search_members':
+                $this->searchMembers($builder);
+                break;
             default:
                 $this->clubCreate($builder);
         }
@@ -316,6 +319,14 @@ class ClubType extends AbstractType
             ->add('TrainingAddress', EntityType::class, array ('label' => 'Adresse : ', 'class' => TrainingAddress::class, 'choices' => $choices, 'choice_label' => 'training_address_street'))
             ->add('TrainingComment', TextareaType::class, array('label' => 'Commentaire : ', 'required' => false))
             ->add('Submit', SubmitType::class, array('label' => 'Modifier'))
+        ;
+    }
+
+    private function searchMembers(FormBuilderInterface $builder)
+    {
+        $builder
+            ->add('Search', TextType::class, array('label' => 'N° licence, Nom', 'mapped' => false))
+            ->add('Submit', SubmitType::class, array('label' => 'Rechercher'))
         ;
     }
 }

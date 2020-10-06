@@ -710,4 +710,30 @@ class ClubController extends AbstractController
 
         return $this->render('Club/Manager/index.html.twig', array('club' => $club, 'club_tools' => $club_tools));
     }
+
+    /**
+     * @Route("/rechercher_membres", name="search_members")
+     * @param Request $request
+     * @return Response
+     */
+    public function searchMembers(Request $request)
+    {
+        $club = $this->getUser()->getUserClub();
+
+        $search = null; $results = null;
+
+        $form = $this->createForm(ClubType::class, $search, array('form' => 'search_members', 'data_class' => null));
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid())
+        {
+            $results = $this->getDoctrine()->getRepository(Member::class)->getFullSearchClubMembers($form->get('Search')->getData(), $club->getClubId());
+
+            return $this->render('Club/Member/search.html.twig', array('form' => $form->createView(), 'results' => $results));
+        }
+
+        return $this->render('Club/Member/search.html.twig', array('form' => $form->createView(), 'results' => $results));
+    }
+
 }

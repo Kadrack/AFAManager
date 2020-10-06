@@ -129,4 +129,26 @@ class MemberRepository extends ServiceEntityRepository
             ->getQuery()
             ->getArrayResult();
     }
+
+    public function getFullSearchClubMembers(string $search, int $club): ?array
+    {
+        $qb = $this->createQueryBuilder('m');
+
+        $qb->select('m.member_id AS Id', 'm.member_firstname AS FirstName', 'm.member_name AS Name', 'm.member_birthday AS Birthday', 'l.member_licence_deadline AS Deadline', 'c.club_name AS Club', 'c.club_id AS ClubId')
+            ->join(MemberLicence::class, 'l', 'WITH', $qb->expr()->eq('m.member_last_licence', 'l.member_licence_id'))
+            ->join(Club::class, 'c', 'WITH', $qb->expr()->eq('m.member_actual_club', 'c.club_id'));
+
+        if (ctype_digit($search))
+        {
+            $qb->where($qb->expr()->eq('Id', $search));
+        }
+        else
+        {
+            $qb->where($qb->expr()->eq('Name', "'".$search."'"));
+        }
+
+        return $qb->andWhere($qb->expr()->eq('ClubId', $club))
+            ->getQuery()
+            ->getArrayResult();
+    }
 }
