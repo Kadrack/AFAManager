@@ -140,14 +140,14 @@ class MemberRepository extends ServiceEntityRepository
 
         if (ctype_digit($search))
         {
-            $qb->where($qb->expr()->eq('Id', $search));
+            $qb->where($qb->expr()->eq('m.member_id', $search));
         }
         else
         {
-            $qb->where($qb->expr()->eq('Name', "'".$search."'"));
+            $qb->where($qb->expr()->eq('m.member_name', "'".$search."'"));
         }
 
-        return $qb->andWhere($qb->expr()->eq('ClubId', $club))
+        return $qb->andWhere($qb->expr()->eq('c.club_id', $club))
             ->getQuery()
             ->getArrayResult();
     }
