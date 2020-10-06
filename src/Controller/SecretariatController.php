@@ -1073,6 +1073,7 @@ class SecretariatController extends AbstractController
             }
 
             $member->setMemberLastLicence($licence_new);
+            $member->setMemberActualClub($licence_new->getMemberLicenceClub());
 
             $entityManager->persist($licence_new);
             $entityManager->persist($stamp);
