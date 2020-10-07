@@ -1174,6 +1174,8 @@ class SecretariatController extends AbstractController
                 }
             }
 
+            $member->setMemberActualClub($this->getDoctrine()->getRepository(Club::class)->findOneBy(['club_id' => $form->get('MemberLicenceClub')->getData()]));
+
             $renew->setMemberLicenceUpdate(new DateTime('today'));
 
             $entityManager->flush();
