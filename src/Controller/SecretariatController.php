@@ -1772,6 +1772,8 @@ class SecretariatController extends AbstractController
                 $user->setPassword($this->passwordEncoder->encodePassword($user, $form['Password']->getData()));
                 $user->setUserClub($club);
                 $user->setUserMember($member);
+                $user->setUserRealName(null);
+                $user->setUserFirstname(null);
                 $user->setUserStatus(1);
 
                 $entityManager->persist($user);

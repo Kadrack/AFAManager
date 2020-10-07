@@ -145,7 +145,7 @@ class User implements UserInterface
         return $this->user_firstname;
     }
 
-    public function setUserFirstname(string $user_firstname): self
+    public function setUserFirstname(?string $user_firstname): self
     {
         $this->user_firstname = $user_firstname;
 
@@ -157,7 +157,7 @@ class User implements UserInterface
         return $this->user_real_name;
     }
 
-    public function setUserRealName(string $user_real_name): self
+    public function setUserRealName(?string $user_real_name): self
     {
         $this->user_real_name = $user_real_name;
 
