@@ -101,7 +101,6 @@ class User implements UserInterface
         {
             $roles[] = 'ROLE_MEMBER';
 
-
             foreach ($this->getUserMember()->getMemberCommissions() as $commission)
             {
                 if (is_null($commission->getCommissionMemberDateOut()))

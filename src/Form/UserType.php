@@ -86,6 +86,8 @@ class UserType extends AbstractType
 
             ->add('Login', TextType::class, array('label' => 'Login : '))
             ->add('UserMember', IntegerType::class, array('label' => 'N° de licence : ', 'mapped' => false, 'required' => false))
+            ->add('UserFirstname', TextType::class, array('label' => 'Prénom : '))
+            ->add('UserRealName', TextType::class, array('label' => 'Nom : '))
             ->add('Password', PasswordType::class, array('label' => 'Mot de passe : ', 'mapped' => false))
             ->add('Submit', SubmitType::class, array('label' => 'Créer'))
         ;

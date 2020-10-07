@@ -20,9 +20,9 @@
         </tr>
         {% for manager in club_tools.managerList %}
             <tr>
-                <td>{{ manager.login|title }}</td>
+                <td>{{ manager.login }}</td>
                 <td>{% if manager.userMember != null %}{{ manager.userMember.getMemberFirstname|title }}{% else %}{{ manager.userFirstname }}{% endif %}</td>
-                <td>{% if manager.userMember != null %}{{ manager.userMember.getMemberName|title }}{% else %}{{ manager.userName|title }}{% endif %}</td>
+                <td>{% if manager.userMember != null %}{{ manager.userMember.getMemberName|title }}{% else %}{{ manager.userRealName|title }}{% endif %}</td>
                 <td>{% if manager.userMember != null %}{{ manager.userMember.memberId }}{% else %}Aucun{% endif %}</td>
                 <td>{% if manager.userLastActivity != null %}{{ manager.userLastActivity|date("d/m/Y") }}{% else %}Aucune{% endif %}</td>
                 <td><a href="{{ path('secretariat_club_manager_delete', {'club': club.getClubId(), 'user': manager.id}) }}">Supprimer</a></td>
