@@ -105,20 +105,24 @@ class LoginAuthenticator extends AbstractFormLoginAuthenticator implements Passw
             // fail authentication with a custom error
             throw new CustomUserMessageAuthenticationException('Login introuvable');
         }
-        elseif (($user->getUserLastActivity() >= new DateTime('-1 year today')) || ($user->getUserLastActivity() == null))
-        {
-            $user->setUserLastActivity(new DateTime('today'));
-        }
-        else
+        elseif ($user->getUserLastActivity() < new DateTime('-1 year today'))
         {
             $user->setUserStatus(0);
+        }
+        elseif (!$this->checkCredentials($credentials, $user))
+        {
+            $user->setUserStatus($user->getUserStatus()+1);
         }
 
         $this->entityManager->flush();
 
-        if ($user->getUserStatus() != 1)
+        if (($user->getUserStatus() == 0) || ($user->getUserStatus() > 4))
         {
             throw new CustomUserMessageAuthenticationException('Login désactivé');
+        }
+        elseif (!$this->checkCredentials($credentials, $user))
+        {
+            throw new CustomUserMessageAuthenticationException('Mot de passe incorrect ' . strval($user->getUserStatus() - 1) . '/3');
         }
 
         return $user;
@@ -153,6 +157,12 @@ class LoginAuthenticator extends AbstractFormLoginAuthenticator implements Passw
      */
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey)
     {
+        $user = $token->getUser();
+
+        $user->setUserStatus(1);
+
+        $this->entityManager->flush();
+
         if ($targetPath = $this->getTargetPath($request->getSession(), $providerKey))
         {
             return new RedirectResponse($targetPath);

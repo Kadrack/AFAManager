@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    AFA-Manager
+{% endblock %}
+
+{% block stylesheets %}
+{% endblock %}
+
+{% block body %}
+    <h1>Liste des gestionnaire du club</h1>
+    <table>
+        <tr>
+            <th>Login</th>
+            <th>Prénom</th>
+            <th>Nom</th>
+            <th>N° de licence</th>
+            <th>Dernière connexion</th>
+            <th>Status accès</th>
+            <th>Commandes</th>
+        </tr>
+        {% for manager in access_list %}
+        <tr>
+            <td>{{ manager.Login }}</td>
+            <td>{% if manager.LicenceId != null %}{{ manager.MemberFirstname|title }}{% else %}{{ manager.UserFirstname }}{% endif %}</td>
+            <td>{% if manager.LicenceId != null %}{{ manager.MemberName|title }}{% else %}{{ manager.UserRealName|title }}{% endif %}</td>
+            <td>{% if manager.LicenceId != null %}{{ manager.LicenceId }}{% else %}Aucun{% endif %}</td>
+            <td>{% if manager.Activity != null %}{{ manager.Activity|date("d/m/Y") }}{% else %}Aucune{% endif %}</td>
+            <td>{% if manager.Status == 0 or manager.Status > 4 %}Verrouillé{% else %}Actif{% endif %}</td>
+            <td>{% if manager.Status == 0 or manager.Status > 4 %}<a href="{{ path('secretariat_access_reactivate', {'user': manager.UserId}) }}">Réactiver</a> - {% endif %}<a href="{{ path('secretariat_access_password_modify', {'user': manager.UserId}) }}">Modifier Mot de Passe</a></td>
+        </tr>
+        {% endfor %}
+    </table>
+{% endblock %}
+
+{% block javascripts %}
+{% endblock %}

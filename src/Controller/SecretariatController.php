@@ -1570,7 +1570,7 @@ class SecretariatController extends AbstractController
      */
     public function commissionIndex()
     {
-        $commissions = $this->getDoctrine()->getRepository(Commission::class)->findAll(['commission_name' => 'DESC']);
+        $commissions = $this->getDoctrine()->getRepository(Commission::class)->findAll();
 
         return $this->render('Secretariat/commission_index.html.twig', array('commissions' => $commissions));
     }
@@ -1821,6 +1821,57 @@ class SecretariatController extends AbstractController
         }
 
         return $this->render('Secretariat/Club/Manager/delete.html.twig', array('form' => $form->createView(), 'club' => $club, 'user' => $user));
+    }
+
+    /**
+     * @Route("/liste_acces_interface", name="access_list_index")
+     * @return Response
+     */
+    public function accessListIndex()
+    {
+        $access_list = $this->getDoctrine()->getManager()->getRepository(User::class)->getAccessList();
+
+        return $this->render('Secretariat/Interface/index.html.twig', array('access_list' => $access_list));
+    }
+
+    /**
+     * @Route("/reactivation_acces/{user<\d+>}", name="access_reactivate")
+     * @param User $user
+     * @return Response
+     */
+    public function accessReactivate(User $user)
+    {
+        $user->setUserStatus(1);
+
+        $this->getDoctrine()->getManager()->flush();
+
+        return $this->redirectToRoute('secretariat_access_list_index');
+    }
+
+    /**
+     * @Route("/modification_mot_de_passe_acces/{user<\d+>}", name="access_password_modify")
+     * @param Request $request
+     * @param User $user
+     * @return Response
+     */
+    public function accessPasswordModify(Request $request, User $user)
+    {
+        $form = $this->createForm(UserType::class, $user, array('form' => 'modify_password', 'data_class' => User::class));
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid())
+        {
+            $user->setPassword($this->passwordEncoder->encodePassword($user, $form['Password']->getData()));
+
+            $this->accessReactivate($user);
+
+            $this->getDoctrine()->getManager()->flush();
+
+            return $this->redirectToRoute('secretariat_access_list_index');
+        }
+
+        return $this->render('Secretariat/Interface/modify_password.html.twig');
     }
 
     /**

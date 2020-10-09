@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Member;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\OptimisticLockException;
@@ -27,6 +28,20 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, User::class);
+    }
+
+    public function getAccessList(): ?array
+    {
+        $qb = $this->createQueryBuilder('u');
+
+        return $qb->select('u.id AS UserId', 'u.login AS Login', 'u.user_firstname AS UserFirstname', 'u.user_real_name AS UserRealName', 'm.member_id AS LicenceId', 'm.member_firstname AS MemberFirstname', 'm.member_name AS MemberName', 'u.user_last_activity AS Activity', 'u.user_status AS Status')
+            ->leftJoin(Member::class, 'm', 'WITH', $qb->expr()->eq('u.user_member', 'm.member_id'))
+            ->where($qb->expr()->isNotNull('u.user_club'))
+            ->orderBy('u.roles', 'DESC')
+            ->addOrderBy('u.user_club', 'ASC')
+            ->addOrderBy('u.login', 'ASC')
+            ->getQuery()
+            ->getArrayResult();
     }
 
     /**

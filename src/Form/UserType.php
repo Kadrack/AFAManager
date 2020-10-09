@@ -104,4 +104,15 @@ class UserType extends AbstractType
             ->add('Submit', SubmitType::class, array('label' => 'Supprimer'))
         ;
     }
+
+    /**
+     * @param FormBuilderInterface $builder
+     */
+    private function modifyPassword(FormBuilderInterface $builder)
+    {
+        $builder
+            ->add('Password', PasswordType::class, array('label' => 'Nouveau mot de passe : ', 'mapped' => false))
+            ->add('Submit', SubmitType::class, array('label' => 'Modifier'))
+        ;
+    }
 }
