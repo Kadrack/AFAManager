@@ -17,8 +17,9 @@ use App\Entity\SecretariatSupporter;
 use App\Entity\Training;
 use App\Entity\TrainingAddress;
 use App\Entity\TrainingSession;
-
 use App\Entity\User;
+use App\Entity\UserAuditTrail;
+
 use App\Form\ClubType;
 use App\Form\GradeType;
 use App\Form\MemberType;
@@ -1758,6 +1759,25 @@ class SecretariatController extends AbstractController
                 $entityManager->persist($user);
                 $entityManager->flush();
 
+                $auditTrail = new UserAuditTrail();
+
+                $auditTrail->setUserAuditTrailAction(7);
+                $auditTrail->setUserAuditTrailUser($user);
+                $auditTrail->setUserAuditTrailWho($this->getUser());
+
+                $entityManager->persist($auditTrail);
+                $entityManager->flush();
+
+                $auditTrail = new UserAuditTrail();
+
+                $auditTrail->setUserAuditTrailAction(8);
+                $auditTrail->setUserAuditTrailClub($club);
+                $auditTrail->setUserAuditTrailUser($user);
+                $auditTrail->setUserAuditTrailWho($this->getUser());
+
+                $entityManager->persist($auditTrail);
+                $entityManager->flush();
+
                 return $this->redirectToRoute('secretariat_club_manager_index', array('club' => $club->getClubId()));
             }
             elseif (is_null($this->getDoctrine()->getRepository(User::class)->findOneBy(['user_member' => $form->get('UserMember')->getData()])))
@@ -1779,6 +1799,25 @@ class SecretariatController extends AbstractController
                 $entityManager->persist($user);
                 $entityManager->flush();
 
+                $auditTrail = new UserAuditTrail();
+
+                $auditTrail->setUserAuditTrailAction(7);
+                $auditTrail->setUserAuditTrailUser($user);
+                $auditTrail->setUserAuditTrailWho($this->getUser());
+
+                $entityManager->persist($auditTrail);
+                $entityManager->flush();
+
+                $auditTrail = new UserAuditTrail();
+
+                $auditTrail->setUserAuditTrailAction(8);
+                $auditTrail->setUserAuditTrailClub($club);
+                $auditTrail->setUserAuditTrailUser($user);
+                $auditTrail->setUserAuditTrailWho($this->getUser());
+
+                $entityManager->persist($auditTrail);
+                $entityManager->flush();
+
                 return $this->redirectToRoute('secretariat_club_manager_index', array('club' => $club->getClubId()));
             }
             else
@@ -1787,6 +1826,16 @@ class SecretariatController extends AbstractController
 
                 $user->setUserClub($club);
 
+                $entityManager->flush();
+
+                $auditTrail = new UserAuditTrail();
+
+                $auditTrail->setUserAuditTrailAction(8);
+                $auditTrail->setUserAuditTrailClub($club);
+                $auditTrail->setUserAuditTrailUser($user);
+                $auditTrail->setUserAuditTrailWho($this->getUser());
+
+                $entityManager->persist($auditTrail);
                 $entityManager->flush();
 
                 return $this->redirectToRoute('secretariat_club_manager_index', array('club' => $club->getClubId()));
@@ -1817,6 +1866,16 @@ class SecretariatController extends AbstractController
 
             $entityManager->flush();
 
+            $auditTrail = new UserAuditTrail();
+
+            $auditTrail->setUserAuditTrailAction(9);
+            $auditTrail->setUserAuditTrailClub($club);
+            $auditTrail->setUserAuditTrailUser($user);
+            $auditTrail->setUserAuditTrailWho($this->getUser());
+
+            $entityManager->persist($auditTrail);
+            $entityManager->flush();
+
             return $this->redirectToRoute('secretariat_club_manager_index', array('club' => $club->getClubId()));
         }
 
@@ -1843,7 +1902,16 @@ class SecretariatController extends AbstractController
     {
         $user->setUserStatus(1);
 
-        $this->getDoctrine()->getManager()->flush();
+        $auditTrail = new UserAuditTrail();
+
+        $auditTrail->setUserAuditTrailAction(5);
+        $auditTrail->setUserAuditTrailUser($user);
+        $auditTrail->setUserAuditTrailWho($this->getUser());
+
+        $entityManager = $this->getDoctrine()->getManager();
+
+        $entityManager->persist($auditTrail);
+        $entityManager->flush();
 
         return $this->redirectToRoute('secretariat_access_list_index');
     }
@@ -1864,14 +1932,21 @@ class SecretariatController extends AbstractController
         {
             $user->setPassword($this->passwordEncoder->encodePassword($user, $form['Password']->getData()));
 
-            $this->accessReactivate($user);
+            $auditTrail = new UserAuditTrail();
 
-            $this->getDoctrine()->getManager()->flush();
+            $auditTrail->setUserAuditTrailAction(6);
+            $auditTrail->setUserAuditTrailUser($user);
+            $auditTrail->setUserAuditTrailWho($this->getUser());
+
+            $entityManager = $this->getDoctrine()->getManager();
+
+            $entityManager->persist($auditTrail);
+            $entityManager->flush();
 
             return $this->redirectToRoute('secretariat_access_list_index');
         }
 
-        return $this->render('Secretariat/Interface/modify_password.html.twig');
+        return $this->render('Secretariat/Interface/modify_password.html.twig', array('form' => $form->createView()));
     }
 
     /**

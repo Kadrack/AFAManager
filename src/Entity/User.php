@@ -6,6 +6,9 @@ use App\Repository\UserRepository;
 
 use DateTimeInterface;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+
 use Doctrine\ORM\Mapping as ORM;
 
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -70,6 +73,22 @@ class User implements UserInterface
      * @ORM\JoinColumn(nullable=true, name="user_join_club", referencedColumnName="club_id")
      */
     private $user_club;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\UserAuditTrail", mappedBy="user_audit_trail_user_user", orphanRemoval=true, cascade={"persist"})
+     */
+    private $user_audit_trails;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\UserAuditTrail", mappedBy="user_audit_trail_user_who", orphanRemoval=true, cascade={"persist"})
+     */
+    private $user_audit_whos;
+
+    public function __construct()
+    {
+        $this->user_audit_whos   = new ArrayCollection();
+        $this->user_audit_trails = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -237,5 +256,67 @@ class User implements UserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
+    }
+
+    /**
+     * @return Collection|UserAuditTrail[]
+     */
+    public function getUserAuditTrails(): Collection
+    {
+        return $this->user_audit_trails;
+    }
+
+    public function addUserAuditTrails(UserAuditTrail $userAuditTrail): self
+    {
+        if (!$this->user_audit_trails->contains($userAuditTrail)) {
+            $this->user_audit_trails[] = $userAuditTrail;
+            $userAuditTrail->setUserAuditTrailUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUserAuditTrails(UserAuditTrail $userAuditTrail): self
+    {
+        if ($this->user_audit_trails->contains($userAuditTrail)) {
+            $this->user_audit_trails->removeElement($userAuditTrail);
+            // set the owning side to null (unless already changed)
+            if ($userAuditTrail->getUserAuditTrailUser() === $this) {
+                $userAuditTrail->setUserAuditTrailUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|UserAuditTrail[]
+     */
+    public function getUserAuditWhos(): Collection
+    {
+        return $this->user_audit_whos;
+    }
+
+    public function addUserAuditWhos(UserAuditTrail $userAuditTrail): self
+    {
+        if (!$this->user_audit_whos->contains($userAuditTrail)) {
+            $this->user_audit_whos[] = $userAuditTrail;
+            $userAuditTrail->setUserAuditTrailWho($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUserAuditWhos(UserAuditTrail $userAuditTrail): self
+    {
+        if ($this->user_audit_whos->contains($userAuditTrail)) {
+            $this->user_audit_whos->removeElement($userAuditTrail);
+            // set the owning side to null (unless already changed)
+            if ($userAuditTrail->getUserAuditTrailWho() === $this) {
+                $userAuditTrail->setUserAuditTrailWho(null);
+            }
+        }
+
+        return $this;
     }
 }

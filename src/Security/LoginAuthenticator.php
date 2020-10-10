@@ -3,6 +3,7 @@
 namespace App\Security;
 
 use App\Entity\User;
+use App\Entity\UserAuditTrail;
 
 use DateTime;
 
@@ -108,10 +109,26 @@ class LoginAuthenticator extends AbstractFormLoginAuthenticator implements Passw
         elseif ($user->getUserLastActivity() < new DateTime('-1 year today'))
         {
             $user->setUserStatus(0);
+
+            $auditTrail = new UserAuditTrail();
+
+            $auditTrail->setUserAuditTrailAction(3);
+            $auditTrail->setUserAuditTrailUser($user);
+
+            $this->entityManager->persist($auditTrail);
+            $this->entityManager->flush();
         }
         elseif (!$this->checkCredentials($credentials, $user))
         {
             $user->setUserStatus($user->getUserStatus()+1);
+
+            $auditTrail = new UserAuditTrail();
+
+            $auditTrail->setUserAuditTrailAction(2);
+            $auditTrail->setUserAuditTrailUser($user);
+
+            $this->entityManager->persist($auditTrail);
+            $this->entityManager->flush();
         }
 
         $this->entityManager->flush();
@@ -161,6 +178,12 @@ class LoginAuthenticator extends AbstractFormLoginAuthenticator implements Passw
 
         $user->setUserStatus(1);
 
+        $auditTrail = new UserAuditTrail();
+
+        $auditTrail->setUserAuditTrailAction(1);
+        $auditTrail->setUserAuditTrailUser($user);
+
+        $this->entityManager->persist($auditTrail);
         $this->entityManager->flush();
 
         if ($targetPath = $this->getTargetPath($request->getSession(), $providerKey))

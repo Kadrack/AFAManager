@@ -163,14 +163,20 @@ class Club
      */
     private $club_trainings;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\UserAuditTrail", mappedBy="user_audit_trail_club", orphanRemoval=true, cascade={"persist"})
+     */
+    private $club_user_audit_trails;
+
     public function __construct()
     {
-        $this->club_addresses = new ArrayCollection();
-        $this->club_grades    = new ArrayCollection();
-        $this->club_histories = new ArrayCollection();
-        $this->club_licences  = new ArrayCollection();
-        $this->club_teachers  = new ArrayCollection();
-        $this->club_trainings = new ArrayCollection();
+        $this->club_addresses         = new ArrayCollection();
+        $this->club_grades            = new ArrayCollection();
+        $this->club_histories         = new ArrayCollection();
+        $this->club_licences          = new ArrayCollection();
+        $this->club_teachers          = new ArrayCollection();
+        $this->club_trainings         = new ArrayCollection();
+        $this->club_user_audit_trails = new ArrayCollection();
     }
 
     public function getClubId(): ?int
@@ -605,6 +611,37 @@ class Club
             // set the owning side to null (unless already changed)
             if ($training->getTrainingClub() === $this) {
                 $training->setTrainingClub(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|UserAuditTrail[]
+     */
+    public function getClubUserAuditTrails(): Collection
+    {
+        return $this->club_user_audit_trails;
+    }
+
+    public function addClubUserAuditTrails(UserAuditTrail $userAuditTrail): self
+    {
+        if (!$this->club_user_audit_trails->contains($userAuditTrail)) {
+            $this->club_user_audit_trails[] = $userAuditTrail;
+            $userAuditTrail->setUserAuditTrailClub($this);
+        }
+
+        return $this;
+    }
+
+    public function removeClubUserAuditTrails(UserAuditTrail $userAuditTrail): self
+    {
+        if ($this->club_user_audit_trails->contains($userAuditTrail)) {
+            $this->club_user_audit_trails->removeElement($userAuditTrail);
+            // set the owning side to null (unless already changed)
+            if ($userAuditTrail->getUserAuditTrailClub() === $this) {
+                $userAuditTrail->setUserAuditTrailClub(null);
             }
         }
 

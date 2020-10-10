@@ -41,6 +41,9 @@ class UserType extends AbstractType
             case 'create':
                 $this->loginCreate($builder);
                 break;
+            case 'modify_password':
+                $this->modifyPassword($builder);
+                break;
             default:
                 break;
         }

@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\User;
 
+use App\Entity\UserAuditTrail;
 use App\Form\UserType;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -58,8 +59,14 @@ class CommonController extends AbstractController
         {
             $user->setPassword($this->passwordEncoder->encodePassword($user, $form['Password']->getData()));
 
+            $auditTrail = new UserAuditTrail();
+
+            $auditTrail->setUserAuditTrailAction(4);
+            $auditTrail->setUserAuditTrailUser($user);
+
             $entityManager = $this->getDoctrine()->getManager();
 
+            $entityManager->persist($auditTrail);
             $entityManager->flush();
 
             return $this->redirectToRoute('common_index');

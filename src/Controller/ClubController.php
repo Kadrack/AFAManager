@@ -9,6 +9,7 @@ use App\Entity\Training;
 use App\Entity\TrainingAddress;
 use App\Entity\User;
 
+use App\Entity\UserAuditTrail;
 use App\Form\ClubType;
 use App\Form\GradeType;
 use App\Form\UserType;
@@ -550,6 +551,15 @@ class ClubController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
 
             $entityManager->persist($user);
+            $entityManager->flush();
+
+            $auditTrail = new UserAuditTrail();
+
+            $auditTrail->setUserAuditTrailAction(7);
+            $auditTrail->setUserAuditTrailUser($user);
+            $auditTrail->setUserAuditTrailWho($this->getUser());
+
+            $entityManager->persist($auditTrail);
             $entityManager->flush();
 
             return $this->redirectToRoute('club_members_list');
