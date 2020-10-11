@@ -9,7 +9,7 @@ use App\Entity\MemberLicence;
 
 use DateTime;
 
-use Doctrine\Persistence\ObjectManager;
+use Doctrine\ORM\EntityManagerInterface;
 
 /**
  * Class Tools
@@ -29,9 +29,9 @@ class MemberTools
 
     /**
      * MemberTools constructor.
-     * @param ObjectManager $entityManager
+     * @param EntityManagerInterface $entityManager
      */
-    public function __construct(ObjectManager $entityManager)
+    public function __construct(EntityManagerInterface $entityManager)
     {
         $this->em = $entityManager;
 

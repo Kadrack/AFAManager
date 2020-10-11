@@ -122,9 +122,7 @@ class MemberController extends AbstractController
      */
     public function myGrades(MemberTools $memberTools)
     {
-        $member = $this->getUser()->getUserMember();
-
-        $memberTools->setMember($member);
+        $memberTools->setMember($this->getUser()->getUserMember());
 
         return $this->render('Member/my_grades.html.twig', array('memberTools' => $memberTools));
     }
