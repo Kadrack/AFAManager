@@ -4,8 +4,9 @@ namespace App\Controller;
 
 use App\Entity\User;
 
-use App\Entity\UserAuditTrail;
 use App\Form\UserType;
+
+use App\Service\UserTools;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
@@ -16,24 +17,11 @@ use Symfony\Component\HttpFoundation\Response;
 
 use Symfony\Component\Routing\Annotation\Route;
 
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
-
 /**
  * @IsGranted("ROLE_USER")
  */
 class CommonController extends AbstractController
 {
-    private $passwordEncoder;
-
-    /**
-     * ClubController constructor.
-     * @param UserPasswordEncoderInterface $passwordEncoder
-     */
-    public function __construct(UserPasswordEncoderInterface $passwordEncoder)
-    {
-        $this->passwordEncoder = $passwordEncoder;
-    }
-
     /**
      * @Route("/", name="common_index")
      */
@@ -45,9 +33,10 @@ class CommonController extends AbstractController
     /**
      * @Route("/mon_acces", name="my_access")
      * @param Request $request
+     * @param UserTools $userTools
      * @return Response
      */
-    public function myAccess(Request $request)
+    public function myAccess(Request $request, UserTools $userTools)
     {
         $user = $this->getUser();
 
@@ -57,17 +46,7 @@ class CommonController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid())
         {
-            $user->setPassword($this->passwordEncoder->encodePassword($user, $form['Password']->getData()));
-
-            $auditTrail = new UserAuditTrail();
-
-            $auditTrail->setUserAuditTrailAction(4);
-            $auditTrail->setUserAuditTrailUser($user);
-
-            $entityManager = $this->getDoctrine()->getManager();
-
-            $entityManager->persist($auditTrail);
-            $entityManager->flush();
+            $userTools->changePassword($user, $form['Password']->getData());
 
             return $this->redirectToRoute('common_index');
         }

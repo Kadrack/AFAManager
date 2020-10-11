@@ -8,9 +8,9 @@
 {% endblock %}
 
 {% block body %}
-    <h1>{{ member.getMemberFirstname()|title }} {{ member.getMemberName()|title }}</h1>
+    <h1>{{ memberTools.getMember.getMemberFirstname()|title }} {{ memberTools.getMember.getMemberName()|title }}</h1>
     <h2>Données personnelles</h2>
-    <img alt="" src="{{ asset('uploads/photos/'~member.getMemberPhoto()) }}" /><br />
+    <img alt="" src="{{ asset('uploads/photos/'~memberTools.getMember.getMemberPhoto()) }}" /><br />
     <table class="table table-hover">
         <thead>
             <tr>
@@ -25,19 +25,19 @@
         </thead>
         <tbody>
             <tr>
-                <td>{{ member.getMemberBirthday()|date("d/m/Y") }}</td>
-                <td>{{ member.getMemberAddress() }}</td>
-                <td>{{ member.getMemberZip() }} {{ member.getMemberCity() }}</td>
-                <td>{{ listData.getCountryName(member.getMemberCountry()) }}</td>
-                <td>{{ member.getMemberEmail() }}</td>
-                <td>{{ member.getMemberPhone() }}</td>
+                <td>{{ memberTools.getMember.getMemberBirthday()|date("d/m/Y") }}</td>
+                <td>{{ memberTools.getMember.getMemberAddress() }}</td>
+                <td>{{ memberTools.getMember.getMemberZip() }} {{ memberTools.getMember.getMemberCity() }}</td>
+                <td>{{ listData.getCountryName(memberTools.getMember.getMemberCountry()) }}</td>
+                <td>{{ memberTools.getMember.getMemberEmail() }}</td>
+                <td>{{ memberTools.getMember.getMemberPhone() }}</td>
                 <td><a class="btn btn-primary" href="{{ path('member_my_data_update') }}">Modifier</a></td>
             </tr>
         </tbody>
     </table>
-    {% if member.getMemberModification() != null %}
+    {% if memberTools.getMember.getMemberModification() != null %}
     <h2>Modification en attente de validation</h2>
-    <img alt="" src=" {{ asset('uploads/photos/'~member.getMemberModification().getMemberModificationPhoto()) }}" /><br />
+    <img alt="" src=" {{ asset('uploads/photos/'~memberTools.getMember.getMemberModification().getMemberModificationPhoto()) }}" /><br />
     <table class="table table-hover">
         <thead>
             <tr>
@@ -53,14 +53,14 @@
         </thead>
         <tbody>
             <tr>
-                <td>{{ member.getMemberModification().getMemberModificationFirstname() }}</td>
-                <td>{{ member.getMemberModification().getMemberModificationName() }}</td>
-                <td>{% if member.getMemberModification().getMemberModificationBirthday() != null %}{{ member.getMemberModification().getMemberModificationBirthday()|date("d/m/Y") }}{% endif %}</td>
-                <td>{{ member.getMemberModification().getMemberModificationAddress() }}</td>
-                <td>{{ member.getMemberModification().getMemberModificationZip() }} {{ member.getMemberModification().getMemberModificationCity() }}</td>
-                <td>{% if member.getMemberModification().getMemberModificationCountry() != null %}{{ listData.getCountryName(member.getMemberModification().getMemberModificationCountry()) }}{% endif %}</td>
-                <td>{{ member.getMemberModification().getMemberModificationEmail() }}</td>
-                <td>{{ member.getMemberModification().getMemberModificationPhone() }}</td>
+                <td>{{ memberTools.getMember.getMemberModification().getMemberModificationFirstname() }}</td>
+                <td>{{ memberTools.getMember.getMemberModification().getMemberModificationName() }}</td>
+                <td>{% if memberTools.getMember.getMemberModification().getMemberModificationBirthday() != null %}{{ memberTools.getMember.getMemberModification().getMemberModificationBirthday()|date("d/m/Y") }}{% endif %}</td>
+                <td>{{ memberTools.getMember.getMemberModification().getMemberModificationAddress() }}</td>
+                <td>{{ memberTools.getMember.getMemberModification().getMemberModificationZip() }} {{ memberTools.getMember.getMemberModification().getMemberModificationCity() }}</td>
+                <td>{% if memberTools.getMember.getMemberModification().getMemberModificationCountry() != null %}{{ listData.getCountryName(memberTools.getMember.getMemberModification().getMemberModificationCountry()) }}{% endif %}</td>
+                <td>{{ memberTools.getMember.getMemberModification().getMemberModificationEmail() }}</td>
+                <td>{{ memberTools.getMember.getMemberModification().getMemberModificationPhone() }}</td>
             </tr>
         </tbody>
     </table>

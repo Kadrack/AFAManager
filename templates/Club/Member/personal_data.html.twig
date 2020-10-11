@@ -8,9 +8,9 @@
 {% endblock %}
 
 {% block body %}
-    <h1>{{ member.getMemberFirstname()|title }} {{ member.getMemberName()|title }}</h1>
+    <h1>{{ memberTools.getMember.getMemberFirstname()|title }} {{ memberTools.getMember.getMemberName()|title }}</h1>
     <h2>Données personnelles</h2>
-    <img alt="" src=" {{ asset('uploads/photos/'~member.getMemberPhoto()) }}" /><br />
+    <img alt="" src=" {{ asset('uploads/photos/'~memberTools.getMember.getMemberPhoto()) }}" /><br />
     <table class="table table-hover">
         <thead>
             <tr>
@@ -22,16 +22,16 @@
         </thead>
         <tbody>
             <tr>
-                <td>{{ member.getMemberAddress() }}</td>
-                <td>{{ member.getMemberZip() }} {{ member.getMemberCity() }}</td>
-                <td>{{ listData.getCountryName(member.getMemberCountry()) }}</td>
-                <td>{{ member.getMemberEmail() }}</td>
+                <td>{{ memberTools.getMember.getMemberAddress() }}</td>
+                <td>{{ memberTools.getMember.getMemberZip() }} {{ memberTools.getMember.getMemberCity() }}</td>
+                <td>{{ listData.getCountryName(memberTools.getMember.getMemberCountry()) }}</td>
+                <td>{{ memberTools.getMember.getMemberEmail() }}</td>
             </tr>
         </tbody>
     </table>
-    {% if member.getMemberModification() != null %}
+    {% if memberTools.getMember.getMemberModification() != null %}
     <h2>Modification en attente de validation</h2>
-    <img alt="" src=" {{ asset('uploads/photos/'~member.getMemberModification().getMemberModificationPhoto()) }}" /><br />
+    <img alt="" src=" {{ asset('uploads/photos/'~memberTools.getMember.getMemberModification().getMemberModificationPhoto()) }}" /><br />
     <table class="table table-hover">
         <thead>
             <tr>
@@ -43,10 +43,10 @@
         </thead>
         <tbody>
             <tr>
-                <td>{{ member.getMemberModification().getMemberModificationAddress() }}</td>
-                <td>{{ member.getMemberModification().getMemberModificationZip() }} {{ member.getMemberModification().getMemberModificationCity() }}</td>
-                <td>{% if member.getMemberModification().getMemberModificationCountry() != null %}{{ listData.getCountryName(member.getMemberModification().getMemberModificationCountry()) }}{% endif %}</td>
-                <td>{{ member.getMemberModification().getMemberModificationEmail() }}</td>
+                <td>{{ memberTools.getMember.getMemberModification().getMemberModificationAddress() }}</td>
+                <td>{{ memberTools.getMember.getMemberModification().getMemberModificationZip() }} {{ memberTools.getMember.getMemberModification().getMemberModificationCity() }}</td>
+                <td>{% if memberTools.getMember.getMemberModification().getMemberModificationCountry() != null %}{{ listData.getCountryName(memberTools.getMember.getMemberModification().getMemberModificationCountry()) }}{% endif %}</td>
+                <td>{{ memberTools.getMember.getMemberModification().getMemberModificationEmail() }}</td>
             </tr>
         </tbody>
     </table>

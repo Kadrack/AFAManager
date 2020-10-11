@@ -75,12 +75,12 @@ class User implements UserInterface
     private $user_club;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\UserAuditTrail", mappedBy="user_audit_trail_user_user", orphanRemoval=true, cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="App\Entity\UserAuditTrail", mappedBy="user_audit_trail_user", orphanRemoval=true, cascade={"persist"})
      */
     private $user_audit_trails;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\UserAuditTrail", mappedBy="user_audit_trail_user_who", orphanRemoval=true, cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="App\Entity\UserAuditTrail", mappedBy="user_audit_trail_who", orphanRemoval=true, cascade={"persist"})
      */
     private $user_audit_whos;
 

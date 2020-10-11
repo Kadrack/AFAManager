@@ -17,7 +17,7 @@
             <th>N° de licence</th>
             <th>Dernière connexion</th>
         </tr>
-        {% for manager in club_tools.managerList %}
+        {% for manager in clubTools.managerList %}
             <tr>
                 <td>{{ manager.login|title }}</td>
                 <td>{% if manager.userMember != null %}{{ manager.userMember.getMemberFirstname|title }}{% else %}{{ manager.userFirstname }}{% endif %}</td>

@@ -30,17 +30,26 @@ class MemberTools
     /**
      * MemberTools constructor.
      * @param ObjectManager $entityManager
-     * @param Member $member
      */
-    public function __construct(ObjectManager $entityManager, Member $member)
+    public function __construct(ObjectManager $entityManager)
     {
         $this->em = $entityManager;
 
         $this->grades   = null;
         $this->licences = null;
         $this->stages   = null;
+    }
 
+    public function getMember()
+    {
+        return $this->member;
+    }
+
+    public function setMember(Member $member)
+    {
         $this->member = $member;
+
+        return $this->member;
     }
 
     public function getGrades(): ?array

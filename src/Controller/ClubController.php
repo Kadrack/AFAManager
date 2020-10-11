@@ -9,13 +9,13 @@ use App\Entity\Training;
 use App\Entity\TrainingAddress;
 use App\Entity\User;
 
-use App\Entity\UserAuditTrail;
 use App\Form\ClubType;
 use App\Form\GradeType;
 use App\Form\UserType;
 
 use App\Service\ClubTools;
 use App\Service\MemberTools;
+use App\Service\UserTools;
 
 use DateTime;
 
@@ -31,8 +31,6 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 use Symfony\Component\Routing\Annotation\Route;
 
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
-
 /**
  * @Route("/club", name="club_")
  *
@@ -40,17 +38,6 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
  */
 class ClubController extends AbstractController
 {
-    private $passwordEncoder;
-
-    /**
-     * ClubController constructor.
-     * @param UserPasswordEncoderInterface $passwordEncoder
-     */
-    public function __construct(UserPasswordEncoderInterface $passwordEncoder)
-    {
-        $this->passwordEncoder = $passwordEncoder;
-    }
-
     /**
      * @Route("/", name="index")
      */
@@ -61,15 +48,14 @@ class ClubController extends AbstractController
 
     /**
      * @Route("/index_dojo", name="dojo_index")
+     * @param ClubTools $clubTools
      * @return Response
      */
-    public function dojoIndex()
+    public function dojoIndex(ClubTools $clubTools)
     {
-        $club = $this->getUser()->getUserClub();
+        $clubTools->setClub($this->getUser()->getUserClub());
 
-        $club_tools = new ClubTools($this->getDoctrine()->getManager(), $club);
-
-        return $this->render('Club/Dojo/index.html.twig', array('club' => $club, 'club_tools' => $club_tools));
+        return $this->render('Club/Dojo/index.html.twig', array('clubTools' => $clubTools));
     }
 
     /**
@@ -495,9 +481,10 @@ class ClubController extends AbstractController
     /**
      * @Route("/donnees_personnelles/{member<\d+>}", name="member_personal_data")
      * @param Member $member
+     * @param MemberTools $memberTools
      * @return Response
      */
-    public function memberPersonalData(Member $member)
+    public function memberPersonalData(Member $member, MemberTools $memberTools)
     {
         $club = $this->getUser()->getUserClub();
 
@@ -506,22 +493,21 @@ class ClubController extends AbstractController
             return $this->redirectToRoute('club_members_list');
         }
 
-        $member_tools = new MemberTools($this->getDoctrine()->getManager(), $member);
+        $memberTools->setMember($member);
 
-        return $this->render('Club/Member/personal_data.html.twig', array('member' => $member, 'member_tools' => $member_tools));
+        return $this->render('Club/Member/personal_data.html.twig', array('memberTools' => $memberTools));
     }
 
     /**
      * @Route("/creer_login/{member<\d+>}", name="member_login_create")
+     * @param UserTools $userTools
      * @param SessionInterface $session
      * @param Request $request
      * @param Member $member
      * @return Response
      */
-    public function memberLoginCreate(SessionInterface $session, Request $request, Member $member)
+    public function memberLoginCreate(UserTools $userTools, SessionInterface $session, Request $request, Member $member)
     {
-        $session->set('duplicate', false);
-
         $club = $this->getUser()->getUserClub();
 
         if ($member->getMemberActualClub() != $club)
@@ -537,30 +523,14 @@ class ClubController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid())
         {
-            if (!is_null($this->getDoctrine()->getRepository(User::class)->findOneBy(['login' => $form->get('Login')->getData()])))
-            {
-                $session->set('duplicate', true);
+            $userTools->newUser($user, $this->getUser(), $form['Password']->getData(), $member);
 
+            $session->set('duplicate', $userTools->isDuplicate());
+
+            if ($session->get('duplicate'))
+            {
                 return $this->render('Club/Member/login_create.html.twig', array('form' => $form->createView()));
             }
-
-            $user->setPassword($this->passwordEncoder->encodePassword($user, $form['Password']->getData()));
-            $user->setUserMember($member);
-            $user->setUserStatus(1);
-
-            $entityManager = $this->getDoctrine()->getManager();
-
-            $entityManager->persist($user);
-            $entityManager->flush();
-
-            $auditTrail = new UserAuditTrail();
-
-            $auditTrail->setUserAuditTrailAction(7);
-            $auditTrail->setUserAuditTrailUser($user);
-            $auditTrail->setUserAuditTrailWho($this->getUser());
-
-            $entityManager->persist($auditTrail);
-            $entityManager->flush();
 
             return $this->redirectToRoute('club_members_list');
         }
@@ -571,9 +541,10 @@ class ClubController extends AbstractController
     /**
      * @Route("/detail_licence/{member<\d+>}", name="member_licence_detail")
      * @param Member $member
+     * @param MemberTools $memberTools
      * @return Response
      */
-    public function memberLicenceDetail(Member $member)
+    public function memberLicenceDetail(Member $member, MemberTools $memberTools)
     {
         $club = $this->getUser()->getUserClub();
 
@@ -582,17 +553,18 @@ class ClubController extends AbstractController
             return $this->redirectToRoute('club_members_list');
         }
 
-        $member_tools = new MemberTools($this->getDoctrine()->getManager(), $member);
+        $memberTools->setMember($member);
 
-        return $this->render('Club/Member/licence_detail.html.twig', array('member' => $member, 'member_tools' => $member_tools));
+        return $this->render('Club/Member/licence_detail.html.twig', array('memberTools' => $memberTools));
     }
 
     /**
      * @Route("/detail_grades/{member<\d+>}", name="member_grades_detail")
      * @param Member $member
+     * @param MemberTools $memberTools
      * @return Response
      */
-    public function memberGradesDetail(Member $member)
+    public function memberGradesDetail(Member $member, MemberTools $memberTools)
     {
         $club = $this->getUser()->getUserClub();
 
@@ -601,30 +573,32 @@ class ClubController extends AbstractController
             return $this->redirectToRoute('club_members_list');
         }
 
-        $member_tools = new MemberTools($this->getDoctrine()->getManager(), $member);
+        $memberTools->setMember($member);
 
-        return $this->render('Club/Member/grade_detail.html.twig', array('member' => $member, 'member_tools' => $member_tools));
+        return $this->render('Club/Member/grade_detail.html.twig', array('memberTools' => $memberTools));
     }
 
     /**
      * @Route("/detail_stages/{member<\d+>}", name="member_stages_detail")
      * @param Member $member
+     * @param MemberTools $memberTools
      * @return Response
      */
-    public function memberStagesDetail(Member $member)
+    public function memberStagesDetail(Member $member, MemberTools $memberTools)
     {
-        $member_tools = new MemberTools($this->getDoctrine()->getManager(), $member);
+        $memberTools->setMember($member);
 
-        return $this->render('Member/my_stages.html.twig', array('member' => $member, 'member_tools' => $member_tools));
+        return $this->render('Member/my_stages.html.twig', array('memberTools' => $memberTools));
     }
 
     /**
      * @Route("/membre/{member<\d+>}/candidature", name="member_application")
      * @param Request $request
      * @param Member $member
+     * @param MemberTools $memberTools
      * @return RedirectResponse|Response
      */
-    public function memberApplication(Request $request, Member $member)
+    public function memberApplication(Request $request, Member $member, MemberTools $memberTools)
     {
         $club = $this->getUser()->getUserClub();
 
@@ -633,9 +607,9 @@ class ClubController extends AbstractController
             return $this->redirectToRoute('club_members_list');
         }
 
-        $member_tools = new MemberTools($this->getDoctrine()->getManager(), $member);
+        $memberTools->setMember($member);
 
-        $grade = $member_tools->getGrades()['exam']['grade'];
+        $grade = $memberTools->getGrades()['exam']['grade'];
 
         $form = $this->createForm(GradeType::class, $grade, array('form' => 'exam_application', 'data_class' => Grade::class));
 
@@ -710,15 +684,14 @@ class ClubController extends AbstractController
 
     /**
      * @Route("/liste_gestionnaire", name="manager_index")
+     * @param ClubTools $clubTools
      * @return Response
      */
-    public function managerIndex()
+    public function managerIndex(ClubTools $clubTools)
     {
-        $club = $this->getUser()->getUserClub();
+        $clubTools->setClub($this->getUser()->getUserClub());
 
-        $club_tools = new ClubTools($this->getDoctrine()->getManager(), $club);
-
-        return $this->render('Club/Manager/index.html.twig', array('club' => $club, 'club_tools' => $club_tools));
+        return $this->render('Club/Manager/index.html.twig', array('clubTools' => $clubTools));
     }
 
     /**

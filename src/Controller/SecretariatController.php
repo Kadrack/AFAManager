@@ -18,7 +18,6 @@ use App\Entity\Training;
 use App\Entity\TrainingAddress;
 use App\Entity\TrainingSession;
 use App\Entity\User;
-use App\Entity\UserAuditTrail;
 
 use App\Form\ClubType;
 use App\Form\GradeType;
@@ -30,6 +29,7 @@ use App\Form\UserType;
 use App\Service\ClubTools;
 use App\Service\ListData;
 use App\Service\PhotoUploader;
+use App\Service\UserTools;
 
 use DateTime;
 
@@ -49,8 +49,6 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 use Symfony\Component\Routing\Annotation\Route;
 
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
-
 /**
  * @Route("/secretariat", name="secretariat_")
  *
@@ -58,17 +56,6 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
  */
 class SecretariatController extends AbstractController
 {
-    private $passwordEncoder;
-
-    /**
-     * ClubController constructor.
-     * @param UserPasswordEncoderInterface $passwordEncoder
-     */
-    public function __construct(UserPasswordEncoderInterface $passwordEncoder)
-    {
-        $this->passwordEncoder = $passwordEncoder;
-    }
-
     /**
      * @Route("/", name="index")
      */
@@ -198,13 +185,14 @@ class SecretariatController extends AbstractController
     /**
      * @Route("/index_dojo/{club<\d+>}", name="dojo_index")
      * @param Club $club
+     * @param ClubTools $clubTools
      * @return Response
      */
-    public function dojoIndex(Club $club)
+    public function dojoIndex(Club $club, ClubTools $clubTools)
     {
-        $club_tools = new ClubTools($this->getDoctrine()->getManager(), $club);
+        $clubTools->setClub($club);
 
-        return $this->render('Secretariat/Dojo/index.html.twig', array('club' => $club, 'club_tools' => $club_tools));
+        return $this->render('Secretariat/Dojo/index.html.twig', array('clubTools' => $clubTools));
     }
 
     /**
@@ -1711,13 +1699,14 @@ class SecretariatController extends AbstractController
     /**
      * @Route("/liste_gestionnaire_club/{club<\d+>}", name="club_manager_index")
      * @param Club $club
+     * @param ClubTools $clubTools
      * @return Response
      */
-    public function clubManagerIndex(Club $club)
+    public function clubManagerIndex(Club $club, ClubTools $clubTools)
     {
-        $club_tools = new ClubTools($this->getDoctrine()->getManager(), $club);
+        $clubTools->setClub($club);
 
-        return $this->render('Secretariat/Club/Manager/index.html.twig', array('club' => $club, 'club_tools' => $club_tools));
+        return $this->render('Secretariat/Club/Manager/index.html.twig', array('clubTools' => $clubTools));
     }
 
     /**
@@ -1725,9 +1714,10 @@ class SecretariatController extends AbstractController
      * @param SessionInterface $session
      * @param Request $request
      * @param Club $club
+     * @param UserTools $userTools
      * @return Response
      */
-    public function clubManagerAdd(SessionInterface $session, Request $request, Club $club)
+    public function clubManagerAdd(SessionInterface $session, Request $request, Club $club, UserTools $userTools)
     {
         $session->set('duplicate', false);
 
@@ -1739,107 +1729,16 @@ class SecretariatController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid())
         {
-            $entityManager = $this->getDoctrine()->getManager();
+            $userTools->clubManagerAdd($user, $club, $this->getUser(), $form['Password']->getData(), $form->get('UserMember')->getData());
 
-            $member = $this->getDoctrine()->getRepository(Member::class)->findOneBy(['member_id' => $form->get('UserMember')->getData()]);
-
-            if (is_null($member))
+            if ($userTools->isDuplicate())
             {
-                if (!is_null($this->getDoctrine()->getRepository(User::class)->findOneBy(['login' => $form->get('Login')->getData()])))
-                {
-                    $session->set('duplicate', true);
+                $session->set('duplicate', true);
 
-                    return $this->render('Secretariat/Club/Manager/add.html.twig', array('form' => $form->createView()));
-                }
-
-                $user->setPassword($this->passwordEncoder->encodePassword($user, $form['Password']->getData()));
-                $user->setUserClub($club);
-                $user->setUserStatus(1);
-
-                $entityManager->persist($user);
-                $entityManager->flush();
-
-                $auditTrail = new UserAuditTrail();
-
-                $auditTrail->setUserAuditTrailAction(7);
-                $auditTrail->setUserAuditTrailUser($user);
-                $auditTrail->setUserAuditTrailWho($this->getUser());
-
-                $entityManager->persist($auditTrail);
-                $entityManager->flush();
-
-                $auditTrail = new UserAuditTrail();
-
-                $auditTrail->setUserAuditTrailAction(8);
-                $auditTrail->setUserAuditTrailClub($club);
-                $auditTrail->setUserAuditTrailUser($user);
-                $auditTrail->setUserAuditTrailWho($this->getUser());
-
-                $entityManager->persist($auditTrail);
-                $entityManager->flush();
-
-                return $this->redirectToRoute('secretariat_club_manager_index', array('club' => $club->getClubId()));
+                return $this->render('Secretariat/Club/Manager/add.html.twig', array('form' => $form->createView()));
             }
-            elseif (is_null($this->getDoctrine()->getRepository(User::class)->findOneBy(['user_member' => $form->get('UserMember')->getData()])))
-            {
-                if (!is_null($this->getDoctrine()->getRepository(User::class)->findOneBy(['login' => $form->get('Login')->getData()])))
-                {
-                    $session->set('duplicate', true);
 
-                    return $this->render('Secretariat/Club/Manager/add.html.twig', array('form' => $form->createView()));
-                }
-
-                $user->setPassword($this->passwordEncoder->encodePassword($user, $form['Password']->getData()));
-                $user->setUserClub($club);
-                $user->setUserMember($member);
-                $user->setUserRealName(null);
-                $user->setUserFirstname(null);
-                $user->setUserStatus(1);
-
-                $entityManager->persist($user);
-                $entityManager->flush();
-
-                $auditTrail = new UserAuditTrail();
-
-                $auditTrail->setUserAuditTrailAction(7);
-                $auditTrail->setUserAuditTrailUser($user);
-                $auditTrail->setUserAuditTrailWho($this->getUser());
-
-                $entityManager->persist($auditTrail);
-                $entityManager->flush();
-
-                $auditTrail = new UserAuditTrail();
-
-                $auditTrail->setUserAuditTrailAction(8);
-                $auditTrail->setUserAuditTrailClub($club);
-                $auditTrail->setUserAuditTrailUser($user);
-                $auditTrail->setUserAuditTrailWho($this->getUser());
-
-                $entityManager->persist($auditTrail);
-                $entityManager->flush();
-
-                return $this->redirectToRoute('secretariat_club_manager_index', array('club' => $club->getClubId()));
-            }
-            else
-            {
-                $user = $this->getDoctrine()->getRepository(User::class)->findOneBy(['user_member' => $form->get('UserMember')->getData()]);
-
-                $user->setUserClub($club);
-
-                $entityManager->flush();
-
-                $auditTrail = new UserAuditTrail();
-
-                $auditTrail->setUserAuditTrailAction(8);
-                $auditTrail->setUserAuditTrailClub($club);
-                $auditTrail->setUserAuditTrailUser($user);
-                $auditTrail->setUserAuditTrailWho($this->getUser());
-
-                $entityManager->persist($auditTrail);
-                $entityManager->flush();
-
-                return $this->redirectToRoute('secretariat_club_manager_index', array('club' => $club->getClubId()));
-            }
+            return $this->redirectToRoute('secretariat_club_manager_index', array('club' => $club->getClubId()));
         }
 
         return $this->render('Secretariat/Club/Manager/add.html.twig', array('form' => $form->createView()));
@@ -1850,9 +1749,10 @@ class SecretariatController extends AbstractController
      * @param Request $request
      * @param Club $club
      * @param User $user
+     * @param UserTools $userTools
      * @return Response
      */
-    public function clubManagerDelete(Request $request, Club $club, User $user)
+    public function clubManagerDelete(Request $request, Club $club, User $user, UserTools $userTools)
     {
         $form = $this->createForm(UserType::class, $user, array('form' => 'club_manager_delete', 'data_class' => User::class));
 
@@ -1860,21 +1760,7 @@ class SecretariatController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid())
         {
-            $entityManager = $this->getDoctrine()->getManager();
-
-            $user->setUserClub(null);
-
-            $entityManager->flush();
-
-            $auditTrail = new UserAuditTrail();
-
-            $auditTrail->setUserAuditTrailAction(9);
-            $auditTrail->setUserAuditTrailClub($club);
-            $auditTrail->setUserAuditTrailUser($user);
-            $auditTrail->setUserAuditTrailWho($this->getUser());
-
-            $entityManager->persist($auditTrail);
-            $entityManager->flush();
+            $userTools->clubManagerDelete($user, $club, $this->getUser());
 
             return $this->redirectToRoute('secretariat_club_manager_index', array('club' => $club->getClubId()));
         }
@@ -1896,22 +1782,12 @@ class SecretariatController extends AbstractController
     /**
      * @Route("/reactivation_acces/{user<\d+>}", name="access_reactivate")
      * @param User $user
+     * @param UserTools $userTools
      * @return Response
      */
-    public function accessReactivate(User $user)
+    public function accessReactivate(User $user, UserTools $userTools)
     {
-        $user->setUserStatus(1);
-
-        $auditTrail = new UserAuditTrail();
-
-        $auditTrail->setUserAuditTrailAction(5);
-        $auditTrail->setUserAuditTrailUser($user);
-        $auditTrail->setUserAuditTrailWho($this->getUser());
-
-        $entityManager = $this->getDoctrine()->getManager();
-
-        $entityManager->persist($auditTrail);
-        $entityManager->flush();
+        $userTools->reactivate($user, $this->getUser());
 
         return $this->redirectToRoute('secretariat_access_list_index');
     }
@@ -1920,9 +1796,10 @@ class SecretariatController extends AbstractController
      * @Route("/modification_mot_de_passe_acces/{user<\d+>}", name="access_password_modify")
      * @param Request $request
      * @param User $user
+     * @param UserTools $userTools
      * @return Response
      */
-    public function accessPasswordModify(Request $request, User $user)
+    public function accessPasswordModify(Request $request, User $user, UserTools $userTools)
     {
         $form = $this->createForm(UserType::class, $user, array('form' => 'modify_password', 'data_class' => User::class));
 
@@ -1930,18 +1807,7 @@ class SecretariatController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid())
         {
-            $user->setPassword($this->passwordEncoder->encodePassword($user, $form['Password']->getData()));
-
-            $auditTrail = new UserAuditTrail();
-
-            $auditTrail->setUserAuditTrailAction(6);
-            $auditTrail->setUserAuditTrailUser($user);
-            $auditTrail->setUserAuditTrailWho($this->getUser());
-
-            $entityManager = $this->getDoctrine()->getManager();
-
-            $entityManager->persist($auditTrail);
-            $entityManager->flush();
+            $userTools->changePassword($user, $form['Password']->getData(), $this->getUser());
 
             return $this->redirectToRoute('secretariat_access_list_index');
         }

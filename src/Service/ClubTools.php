@@ -3,13 +3,12 @@
 namespace App\Service;
 
 use App\Entity\Club;
-
 use App\Entity\ClubTeacher;
 use App\Entity\Training;
 use App\Entity\TrainingAddress;
-
 use App\Entity\User;
-use Doctrine\Persistence\ObjectManager;
+
+use Doctrine\ORM\EntityManagerInterface;
 
 /**
  * Class Tools
@@ -27,14 +26,24 @@ class ClubTools
 
     /**
      * ClubTools constructor.
-     * @param ObjectManager $entityManager
+     * @param EntityManagerInterface $entityManager
      * @param Club $club
      */
-    public function __construct(ObjectManager $entityManager, Club $club)
+    public function __construct(EntityManagerInterface $entityManager)
     {
         $this->em = $entityManager;
+    }
 
+    public function getClub()
+    {
+        return $this->club;
+    }
+
+    public function setClub(Club $club)
+    {
         $this->club = $club;
+
+        return $this->club;
     }
 
     public function getLessonsDetails(): ?array

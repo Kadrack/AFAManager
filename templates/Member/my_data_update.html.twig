@@ -8,12 +8,12 @@
 {% endblock %}
 
 {% block body %}
-    <h1>{{ member.getMemberFirstname()|title }} {{ member.getMemberName()|title }}</h1>
+    <h1>{{ memberTools.getMember.getMemberFirstname()|title }} {{ memberTools.getMember.getMemberName()|title }}</h1>
     <h2>Données personnelles</h2>
     {{ form_start(form) }}
-    {% if member.getMemberModification() != null %}
-    {% if member.getMemberModification().getMemberModificationPhoto() != null %}
-    <img alt="" src=" {{ asset('uploads/photos/'~member.getMemberModification().getMemberModificationPhoto()) }}" /><br />
+    {% if memberTools.getMember.getMemberModification() != null %}
+    {% if memberTools.getMember.getMemberModification().getMemberModificationPhoto() != null %}
+    <img alt="" src=" {{ asset('uploads/photos/'~memberTools.getMember.getMemberModification().getMemberModificationPhoto()) }}" /><br />
     {% endif %}
     {% endif %}
     {{ form_widget(form.MemberModificationPhoto) }}
@@ -36,15 +36,15 @@
         <tbody>
             <tr>
                 <th scope="row">Données actuelle</th>
-                <td>{{ member.getMemberFirstname() }}</td>
-                <td>{{ member.getMemberName() }}</td>
-                <td>{{ member.getMemberBirthday()|date("d/m/Y") }}</td>
-                <td>{{ member.getMemberAddress() }}</td>
-                <td>{{ member.getMemberZip() }}</td>
-                <td>{{ member.getMemberCity() }}</td>
-                <td>{{ listData.countryName(member.getMemberCountry()) }}</td>
-                <td>{{ member.getMemberEmail() }}</td>
-                <td>{{ member.getMemberPhone() }}</td>
+                <td>{{ memberTools.getMember.getMemberFirstname() }}</td>
+                <td>{{ memberTools.getMember.getMemberName() }}</td>
+                <td>{{ memberTools.getMember.getMemberBirthday()|date("d/m/Y") }}</td>
+                <td>{{ memberTools.getMember.getMemberAddress() }}</td>
+                <td>{{ memberTools.getMember.getMemberZip() }}</td>
+                <td>{{ memberTools.getMember.getMemberCity() }}</td>
+                <td>{{ listData.countryName(memberTools.getMember.getMemberCountry()) }}</td>
+                <td>{{ memberTools.getMember.getMemberEmail() }}</td>
+                <td>{{ memberTools.getMember.getMemberPhone() }}</td>
                 <td></td>
             </tr>
             <tr>

@@ -8,7 +8,7 @@
 {% endblock %}
 
 {% block body %}
-    <h1>{{ club.getClubName()|title }} n°{{ club.getClubId() }}</h1>
+    <h1>{{ clubTools.getClub.getClubName()|title }} n°{{ clubTools.getClub.getClubId() }}</h1>
     <h2>Dojo(s)</h2>
     <table>
         <tr>
@@ -21,7 +21,7 @@
             <th>Formation DEA</th>
             <th>Commandes</th>
         </tr>
-        {% for address in club_tools.getLessonsDetails().Dojos %}
+        {% for address in clubTools.getLessonsDetails().Dojos %}
             <tr>
                 <td>{{ address.getTrainingAddressName()|title }}</td>
                 <td>{{ address.getTrainingAddressStreet()|title }}</td>
@@ -54,7 +54,7 @@
             <th>Salle</th>
             <th>Commandes</th>
         </tr>
-        {% for training in club_tools.getLessonsDetails().Trainings %}
+        {% for training in clubTools.getLessonsDetails().Trainings %}
             <tr>
                 <td>{{ listData.getDay(training.getTrainingDay()) }}</td>
                 <td>{{ training.getTrainingStartingHour()|date('H:i') }}</td>
@@ -83,7 +83,7 @@
             <th>Grade</th>
             <th>Commandes</th>
         </tr>
-        {% for teacher in club_tools.getLessonsDetails().AFA_teachers %}
+        {% for teacher in clubTools.getLessonsDetails().AFA_teachers %}
             <tr>
                 <td>{{ listData.getTeacherTitle(teacher.Title) }}</td>
                 <td>{{ listData.getTeacherType(teacher.Type) }}</td>
@@ -114,7 +114,7 @@
             <th>Enseignement ADEPS</th>
             <th>Commandes</th>
         </tr>
-        {% for teacher in club_tools.getLessonsDetails().Foreign_teachers %}
+        {% for teacher in clubTools.getLessonsDetails().Foreign_teachers %}
             <tr>
                 <td>{{ listData.getTeacherTitle(teacher.Title) }}</td>
                 <td>{{ listData.getTeacherType(teacher.Type) }}</td>

@@ -8,10 +8,10 @@
 {% endblock %}
 
 {% block body %}
-    <h1>{{ member.getMemberFirstname()|title }} {{ member.getMemberName()|title }}</h1>
-    <h2>Début de pratique : {{ member.getMemberFirstLicence().getMemberLicenceMedicalCertificate()|date("d/m/Y") }}</h2>
+    <h1>{{ memberTools.getMember.getMemberFirstname()|title }} {{ memberTools.getMember.getMemberName()|title }}</h1>
+    <h2>Début de pratique : {{ memberTools.getMember.getMemberFirstLicence().getMemberLicenceMedicalCertificate()|date("d/m/Y") }}</h2>
     <h2>Historique des grades</h2>
-    {% if member_tools.getGrades().exam.candidate %}<a href="{{ path('club_member_application', {'member': member.memberId(), 'type': 1}) }}">Candidature au prochain examen fédéral</a> {% endif %}{% if member_tools.getGrades().kyu %}<a href="{{ path('club_member_add_kyu', {'member': member.memberId()}) }}">Ajouter un grade Kyu</a> {% endif %}
+    {% if memberTools.getGrades().exam.candidate %}<a href="{{ path('club_member_application', {'member': memberTools.getMember.memberId(), 'type': 1}) }}">Candidature au prochain examen fédéral</a> {% endif %}{% if memberTools.getGrades().kyu %}<a href="{{ path('club_member_add_kyu', {'member': memberTools.getMember.memberId()}) }}">Ajouter un grade Kyu</a> {% endif %}
     <table>
         <tr>
             <th>Grade</th>
@@ -20,7 +20,7 @@
             <th>Résultat</th>
             <th>Type</th>
         </tr>
-        {% for grade in member_tools.getGrades().history %}
+        {% for grade in memberTools.getGrades().history %}
             <tr>
                 <td>{{ listData.getGrade(grade.Rank) }}</td>
                 <td>{{ grade.Date|date("d/m/Y") }}</td>

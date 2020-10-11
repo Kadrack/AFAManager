@@ -117,55 +117,59 @@ class MemberController extends AbstractController
 
     /**
      * @Route("/mes_grades", name="my_grades")
+     * @param MemberTools $memberTools
      * @return Response
      */
-    public function myGrades()
+    public function myGrades(MemberTools $memberTools)
     {
         $member = $this->getUser()->getUserMember();
 
-        $member_tools = new MemberTools($this->getDoctrine()->getManager(), $member);
+        $memberTools->setMember($member);
 
-        return $this->render('Member/my_grades.html.twig', array('member' => $member, 'member_tools' => $member_tools));
+        return $this->render('Member/my_grades.html.twig', array('memberTools' => $memberTools));
     }
 
     /**
      * @Route("/ma_licence", name="my_licence")
+     * @param MemberTools $memberTools
      * @return Response
      */
-    public function myLicence()
+    public function myLicence(MemberTools $memberTools)
     {
         $member = $this->getUser()->getUserMember();
 
-        $member_tools = new MemberTools($this->getDoctrine()->getManager(), $member);
+        $memberTools->setMember($member);
 
-        return $this->render('Member/my_licence.html.twig', array('member' => $member, 'member_tools' => $member_tools));
+        return $this->render('Member/my_licence.html.twig', array('memberTools' => $memberTools));
     }
 
     /**
      * @Route("/mes_stages", name="my_stages")
+     * @param MemberTools $memberTools
      * @return Response
      */
-    public function myStages()
+    public function myStages(MemberTools $memberTools)
     {
         $member = $this->getUser()->getUserMember();
 
-        $member_tools = new MemberTools($this->getDoctrine()->getManager(), $member);
+        $memberTools->setMember($member);
 
-        return $this->render('Member/my_stages.html.twig', array('member' => $member, 'member_tools' => $member_tools));
+        return $this->render('Member/my_stages.html.twig', array('memberTools' => $memberTools));
     }
 
     /**
      * @Route("/ma_candidature/{type<\d+>}", name="my_application")
      * @param Request $request
+     * @param MemberTools $memberTools
      * @return RedirectResponse|Response
      */
-    public function myApplication(Request $request)
+    public function myApplication(Request $request, MemberTools $memberTools)
     {
         $member = $this->getUser()->getUserMember();
 
-        $member_tools = new MemberTools($this->getDoctrine()->getManager(), $member);
+        $memberTools->setMember($member);
 
-        $grade = $member_tools->getGrades()['exam']['grade'];
+        $grade = $memberTools->getGrades()['exam']['grade'];
 
         $form = $this->createForm(GradeType::class, $grade, array('form' => 'exam_application', 'data_class' => Grade::class));
 
@@ -186,14 +190,13 @@ class MemberController extends AbstractController
 
     /**
      * @Route("/mon_club", name="my_club")
+     * @param ClubTools $clubTools
      * @return Response
      */
-    public function myClub()
+    public function myClub(ClubTools $clubTools)
     {
-        $club = $this->getUser()->getUserMember()->getMemberActualClub();
+        $clubTools->setClub($this->getUser()->getUserMember()->getMemberActualClub());
 
-        $club_tools = new ClubTools($this->getDoctrine()->getManager(), $club);
-
-        return $this->render('Member/my_club.html.twig', array('club' => $club, 'club_tools' => $club_tools));
+        return $this->render('Member/my_club.html.twig', array('clubTools' => $clubTools));
     }
 }

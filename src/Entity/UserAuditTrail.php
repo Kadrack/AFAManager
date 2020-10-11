@@ -35,19 +35,19 @@ class UserAuditTrail
     private $user_audit_trail_action;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\User")
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="user_audit_trails", cascade={"persist"})
      * @ORM\JoinColumn(nullable=true, name="user_audit_trail_join_user_user", referencedColumnName="id")
      */
     private $user_audit_trail_user;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\User")
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="user_audit_whos")
      * @ORM\JoinColumn(nullable=true, name="user_audit_trail_join_user_who", referencedColumnName="id")
      */
     private $user_audit_trail_who;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Club")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Club", inversedBy="club_user_audit_trails")
      * @ORM\JoinColumn(nullable=true, name="user_audit_trail_join_club", referencedColumnName="club_id")
      */
     private $user_audit_trail_club;
