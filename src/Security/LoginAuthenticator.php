@@ -106,7 +106,7 @@ class LoginAuthenticator extends AbstractFormLoginAuthenticator implements Passw
             // fail authentication with a custom error
             throw new CustomUserMessageAuthenticationException('Login introuvable');
         }
-        elseif ($user->getUserLastActivity() < new DateTime('-1 year today'))
+        elseif (($user->getUserLastActivity() < new DateTime('-1 year today')) && (!is_null($user->getUserLastActivity())))
         {
             $user->setUserStatus(0);
 
