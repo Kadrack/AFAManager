@@ -262,4 +262,46 @@ class MemberTools
 
         return true;
     }
+
+    /**
+     * @return Grade
+     */
+    public function newKyu()
+    {
+        if ($this->member->getMemberLastGrade()->getGradeRank() < 6)
+        {
+            $rank = $this->member->getMemberLastGrade()->getGradeRank() + 1;
+        }
+        else
+        {
+            $rank = 2;
+        }
+
+        $grade = new Grade();
+
+        $grade->setGradeClub($this->member->getMemberLastLicence()->getMemberLicenceClub());
+        $grade->setGradeDate(new DateTime('today'));
+        $grade->setGradeMember($this->member);
+        $grade->setGradeRank($rank);
+        $grade->setGradeStatus(4);
+
+        return $grade;
+    }
+
+    /**
+     * @param Grade $grade
+     * @return bool
+     */
+    public function addKyu(Grade $grade)
+    {
+        if ($this->member->getMemberLastGrade()->getGradeDate() <= $grade->getGradeDate())
+        {
+            $this->member->setMemberLastGrade($grade);
+        }
+
+        $this->em->persist($grade);
+        $this->em->flush();
+
+        return true;
+    }
 }
