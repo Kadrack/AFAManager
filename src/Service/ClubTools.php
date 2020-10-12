@@ -192,10 +192,9 @@ class ClubTools
     }
 
     /**
-     * @param Club $club
      * @return bool
      */
-    public function associationDetails(Club $club)
+    public function associationDetails()
     {
         $this->em->flush();
 
