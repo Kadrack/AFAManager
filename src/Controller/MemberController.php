@@ -65,7 +65,7 @@ class MemberController extends AbstractController
         {
             $memberTools->setModification($form->getData(), $form['MemberModificationPhoto']->getData(), $form['MemberModificationCountry']->getData());
 
-            return $this->render('Member/my_data.html.twig', array('memberTools' => $memberTools));
+            return $this->render('Member/my_data.html.twig', array('member' => $memberTools->getMember()));
         }
 
         return $this->render('Member/my_data_update.html.twig', array('form' => $form->createView(), 'memberTools' => $memberTools));
