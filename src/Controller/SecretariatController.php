@@ -1729,7 +1729,7 @@ class SecretariatController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid())
         {
-            $userTools->clubManagerAdd($user, $club, $this->getUser(), $form['Password']->getData(), $form->get('UserMember')->getData());
+            $userTools->clubManagerAdd($form->getData(), $club, $this->getUser(), $form['Password']->getData(), $form->get('UserMember')->getData());
 
             if ($userTools->isDuplicate())
             {

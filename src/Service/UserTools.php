@@ -172,9 +172,13 @@ class UserTools
      */
     public function clubManagerAdd(User $user, Club $club, User $who, string $password, ?int $member_id)
     {
-        if ($user->getPassword() == "")
+        if (is_null($this->entityManager->getRepository(User::class)->findOneBy(['user_member' => $member_id])))
         {
             $this->newUser($user, $who, $password, $member_id);
+        }
+        else
+        {
+            $user = $this->entityManager->getRepository(User::class)->findOneBy(['user_member' => $member_id]);
         }
 
         $user->setUserClub($club);

@@ -40,11 +40,18 @@ class MemberTools
         $this->stages   = null;
     }
 
-    public function getMember()
+    /**
+     * @return Member
+     */
+    public function getMember(): Member
     {
         return $this->member;
     }
 
+    /**
+     * @param Member $member
+     * @return Member
+     */
     public function setMember(Member $member)
     {
         $this->member = $member;
@@ -52,6 +59,9 @@ class MemberTools
         return $this->member;
     }
 
+    /**
+     * @return array|null
+     */
     public function getGrades(): ?array
     {
         if ($this->grades != null)
@@ -77,6 +87,9 @@ class MemberTools
         return $this->grades;
     }
 
+    /**
+     * @return bool
+     */
     private function isCandidateKyu(): bool
     {
         $count_kyus = 0;
@@ -94,6 +107,9 @@ class MemberTools
         return $kyu_candidate;
     }
 
+    /**
+     * @return array
+     */
     private function isCandidateDan(): array
     {
         $today = new DateTime('today');
@@ -136,6 +152,10 @@ class MemberTools
         return array('candidate' => $is_candidate, 'grade' => $next_grade);
     }
 
+    /**
+     * @param GradeSession $session
+     * @return Grade|null
+     */
     private function nextGrade(GradeSession $session): ?Grade
     {
         $rank = 0;
@@ -173,6 +193,9 @@ class MemberTools
 
     }
 
+    /**
+     * @return array|null
+     */
     public function getLicences(): ?array
     {
         if ($this->licences != null)
@@ -198,6 +221,9 @@ class MemberTools
         return $this->licences;
     }
 
+    /**
+     * @return array|null
+     */
     public function getStages(): ?array
     {
         if ($this->stages != null)
@@ -223,5 +249,17 @@ class MemberTools
         $this->stages = array('history' => $history, 'total' => $total);
 
         return $this->stages;
+    }
+
+    /**
+     * @param Grade $grade
+     * @return bool
+     */
+    public function application(Grade $grade)
+    {
+        $this->em->persist($grade);
+        $this->em->flush();
+
+        return true;
     }
 }
