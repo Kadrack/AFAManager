@@ -17,8 +17,6 @@ use App\Service\ClubTools;
 use App\Service\MemberTools;
 use App\Service\UserTools;
 
-use DateTime;
-
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;

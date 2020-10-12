@@ -199,34 +199,25 @@ class SecretariatController extends AbstractController
      * @Route("/ajouter_dojo/{club<\d+>}", name="dojo_address_add")
      * @param Request $request
      * @param Club $club
+     * @param ClubTools $clubTools
      * @return RedirectResponse|Response
      */
-    public function dojoAddressAdd(Request $request, Club $club)
+    public function dojoAddressAdd(Request $request, Club $club, ClubTools $clubTools)
     {
+        $clubTools->setClub($club);
+
         $form = $this->createForm(ClubType::class, new TrainingAddress(), array('form' => 'dojo_create', 'data_class' => TrainingAddress::class));
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid())
         {
-            $address = $form->getData();
-
-            if ($address->getTrainingAddressDEA() == false)
-            {
-                $address->setTrainingAddressDEAFormation(null);
-            }
-
-            $address->setTrainingAddressClub($club);
-
-            $entityManager = $this->getDoctrine()->getManager();
-
-            $entityManager->persist($address);
-            $entityManager->flush();
+            $clubTools->dojoAddress($form->getData(), 'Add');
 
             return $this->redirectToRoute('secretariat_dojo_index', array('club' => $club->getClubId()));
         }
 
-        return $this->render('Secretariat/Dojo/address_add.html.twig', array('form' => $form->createView()));
+        return $this->render('Secretariat/Dojo/address_add.html.twig', array('form' => $form->createView(), 'clubTools' => $clubTools->getClub()));
     }
 
     /**
@@ -234,24 +225,25 @@ class SecretariatController extends AbstractController
      * @param Request $request
      * @param TrainingAddress $address
      * @param Club $club
+     * @param ClubTools $clubTools
      * @return RedirectResponse|Response
      */
-    public function dojoAddressUpdate(Request $request, TrainingAddress $address, Club $club)
+    public function dojoAddressUpdate(Request $request, TrainingAddress $address, Club $club, ClubTools $clubTools)
     {
+        $clubTools->setClub($club);
+
         $form = $this->createForm(ClubType::class, $address, array('form' => 'dojo_update', 'data_class' => TrainingAddress::class));
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid())
         {
-            $entityManager = $this->getDoctrine()->getManager();
-
-            $entityManager->flush();
+            $clubTools->dojoAddress($form->getData());
 
             return $this->redirectToRoute('secretariat_dojo_index', array('club' => $club->getClubId()));
         }
 
-        return $this->render('Secretariat/Dojo/address_update.html.twig', array('form' => $form->createView()));
+        return $this->render('Secretariat/Dojo/address_update.html.twig', array('form' => $form->createView(), 'clubTools' => $clubTools->getClub()));
     }
 
     /**
@@ -259,54 +251,50 @@ class SecretariatController extends AbstractController
      * @param Request $request
      * @param TrainingAddress $address
      * @param Club $club
+     * @param ClubTools $clubTools
      * @return RedirectResponse|Response
      */
-    public function dojoAddressDelete(Request $request, TrainingAddress $address, Club $club)
+    public function dojoAddressDelete(Request $request, TrainingAddress $address, Club $club, ClubTools $clubTools)
     {
+        $clubTools->setClub($club);
+
         $form = $this->createForm(ClubType::class, $address, array('form' => 'dojo_delete', 'data_class' => TrainingAddress::class));
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid())
         {
-            $entityManager = $this->getDoctrine()->getManager();
-
-            $entityManager->remove($address);
-            $entityManager->flush();
+            $clubTools->dojoAddress($form->getData(), 'Delete');
 
             return $this->redirectToRoute('secretariat_dojo_index', array('club' => $club->getClubId()));
         }
 
-        return $this->render('Secretariat/Dojo/address_delete.html.twig', array('form' => $form->createView()));
+        return $this->render('Secretariat/Dojo/address_delete.html.twig', array('form' => $form->createView(), 'clubTools' => $clubTools->getClub()));
     }
 
     /**
      * @Route("/ajouter_horaire/{club<\d+>}", name="dojo_training_add")
      * @param Request $request
      * @param Club $club
+     * @param ClubTools $clubTools
      * @return RedirectResponse|Response
      */
-    public function dojoTrainingAdd(Request $request, Club $club)
+    public function dojoTrainingAdd(Request $request, Club $club, ClubTools $clubTools)
     {
+        $clubTools->setClub($club);
+
         $form = $this->createForm(ClubType::class, new Training(), array('form' => 'training_create', 'data_class' => Training::class, 'choices' => $club->getClubAddresses()));
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid())
         {
-            $training = $form->getData();
-
-            $training->setTrainingClub($club);
-
-            $entityManager = $this->getDoctrine()->getManager();
-
-            $entityManager->persist($training);
-            $entityManager->flush();
+            $clubTools->dojoTraining($form->getData(), 'Add');
 
             return $this->redirectToRoute('secretariat_dojo_index', array('club' => $club->getClubId()));
         }
 
-        return $this->render('Secretariat/Dojo/training_add.html.twig', array('form' => $form->createView()));
+        return $this->render('Secretariat/Dojo/training_add.html.twig', array('form' => $form->createView(), 'clubTools' => $clubTools->getClub()));
     }
 
     /**
@@ -314,24 +302,25 @@ class SecretariatController extends AbstractController
      * @param Request $request
      * @param Training $training
      * @param Club $club
+     * @param ClubTools $clubTools
      * @return RedirectResponse|Response
      */
-    public function dojoTrainingUpdate(Request $request, Training $training, Club $club)
+    public function dojoTrainingUpdate(Request $request, Training $training, Club $club, ClubTools $clubTools)
     {
+        $clubTools->setClub($club);
+
         $form = $this->createForm(ClubType::class, $training, array('form' => 'training_update', 'data_class' => Training::class));
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid())
         {
-            $entityManager = $this->getDoctrine()->getManager();
-
-            $entityManager->flush();
+            $clubTools->dojoTraining($form->getData());
 
             return $this->redirectToRoute('secretariat_dojo_index', array('club' => $club->getClubId()));
         }
 
-        return $this->render('Secretariat/Dojo/training_update.html.twig', array('form' => $form->createView()));
+        return $this->render('Secretariat/Dojo/training_update.html.twig', array('form' => $form->createView(), 'clubTools' => $clubTools->getClub()));
     }
 
     /**
@@ -339,66 +328,50 @@ class SecretariatController extends AbstractController
      * @param Request $request
      * @param Training $training
      * @param Club $club
+     * @param ClubTools $clubTools
      * @return RedirectResponse|Response
      */
-    public function dojoTrainingDelete(Request $request, Training $training, Club $club)
+    public function dojoTrainingDelete(Request $request, Training $training, Club $club, ClubTools $clubTools)
     {
+        $clubTools->setClub($club);
+
         $form = $this->createForm(ClubType::class, $training, array('form' => 'training_delete', 'data_class' => Training::class));
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid())
         {
-            $entityManager = $this->getDoctrine()->getManager();
-
-            $entityManager->remove($training);
-            $entityManager->flush();
+            $clubTools->dojoTraining($form->getData(), 'Delete');
 
             return $this->redirectToRoute('secretariat_dojo_index', array('club' => $club->getClubId()));
         }
 
-        return $this->render('Secretariat/Dojo/training_delete.html.twig', array('form' => $form->createView()));
+        return $this->render('Secretariat/Dojo/training_delete.html.twig', array('form' => $form->createView(), 'clubTools' => $clubTools->getClub()));
     }
 
     /**
      * @Route("/ajouter_professeur_afa/{club<\d+>}", name="dojo_teacher_afa_add")
      * @param Request $request
      * @param Club $club
+     * @param ClubTools $clubTools
      * @return RedirectResponse|Response
      */
-    public function dojoTeacherAFAAdd(Request $request, Club $club)
+    public function dojoTeacherAFAAdd(Request $request, Club $club, ClubTools $clubTools)
     {
+        $clubTools->setClub($club);
+
         $form = $this->createForm(ClubType::class, new ClubTeacher(), array('form' => 'teacher_afa_create', 'data_class' => ClubTeacher::class));
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid())
         {
-            $teacher = $form->getData();
-
-            $teacher->setClubTeacher($club);
-
-            $member = $this->getDoctrine()->getRepository(Member::class)->findOneBy(['member_id' => $form->get('ClubTeacherMember')->getData()]);
-
-            if ($member != null)
-            {
-                $teacher->setClubTeacherMember($member);
-
-                if ($form->get('ClubTeacherTitle')->getData() == 1)
-                {
-                    $club->setClubMainTeacher($teacher);
-                }
-
-                $entityManager = $this->getDoctrine()->getManager();
-
-                $entityManager->persist($teacher);
-                $entityManager->flush();
-            }
+            $clubTools->dojoTeacher($form->getData(), 'Add', $form->get('ClubTeacherMember')->getData());
 
             return $this->redirectToRoute('secretariat_dojo_index', array('club' => $club->getClubId()));
         }
 
-        return $this->render('Secretariat/Dojo/teacher_afa_add.html.twig', array('form' => $form->createView()));
+        return $this->render('Secretariat/Dojo/teacher_afa_add.html.twig', array('form' => $form->createView(), 'clubTools' => $clubTools->getClub()));
     }
 
     /**
@@ -406,10 +379,13 @@ class SecretariatController extends AbstractController
      * @param Request $request
      * @param ClubTeacher $teacher
      * @param Club $club
+     * @param ClubTools $clubTools
      * @return RedirectResponse|Response
      */
-    public function dojoTeacherAFAUpdate(Request $request, ClubTeacher $teacher, Club $club)
+    public function dojoTeacherAFAUpdate(Request $request, ClubTeacher $teacher, Club $club, ClubTools $clubTools)
     {
+        $clubTools->setClub($club);
+
         $form = $this->createForm(ClubType::class, $teacher, array('form' => 'teacher_afa_update', 'data_class' => ClubTeacher::class));
 
         $form->get('ClubTeacherMember')->setData($teacher->getClubTeacherMember()->getMemberId());
@@ -420,19 +396,12 @@ class SecretariatController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid())
         {
-            if ($form->get('ClubTeacherTitle')->getData() == 1)
-            {
-                $club->setClubMainTeacher($teacher);
-            }
-
-            $entityManager = $this->getDoctrine()->getManager();
-
-            $entityManager->flush();
+            $clubTools->dojoTeacher($form->getData());
 
             return $this->redirectToRoute('secretariat_dojo_index', array('club' => $club->getClubId()));
         }
 
-        return $this->render('Secretariat/Dojo/teacher_afa_update.html.twig', array('form' => $form->createView()));
+        return $this->render('Secretariat/Dojo/teacher_afa_update.html.twig', array('form' => $form->createView(), 'clubTools' => $clubTools->getClub()));
     }
 
     /**
@@ -440,10 +409,13 @@ class SecretariatController extends AbstractController
      * @param Request $request
      * @param ClubTeacher $teacher
      * @param Club $club
+     * @param ClubTools $clubTools
      * @return RedirectResponse|Response
      */
-    public function dojoTeacherAFADelete(Request $request, ClubTeacher $teacher, Club $club)
+    public function dojoTeacherAFADelete(Request $request, ClubTeacher $teacher, Club $club, ClubTools $clubTools)
     {
+        $clubTools->setClub($club);
+
         $form = $this->createForm(ClubType::class, $teacher, array('form' => 'teacher_afa_delete', 'data_class' => ClubTeacher::class));
 
         $form->get('ClubTeacherMember')->setData($teacher->getClubTeacherMember()->getMemberId());
@@ -454,57 +426,37 @@ class SecretariatController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid())
         {
-            $entityManager = $this->getDoctrine()->getManager();
-
-            if ($form->get('ClubTeacherTitle')->getData() == 1)
-            {
-                $main_teacher = $this->getDoctrine()->getRepository(ClubTeacher::class)->findOneBy(['club_teacher' => $club->getClubId(), 'club_teacher_title' => 1]);
-
-                /** @var ClubTeacher $main_teacher */
-                $club->setClubMainTeacher($main_teacher->getClubTeacherId() == $teacher->getClubTeacherId() ? null : $main_teacher);
-            }
-
-            $entityManager->remove($teacher);
-            $entityManager->flush();
+            $clubTools->dojoTeacher($form->getData(), 'Delete');
 
             return $this->redirectToRoute('secretariat_dojo_index', array('club' => $club->getClubId()));
         }
 
-        return $this->render('Secretariat/Dojo/teacher_afa_delete.html.twig', array('form' => $form->createView()));
+        return $this->render('Secretariat/Dojo/teacher_afa_delete.html.twig', array('form' => $form->createView(), 'clubTools' => $clubTools->getClub()));
     }
 
     /**
      * @Route("/ajouter_professeur_etranger/{club<\d+>}", name="dojo_teacher_foreign_add")
      * @param Request $request
      * @param Club $club
+     * @param ClubTools $clubTools
      * @return RedirectResponse|Response
      */
-    public function dojoTeacherForeignAdd(Request $request, Club $club)
+    public function dojoTeacherForeignAdd(Request $request, Club $club, ClubTools $clubTools)
     {
+        $clubTools->setClub($club);
+
         $form = $this->createForm(ClubType::class, new ClubTeacher(), array('form' => 'teacher_foreign_create', 'data_class' => ClubTeacher::class));
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid())
         {
-            $teacher = $form->getData();
-
-            $teacher->setClubTeacher($club);
-
-            if ($form->get('ClubTeacherTitle')->getData() == 1)
-            {
-                $club->setClubMainTeacher($teacher);
-            }
-
-            $entityManager = $this->getDoctrine()->getManager();
-
-            $entityManager->persist($teacher);
-            $entityManager->flush();
+            $clubTools->dojoTeacher($form->getData(), 'Add', $form->get('ClubTeacherMember')->getData());
 
             return $this->redirectToRoute('secretariat_dojo_index', array('club' => $club->getClubId()));
         }
 
-        return $this->render('Secretariat/Dojo/teacher_foreign_add.html.twig', array('form' => $form->createView()));
+        return $this->render('Secretariat/Dojo/teacher_foreign_add.html.twig', array('form' => $form->createView(), 'clubTools' => $clubTools->getClub()));
     }
 
     /**
@@ -512,29 +464,25 @@ class SecretariatController extends AbstractController
      * @param Request $request
      * @param ClubTeacher $teacher
      * @param Club $club
+     * @param ClubTools $clubTools
      * @return RedirectResponse|Response
      */
-    public function dojoTeacherForeignUpdate(Request $request, ClubTeacher $teacher, Club $club)
+    public function dojoTeacherForeignUpdate(Request $request, ClubTeacher $teacher, Club $club, ClubTools $clubTools)
     {
+        $clubTools->setClub($club);
+
         $form = $this->createForm(ClubType::class, $teacher, array('form' => 'teacher_foreign_update', 'data_class' => ClubTeacher::class));
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid())
         {
-            if ($form->get('ClubTeacherTitle')->getData() == 1)
-            {
-                $club->setClubMainTeacher($teacher);
-            }
-
-            $entityManager = $this->getDoctrine()->getManager();
-
-            $entityManager->flush();
+            $clubTools->dojoTeacher($form->getData());
 
             return $this->redirectToRoute('secretariat_dojo_index', array('club' => $club->getClubId()));
         }
 
-        return $this->render('Secretariat/Dojo/teacher_foreign_update.html.twig', array('form' => $form->createView()));
+        return $this->render('Secretariat/Dojo/teacher_foreign_update.html.twig', array('form' => $form->createView(), 'clubTools' => $clubTools->getClub()));
     }
 
     /**
@@ -542,33 +490,25 @@ class SecretariatController extends AbstractController
      * @param Request $request
      * @param ClubTeacher $teacher
      * @param Club $club
+     * @param ClubTools $clubTools
      * @return RedirectResponse|Response
      */
-    public function dojoTeacherForeignDelete(Request $request, ClubTeacher $teacher, Club $club)
+    public function dojoTeacherForeignDelete(Request $request, ClubTeacher $teacher, Club $club, ClubTools $clubTools)
     {
+        $clubTools->setClub($club);
+
         $form = $this->createForm(ClubType::class, $teacher, array('form' => 'teacher_foreign_delete', 'data_class' => ClubTeacher::class));
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid())
         {
-            $entityManager = $this->getDoctrine()->getManager();
-
-            if ($form->get('ClubTeacherTitle')->getData() == 1)
-            {
-                $main_teacher = $this->getDoctrine()->getRepository(ClubTeacher::class)->findOneBy(['club_teacher' => $club->getClubId(), 'club_teacher_title' => 1]);
-
-                /** @var ClubTeacher $main_teacher */
-                $club->setClubMainTeacher($main_teacher->getClubTeacherId() == $teacher->getClubTeacherId() ? null : $main_teacher);
-            }
-
-            $entityManager->remove($teacher);
-            $entityManager->flush();
+            $clubTools->dojoTeacher($form->getData(), 'Delete');
 
             return $this->redirectToRoute('secretariat_dojo_index', array('club' => $club->getClubId()));
         }
 
-        return $this->render('Secretariat/Dojo/teacher_foreign_delete.html.twig', array('form' => $form->createView()));
+        return $this->render('Secretariat/Dojo/teacher_foreign_delete.html.twig', array('form' => $form->createView(), 'clubTools' => $clubTools->getClub()));
     }
 
     /**
