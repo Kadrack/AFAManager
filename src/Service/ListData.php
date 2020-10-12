@@ -11,7 +11,7 @@ use Symfony\Component\Intl\Countries;
 class ListData
 {
     /**
-     * @param int $day
+     * @param int $type
      * @return false|int|int[]|string|void
      */
     public function getAccessType(int $type = 0)
