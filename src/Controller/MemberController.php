@@ -22,8 +22,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 use Symfony\Component\Routing\Annotation\Route;
 
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
-
 /**
  * @Route("/membre", name="member_")
  *
@@ -31,17 +29,6 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
  */
 class MemberController extends AbstractController
 {
-    private $passwordEncoder;
-
-    /**
-     * ClubController constructor.
-     * @param UserPasswordEncoderInterface $passwordEncoder
-     */
-    public function __construct(UserPasswordEncoderInterface $passwordEncoder)
-    {
-        $this->passwordEncoder = $passwordEncoder;
-    }
-
     /**
      * @Route("/", name="index")
      */
@@ -56,63 +43,32 @@ class MemberController extends AbstractController
      */
     public function myData()
     {
-        $member = $this->getUser()->getUserMember();
-
-        return $this->render('Member/my_data.html.twig', array('member' => $member));
+        return $this->render('Member/my_data.html.twig', array('member' => $this->getUser()->getUserMember()));
     }
 
     /**
      * @Route("/mes_donnees/modifier", name="my_data_update")
      * @param Request $request
      * @param PhotoUploader $photoUploader
+     * @param MemberTools $memberTools
      * @return Response
      */
-    public function myDataUpdate(Request $request, PhotoUploader $photoUploader)
+    public function myDataUpdate(Request $request, PhotoUploader $photoUploader, MemberTools $memberTools)
     {
-        $member = $this->getUser()->getUserMember();
+        $memberTools->setMember($this->getUser()->getUserMember());
 
-        if ($member->getMemberModification() == null)
-        {
-            $member_modification = new MemberModification();
-
-            $member_modification->setMemberModificationId($member->getMemberId());
-        }
-        else
-        {
-            $member_modification = $member->getMemberModification();
-        }
-
-        $form = $this->createForm(MemberType::class, $member_modification, array('form' => 'my_data_update', 'data_class' => MemberModification::class));
+        $form = $this->createForm(MemberType::class, $memberTools->getModification(), array('form' => 'my_data_update', 'data_class' => MemberModification::class));
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid())
         {
-            if (($form['MemberModificationPhoto']->getData() != 'nophoto.png') && ($member_modification->getMemberModificationPhoto() !== null))
-            {
-                $member_modification->setMemberModificationPhoto($photoUploader->upload($form['MemberModificationPhoto']->getData(), $member_modification->getMemberModificationPhoto()));
-            }
+            $memberTools->setModification($form->getData(), $form['MemberModificationPhoto']->getData(), $form['MemberModificationCountry']->getData());
 
-            $entityManager = $this->getDoctrine()->getManager();
-
-            if ($member->getMemberModification() == null)
-            {
-                $member->setMemberModification($member_modification);
-
-                $entityManager->persist($member_modification);
-            }
-
-            if ($form['MemberModificationCountry']->getData() == $member->getMemberCountry())
-            {
-                $member_modification->setMemberModificationCountry();
-            }
-
-            $entityManager->flush();
-
-            return $this->render('Member/my_data.html.twig', array('member' => $member));
+            return $this->render('Member/my_data.html.twig', array('memberTools' => $memberTools));
         }
 
-        return $this->render('Member/my_data_update.html.twig', array('form' => $form->createView(), 'member' => $member));
+        return $this->render('Member/my_data_update.html.twig', array('form' => $form->createView(), 'memberTools' => $memberTools));
     }
 
     /**
@@ -134,9 +90,7 @@ class MemberController extends AbstractController
      */
     public function myLicence(MemberTools $memberTools)
     {
-        $member = $this->getUser()->getUserMember();
-
-        $memberTools->setMember($member);
+        $memberTools->setMember($this->getUser()->getUserMember());
 
         return $this->render('Member/my_licence.html.twig', array('memberTools' => $memberTools));
     }
@@ -148,9 +102,7 @@ class MemberController extends AbstractController
      */
     public function myStages(MemberTools $memberTools)
     {
-        $member = $this->getUser()->getUserMember();
-
-        $memberTools->setMember($member);
+        $memberTools->setMember($this->getUser()->getUserMember());
 
         return $this->render('Member/my_stages.html.twig', array('memberTools' => $memberTools));
     }
@@ -163,22 +115,15 @@ class MemberController extends AbstractController
      */
     public function myApplication(Request $request, MemberTools $memberTools)
     {
-        $member = $this->getUser()->getUserMember();
+        $memberTools->setMember($this->getUser()->getUserMember());
 
-        $memberTools->setMember($member);
-
-        $grade = $memberTools->getGrades()['exam']['grade'];
-
-        $form = $this->createForm(GradeType::class, $grade, array('form' => 'exam_application', 'data_class' => Grade::class));
+        $form = $this->createForm(GradeType::class, $memberTools->getGrades()['exam']['grade'], array('form' => 'exam_application', 'data_class' => Grade::class));
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid())
         {
-            $entityManager = $this->getDoctrine()->getManager();
-
-            $entityManager->persist($grade);
-            $entityManager->flush();
+            $memberTools->application($form->getData());
 
             return $this->redirectToRoute('member_my_data');
         }

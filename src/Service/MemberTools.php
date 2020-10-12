@@ -6,6 +6,7 @@ use App\Entity\Grade;
 use App\Entity\GradeSession;
 use App\Entity\Member;
 use App\Entity\MemberLicence;
+use App\Entity\MemberModification;
 
 use DateTime;
 
@@ -25,15 +26,19 @@ class MemberTools
 
     private $member;
 
+    private $photoUploader;
+
     private $stages;
 
     /**
      * MemberTools constructor.
      * @param EntityManagerInterface $entityManager
+     * @param PhotoUploader $photoUploader
      */
-    public function __construct(EntityManagerInterface $entityManager)
+    public function __construct(EntityManagerInterface $entityManager, PhotoUploader $photoUploader)
     {
-        $this->em = $entityManager;
+        $this->em            = $entityManager;
+        $this->photoUploader = $photoUploader;
 
         $this->grades   = null;
         $this->licences = null;
@@ -300,6 +305,55 @@ class MemberTools
         }
 
         $this->em->persist($grade);
+        $this->em->flush();
+
+        return true;
+    }
+
+    /**
+     * @return MemberModification
+     */
+    public function getModification()
+    {
+        if ($this->member->getMemberModification() == null)
+        {
+            $modification = new MemberModification();
+
+            $modification->setMemberModificationId($this->member->getMemberId());
+
+            return $modification;
+        }
+        else
+        {
+            return $this->member->getMemberModification();
+        }
+    }
+
+    /**
+     * @param MemberModification $memberModification
+     * @param string|null $photo
+     * @param string|null $country
+     * @return bool
+     */
+    public function setModification(MemberModification $memberModification, ?string $photo, ?string $country)
+    {
+        if (($photo != 'nophoto.png') && ($memberModification->getMemberModificationPhoto() !== null))
+        {
+            $memberModification->setMemberModificationPhoto($this->photoUploader->upload($photo, $memberModification->getMemberModificationPhoto()));
+        }
+
+        if ($this->member->getMemberModification() == null)
+        {
+            $this->member->setMemberModification($memberModification);
+
+            $this->em->persist($memberModification);
+        }
+
+        if ($country == $this->member->getMemberCountry())
+        {
+            $memberModification->setMemberModificationCountry();
+        }
+
         $this->em->flush();
 
         return true;

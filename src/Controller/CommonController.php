@@ -38,15 +38,13 @@ class CommonController extends AbstractController
      */
     public function myAccess(Request $request, UserTools $userTools)
     {
-        $user = $this->getUser();
-
-        $form = $this->createForm(UserType::class, $user, array('form' => 'my_access', 'data_class' => User::class));
+        $form = $this->createForm(UserType::class, $this->getUser(), array('form' => 'my_access', 'data_class' => User::class));
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid())
         {
-            $userTools->changePassword($user, $form['Password']->getData());
+            $userTools->changePassword($form->getData(), $form['Password']->getData());
 
             return $this->redirectToRoute('common_index');
         }
