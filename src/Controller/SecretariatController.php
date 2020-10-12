@@ -515,19 +515,20 @@ class SecretariatController extends AbstractController
      * @Route("/detail_association/{club<\d+>}", name="association_details")
      * @param Request $request
      * @param Club $club
+     * @param ClubTools $clubTools
      * @return RedirectResponse|Response
      */
-    public function associationDetails(Request $request, Club $club)
+    public function associationDetails(Request $request, Club $club, ClubTools $clubTools)
     {
+        $clubTools->setClub($club);
+
         $form = $this->createForm(ClubType::class, $club, array('form' => 'detail_association'));
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid())
         {
-            $entityManager = $this->getDoctrine()->getManager();
-
-            $entityManager->flush();
+            $clubTools->associationDetails($form->getData());
 
             return $this->redirectToRoute('secretariat_club_list');
         }
