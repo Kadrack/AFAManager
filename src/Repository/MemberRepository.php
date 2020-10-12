@@ -12,10 +12,11 @@ use App\Entity\TrainingAttendance;
 use App\Entity\TrainingSession;
 use App\Entity\User;
 
+use DateTime;
+
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 use Doctrine\Persistence\ManagerRegistry;
-use phpDocumentor\Reflection\DocBlock\Tags\Var_;
 
 /**
  * @method Member|null find($id, $lockMode = null, $lockVersion = null)
@@ -46,8 +47,10 @@ class MemberRepository extends ServiceEntityRepository
 
     }
 
-    public function getClubActiveMembers(Club $club, string $today): ?array
+    public function getClubActiveMembers(Club $club): ?array
     {
+        $today = new DateTime('today');
+
         $qb = $this->createQueryBuilder('m');
 
         return $qb->select('m.member_id AS Id', 'm.member_firstname AS FirstName', 'm.member_name AS Name', 'g.grade_rank AS Grade', 'l.member_licence_deadline AS Deadline', 'u.id AS User')
@@ -55,7 +58,7 @@ class MemberRepository extends ServiceEntityRepository
             ->join(Grade::class, 'g', 'WITH', $qb->expr()->eq('m.member_last_grade', 'g.grade_id'))
             ->leftJoin(User::class, 'u', 'WITH', $qb->expr()->eq('m.member_id', 'u.user_member'))
             ->where($qb->expr()->eq('l.member_licence_club', $club->getClubId()))
-            ->andWhere($qb->expr()->gt('l.member_licence_deadline', "'".$today."'"))
+            ->andWhere($qb->expr()->gt('l.member_licence_deadline', "'".$today->format('Y-m-d')."'"))
             ->andWhere($qb->expr()->eq('l.member_licence_status', 1))
             ->orderBy('FirstName', 'ASC')
             ->addOrderBy('Name', 'ASC')
@@ -63,14 +66,37 @@ class MemberRepository extends ServiceEntityRepository
             ->getArrayResult();
     }
 
-    public function getClubInactiveMembers(Club $club, string $today): ?array
+    public function getClubInactiveMembers(Club $club): ?array
     {
+        $today = new DateTime('today');
+
         $qb = $this->createQueryBuilder('m');
 
         return $qb->select('m.member_firstname AS FirstName', 'm.member_name AS Name', 'm.member_id AS Id', 'l.member_licence_deadline AS Deadline', 'l.member_licence_id AS Licence')
             ->innerJoin(MemberLicence::class, 'l', 'WITH', $qb->expr()->eq('m.member_id', 'l.member_licence'))
             ->where($qb->expr()->eq('l.member_licence_club', $club->getClubId()))
-            ->andWhere($qb->expr()->lte('l.member_licence_deadline', "'".$today."'"))
+            ->andWhere($qb->expr()->lte('l.member_licence_deadline', "'".$today->format('Y-m-d')."'"))
+            ->andWhere($qb->expr()->eq('l.member_licence_status', 1))
+            ->orderBy('Deadline', 'DESC')
+            ->addOrderBy('FirstName', 'ASC')
+            ->addOrderBy('Name', 'ASC')
+            ->getQuery()
+            ->getArrayResult();
+    }
+
+    public function getClubRecentInactiveMembers(Club $club): ?array
+    {
+        $today = new DateTime('today');
+
+        $limit = new DateTime('-3 month today');
+
+        $qb = $this->createQueryBuilder('m');
+
+        return $qb->select('m.member_firstname AS FirstName', 'm.member_name AS Name', 'm.member_id AS Id', 'l.member_licence_deadline AS Deadline', 'l.member_licence_id AS Licence')
+            ->innerJoin(MemberLicence::class, 'l', 'WITH', $qb->expr()->eq('m.member_id', 'l.member_licence'))
+            ->where($qb->expr()->eq('l.member_licence_club', $club->getClubId()))
+            ->andWhere($qb->expr()->lte('l.member_licence_deadline', "'".$today->format('Y-m-d')."'"))
+            ->andWhere($qb->expr()->gte('l.member_licence_deadline', "'".$limit->format('Y-m-d')."'"))
             ->andWhere($qb->expr()->eq('l.member_licence_status', 1))
             ->orderBy('Deadline', 'DESC')
             ->addOrderBy('FirstName', 'ASC')

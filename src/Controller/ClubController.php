@@ -395,11 +395,11 @@ class ClubController extends AbstractController
     {
         $clubTools->setClub($this->getUser()->getUserClub());
 
-        $today = new DateTime('today');
+        $members = $this->getDoctrine()->getRepository(Member::class)->getClubActiveMembers($clubTools->getClub());
 
-        $members = $this->getDoctrine()->getRepository(Member::class)->getClubActiveMembers($clubTools->getClub(), $today->format('Y-m-d'));
+        $old_members = $this->getDoctrine()->getRepository(Member::class)->getClubRecentInactiveMembers($clubTools->getClub());
 
-        return $this->render('Club/Member/list.html.twig', array('members' => $members, 'club' => $clubTools->getClub()));
+        return $this->render('Club/Member/list.html.twig', array('members' => $members, 'old_members' => $old_members, 'club' => $clubTools->getClub()));
     }
 
     /**

@@ -20,16 +20,35 @@
             <th>Commandes</th>
         </tr>
         {% for member in members %}
-            {% if member.Id != null %}
-                <tr>
-                    <td>{{ member.Id }}</td>
-                    <td>{{ member.FirstName|title }}</td>
-                    <td>{{ member.Name|title }}</td>
-                    <td>{{ listData.grade(member.Grade) }}</td>
-                    <td>{{ member.Deadline|date("d/m/Y") }}</td>
-                    <td><a href="{{ path('club_member_grades_detail', {'member': member.Id}) }}">Grades</a> - <a href="{{ path('club_member_stages_detail', {'member': member.Id}) }}">Stages</a> - <a href="{{ path('club_member_licence_detail', {'member': member.Id}) }}">Licence</a> - <a href="{{ path('club_member_personal_data', {'member': member.Id}) }}">Données personnelles</a>{% if member.User == null %} - <a href="{{ path('club_member_login_create', {'member': member.Id}) }}">Créer accès</a>{% endif %}</td>
-                </tr>
-            {% endif %}
+        {% if member.Id != null %}
+            <tr>
+                <td>{{ member.Id }}</td>
+                <td>{{ member.FirstName|title }}</td>
+                <td>{{ member.Name|title }}</td>
+                <td>{{ listData.grade(member.Grade) }}</td>
+                <td>{{ member.Deadline|date("d/m/Y") }}</td>
+                <td><a href="{{ path('club_member_grades_detail', {'member': member.Id}) }}">Grades</a> - <a href="{{ path('club_member_stages_detail', {'member': member.Id}) }}">Stages</a> - <a href="{{ path('club_member_licence_detail', {'member': member.Id}) }}">Licence</a> - <a href="{{ path('club_member_personal_data', {'member': member.Id}) }}">Données personnelles</a>{% if member.User == null %} - <a href="{{ path('club_member_login_create', {'member': member.Id}) }}">Créer accès</a>{% endif %}</td>
+            </tr>
+        {% endif %}
+        {% endfor %}
+    </table>
+    <h2>Liste ancient membres récent (moins de 3 mois)</h2>
+    <table>
+        <tr>
+            <th>Licence n°</th>
+            <th>Prénom</th>
+            <th>Nom</th>
+            <th>Echéance</th>
+        </tr>
+        {% for member in old_members %}
+        {% if member.Id != null %}
+        <tr>
+            <td>{{ member.Id }}</td>
+            <td>{{ member.FirstName|title }}</td>
+            <td>{{ member.Name|title }}</td>
+            <td>{{ member.Deadline|date("d/m/Y") }}</td>
+        </tr>
+        {% endif %}
         {% endfor %}
     </table>
 {% endblock %}

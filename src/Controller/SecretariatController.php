@@ -626,9 +626,7 @@ class SecretariatController extends AbstractController
      */
     public function membersActive(SessionInterface $session, Club $club)
     {
-        $today = new DateTime('today');
-
-        $members = $this->getDoctrine()->getRepository(Member::class)->getClubActiveMembers($club, $today->format('Y-m-d'));
+        $members = $this->getDoctrine()->getRepository(Member::class)->getClubActiveMembers($club);
 
         $limit = new DateTime('+3 month today');
 
@@ -644,9 +642,7 @@ class SecretariatController extends AbstractController
      */
     public function membersAncient(Club $club)
     {
-        $today = new DateTime('today');
-
-        $members = $this->getDoctrine()->getRepository(Member::class)->getClubInactiveMembers($club, $today->format('Y-m-d'));
+        $members = $this->getDoctrine()->getRepository(Member::class)->getClubInactiveMembers($club);
 
         $limit = new DateTime('+3 month today');
 
