@@ -121,13 +121,62 @@ class UserTools
 
     /**
      * @param User $user
-     * @param string $new_password
+     * @param string|null $new_login
+     * @param string|null $new_password
      * @param User|null $who
      * @return bool
      */
-    public function changePassword(User $user, string $new_password, ?User $who = null)
+    public function updateMyAccount(User $user, ?string $new_login, ?string $new_password, ?User $who = null)
     {
-        $user->setPassword($this->passwordEncoder->encodePassword($user, $new_password));
+        if (!is_null($new_login) && ($new_login != $user->getLogin()))
+        {
+            $this->changeLogin($user, $new_login);
+        }
+
+        if (!is_null($new_password))
+        {
+            $this->changePassword($user, $new_password, $who);
+        }
+
+        return true;
+    }
+
+    /**
+     * @param User $user
+     * @param string $new_login
+     * @return bool
+     */
+    public function changeLogin(User $user, string $new_login)
+    {
+        $user->setLogin($new_login);
+
+        $this->checkDuplicate($user);
+
+        if (!$this->isDuplicate)
+        {
+            $this->entityManager->flush();
+
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * @param User $user
+     * @param string $new_password1
+     * @param string $new_password2
+     * @param User|null $who
+     * @return bool
+     */
+    public function changePassword(User $user, string $new_password1, string $new_password2, ?User $who = null)
+    {
+        if ($new_password1 != $new_password2)
+        {
+            return false;
+        }
+
+        $user->setPassword($this->passwordEncoder->encodePassword($user, $new_password1));
 
         $auditTrail = new UserAuditTrail();
 

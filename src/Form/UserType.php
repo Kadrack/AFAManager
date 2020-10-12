@@ -9,7 +9,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 
-use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -35,14 +34,14 @@ class UserType extends AbstractType
             case 'club_manager_delete':
                 $this->clubManagerDelete($builder);
                 break;
-            case 'my_access':
-                $this->myAccess($builder);
+            case 'change_login':
+                $this->changeLogin($builder);
+                break;
+            case 'change_password':
+                $this->changePassword($builder);
                 break;
             case 'create':
                 $this->loginCreate($builder);
-                break;
-            case 'modify_password':
-                $this->modifyPassword($builder);
                 break;
             default:
                 break;
@@ -72,10 +71,22 @@ class UserType extends AbstractType
     /**
      * @param FormBuilderInterface $builder
      */
-    private function myAccess(FormBuilderInterface $builder)
+    private function changeLogin(FormBuilderInterface $builder)
     {
         $builder
-            ->add('Password', PasswordType::class, array('label' => 'Nouveau mot de passe : ', 'mapped' => false))
+            ->add('Login', TextType::class, array('label' => 'Login : '))
+            ->add('Submit', SubmitType::class, array('label' => 'Modifier'))
+        ;
+    }
+
+    /**
+     * @param FormBuilderInterface $builder
+     */
+    private function changePassword(FormBuilderInterface $builder)
+    {
+        $builder
+            ->add('Password1', PasswordType::class, array('label' => 'Nouveau mot de passe : ', 'mapped' => false))
+            ->add('Password2', PasswordType::class, array('label' => 'Vérification         : ', 'mapped' => false))
             ->add('Submit', SubmitType::class, array('label' => 'Modifier'))
         ;
     }
@@ -105,17 +116,6 @@ class UserType extends AbstractType
 
             ->add('Login', TextType::class, array('label' => 'Login : ', 'disabled' => true))
             ->add('Submit', SubmitType::class, array('label' => 'Supprimer'))
-        ;
-    }
-
-    /**
-     * @param FormBuilderInterface $builder
-     */
-    private function modifyPassword(FormBuilderInterface $builder)
-    {
-        $builder
-            ->add('Password', PasswordType::class, array('label' => 'Nouveau mot de passe : ', 'mapped' => false))
-            ->add('Submit', SubmitType::class, array('label' => 'Modifier'))
         ;
     }
 }

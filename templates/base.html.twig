@@ -46,7 +46,7 @@
                     {% endif %}
                     {% if is_granted('ROLE_MEMBER') %}
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="{{ path('member_index') }}" role="button" aria-haspopup="true" aria-expanded="false">Membre</a>
+                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="" role="button" aria-haspopup="true" aria-expanded="false">Membre</a>
                              <div class="dropdown-menu" style="">
                                 <a class="dropdown-item" href="{{ path('member_my_data') }}">Mes Données</a>
                                 <a class="dropdown-item" href="{{ path('member_my_grades') }}">Mes Grades</a>
@@ -58,7 +58,7 @@
                     {% endif %}
                     {% if is_granted('ROLE_CLUB') %}
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="{{ path('club_index') }}">Club</a>
+                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="">Club</a>
                             <div class="dropdown-menu" style="">
                                  <a class="dropdown-item" href="{{ path('club_dojo_index') }}">Dojo(s), horaires & professeurs</a>
                                  <a class="dropdown-item" href="{{ path('club_members_list') }}">Liste des membres</a>
@@ -70,7 +70,7 @@
                     {% endif %}
                     {% if is_granted('ROLE_CFG') %}
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="{{ path('grade_index') }}">CFG</a>
+                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="">CFG</a>
                             <div class="dropdown-menu" style="">
                                 <a href="{{ path('grade_exam_index') }}">Examens Fédéraux</a>
                             </div>
@@ -83,7 +83,7 @@
                     {% endif %}
                     {% if is_granted('ROLE_SECRETARIAT') %}
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="{{ path('secretariat_index') }}">Secrétariat</a>
+                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="">Secrétariat</a>
                             <div class="dropdown-menu" style="">
                                 <a class="dropdown-item" href="{{ path('secretariat_supporter_index') }}">Sympathisants</a>
                                 <a class="dropdown-item" href="{{ path('secretariat_search_members') }}" target="_blank">Recherche membres</a>
@@ -99,14 +99,14 @@
                     </li>
                     {% endif %}
                     {% if is_granted('ROLE_USER') %}
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ path('my_access') }}">Mon Accès</a>
-                        </li>
-                    {% endif %}
-                    {% if is_granted('ROLE_USER') %}
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ path('app_logout') }}">Déconnexion</a>
-                        </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="">Mon Compte</a>
+                            <div class="dropdown-menu" style="">
+                                <a class="dropdown-item" href="{{ path('common_change_login') }}">Modification Login</a>
+                                <a class="dropdown-item" href="{{ path('common_change_password') }}">Modification Mot de Passe</a>
+                                <a class="dropdown-item" href="{{ path('app_logout') }}">Déconnexion</a>
+                            </div>
+                    </li>
                     {% endif %}
                 </ul>
             </div>
