@@ -915,11 +915,7 @@ class SecretariatController extends AbstractController
         $licence_new->setMemberLicenceDeadline(new DateTime('+1 year '.$licence_old->getMemberLicenceDeadline()->format('Y-m-d')));
         $licence_new->setMemberLicenceStatus(1);
 
-        if ($member->getMemberLastGrade() != null)
-        {
-            $kyu = false;
-        }
-        else if ($member->getMemberLastGrade() == null)
+        if ($member->getMemberLastGrade() == null)
         {
             $kyu = true;
         }
@@ -936,7 +932,7 @@ class SecretariatController extends AbstractController
         {
             $form = $this->createForm(MemberType::class, $licence_new, array('form' => 'licence_renew_kyu', 'data_class' => MemberLicence::class));
 
-            $form->get('GradeRank')->setData($licence_old->getMemberLicenceGrade() == null ? null : $licence_old->getMemberLicenceGrade()->getGradeRank());
+            $form->get('GradeKyuRank')->setData($licence_old->getMemberLicenceGrade() == null ? null : $licence_old->getMemberLicenceGrade()->getGradeRank());
         }
         else
         {
@@ -970,13 +966,13 @@ class SecretariatController extends AbstractController
 
             if ($kyu)
             {
-                if (($licence_old->getMemberLicenceGrade() == null) and ($form->get('GradeRank')->getData() != null))
+                if (($licence_old->getMemberLicenceGrade() == null) and ($form->get('GradeKyuRank')->getData() != null))
                 {
                     $update = true;
                 }
                 else if ($licence_old->getMemberLicenceGrade() != null)
                 {
-                    $update = $licence_old->getMemberLicenceGrade()->getGradeRank() < $form->get('GradeRank')->getData();
+                    $update = $licence_old->getMemberLicenceGrade()->getGradeRank() < $form->get('GradeKyuRank')->getData();
                 }
                 else
                 {
@@ -987,8 +983,9 @@ class SecretariatController extends AbstractController
                 {
                     $grade = new Grade();
 
-                    $grade->setGradeRank($form->get('GradeRank')->getData());
+                    $grade->setGradeRank($form->get('GradeKyuRank')->getData());
                     $grade->setGradeMember($member);
+                    $grade->setGradeStatus(4);
 
                     $member->setMemberLastGrade($grade);
 
@@ -1034,11 +1031,7 @@ class SecretariatController extends AbstractController
 
         $kyus = $member->getMemberGrades();
 
-        if ($member->getMemberLastGrade() != null)
-        {
-            $kyu = false;
-        }
-        else if ($member->getMemberLastGrade() == null)
+        if ($member->getMemberLastGrade() == null)
         {
             $kyu = true;
         }
@@ -1055,7 +1048,7 @@ class SecretariatController extends AbstractController
         {
             $form = $this->createForm(MemberType::class, $renew, array('form' => 'licence_renew_kyu', 'data_class' => MemberLicence::class));
 
-            $form->get('GradeRank')->setData($member->getMemberLastGrade() == null ? null : $member->getMemberLastGrade()->getGradeRank());
+            $form->get('GradeKyuRank')->setData($member->getMemberLastGrade() == null ? null : $member->getMemberLastGrade()->getGradeRank());
         }
         else
         {
@@ -1070,13 +1063,13 @@ class SecretariatController extends AbstractController
 
             if ($kyu)
             {
-                if ($grade->getGradeRank() != $form->get('GradeRank')->getData())
+                if ($grade->getGradeRank() != $form->get('GradeKyuRank')->getData())
                 {
                     $update = true;
 
                     foreach ($kyus as $kyu)
                     {
-                        if ($kyu->getGradeRank() == $form->get('GradeRank')->getData())
+                        if ($kyu->getGradeRank() == $form->get('GradeKyuRank')->getData())
                         {
                             $update = false;
                         }
@@ -1084,7 +1077,7 @@ class SecretariatController extends AbstractController
 
                     if ($update)
                     {
-                        $grade->setGradeRank($form->get('GradeRank')->getData());
+                        $grade->setGradeRank($form->get('GradeKyuRank')->getData());
 
                         $grade->setGradeMember($member);
 
@@ -1093,8 +1086,6 @@ class SecretariatController extends AbstractController
                             $member->setMemberLastGrade($grade);
 
                             $renew->setMemberLicenceGrade($grade);
-
-                            $entityManager->persist($grade);
                         }
                     }
                 }
