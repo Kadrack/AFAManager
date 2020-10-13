@@ -152,7 +152,7 @@ class ClubTools
      * @param int|null $member_id
      * @return bool
      */
-    public function dojoTeacher(ClubTeacher $clubTeacher, ?string $action, ?int $member_id = null)
+    public function dojoTeacher(ClubTeacher $clubTeacher, ?string $action = null, ?int $member_id = null)
     {
         if ($action == 'Add')
         {
