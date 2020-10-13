@@ -302,7 +302,7 @@ class ClubController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid())
         {
-            $clubTools->dojoTeacher($form->getData(), 'Add', $form->get('ClubTeacherMember')->getData());
+            $clubTools->dojoTeacher($form->getData(), 'Add');
 
             return $this->redirectToRoute('club_dojo_index');
         }

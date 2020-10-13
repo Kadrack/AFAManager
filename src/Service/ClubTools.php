@@ -158,14 +158,18 @@ class ClubTools
         {
             $clubTeacher->setClubTeacher($this->getClub());
 
-            $member = $this->em->getRepository(Member::class)->findOneBy(['member_id' => $member_id]);
-
-            if ($member != null)
+            if (!is_null($member_id))
             {
-                $clubTeacher->setClubTeacherMember($member);
+                $member = $this->em->getRepository(Member::class)->findOneBy(['member_id' => $member_id]);
 
-                $this->em->persist($clubTeacher);
+                if ($member != null)
+                {
+                    $clubTeacher->setClubTeacherMember($member);
+                }
             }
+
+            $this->em->persist($clubTeacher);
+
         }
 
         if ($action == 'Delete')
