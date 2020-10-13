@@ -108,6 +108,18 @@ class MemberController extends AbstractController
     }
 
     /**
+     * @Route("/mes_titres", name="my_titles")
+     * @param MemberTools $memberTools
+     * @return Response
+     */
+    public function myTitles(MemberTools $memberTools)
+    {
+        $memberTools->setMember($this->getUser()->getUserMember());
+
+        return $this->render('Member/my_titles.html.twig', array('memberTools' => $memberTools));
+    }
+
+    /**
      * @Route("/ma_candidature/{type<\d+>}", name="my_application")
      * @param Request $request
      * @param MemberTools $memberTools

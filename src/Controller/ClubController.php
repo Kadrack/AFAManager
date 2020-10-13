@@ -520,7 +520,28 @@ class ClubController extends AbstractController
 
         $memberTools->setMember($member);
 
-        return $this->render('Member/my_stages.html.twig', array('memberTools' => $memberTools));
+        return $this->render('Club/Member/stages_detail.html.twig', array('memberTools' => $memberTools));
+    }
+
+    /**
+     * @Route("/detail_titres/{member<\d+>}", name="member_titles_detail")
+     * @param Member $member
+     * @param MemberTools $memberTools
+     * @param ClubTools $clubTools
+     * @return Response
+     */
+    public function memberTitlesDetail(Member $member, MemberTools $memberTools, ClubTools $clubTools)
+    {
+        $clubTools->setClub($this->getUser()->getUserClub());
+
+        if ($member->getMemberActualClub() !== $clubTools->getClub())
+        {
+            return $this->redirectToRoute('club_members_list');
+        }
+
+        $memberTools->setMember($member);
+
+        return $this->render('Club/Member/titles_detail.html.twig', array('memberTools' => $memberTools));
     }
 
     /**

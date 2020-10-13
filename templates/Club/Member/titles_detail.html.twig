@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    AFA-Manager
+{% endblock %}
+
+{% block stylesheets %}
+{% endblock %}
+
+{% block body %}
+    <h1>{{ memberTools.getMember.getMemberFirstname()|title }} {{ memberTools.getMember.getMemberName()|title }}</h1>
+    <h2>Historique des titres</h2>
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th scope="col">Titre</th>
+                <th scope="col">Date</th>
+                <th scope="col">N° Diplôme</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for title in memberTools.getTitles() %}
+        <tr>
+            <td>{{ listData.gradeTitle(title.Rank) }}</td>
+            <td>{{ title.Date|date("d/m/Y") }}</td>
+            <td>{{ title.Certificate }}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
+
+{% block javascripts %}
+{% endblock %}

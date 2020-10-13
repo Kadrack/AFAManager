@@ -175,37 +175,15 @@ class ListData
      * @param int $title
      * @return false|int|int[]|string|void
      */
-    public function getGradeTitleAikikai(int $title)
+    public function getGradeTitle(int $title)
     {
-        $titles = array('Fuku Shidoïn' => 1, 'Shidoïn' => 2, 'Shihan' => 3);
+        $titles = array('Fuku Shidoïn' => 1, 'Shidoïn' => 2, 'Shihan' => 3, 'Initiateur' => 4, 'Aide-Moniteur' => 5, 'Moniteur' => 6, 'Moniteur Animateur' => 7, 'Moniteur Initiateur' => 8, 'Moniteur Educateur' => 9, 'Autre' => 10);
 
         if ($title == 0)
         {
             return $titles;
         }
         else if ($title > sizeof($titles))
-        {
-            return "Autre";
-        }
-        else
-        {
-            return array_search($title, $titles);
-        }
-    }
-
-    /**
-     * @param int $title
-     * @return false|int|int[]|string|void
-     */
-    public function getGradeTitleAdeps(int $title)
-    {
-        $titles = array('Initiateur' => 4, 'Aide-Moniteur' => 5, 'Moniteur' => 6, 'Moniteur Animateur' => 7, 'Moniteur Initiateur' => 8, 'Moniteur Educateur' => 9, 'Autre' => 10);
-
-        if ($title == 0)
-        {
-            return $titles;
-        }
-        else if (($title > 3) AND ($title > 9))
         {
             return "Autre";
         }

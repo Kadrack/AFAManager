@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Club;
 use App\Entity\Grade;
+use App\Entity\GradeTitle;
 use App\Entity\Member;
 use App\Entity\MemberLicence;
 use App\Entity\MemberModification;
@@ -176,5 +177,18 @@ class MemberRepository extends ServiceEntityRepository
         return $qb->andWhere($qb->expr()->eq('c.club_id', $club))
             ->getQuery()
             ->getArrayResult();
+    }
+
+    public function getMemberTitles(int $member_id): ?array
+    {
+        $qb = $this->createQueryBuilder('m');
+
+        return $qb->select('t.grade_title_date AS Date', 't.grade_title_rank AS Rank', 't.grade_title_certificate AS Certificate')
+            ->join(GradeTitle::class, 't', 'WITH', $qb->expr()->eq('m.member_id', 't.grade_title_member'))
+            ->where($qb->expr()->eq('m.member_id', $member_id))
+            ->orderBy('Date', 'DESC')
+            ->getQuery()
+            ->getArrayResult();
+
     }
 }

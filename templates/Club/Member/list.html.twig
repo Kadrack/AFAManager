@@ -10,15 +10,18 @@
 {% block body %}
     <h1>{{ club.getClubName()|title }}</h1>
     <h2>Liste des Membres</h2>
-    <table>
-        <tr>
-            <th>Licence n°</th>
-            <th>Prénom</th>
-            <th>Nom</th>
-            <th>Grade</th>
-            <th>Echéance</th>
-            <th>Commandes</th>
-        </tr>
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th scope="col">Licence n°</th>
+                <th scope="col">Prénom</th>
+                <th scope="col">Nom</th>
+                <th scope="col">Grade</th>
+                <th scope="col">Echéance</th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
         {% for member in members %}
         {% if member.Id != null %}
             <tr>
@@ -27,29 +30,49 @@
                 <td>{{ member.Name|title }}</td>
                 <td>{{ listData.grade(member.Grade) }}</td>
                 <td>{{ member.Deadline|date("d/m/Y") }}</td>
-                <td><a href="{{ path('club_member_grades_detail', {'member': member.Id}) }}">Grades</a> - <a href="{{ path('club_member_stages_detail', {'member': member.Id}) }}">Stages</a> - <a href="{{ path('club_member_licence_detail', {'member': member.Id}) }}">Licence</a> - <a href="{{ path('club_member_personal_data', {'member': member.Id}) }}">Données personnelles</a>{% if member.User == null %} - <a href="{{ path('club_member_login_create', {'member': member.Id}) }}">Créer accès</a>{% endif %}</td>
+                <td>
+                    <div class="btn-group" role="group" aria-label="Commandes">
+                        <button type="button" class="btn btn-primary">Commandes</button>
+                        <div class="btn-group" role="group">
+                            <button id="btnGroupDrop1" type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
+                            <div class="dropdown-menu" aria-labelledby="btnGroupDrop1" style="">
+                                <a class="dropdown-item" href="{{ path('club_member_grades_detail', {'member': member.Id}) }}">Grades</a>
+                                <a class="dropdown-item" href="{{ path('club_member_stages_detail', {'member': member.Id}) }}">Stages</a>
+                                <a class="dropdown-item" href="{{ path('club_member_licence_detail', {'member': member.Id}) }}">Licence</a>
+                                <a class="dropdown-item" href="{{ path('club_member_titles_detail', {'member': member.Id}) }}">Titres</a>
+                                <a class="dropdown-item" href="{{ path('club_member_personal_data', {'member': member.Id}) }}">Données personnelles</a>
+                                {% if member.User == null %}<a class="dropdown-item" href="{{ path('club_member_login_create', {'member': member.Id}) }}">Créer accès</a>{% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </td>
             </tr>
         {% endif %}
         {% endfor %}
+        </tbody>
     </table>
     <h2>Liste ancien membres récent (moins de 3 mois)</h2>
-    <table>
-        <tr>
-            <th>Licence n°</th>
-            <th>Prénom</th>
-            <th>Nom</th>
-            <th>Echéance</th>
-        </tr>
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th scope="col">Licence n°</th>
+                <th scope="col">Prénom</th>
+                <th scope="col">Nom</th>
+                <th scope="col">Echéance</th>
+            </tr>
+        </thead>
+        <tbody>
         {% for member in old_members %}
         {% if member.Id != null %}
-        <tr>
-            <td>{{ member.Id }}</td>
-            <td>{{ member.FirstName|title }}</td>
-            <td>{{ member.Name|title }}</td>
-            <td>{{ member.Deadline|date("d/m/Y") }}</td>
-        </tr>
+            <tr>
+                <td>{{ member.Id }}</td>
+                <td>{{ member.FirstName|title }}</td>
+                <td>{{ member.Name|title }}</td>
+                <td>{{ member.Deadline|date("d/m/Y") }}</td>
+            </tr>
         {% endif %}
         {% endfor %}
+        </tbody>
     </table>
 {% endblock %}
 

@@ -30,6 +30,8 @@ class MemberTools
 
     private $stages;
 
+    private $titles;
+
     /**
      * MemberTools constructor.
      * @param EntityManagerInterface $entityManager
@@ -254,6 +256,21 @@ class MemberTools
         $this->stages = array('history' => $history, 'total' => $total);
 
         return $this->stages;
+    }
+
+    /**
+     * @return array|null
+     */
+    public function getTitles(): ?array
+    {
+        if ($this->titles != null)
+        {
+            return $this->titles;
+        }
+
+        $this->titles = $this->em->getRepository(Member::class)->getMemberTitles($this->member->getMemberId());
+
+        return $this->titles;
     }
 
     /**

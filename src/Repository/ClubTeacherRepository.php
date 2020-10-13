@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Club;
 use App\Entity\ClubTeacher;
 use App\Entity\Grade;
+use App\Entity\GradeTitle;
 use App\Entity\Member;
 
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -28,14 +29,16 @@ class ClubTeacherRepository extends ServiceEntityRepository
     {
         $qb = $this->createQueryBuilder('t');
 
-        return $qb->select('t.club_teacher_id AS Id', 't.club_teacher_title AS Title', 't.club_teacher_type AS Type', 'm.member_firstname AS Firstname', 'm.member_name AS Name', 'd.grade_rank AS Grade')
+        return $qb->select('t.club_teacher_id AS Id', 't.club_teacher_title AS Title', 't.club_teacher_type AS Type', 'm.member_firstname AS Firstname', 'm.member_name AS Name', 'g.grade_rank AS Grade', 'm.member_id AS Licence', 'gt.grade_title_rank AS GradeTitleAikikai', 'gt.grade_title_rank AS GradeTitleAdeps')
             ->join(Member::class, 'm', 'WITH', $qb->expr()->eq('m.member_id', 't.club_teacher_member'))
-            ->join(Grade::class, 'd', 'WITH', $qb->expr()->eq('m.member_last_grade', 'd.grade_id'))
+            ->join(Grade::class, 'g', 'WITH', $qb->expr()->eq('m.member_last_grade', 'g.grade_id'))
+            ->join(GradeTitle::class, 'gt', 'WITH', $qb->expr()->eq('m.member_id', 'gt.grade_title_member'))
             ->where($qb->expr()->IsNotNull('t.club_teacher_member'))
             ->andWhere($qb->expr()->eq('t.club_teacher', $club->getClubId()))
             ->orderBy('Title', 'ASC')
             ->addOrderBy('Firstname', 'ASC')
             ->addOrderBy('Name', 'ASC')
+            ->addOrderBy('GradeTitleAikikai', 'ASC')
             ->getQuery()
             ->getArrayResult();
     }

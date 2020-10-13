@@ -9,7 +9,7 @@
 
 {% block body %}
     <h1>{{ member.getMemberFirstname()|title }} {{ member.getMemberName()|title }}</h1>
-    <h2>Données personnelles</h2>
+    <h2>Données personnelles <a class="btn btn-primary" href="{{ path('member_my_data_update') }}">Modifier</a></h2>
     <img alt="" src="{{ asset('uploads/photos/'~member.getMemberPhoto()) }}" /><br />
     <table class="table table-hover">
         <thead>
@@ -20,7 +20,6 @@
                 <th scope="col">Pays</th>
                 <th scope="col">Email</th>
                 <th scope="col">Téléphone</th>
-                <th scope="col">Commande</th>
             </tr>
         </thead>
         <tbody>
@@ -31,7 +30,6 @@
                 <td>{{ listData.getCountryName(member.getMemberCountry()) }}</td>
                 <td>{{ member.getMemberEmail() }}</td>
                 <td>{{ member.getMemberPhone() }}</td>
-                <td><a class="btn btn-primary" href="{{ path('member_my_data_update') }}">Modifier</a></td>
             </tr>
         </tbody>
     </table>

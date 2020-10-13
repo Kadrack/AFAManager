@@ -71,6 +71,8 @@
                 <th scope="col">Prénom</th>
                 <th scope="col">Nom</th>
                 <th scope="col">Grade</th>
+                <th scope="col">Enseignement Aïkikaï</th>
+                <th scope="col">Enseignement ADEPS</th>
             </tr>
         </thead>
         <tbody>
@@ -78,9 +80,11 @@
             <tr>
                 <td>{{ listData.getTeacherTitle(teacher.Title) }}</td>
                 <td>{{ listData.getTeacherType(teacher.Type) }}</td>
-                <td>{{ teacher.Firstname }}</td>
-                <td>{{ teacher.Name }}</td>
+                <td>{{ teacher.Firstname|title }}</td>
+                <td>{{ teacher.Name|title }}</td>
                 <td>{{ listData.getGrade(teacher.Grade) }}</td>
+                <td>{% if teacher.GradeTitleAikikai != null %}{{ listData.getGradeTitle(teacher.GradeTitleAikikai) }}{% endif %}</td>
+                <td>{% if teacher.GradeTitleAdeps != null %}{{ listData.getGradeTitle(teacher.GradeTitleAdeps) }}{% endif %}</td>
             </tr>
         {% endfor %}
         </tbody>
@@ -105,11 +109,11 @@
             <tr>
                 <td>{{ listData.getTeacherTitle(teacher.Title) }}</td>
                 <td>{{ listData.getTeacherType(teacher.Type) }}</td>
-                <td>{{ teacher.Firstname }}</td>
-                <td>{{ teacher.Name }}</td>
+                <td>{{ teacher.Firstname|title }}</td>
+                <td>{{ teacher.Name|title }}</td>
                 <td>{{ listData.getGrade(teacher.Grade) }}</td>
-                <td>{% if teacher.GradeTitleAikikai != null %}{{ listData.getGradeTitleAikikai(teacher.GradeTitleAikikai) }}{% endif %}</td>
-                <td>{% if teacher.GradeTitleAdeps != null %}{{ listData.getGradeTitleAdeps(teacher.GradeTitleAdeps) }}{% endif %}</td>
+                <td>{% if teacher.GradeTitleAikikai != null %}{{ listData.getGradeTitle(teacher.GradeTitleAikikai) }}{% endif %}</td>
+                <td>{% if teacher.GradeTitleAdeps != null %}{{ listData.getGradeTitle(teacher.GradeTitleAdeps) }}{% endif %}</td>
             </tr>
         </tbody>
         {% endfor %}

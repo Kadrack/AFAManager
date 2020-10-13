@@ -69,6 +69,45 @@ class ClubTools
 
         $afa_teachers = $this->em->getRepository(ClubTeacher::class)->getAFATeachers($this->club);
 
+        for ($i = 0; $i < count($afa_teachers); $i++)
+        {
+            if ($afa_teachers[$i]['Licence'] == $afa_teachers[$i+1]['Licence'])
+            {
+                if ($afa_teachers[$i+1]['GradeTitleAikikai'] > 3)
+                {
+                    $afa_teachers[$i+1]['GradeTitleAikikai'] = null;
+                }
+
+                if (($afa_teachers[$i+1]['GradeTitleAikikai'] == null) && ($afa_teachers[$i]['GradeTitleAikikai'] <= 3))
+                {
+                    $afa_teachers[$i+1]['GradeTitleAikikai'] = $afa_teachers[$i]['GradeTitleAikikai'];
+                }
+
+                if (($afa_teachers[$i+1]['GradeTitleAdeps'] < 4 ) || ($afa_teachers[$i+1]['GradeTitleAdeps'] > 9 ))
+                {
+                    $afa_teachers[$i+1]['GradeTitleAdeps'] = null;
+                }
+
+                if (($afa_teachers[$i+1]['GradeTitleAdeps'] == null) && (($afa_teachers[$i+1]['GradeTitleAdeps'] >= 4 ) && ($afa_teachers[$i+1]['GradeTitleAdeps'] <= 9 )))
+                {
+                    $afa_teachers[$i+1]['GradeTitleAdeps'] = $afa_teachers[$i]['GradeTitleAdeps'];
+                }
+
+                unset($afa_teachers[$i]);
+            }
+            else
+            {
+                if (($afa_teachers[$i]['GradeTitleAdeps'] < 4 ) || ($afa_teachers[$i]['GradeTitleAdeps'] > 9 ))
+                {
+                    $afa_teachers[$i]['GradeTitleAdeps'] = null;
+                }
+                elseif ($afa_teachers[$i]['GradeTitleAikikai'] > 3)
+                {
+                    $afa_teachers[$i]['GradeTitleAikikai'] = null;
+                }
+            }
+        }
+
         $foreign_teachers = $this->em->getRepository(ClubTeacher::class)->getForeignTeachers($this->club);
 
         $this->lessons = array('Dojos' => $dojos, 'Trainings' => $trainings, 'AFA_teachers' => $afa_teachers, 'Foreign_teachers' => $foreign_teachers);

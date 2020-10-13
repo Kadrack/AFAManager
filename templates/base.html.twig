@@ -6,7 +6,7 @@
 
         <link rel="icon" type="image/svg" href="{{ asset('images/favicon.svg') }}" />
 
-        <link rel="stylesheet" type="text/css" href="https://bootswatch.com/4/solar/bootstrap.min.css">
+        <link rel="stylesheet" type="text/css" href="{{ asset('css/bootstrap.css') }}">
 
         <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
@@ -20,7 +20,7 @@
     {% if app.request.pathinfo == '/login' %}
     <body class="login">
     {% else %}
-    <body>
+    <body class="container">
         <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
             <a class="navbar-brand" href="{{ path('common_index') }}">AFA-Manager</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
@@ -31,11 +31,11 @@
                 <ul class="navbar-nav mr-auto">
                     {% if is_granted('ROLE_USER') %}
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="" role="button" aria-haspopup="true" aria-expanded="false">Tutoriels</a>
-                            <div class="dropdown-menu" style="">
+                            <a class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Tutoriels</a>
+                            <div class="dropdown-menu">
                                 {% if is_granted('ROLE_CLUB') %}
-                                <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="" role="button" aria-haspopup="true" aria-expanded="false">Club</a>
-                                <div class="dropdown-menu" style="">
+                                <a class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Club</a>
+                                <div class="dropdown-menu">
                                     <a class="dropdown-item" href="{{ asset('tutoriels/club-ajout-salle.mov') }}">Ajouter une salle</a>
                                     <a class="dropdown-item" href="{{ asset('tutoriels/club-ajout-horaire.mov') }}">Ajouter un horaire</a>
                                     <a class="dropdown-item" href="{{ asset('tutoriels/club-ajout-professeur.mov') }}">Ajouter un professeur</a>
@@ -46,11 +46,12 @@
                     {% endif %}
                     {% if is_granted('ROLE_MEMBER') %}
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="" role="button" aria-haspopup="true" aria-expanded="false">Membre</a>
-                             <div class="dropdown-menu" style="">
+                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Membre</a>
+                            <div class="dropdown-menu">
                                 <a class="dropdown-item" href="{{ path('member_my_data') }}">Mes Données</a>
                                 <a class="dropdown-item" href="{{ path('member_my_grades') }}">Mes Grades</a>
                                 <a class="dropdown-item" href="{{ path('member_my_stages') }}">Mes Stages</a>
+                                <a class="dropdown-item" href="{{ path('member_my_titles') }}">Mes Titres</a>
                                 <a class="dropdown-item" href="{{ path('member_my_licence') }}">Ma Licence</a>
                                 <a class="dropdown-item" href="{{ path('member_my_club') }}">Mon Club</a>
                             </div>
@@ -58,21 +59,21 @@
                     {% endif %}
                     {% if is_granted('ROLE_CLUB') %}
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="">Club</a>
-                            <div class="dropdown-menu" style="">
-                                 <a class="dropdown-item" href="{{ path('club_dojo_index') }}">Dojo(s), horaires & professeurs</a>
-                                 <a class="dropdown-item" href="{{ path('club_members_list') }}">Liste des membres</a>
-                                 <a class="dropdown-item" href="{{ path('club_association_details') }}">Détails Association</a>
-                                 <a class="dropdown-item" href="{{ path('club_manager_index') }}">Liste des gestionnaires</a>
-                                 <a class="dropdown-item" href="{{ path('club_search_members') }}" target="_blank">Recherche membres</a>
+                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Club</a>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" href="{{ path('club_dojo_index') }}">Dojo(s), horaires & professeurs</a>
+                                <a class="dropdown-item" href="{{ path('club_members_list') }}">Liste des membres</a>
+                                <a class="dropdown-item" href="{{ path('club_association_details') }}">Détails Association</a>
+                                <a class="dropdown-item" href="{{ path('club_manager_index') }}">Liste des gestionnaires</a>
+                                <a class="dropdown-item" href="{{ path('club_search_members') }}" target="_blank">Recherche membres</a>
                             </div>
                     </li>
                     {% endif %}
                     {% if is_granted('ROLE_CFG') %}
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="">CFG</a>
-                            <div class="dropdown-menu" style="">
-                                <a href="{{ path('grade_exam_index') }}">Examens Fédéraux</a>
+                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">CFG</a>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" href="{{ path('grade_exam_index') }}">Examens Fédéraux</a>
                             </div>
                     </li>
                     {% endif %}
@@ -83,8 +84,8 @@
                     {% endif %}
                     {% if is_granted('ROLE_SECRETARIAT') %}
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="">Secrétariat</a>
-                            <div class="dropdown-menu" style="">
+                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Secrétariat</a>
+                            <div class="dropdown-menu">
                                 <a class="dropdown-item" href="{{ path('secretariat_supporter_index') }}">Sympathisants</a>
                                 <a class="dropdown-item" href="{{ path('secretariat_search_members') }}" target="_blank">Recherche membres</a>
                                 <a class="dropdown-item" href="{{ path('secretariat_club_list') }}">Les Clubs</a>
@@ -100,10 +101,11 @@
                     {% endif %}
                     {% if is_granted('ROLE_USER') %}
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="">Mon Compte</a>
-                            <div class="dropdown-menu" style="">
+                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Mon Compte</a>
+                            <div class="dropdown-menu">
                                 <a class="dropdown-item" href="{{ path('common_change_login') }}">Modification Login</a>
                                 <a class="dropdown-item" href="{{ path('common_change_password') }}">Modification Mot de Passe</a>
+                                <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="{{ path('app_logout') }}">Déconnexion</a>
                             </div>
                     </li>
@@ -112,9 +114,12 @@
             </div>
         </nav>
     {% endif %}
+        <main class="container">
+            {% block body %}{% endblock %}
+        </main>
 
-    {% block body %}{% endblock %}
-
-    {% block javascripts %}{% endblock %}
+        <footer>
+            {% block javascripts %}{% endblock %}
+        </footer>
     </body>
 </html>
