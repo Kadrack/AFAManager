@@ -93,7 +93,6 @@ class CommonController extends AbstractController
 
                 return $this->render('Common/change_password.html.twig', array('form' => $form->createView()));
             }
-
         }
 
         return $this->render('Common/change_password.html.twig', array('form' => $form->createView()));

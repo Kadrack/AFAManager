@@ -1722,22 +1722,32 @@ class SecretariatController extends AbstractController
 
     /**
      * @Route("/modification_mot_de_passe_acces/{user<\d+>}", name="access_password_modify")
+     * @param SessionInterface $session
      * @param Request $request
      * @param User $user
      * @param UserTools $userTools
      * @return Response
      */
-    public function accessPasswordModify(Request $request, User $user, UserTools $userTools)
+    public function accessPasswordModify(SessionInterface $session, Request $request, User $user, UserTools $userTools)
     {
-        $form = $this->createForm(UserType::class, $user, array('form' => 'modify_password', 'data_class' => User::class));
+        $session->set('passwordError', false);
+
+        $form = $this->createForm(UserType::class, $user, array('form' => 'change_password', 'data_class' => User::class));
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid())
         {
-            $userTools->changePassword($user, $form['Password']->getData(), $this->getUser());
+            if ($userTools->changePassword($form->getData(), $form['Password1']->getData(), $form['Password2']->getData()))
+            {
+                return $this->redirectToRoute('secretariat_access_list_index');
+            }
+            else
+            {
+                $session->set('passwordError', true);
 
-            return $this->redirectToRoute('secretariat_access_list_index');
+                return $this->render('Secretariat/Interface/modify_password.html.twig', array('form' => $form->createView()));
+            }
         }
 
         return $this->render('Secretariat/Interface/modify_password.html.twig', array('form' => $form->createView()));
