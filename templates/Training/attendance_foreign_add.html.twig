@@ -10,45 +10,56 @@
 {% block body %}
     {{ form_start(form) }}
     <h1>{{ training.getTrainingName()|title }}</h1>
-    <table>
-        <tr>
-            <th>Total Cash</th>
-            <th>Total Carte</th>
-        </tr>
-        <tr>
-            <td>{{ total_cash }}</td>
-            <td>{{ total_card }}</td>
-        </tr>
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th scope="col">Total Cash</th>
+                <th scope="col">Total Carte</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{ total_cash }}</td>
+                <td>{{ total_card }}</td>
+            </tr>
+        </tbody>
     </table>
     <h2>Pratiquants non AFA</h2>
-    <table>
-        <tr>
-            <th>Nom</th>
-            <th>Sexe</th>
-            <th>Pays</th>
-            <th>Cours</th>
-            <th>Paiement</th>
-            <th>Mode</th>
-            <th>Commandes</th>
-        </tr>
-        <tr>
-            <td>{{ form_widget(form.TrainingAttendanceName) }}</td>
-            <td width="90">{{ form_widget(form.TrainingAttendanceSex) }}</td>
-            <td>{{ form_widget(form.TrainingAttendanceCountry) }}</td>
-            <td>{{ form_widget(form.TrainingAttendanceSession) }}</td>
-            <td>{{ form_widget(form.TrainingAttendancePayment) }}</td>
-            <td width="60">{{ form_widget(form.TrainingAttendancePaymentType) }}</td>
-            <td>{{ form_widget(form.Submit) }}</td>
-        </tr>
-        <tr>
-            <th>Nom</th>
-            <th>Sexe</th>
-            <th>Pays</th>
-            <th>Cours</th>
-            <th>Paiement</th>
-            <th>Mode</th>
-            <th>Commandes</th>
-        </tr>
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th scope="col">Nom</th>
+                <th scope="col">Sexe</th>
+                <th scope="col">Pays</th>
+                <th scope="col">Cours</th>
+                <th scope="col">Paiement</th>
+                <th scope="col">Mode</th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{ form_widget(form.TrainingAttendanceName) }}</td>
+                <td width="90">{{ form_widget(form.TrainingAttendanceSex) }}</td>
+                <td>{{ form_widget(form.TrainingAttendanceCountry) }}</td>
+                <td>{{ form_widget(form.TrainingAttendanceSession) }}</td>
+                <td>{{ form_widget(form.TrainingAttendancePayment) }}</td>
+                <td width="60">{{ form_widget(form.TrainingAttendancePaymentType) }}</td>
+                <td>{{ form_widget(form.Submit) }}</td>
+            </tr>
+        </tbody>
+        <thead>
+            <tr>
+                <th scope="col">Nom</th>
+                <th scope="col">Sexe</th>
+                <th scope="col">Pays</th>
+                <th scope="col">Cours</th>
+                <th scope="col">Paiement</th>
+                <th scope="col">Mode</th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
         {% for practitioner in practitioners %}
             <tr>
                 <td>{{ practitioner.training_attendance_name|title }}</td>
@@ -75,6 +86,7 @@
                 <td></td>
             </tr>
         {% endfor %}
+        </tbody>
     </table>
     {{ form_end(form) }}
 {% endblock %}

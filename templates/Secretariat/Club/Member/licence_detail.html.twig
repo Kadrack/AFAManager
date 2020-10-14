@@ -10,27 +10,25 @@
 {% block body %}
     <h1>{{ member.getMemberFirstname() }} {{ member.getMemberName() }}</h1>
     <h2>Début de pratique : {{ member.getMemberFirstLicence().getMemberLicenceMedicalCertificate()|date("d/m/Y") }}</h2>
-    <h2>Historique Licence n° {{ member.getMemberId() }}</h2>
-    <table>
-        <tr>
-            <th>Echéance</th>
-            <th>Club</th>
-            <th>Commande</th>
-        </tr>
-        {% if next_renew %}
+    <h3>Historique Licence n° {{ member.getMemberId() }}</h3>
+    {% if next_renew %}<a class="btn btn-primary" href="{{ path('secretariat_member_licence_renew', {'club': club.getClubId(), 'member': member.getMemberId()}) }}">Renouveller</a>{% endif %}
+    <table class="table table-hover">
+        <thead>
             <tr>
-                <td></td>
-                <td></td>
-                <td><a href="{{ path('secretariat_member_licence_renew', {'club': club.getClubId(), 'member': member.getMemberId()}) }}">Renouveller</a></td>
+                <th scope="col">Echéance</th>
+                <th scope="col">Club</th>
+                <th scope="col"></th>
             </tr>
-        {% endif %}
+        </thead>
+        <tbody>
         {% for licence in licence_history %}
             <tr>
                 <td>{{ licence.getMemberLicenceDeadline()|date("d/m/Y") }}</td>
                 <td>{{ licence.getMemberLicenceClub().getClubId() }} - {{ licence.getMemberLicenceClub().getClubName() }}</td>
-                <td><a href="{{ path('secretariat_member_licence_renew_update', {'club': club.getClubId(), 'member': member.getMemberId(), 'renew': licence.getMemberLicenceId()}) }}">Modifier</a></td>
+                <td><a class="btn btn-primary" href="{{ path('secretariat_member_licence_renew_update', {'club': club.getClubId(), 'member': member.getMemberId(), 'renew': licence.getMemberLicenceId()}) }}">Modifier</a></td>
             </tr>
         {% endfor %}
+        </tbody>
     </table>
 {% endblock %}
 

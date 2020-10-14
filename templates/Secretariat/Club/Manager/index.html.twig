@@ -8,17 +8,20 @@
 {% endblock %}
 
 {% block body %}
-    <h1>Liste des gestionnaire du club</h1>
-    <table>
-        <tr>
-            <th>Login</th>
-            <th>Prénom</th>
-            <th>Nom</th>
-            <th>N° de licence</th>
-            <th>Dernière connexion</th>
-            <th>Status Accès</th>
-            <th>Commandes</th>
-        </tr>
+    <h1>Liste des gestionnaires du club <a class="btn btn-primary" href="{{ path('secretariat_club_manager_add', {'club': clubTools.getClub.getClubId()}) }}">Ajouter</a></h1>
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th scope="col">Login</th>
+                <th scope="col">Prénom</th>
+                <th scope="col">Nom</th>
+                <th scope="col">N° de licence</th>
+                <th scope="col">Dernière connexion</th>
+                <th scope="col">Status Accès</th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
         {% for manager in clubTools.managerList %}
             <tr>
                 <td>{{ manager.login }}</td>
@@ -27,19 +30,22 @@
                 <td>{% if manager.userMember != null %}{{ manager.userMember.memberId }}{% else %}Aucun{% endif %}</td>
                 <td>{% if manager.userLastActivity != null %}{{ manager.userLastActivity|date("d/m/Y") }}{% else %}Aucune{% endif %}</td>
                 <td>{% if manager.userStatus == 0 or manager.userStatus > 4 %}Verrouillé{% else %}Actif{% endif %}</td>
-                <td><a href="{{ path('secretariat_club_manager_delete', {'club': clubTools.getClub.getClubId(), 'user': manager.id}) }}">Supprimer</a>{% if manager.userStatus == 0 or manager.userStatus > 4 %} - <a href="{{ path('secretariat_access_reactivate', {'user': manager.id}) }}">Réactiver</a> - {% endif %} - <a href="{{ path('secretariat_access_password_modify', {'user': manager.id}) }}">Modifier Mot de Passe</a></td>
+                <td>
+                    <div class="btn-group" role="group" aria-label="Commandes">
+                        <button type="button" class="btn btn-primary">Commandes</button>
+                        <div class="btn-group" role="group">
+                            <button id="btnGroupDrop1" type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
+                            <div class="dropdown-menu" aria-labelledby="btnGroupDrop1" style="">
+                                <a class="dropdown-item" href="{{ path('secretariat_club_manager_delete', {'club': clubTools.getClub.getClubId(), 'user': manager.id}) }}">Supprimer</a>
+                                {% if manager.userStatus == 0 or manager.userStatus > 4 %}<a class="dropdown-item" href="{{ path('secretariat_access_reactivate', {'user': manager.id}) }}">Réactiver</a>{% endif %}
+                                <a class="dropdown-item" href="{{ path('secretariat_access_password_modify', {'user': manager.id}) }}">Modifier Mot de Passe</a>
+                            </div>
+                        </div>
+                    </div>
+                </td>
             </tr>
         {% endfor %}
-        <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td><a href="{{ path('secretariat_club_manager_add', {'club': clubTools.getClub.getClubId()}) }}">Ajouter</a></td>
-        </tr>
+        </tbody>
     </table>
 {% endblock %}
 

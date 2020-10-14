@@ -1,0 +1,54 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    AFA-Manager
+{% endblock %}
+
+{% block stylesheets %}
+{% endblock %}
+
+{% block body %}
+    <h1>{{ training.getTrainingName() }}</h1>
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th scope="col">Titre</th>
+                <th scope="col">Type</th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{ training.getTrainingName() }}</td>
+                <td>{{ listData.getTrainingType(training.getTrainingType()) }}</td>
+                <td><a class="btn btn-primary" href="{{ path('secretariat_training_update', {'training': training.getTrainingId()}) }}">Modifier</a><a class="btn btn-primary" href="{{ path('secretariat_training_delete', {'training': training.getTrainingId()}) }}">Supprimer</a></td>
+            </tr>
+        </tbody>
+    </table>
+    <h2>Cours</h2>
+    <a class="btn btn-primary" href="{{ path('secretariat_training_session_add', {'training': training.getTrainingId()}) }}">Ajouter</a>
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th scope="col">Date</th>
+                <th scope="col">Début</th>
+                <th scope="col">Fin</th>
+                <th scope="col"># Heures</th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for session in sessions %}
+            <tr>
+                <td>{{ session.training_session_date|date('d/m/Y') }}</td>
+                <td>{% if session.training_session_starting_hour != null %}{{ session.training_session_starting_hour|date('H:i') }}{% endif %}</td>
+                <td>{% if session.training_session_ending_hour != null %}{{ session.training_session_ending_hour|date('H:i') }}{% endif %}</td>
+                <td>{{ session.training_session_duration/60 }}</td>
+                <td><a class="btn btn-primary" href="{{ path('secretariat_training_session_update', {'training': training.getTrainingId(), 'session': session.training_session_id}) }}">Modifier</a><a class="btn btn-primary" href="{{ path('secretariat_training_session_delete', {'training': training.getTrainingId(), 'session': session.training_session_id}) }}">Supprimer</a></td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}
+
+{% block javascripts %}
+{% endblock %}

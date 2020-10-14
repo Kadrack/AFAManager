@@ -9,6 +9,7 @@
 
 {% block body %}
     <h1>Liste des stages</h1>
+    <a class="btn btn-primary" href="{{ path('secretariat_training_create') }}">Ajouter</a>
     <table class="table table-hover">
         <thead>
             <tr>
@@ -24,7 +25,7 @@
                 <td>{{ training.training_session_date|date("d/m/Y") }}</td>
                 <td>{{ training.training_name }}</td>
                 <td>{{ training.training_total_sessions }}</td>
-                <td><a class="btn btn-primary" href="{{ path('training_attendance_add', {'training': training.training_id}) }}">Membres</a><a class="btn btn-primary" href="{{ path('training_attendance_foreign_add', {'training': training.training_id}) }}" target="_blank">Non AFA</a></td>
+                <td><a class="btn btn-primary" href="{{ path('secretariat_training_detail', {'training': training.training_id}) }}">Modifier</a></td>
             </tr>
         {% endfor %}
         </tbody>

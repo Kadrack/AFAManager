@@ -71,7 +71,7 @@ class SecretariatController extends AbstractController
     {
         $supporters = $this->getDoctrine()->getRepository(SecretariatSupporter::class)->findAll();
 
-        return $this->render('Secretariat/supporter_index.html.twig', array('supporters' => $supporters));
+        return $this->render('Secretariat/Supporter/index.html.twig', array('supporters' => $supporters));
     }
 
     /**
@@ -98,7 +98,7 @@ class SecretariatController extends AbstractController
             return $this->redirectToRoute('secretariat_supporter_index');
         }
 
-        return $this->render('Secretariat/supporter_add.html.twig', array('form' => $form->createView()));
+        return $this->render('Secretariat/Supporter/add.html.twig', array('form' => $form->createView()));
     }
 
     /**
@@ -123,7 +123,7 @@ class SecretariatController extends AbstractController
             return $this->redirectToRoute('secretariat_supporter_index');
         }
 
-        return $this->render('Secretariat/supporter_update.html.twig', array('form' => $form->createView()));
+        return $this->render('Secretariat/Supporter/update.html.twig', array('form' => $form->createView()));
     }
 
     /**
@@ -149,7 +149,7 @@ class SecretariatController extends AbstractController
             return $this->redirectToRoute('secretariat_supporter_index');
         }
 
-        return $this->render('Secretariat/supporter_delete.html.twig', array('form' => $form->createView()));
+        return $this->render('Secretariat/Supporter/delete.html.twig', array('form' => $form->createView()));
     }
 
     /**
@@ -179,7 +179,7 @@ class SecretariatController extends AbstractController
 
         $inactive_list = $this->getDoctrine()->getRepository(Club::class)->getInactiveClubs();
 
-        return $this->render('Secretariat/club_list.html.twig', array('active_clubs' => $active_clubs, 'inactive_clubs' => $inactive_list));
+        return $this->render('Secretariat/Club/list.html.twig', array('active_clubs' => $active_clubs, 'inactive_clubs' => $inactive_list));
     }
 
     /**
@@ -533,7 +533,7 @@ class SecretariatController extends AbstractController
             return $this->redirectToRoute('secretariat_club_list');
         }
 
-        return $this->render('Secretariat/club_association_details.html.twig', array('form' => $form->createView(), 'club' => $club));
+        return $this->render('Secretariat/Club/Association/details.html.twig', array('form' => $form->createView(), 'club' => $club));
     }
 
     /**
@@ -553,10 +553,10 @@ class SecretariatController extends AbstractController
         {
             $results = $this->getDoctrine()->getRepository(Member::class)->getFullSearchMembers($form->get('Search')->getData());
 
-            return $this->render('Secretariat/members_search.html.twig', array('form' => $form->createView(), 'results' => $results));
+            return $this->render('Secretariat/Member/search.html.twig', array('form' => $form->createView(), 'results' => $results));
         }
 
-        return $this->render('Secretariat/members_search.html.twig', array('form' => $form->createView(), 'results' => $results));
+        return $this->render('Secretariat/Member/search.html.twig', array('form' => $form->createView(), 'results' => $results));
     }
 
     /**
@@ -573,7 +573,7 @@ class SecretariatController extends AbstractController
 
         $session->set('origin', 'active');
 
-        return $this->render('Secretariat/members_list.html.twig', array('members' => $members, 'club' => $club, 'limit' => $limit));
+        return $this->render('Secretariat/Club/Member/list_active.html.twig', array('members' => $members, 'club' => $club, 'limit' => $limit));
     }
 
     /**
@@ -587,7 +587,7 @@ class SecretariatController extends AbstractController
 
         $limit = new DateTime('+3 month today');
 
-        return $this->render('Secretariat/members_ancient.html.twig', array('members' => $members == null ? null : $members, 'club' => $club, 'limit' => $limit));
+        return $this->render('Secretariat/Club/Member/list_ancient.html.twig', array('members' => $members == null ? null : $members, 'club' => $club, 'limit' => $limit));
     }
 
     /**
@@ -621,7 +621,7 @@ class SecretariatController extends AbstractController
             return $this->redirectToRoute('secretariat_club_list');
         }
 
-        return $this->render('Secretariat/club_create.html.twig', array('form' => $form->createView()));
+        return $this->render('Secretariat/Club/create.html.twig', array('form' => $form->createView()));
     }
 
     /**
@@ -657,7 +657,7 @@ class SecretariatController extends AbstractController
             return $this->redirectToRoute('secretariat_club_list');
         }
 
-        return $this->render('Secretariat/club_disaffiliate.html.twig', array('form' => $form->createView(), 'club' => $club));
+        return $this->render('Secretariat/Club/disaffiliate.html.twig', array('form' => $form->createView(), 'club' => $club));
     }
 
     /**
@@ -693,7 +693,7 @@ class SecretariatController extends AbstractController
             return $this->redirectToRoute('club_index');
         }
 
-        return $this->render('Secretariat/club_reassign.html.twig', array('form' => $form->createView(), 'club' => $club));
+        return $this->render('Secretariat/Club/reassign.html.twig', array('form' => $form->createView(), 'club' => $club));
     }
 
     /**
@@ -774,7 +774,7 @@ class SecretariatController extends AbstractController
             return $this->redirectToRoute('secretariat_members_active', array('club' => $club->getClubId()));
         }
 
-        return $this->render('Secretariat/member_create.html.twig', array('form' => $form->createView()));
+        return $this->render('Secretariat/Club/Member/create.html.twig', array('form' => $form->createView()));
     }
 
     /**
@@ -790,7 +790,7 @@ class SecretariatController extends AbstractController
 
         $next_renew = $licence_history[0]->getMemberLicenceDeadline() < new DateTime('+3 month today');
 
-        return $this->render('Secretariat/member_licence_detail.html.twig', array('member' => $member, 'club' => $club, 'licence_history' => $licence_history, 'next_renew' => $next_renew));
+        return $this->render('Secretariat/Club/Member/licence_detail.html.twig', array('member' => $member, 'club' => $club, 'licence_history' => $licence_history, 'next_renew' => $next_renew));
     }
 
     /**
@@ -822,7 +822,7 @@ class SecretariatController extends AbstractController
             return $this->redirectToRoute('secretariat_members_active', array('club' => $club->getClubId(), 'member' => $member->getMemberId()));
         }
 
-        return $this->render('Secretariat/personal_detail.html.twig', array('form' => $form->createView(), 'member' => $member));
+        return $this->render('Secretariat/Club/Member/personal_detail.html.twig', array('form' => $form->createView(), 'member' => $member));
     }
 
     /**
@@ -1012,7 +1012,7 @@ class SecretariatController extends AbstractController
             }
         }
 
-        return $this->render('Secretariat/member_licence_renew.html.twig', array('form' => $form->createView()));
+        return $this->render('Secretariat/Club/Member/licence_renew.html.twig', array('form' => $form->createView()));
     }
 
     /**
@@ -1107,7 +1107,7 @@ class SecretariatController extends AbstractController
             }
         }
 
-        return $this->render('Secretariat/member_licence_renew.html.twig', array('form' => $form->createView()));
+        return $this->render('Secretariat/Club/Member/licence_renew.html.twig', array('form' => $form->createView()));
     }
 
     /**
@@ -1117,7 +1117,7 @@ class SecretariatController extends AbstractController
     {
         $sessions = $this->getDoctrine()->getRepository(GradeSession::class)->findBy(['grade_session_type' => 1], ['grade_session_date' => 'DESC', 'grade_session_type' => 'DESC']);
 
-        return $this->render('Secretariat/exam_index.html.twig', array('sessions' => $sessions));
+        return $this->render('Secretariat/Exam/index.html.twig', array('sessions' => $sessions));
     }
 
     /**
@@ -1146,7 +1146,7 @@ class SecretariatController extends AbstractController
             return $this->redirectToRoute('secretariat_exam_index');
         }
 
-        return $this->render('Secretariat/exam_create.html.twig', array('form' => $form->createView()));
+        return $this->render('Secretariat/Exam/create.html.twig', array('form' => $form->createView()));
     }
 
     /**
@@ -1171,7 +1171,7 @@ class SecretariatController extends AbstractController
             return $this->redirectToRoute('secretariat_exam_index', array('session' => $session->getGradeSessionId()));
         }
 
-        return $this->render('Secretariat/exam_update.html.twig', array('form' => $form->createView()));
+        return $this->render('Secretariat/Exam/update.html.twig', array('form' => $form->createView()));
     }
 
     /**
@@ -1181,7 +1181,7 @@ class SecretariatController extends AbstractController
     {
         $trainings = $this->getDoctrine()->getRepository(Training::class)->getActiveTrainings(4);
 
-        return $this->render('Secretariat/training_index.html.twig', array('trainings' => count($trainings) == 0 ? null : $trainings));
+        return $this->render('Secretariat/Training/index.html.twig', array('trainings' => count($trainings) == 0 ? null : $trainings));
     }
 
     /**
@@ -1219,7 +1219,7 @@ class SecretariatController extends AbstractController
             return $this->redirectToRoute('secretariat_training_index');
         }
 
-        return $this->render('Secretariat/training_create.html.twig', array('form' => $form->createView()));
+        return $this->render('Secretariat/Training/create.html.twig', array('form' => $form->createView()));
     }
 
     /**
@@ -1232,7 +1232,7 @@ class SecretariatController extends AbstractController
     {
         $sessions = $this->getDoctrine()->getRepository(TrainingSession::class)->getTrainingSessions($training->getTrainingId());
 
-        return $this->render('Secretariat/training_detail.html.twig', array('training' => $training, 'sessions' => $sessions));
+        return $this->render('Secretariat/Training/detail.html.twig', array('training' => $training, 'sessions' => $sessions));
     }
 
     /**
@@ -1257,7 +1257,7 @@ class SecretariatController extends AbstractController
             return $this->redirectToRoute('secretariat_training_index');
         }
 
-        return $this->render('Secretariat/training_update.html.twig', array('form' => $form->createView()));
+        return $this->render('Secretariat/Training/update.html.twig', array('form' => $form->createView()));
     }
 
     /**
@@ -1283,7 +1283,7 @@ class SecretariatController extends AbstractController
             return $this->redirectToRoute('secretariat_training_index');
         }
 
-        return $this->render('Secretariat/training_update.html.twig', array('form' => $form->createView()));
+        return $this->render('Secretariat/Training/update.html.twig', array('form' => $form->createView()));
     }
 
     /**
@@ -1318,7 +1318,7 @@ class SecretariatController extends AbstractController
             return $this->redirectToRoute('secretariat_training_detail', array('training' => $training->getTrainingId()));
         }
 
-        return $this->render('Secretariat/training_session_add.html.twig', array('form' => $form->createView()));
+        return $this->render('Secretariat/Training/session_add.html.twig', array('form' => $form->createView()));
     }
 
     /**
@@ -1350,7 +1350,7 @@ class SecretariatController extends AbstractController
             return $this->redirectToRoute('secretariat_training_detail', array('training' => $training->getTrainingId()));
         }
 
-        return $this->render('Secretariat/training_session_update.html.twig', array('form' => $form->createView()));
+        return $this->render('Secretariat/Training/session_update.html.twig', array('form' => $form->createView()));
     }
 
     /**
@@ -1399,7 +1399,7 @@ class SecretariatController extends AbstractController
 
         }
 
-        return $this->render('Secretariat/training_session_update.html.twig', array('form' => $form->createView()));
+        return $this->render('Secretariat/Training/session_update.html.twig', array('form' => $form->createView()));
     }
 
     /**
@@ -1409,7 +1409,7 @@ class SecretariatController extends AbstractController
     {
         $modifications = $this->getDoctrine()->getRepository(Member::class)->getMemberModification();
 
-        return $this->render('Secretariat/member_modification_validation_index.html.twig', array('modifications' => $modifications));
+        return $this->render('Secretariat/Member/Modification/index.html.twig', array('modifications' => $modifications));
     }
 
     /**
@@ -1450,7 +1450,7 @@ class SecretariatController extends AbstractController
             return $this->redirectToRoute('secretariat_member_modification_validation_index');
         }
 
-        return $this->render('Secretariat/member_modification_validation_validate.html.twig', array('form' => $form->createView()));
+        return $this->render('Secretariat/Member/Modification/validate.html.twig', array('form' => $form->createView()));
     }
 
     /**
@@ -1479,7 +1479,7 @@ class SecretariatController extends AbstractController
             return $this->redirectToRoute('secretariat_member_modification_validation_index');
         }
 
-        return $this->render('Secretariat/member_modification_validation_cancel.html.twig', array('form' => $form->createView()));
+        return $this->render('Secretariat/Member/Modification/cancel.html.twig', array('form' => $form->createView()));
     }
 
     /**
@@ -1489,7 +1489,7 @@ class SecretariatController extends AbstractController
     {
         $commissions = $this->getDoctrine()->getRepository(Commission::class)->findAll();
 
-        return $this->render('Secretariat/commission_index.html.twig', array('commissions' => $commissions));
+        return $this->render('Secretariat/Commission/index.html.twig', array('commissions' => $commissions));
     }
 
     /**
@@ -1531,7 +1531,7 @@ class SecretariatController extends AbstractController
             return $this->redirectToRoute('secretariat_commission_index');
         }
 
-        return $this->render('Secretariat/commission_add.html.twig', array('form' => $form->createView()));
+        return $this->render('Secretariat/Commission/create.html.twig', array('form' => $form->createView()));
     }
 
     /**
@@ -1544,7 +1544,7 @@ class SecretariatController extends AbstractController
     {
         $members = $this->getDoctrine()->getRepository(CommissionMember::class)->getCommissionMembers($commission->getCommissionId());
 
-        return $this->render('Secretariat/commission_detail.html.twig', array('members' => $members, 'commission' => $commission));
+        return $this->render('Secretariat/Commission/detail.html.twig', array('members' => $members, 'commission' => $commission));
     }
 
     /**
@@ -1589,7 +1589,7 @@ class SecretariatController extends AbstractController
             return $this->redirectToRoute('secretariat_commission_detail', array('commission' => $commission->getCommissionId()));
         }
 
-        return $this->render('Secretariat/commission_member_add.html.twig', array('form' => $form->createView()));
+        return $this->render('Secretariat/Commission/add_member.html.twig', array('form' => $form->createView()));
     }
 
     /**
@@ -1621,7 +1621,7 @@ class SecretariatController extends AbstractController
             return $this->redirectToRoute('secretariat_commission_detail', array('commission' => $commission->getCommissionId()));
         }
 
-        return $this->render('Secretariat/commission_member_delete.html.twig', array('form' => $form->createView()));
+        return $this->render('Secretariat/Commission/delete_member.html.twig', array('form' => $form->createView()));
     }
 
     /**

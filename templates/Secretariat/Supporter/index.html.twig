@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    AFA-Manager
+{% endblock %}
+
+{% block stylesheets %}
+{% endblock %}
+
+{% block body %}
+    <h1>Liste des sympathisants <a class="btn btn-primary" href="{{ path('secretariat_supporter_create') }}">Ajouter</a></h1>
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th scope="col">Nom</th>
+                <th scope="col">Adresse</th>
+                <th scope="col">Code postal</th>
+                <th scope="col">Localité</th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for supporter in supporters %}
+            <tr>
+                <td>{{ supporter.getSecretariatSupporterName() }}</td>
+                <td>{{ supporter.getSecretariatSupporterAddress() }}</td>
+                <td>{{ supporter.getSecretariatSupporterZip() }}</td>
+                <td>{{ supporter.getSecretariatSupporterCity() }}</td>
+                <td>
+                    <div class="btn-group" role="group" aria-label="Commandes">
+                        <button type="button" class="btn btn-primary">Commandes</button>
+                        <div class="btn-group" role="group">
+                            <button id="btnGroupDrop1" type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
+                            <div class="dropdown-menu" aria-labelledby="btnGroupDrop1" style="">
+                                <a class="dropdown-item" href="{{ path('secretariat_supporter_update', {'supporter': supporter.getSecretariatSupporterId()}) }}">Modifier</a>
+                                <a class="dropdown-item" href="{{ path('secretariat_supporter_delete', {'supporter': supporter.getSecretariatSupporterId()}) }}">Supprimer</a>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
+
+{% block javascripts %}
+{% endblock %}

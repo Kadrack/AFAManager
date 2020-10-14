@@ -1,0 +1,80 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    AFA-Manager
+{% endblock %}
+
+{% block stylesheets %}
+{% endblock %}
+
+{% block body %}
+    {{ form_start(form) }}
+    <h1>{{ club.getClubName()|title }}</h1>
+    <h2>Siège</h2>
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th scope="col">Nom</th>
+                <th scope="col">Adresse</th>
+                <th scope="col">Code postal</th>
+                <th scope="col">Localité</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{ form_widget(form.ClubName) }}</td>
+                <td>{{ form_widget(form.ClubAddress) }}</td>
+                <td>{{ form_widget(form.ClubZip) }}</td>
+                <td>{{ form_widget(form.ClubCity) }}</td>
+            </tr>
+        </tbody>
+    </table>
+    <h2>Détails association</h2>
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th scope="col">Type Association</th>
+                <th scope="col">N° entreprise</th>
+                <th scope="col">N° de compte (IBAN)</th>
+                <th scope="col">Site internet</th>
+                <th scope="col">Email publique</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{ form_widget(form.ClubType) }}</td>
+                <td>{{ form_widget(form.ClubBceNumber) }}</td>
+                <td>{{ form_widget(form.ClubIban) }}</td>
+                <td>{{ form_widget(form.ClubUrl) }}</td>
+                <td>{{ form_widget(form.ClubEmailPublic) }}</td>
+            </tr>
+        </tbody>
+    </table>
+    <h2>Correspondant</h2>
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th scope="col">Nom</th>
+                <th scope="col">Email</th>
+                <th scope="col">N° de téléphone</th>
+                <th scope="col">Adresse</th>
+                <th scope="col">Code postal</th>
+                <th scope="col">Localité</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{ form_widget(form.ClubNameContact) }}</td>
+                <td>{{ form_widget(form.ClubEmailContact) }}</td>
+                <td>{{ form_widget(form.ClubPhoneContact) }}</td>
+                <td>{{ form_widget(form.ClubAddressContact) }}</td>
+                <td>{{ form_widget(form.ClubZipContact) }}</td>
+                <td>{{ form_widget(form.ClubCityContact) }}</td>
+            </tr>
+        </tbody>
+    </table>
+    {{ form_end(form) }}
+{% endblock %}
+
+{% block javascripts %}
+{% endblock %}

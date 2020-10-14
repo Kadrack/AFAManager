@@ -1,0 +1,60 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    AFA-Manager
+{% endblock %}
+
+{% block stylesheets %}
+{% endblock %}
+
+{% block body %}
+    {{ form_start(form) }}
+    {{ form_widget(form) }}
+    {{ form_end(form) }}
+
+    {% if results != null %}
+    <h2>Résultats de la recherche</h2>
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Licence n°</th>
+                <th scope="col">Prénom</th>
+                <th scope="col">Nom</th>
+                <th scope="col">Club</th>
+                <th scope="col">Echéance</th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for member in results %}
+            <tr>
+                <td>{{ loop.index }}</td>
+                <td>{{ member.Id }}</td>
+                <td>{{ member.FirstName|title }}</td>
+                <td>{{ member.Name|title }}</td>
+                <td>{{ member.ClubId }} - {{ member.Club|title }}</td>
+                <td>{{ member.Deadline|date("d/m/Y") }}</td>
+                <td>
+                    <div class="btn-group" role="group" aria-label="Commandes">
+                        <button type="button" class="btn btn-primary">Commandes</button>
+                        <div class="btn-group" role="group">
+                            <button id="btnGroupDrop1" type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
+                            <div class="dropdown-menu" aria-labelledby="btnGroupDrop1" style="">
+                                <a class="dropdown-item" href="{{ path('secretariat_member_personal_detail', {'club': member.ClubId, 'member': member.Id}) }}">Détail Données personnelles</a>
+                                <a class="dropdown-item" href="{{ path('secretariat_member_form_renew', {'club': member.ClubId, 'member': member.Id}) }}">Formulaire renouvellement</a>
+                                <a class="dropdown-item" href="{{ path('secretariat_member_licence_detail', {'club': member.ClubId, 'member': member.Id}) }}">Détail Licence</a>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% endif %}
+
+{% endblock %}
+
+{% block javascripts %}
+{% endblock %}

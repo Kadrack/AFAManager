@@ -1,0 +1,85 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    AFA-Manager
+{% endblock %}
+
+{% block stylesheets %}
+{% endblock %}
+
+{% block body %}
+    <h1>Liste des clubs <a class="btn btn-primary" href="{{ path('secretariat_club_create') }}">Ajouter</a></h1>
+    {% for active in active_clubs %}
+    <h2>{{ active.province }}</h2>
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th scope="col">Numéro</th>
+                <th scope="col">Nom</th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for club in active.Clubs %}
+            <tr>
+                <td>{{ club.Id }}</td>
+                <td>{{ club.Name|title }}</td>
+                <td style="text-align: right">
+                    <div class="btn-group" role="group" aria-label="Commandes">
+                        <button type="button" class="btn btn-primary">Commandes</button>
+                        <div class="btn-group" role="group">
+                            <button id="btnGroupDrop1" type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
+                            <div class="dropdown-menu" aria-labelledby="btnGroupDrop1" style="">
+                                <a class="dropdown-item" href="{{ path('secretariat_association_details', {'club': club.Id}) }}">Détails Association</a>
+                                <a class="dropdown-item" href="{{ path('secretariat_dojo_index', {'club': club.Id}) }}">Détails Dojo</a>
+                                <a class="dropdown-item" href="{{ path('secretariat_members_active', {'club': club.Id}) }}">Liste des Membres Actifs</a>
+                                <a class="dropdown-item" href="{{ path('secretariat_form_renew_create', {'club': club.Id}) }}" target="_blank">Formulaires de renouvellement</a>
+                                <a class="dropdown-item" href="{{ path('secretariat_members_ancient', {'club': club.Id}) }}">Liste des Membres Inactifs</a>
+                                <a class="dropdown-item" href="{{ path('secretariat_club_manager_index', {'club': club.Id}) }}">Liste des Gestionnaire(s)</a>
+                                <a class="dropdown-item" href="{{ path('secretariat_club_disaffiliate', {'club': club.Id}) }}">Désaffilier</a>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% endfor %}
+    {% if inactive_clubs != null %}
+    <h2>Clubs Inactifs</h2>
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>Numéro</th>
+                <th>Nom</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for club in inactive_clubs %}
+            <tr>
+                <td>{{ club.Id }}</td>
+                <td>{{ club.Name }}</td>
+                <td style="text-align: right">
+                    <div class="btn-group" role="group" aria-label="Commandes">
+                        <button type="button" class="btn btn-primary">Commandes</button>
+                        <div class="btn-group" role="group">
+                            <button id="btnGroupDrop1" type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
+                            <div class="dropdown-menu" aria-labelledby="btnGroupDrop1" style="">
+                                <a class="dropdown-item" href="{{ path('secretariat_club_reassign', {'club': club.Id}) }}">Affilier</a>
+                                <a class="dropdown-item" href="{{ path('secretariat_association_details', {'club': club.Id}) }}">Détails Association</a>
+                                <a class="dropdown-item" href="{{ path('secretariat_members_active', {'club': club.Id}) }}">Liste des Membres Actifs</a>
+                                <a class="dropdown-item" href="{{ path('secretariat_members_ancient', {'club': club.Id}) }}">Liste des Membres Inactifs</a>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+    {% endif %}
+{% endblock %}
+
+{% block javascripts %}
+{% endblock %}

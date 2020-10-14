@@ -8,19 +8,36 @@
 {% endblock %}
 
 {% block body %}
-    <h1>{{ clubTools.getClub.getClubName()|title }} n°{{ clubTools.getClub.getClubId() }}</h1>
+    <h1>
+        {{ clubTools.getClub.getClubName()|title }} n°{{ clubTools.getClub.getClubId() }}
+        <div class="btn-group" role="group" aria-label="Ajouter">
+            <button type="button" class="btn btn-primary">Ajouter</button>
+            <div class="btn-group" role="group">
+                <button id="btnGroupDrop1" type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
+                <div class="dropdown-menu" aria-labelledby="btnGroupDrop1" style="">
+                    <a class="dropdown-item" href="{{ path('secretariat_dojo_address_add', {'club': clubTools.getClub.getClubId()}) }}">Dojo</a>
+                    <a class="dropdown-item" href="{{ path('secretariat_dojo_training_add', {'club': clubTools.getClub.getClubId()}) }}">Cour</a>
+                    <a class="dropdown-item" href="{{ path('secretariat_dojo_teacher_afa_add', {'club': clubTools.getClub.getClubId()}) }}">Professeur AFA</a>
+                    <a class="dropdown-item" href="{{ path('secretariat_dojo_teacher_foreign_add', {'club': clubTools.getClub.getClubId()}) }}">Professeur Non AFA</a>
+                </div>
+            </div>
+        </div>
+    </h1>
     <h2>Dojo(s)</h2>
-    <table>
+    <table class="table table-hover">
+        <thead>
         <tr>
-            <th>Salle</th>
-            <th>Adresse</th>
-            <th>Code postal</th>
-            <th>Localité</th>
-            <th>Tatamis (m²)</th>
-            <th>DEA</th>
-            <th>Formation DEA</th>
-            <th>Commandes</th>
+            <th scope="col">Salle</th>
+            <th scope="col">Adresse</th>
+            <th scope="col">Code postal</th>
+            <th scope="col">Localité</th>
+            <th scope="col">Tatamis (m²)</th>
+            <th scope="col">DEA</th>
+            <th scope="col">Formation DEA</th>
+            <th scope="col"></th>
         </tr>
+        </thead>
+        <tbody>
         {% for address in clubTools.getLessonsDetails().Dojos %}
             <tr>
                 <td>{{ address.getTrainingAddressName()|title }}</td>
@@ -29,60 +46,74 @@
                 <td>{{ address.getTrainingAddressCity()|title }}</td>
                 <td>{{ address.getTrainingAddressTatamis() }}</td>
                 <td>{% if address.getTrainingAddressDEA() %}Oui{% else %}Non{% endif %}</td>
-                <td>{% if address.getTrainingAddressDEA() %}{{ address.getTrainingAddressDEAFormation()|date("d/m/Y") }}{% else %}N/A{% endif %}</td>
-                <td><a href="{{ path('secretariat_dojo_address_update', {'address': address.getTrainingAddressId(), 'club': clubTools.getClub.getClubId()}) }}">Modifier</a> - <a href="{{ path('secretariat_dojo_address_delete', {'address': address.getTrainingAddressId(), 'club': clubTools.getClub.getClubId()}) }}">Supprimer</a></td>
+                <td>{% if address.getTrainingAddressDEAFormation != null %}{{ address.getTrainingAddressDEAFormation()|date("d/m/Y") }}{% else %}N/A{% endif %}</td>
+                <td style="text-align: right">
+                    <div class="btn-group" role="group" aria-label="Commandes">
+                        <button type="button" class="btn btn-primary">Commandes</button>
+                        <div class="btn-group" role="group">
+                            <button id="btnGroupDrop1" type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
+                            <div class="dropdown-menu" aria-labelledby="btnGroupDrop1" style="">
+                                <a class="dropdown-item" href="{{ path('secretariat_dojo_address_update', {'address': address.getTrainingAddressId(), 'club': clubTools.getClub.getClubId()}) }}">Modifier</a>
+                                <a class="dropdown-item" href="{{ path('secretariat_dojo_address_delete', {'address': address.getTrainingAddressId(), 'club': clubTools.getClub.getClubId()}) }}">Supprimer</a>
+                            </div>
+                        </div>
+                    </div>
+                </td>
             </tr>
         {% endfor %}
-        <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td><a href="{{ path('secretariat_dojo_address_add', {'club': clubTools.getClub.getClubId()}) }}">Ajouter</a></td>
-        </tr>
+        </tbody>
     </table>
-    <h2>Horaire cours</h2>
-    <table>
+    <h2>Horaire des cours</h2>
+    <table class="table table-hover">
+        <thead>
         <tr>
-            <th>Jour</th>
-            <th>Début</th>
-            <th>Fin</th>
-            <th>Type</th>
-            <th>Salle</th>
-            <th>Commandes</th>
+            <th scope="col">Jour</th>
+            <th scope="col">Début</th>
+            <th scope="col">Fin</th>
+            <th scope="col">Type</th>
+            <th scope="col">Salle</th>
+            <th scope="col"></th>
         </tr>
+        </thead>
+        <tbody>
         {% for training in clubTools.getLessonsDetails().Trainings %}
             <tr>
                 <td>{{ listData.getDay(training.getTrainingDay()) }}</td>
                 <td>{{ training.getTrainingStartingHour()|date('H:i') }}</td>
                 <td>{{ training.getTrainingEndingHour()|date('H:i') }}</td>
                 <td>{{ listData.getTrainingType(training.getTrainingType()) }}</td>
-                <td>{{ training.getTrainingAddress().getTrainingAddressName()|title }}</td>
-                <td><a href="{{ path('secretariat_dojo_training_update', {'training': training.getTrainingId(), 'club': clubTools.getClub.getClubId()}) }}">Modifier</a> - <a href="{{ path('secretariat_dojo_training_delete', {'training': training.getTrainingId(), 'club': clubTools.getClub.getClubId()}) }}">Supprimer</a></td>
+                <td>{{ training.getTrainingAddress().getTrainingAddressName() }}</td>
+                <td style="text-align: right">
+                    <div class="btn-group" role="group" aria-label="Commandes">
+                        <button type="button" class="btn btn-primary">Commandes</button>
+                        <div class="btn-group" role="group">
+                            <button id="btnGroupDrop1" type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
+                            <div class="dropdown-menu" aria-labelledby="btnGroupDrop1" style="">
+                                <a class="dropdown-item" href="{{ path('secretariat_dojo_training_update', {'training': training.getTrainingId(), 'club': clubTools.getClub.getClubId()}) }}">Modifier</a>
+                                <a class="dropdown-item" href="{{ path('secretariat_dojo_training_delete', {'training': training.getTrainingId(), 'club': clubTools.getClub.getClubId()}) }}">Supprimer</a>
+                            </div>
+                        </div>
+                    </div>
+                </td>
             </tr>
         {% endfor %}
-        <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td><a href="{{ path('secretariat_dojo_training_add', {'club': clubTools.getClub.getClubId()}) }}">Ajouter</a></td>
-        </tr>
+        </tbody>
     </table>
     <h2>Professeur(s) & Assistant(s) AFA</h2>
-    <table>
+    <table class="table table-hover">
+        <thead>
         <tr>
-            <th>Titre</th>
-            <th>Type</th>
-            <th>Prénom</th>
-            <th>Nom</th>
-            <th>Grade</th>
-            <th>Commandes</th>
+            <th scope="col">Titre</th>
+            <th scope="col">Type</th>
+            <th scope="col">Prénom</th>
+            <th scope="col">Nom</th>
+            <th scope="col">Grade</th>
+            <th scope="col">Enseignement Aïkikaï</th>
+            <th scope="col">Enseignement ADEPS</th>
+            <th scope="col"></th>
         </tr>
+        </thead>
+        <tbody>
         {% for teacher in clubTools.getLessonsDetails().AFA_teachers %}
             <tr>
                 <td>{{ listData.getTeacherTitle(teacher.Title) }}</td>
@@ -90,30 +121,39 @@
                 <td>{{ teacher.Firstname|title }}</td>
                 <td>{{ teacher.Name|title }}</td>
                 <td>{{ listData.getGrade(teacher.Grade) }}</td>
-                <td><a href="{{ path('secretariat_dojo_teacher_afa_update', {'teacher': teacher.Id, 'club': clubTools.getClub.getClubId()}) }}">Modifier</a> - <a href="{{ path('secretariat_dojo_teacher_afa_delete', {'teacher': teacher.Id, 'club': clubTools.getClub.getClubId()}) }}">Supprimer</a></td>
+                <td>{% if teacher.GradeTitleAikikai != null %}{{ listData.getGradeTitle(teacher.GradeTitleAikikai) }}{% endif %}</td>
+                <td>{% if teacher.GradeTitleAdeps != null %}{{ listData.getGradeTitle(teacher.GradeTitleAdeps) }}{% endif %}</td>
+                <td style="text-align: right">
+                    <div class="btn-group" role="group" aria-label="Commandes">
+                        <button type="button" class="btn btn-primary">Commandes</button>
+                        <div class="btn-group" role="group">
+                            <button id="btnGroupDrop1" type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
+                            <div class="dropdown-menu" aria-labelledby="btnGroupDrop1" style="">
+                                <a class="dropdown-item" href="{{ path('secretariat_dojo_teacher_afa_update', {'teacher': teacher.Id, 'club': clubTools.getClub.getClubId()}) }}">Modifier</a>
+                                <a class="dropdown-item" href="{{ path('secretariat_dojo_teacher_afa_delete', {'teacher': teacher.Id, 'club': clubTools.getClub.getClubId()}) }}">Supprimer</a>
+                            </div>
+                        </div>
+                    </div>
+                </td>
             </tr>
         {% endfor %}
-        <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td><a href="{{ path('secretariat_dojo_teacher_afa_add', {'club': clubTools.getClub.getClubId()}) }}">Ajouter</a></td>
-        </tr>
+        </tbody>
     </table>
     <h2>Professeur(s) & Assistant(s) Autre</h2>
-    <table>
+    <table class="table table-hover">
+        <thead>
         <tr>
-            <th>Titre</th>
-            <th>Type</th>
-            <th>Prénom</th>
-            <th>Nom</th>
-            <th>Grade</th>
-            <th>Enseignement Aïkikaï</th>
-            <th>Enseignement ADEPS</th>
-            <th>Commandes</th>
+            <th scope="col">Titre</th>
+            <th scope="col">Type</th>
+            <th scope="col">Prénom</th>
+            <th scope="col">Nom</th>
+            <th scope="col">Grade</th>
+            <th scope="col">Enseignement Aïkikaï</th>
+            <th scope="col">Enseignement ADEPS</th>
+            <th scope="col"></th>
         </tr>
+        </thead>
+        <tbody>
         {% for teacher in clubTools.getLessonsDetails().Foreign_teachers %}
             <tr>
                 <td>{{ listData.getTeacherTitle(teacher.Title) }}</td>
@@ -121,21 +161,23 @@
                 <td>{{ teacher.Firstname|title }}</td>
                 <td>{{ teacher.Name|title }}</td>
                 <td>{{ listData.getGrade(teacher.Grade) }}</td>
-                <td>{% if teacher.GradeTitleAikikai != null %}{{ listData.getGradeTitleAikikai(teacher.GradeTitleAikikai) }}{% endif %}</td>
-                <td>{% if teacher.GradeTitleAdeps != null %}{{ listData.getGradeTitleAdeps(teacher.GradeTitleAdeps) }}{% endif %}</td>
-                <td><a href="{{ path('secretariat_dojo_teacher_foreign_update', {'teacher': teacher.Id, 'club': clubTools.getClub.getClubId()}) }}">Modifier</a> - <a href="{{ path('secretariat_dojo_teacher_foreign_delete', {'teacher': teacher.Id, 'club': clubTools.getClub.getClubId()}) }}">Supprimer</a></td>
+                <td>{% if teacher.GradeTitleAikikai != null %}{{ listData.getGradeTitle(teacher.GradeTitleAikikai) }}{% endif %}</td>
+                <td>{% if teacher.GradeTitleAdeps != null %}{{ listData.getGradeTitle(teacher.GradeTitleAdeps) }}{% endif %}</td>
+                <td style="text-align: right">
+                    <div class="btn-group" role="group" aria-label="Commandes">
+                        <button type="button" class="btn btn-primary">Commandes</button>
+                        <div class="btn-group" role="group">
+                            <button id="btnGroupDrop1" type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
+                            <div class="dropdown-menu" aria-labelledby="btnGroupDrop1" style="">
+                                <a class="dropdown-item" href="{{ path('secretariat_dojo_teacher_foreign_update', {'teacher': teacher.Id, 'club': clubTools.getClub.getClubId()}) }}">Modifier</a>
+                                <a class="dropdown-item" href="{{ path('secretariat_dojo_teacher_foreign_delete', {'teacher': teacher.Id, 'club': clubTools.getClub.getClubId()}) }}">Supprimer</a>
+                            </div>
+                        </div>
+                    </div>
+                </td>
             </tr>
         {% endfor %}
-        <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td><a href="{{ path('secretariat_dojo_teacher_foreign_add', {'club': clubTools.getClub.getClubId()}) }}">Ajouter</a></td>
-        </tr>
+        </tbody>
     </table>
 {% endblock %}
 

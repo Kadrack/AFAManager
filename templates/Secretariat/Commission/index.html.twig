@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    AFA-Manager
+{% endblock %}
+
+{% block stylesheets %}
+{% endblock %}
+
+{% block body %}
+    <h1>Liste des commissions</h1>
+    <a class="btn btn-primary" href="{{ path('secretariat_commission_create') }}">Ajouter</a>
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th scope="col">Nom</th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for commission in commissions %}
+            <tr>
+                <td>{{ commission.getCommissionName() }}</td>
+                <td><a class="btn btn-primary" href="{{ path('secretariat_commission_detail', {'commission': commission.commissionId()}) }}">Liste des Membres</a></td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
+
+{% block javascripts %}
+{% endblock %}

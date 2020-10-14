@@ -9,19 +9,22 @@
 
 {% block body %}
     <h1>Liste des modifications en attente</h1>
-    <table>
-        <tr>
-            <th>Prénom</th>
-            <th>Nom</th>
-            <th>Date de naissance</th>
-            <th>Adresse</th>
-            <th>Code postal</th>
-            <th>Localité</th>
-            <th>Pays</th>
-            <th>Email</th>
-            <th>Téléphone</th>
-            <th>Commandes</th>
-        </tr>
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th scope="col">Prénom</th>
+                <th scope="col">Nom</th>
+                <th scope="col">Date de naissance</th>
+                <th scope="col">Adresse</th>
+                <th scope="col">Code postal</th>
+                <th scope="col">Localité</th>
+                <th scope="col">Pays</th>
+                <th scope="col">Email</th>
+                <th scope="col">Téléphone</th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
         {% for modification in modifications %}
             <tr>
                 <td>{{ modification.FirstName|title }} ({{ modification.NewFirstName }})</td>
@@ -33,9 +36,10 @@
                 <td>{{ modification.Country }}</td>
                 <td>{{ modification.Email }}</td>
                 <td>{{ modification.Phone }}</td>
-                <td><a href="{{ path('secretariat_member_modification_validation_validate', {'member': modification.Member}) }}">Valider</a> - <a href="{{ path('secretariat_member_modification_validation_cancel', {'member': modification.Member}) }}">Refuser</a></td>
+                <td><a class="btn btn-primary" href="{{ path('secretariat_member_modification_validation_validate', {'member': modification.Member}) }}">Valider</a><a class="btn btn-primary" href="{{ path('secretariat_member_modification_validation_cancel', {'member': modification.Member}) }}">Refuser</a></td>
             </tr>
         {% endfor %}
+        </tbody>
     </table>
 {% endblock %}
 
