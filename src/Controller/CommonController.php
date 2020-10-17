@@ -16,10 +16,16 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
+
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
+use Symfony\Component\Mailer\MailerInterface;
+
+use Symfony\Component\Mime\Email;
+
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/", name="common_")
+ * @Route("", name="common_")
  *
  * @IsGranted("ROLE_USER")
  */
@@ -96,5 +102,29 @@ class CommonController extends AbstractController
         }
 
         return $this->render('Common/change_password.html.twig', array('form' => $form->createView()));
+    }
+
+    /**
+     * @Route("/email")
+     * @param MailerInterface $mailer
+     * @return Response
+     * @throws TransportExceptionInterface
+     */
+    public function sendEmail(MailerInterface $mailer)
+    {
+        /* $email = (new Email())
+            ->from('')
+            ->to('')
+            ->cc('')
+            //->bcc('bcc@example.com')
+            //->replyTo('fabien@example.com')
+            //->priority(Email::PRIORITY_HIGH)
+            ->subject('Test Symfony Mailer!')
+            ->text('Voilà un mail envoyé avec Symfony')
+            ->html('<p>Voilà un mail envoyé avec Symfony</p>');
+
+        $mailer->send($email); */
+
+        return $this->render('Common/index.html.twig');
     }
 }
