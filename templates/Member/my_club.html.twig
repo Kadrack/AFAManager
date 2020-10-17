@@ -83,8 +83,8 @@
                 <td>{{ teacher.Firstname|title }}</td>
                 <td>{{ teacher.Name|title }}</td>
                 <td>{{ listData.getGrade(teacher.Grade) }}</td>
-                <td>{% if teacher.GradeTitleAikikai != null %}{{ listData.getGradeTitle(teacher.GradeTitleAikikai) }}{% endif %}</td>
-                <td>{% if teacher.GradeTitleAdeps != null %}{{ listData.getGradeTitle(teacher.GradeTitleAdeps) }}{% endif %}</td>
+                <td>{% if teacher.GradeTitleAikikai != null %}{{ listData.getGradeTitle(teacher.GradeTitleAikikai) }}{% else %}Aucun{% endif %}</td>
+                <td>{% if teacher.GradeTitleAdeps != null %}{{ listData.getGradeTitle(teacher.GradeTitleAdeps) }}{% else %}Aucun{% endif %}</td>
             </tr>
         {% endfor %}
         </tbody>
@@ -112,8 +112,8 @@
                 <td>{{ teacher.Firstname|title }}</td>
                 <td>{{ teacher.Name|title }}</td>
                 <td>{{ listData.getGrade(teacher.Grade) }}</td>
-                <td>{% if teacher.GradeTitleAikikai != null %}{{ listData.getGradeTitle(teacher.GradeTitleAikikai) }}{% endif %}</td>
-                <td>{% if teacher.GradeTitleAdeps != null %}{{ listData.getGradeTitle(teacher.GradeTitleAdeps) }}{% endif %}</td>
+                <td>{% if teacher.GradeTitleAikikai != null %}{{ listData.getGradeTitle(teacher.GradeTitleAikikai) }}{% else %}Aucun{% endif %}</td>
+                <td>{% if teacher.GradeTitleAdeps != null %}{{ listData.getGradeTitle(teacher.GradeTitleAdeps) }}{% else %}Aucun{% endif %}</td>
             </tr>
         </tbody>
         {% endfor %}
