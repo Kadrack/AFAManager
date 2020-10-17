@@ -121,8 +121,8 @@
                 <td>{{ teacher.Firstname|title }}</td>
                 <td>{{ teacher.Name|title }}</td>
                 <td>{{ listData.getGrade(teacher.Grade) }}</td>
-                <td>{% if teacher.GradeTitleAikikai != null %}{{ listData.getGradeTitle(teacher.GradeTitleAikikai) }}{% endif %}</td>
-                <td>{% if teacher.GradeTitleAdeps != null %}{{ listData.getGradeTitle(teacher.GradeTitleAdeps) }}{% endif %}</td>
+                <td>{% if teacher.GradeTitleAikikai != null %}{{ listData.getGradeTitle(teacher.GradeTitleAikikai) }}{% else %}Aucun{% endif %}</td>
+                <td>{% if teacher.GradeTitleAdeps != null %}{{ listData.getGradeTitle(teacher.GradeTitleAdeps) }}{% else %}Aucun{% endif %}</td>
                 <td style="text-align: right">
                     <div class="btn-group" role="group" aria-label="Commandes">
                         <button type="button" class="btn btn-primary">Commandes</button>
@@ -161,8 +161,8 @@
                 <td>{{ teacher.Firstname|title }}</td>
                 <td>{{ teacher.Name|title }}</td>
                 <td>{{ listData.getGrade(teacher.Grade) }}</td>
-                <td>{% if teacher.GradeTitleAikikai != null %}{{ listData.getGradeTitle(teacher.GradeTitleAikikai) }}{% endif %}</td>
-                <td>{% if teacher.GradeTitleAdeps != null %}{{ listData.getGradeTitle(teacher.GradeTitleAdeps) }}{% endif %}</td>
+                <td>{% if teacher.GradeTitleAikikai != null %}{{ listData.getGradeTitle(teacher.GradeTitleAikikai) }}{% else %}Aucun{% endif %}</td>
+                <td>{% if teacher.GradeTitleAdeps != null %}{{ listData.getGradeTitle(teacher.GradeTitleAdeps) }}{% else %}Aucun{% endif %}</td>
                 <td style="text-align: right">
                     <div class="btn-group" role="group" aria-label="Commandes">
                         <button type="button" class="btn btn-primary">Commandes</button>
