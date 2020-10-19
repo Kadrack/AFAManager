@@ -43,6 +43,14 @@ class AdministrationController extends AbstractController
             $statistics[$province]['Total'][2] = 0;
         }
 
+        for ($i = 1; $i <= 12; $i++)
+        {
+            $total['Limits'][$i] = 0;
+        }
+
+        $total['Total'][1] = 0;
+        $total['Total'][2] = 0;
+
         $query = $this->getDoctrine()->getRepository(Club::class)->getProvinceMembersCount();
 
         $i = 1;
@@ -64,13 +72,27 @@ class AdministrationController extends AbstractController
                     $limit = $i * 2;
                 }
 
+                $total['Limits'][$limit] = $total['Limits'][$limit] + $province['Total'];
+
                 $statistics[$province['Province']]['Limits'][$limit] = $province;
             }
 
             $i++;
         }
 
-        return $this->render('Administration/Statistic/index.html.twig', array('statistics' => $statistics));
+        for ($i = 1; $i <= 12; $i++)
+        {
+            if (is_int($i / 2))
+            {
+                $total['Total'][2] = $total['Total'][2] + $total['Limits'][$i];
+            }
+            else
+            {
+                $total['Total'][1] = $total['Total'][1] + $total['Limits'][$i];
+            }
+        }
+
+        return $this->render('Administration/Statistic/index.html.twig', array('statistics' => $statistics, 'total' => $total));
     }
 
     /**

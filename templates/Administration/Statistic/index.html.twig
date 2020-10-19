@@ -8,36 +8,37 @@
 {% endblock %}
 
 {% block body %}
+    <h1>Statistique en temps réel</h1>
     <table class="table table-hover">
         <thead>
-        <tr>
-            <th rowspan="2" scope="col">Province</th>
-            <th colspan="2" scope="col">- de 6</th>
-            <th colspan="2" scope="col">- de 12</th>
-            <th colspan="2" scope="col">- de 18</th>
-            <th colspan="2" scope="col">- de 25</th>
-            <th colspan="2" scope="col">- de 35</th>
-            <th colspan="2" scope="col">+ de 35</th>
-            <th colspan="2" scope="col">Total</th>
-            <th rowspan="2" scope="col">Total</th>
-            <th rowspan="2" scope="col"></th>
-        </tr>
-        <tr>
-            <th scope="col">H</th>
-            <th scope="col">F</th>
-            <th scope="col">H</th>
-            <th scope="col">F</th>
-            <th scope="col">H</th>
-            <th scope="col">F</th>
-            <th scope="col">H</th>
-            <th scope="col">F</th>
-            <th scope="col">H</th>
-            <th scope="col">F</th>
-            <th scope="col">H</th>
-            <th scope="col">F</th>
-            <th scope="col">H</th>
-            <th scope="col">F</th>
-        </tr>
+            <tr>
+                <th rowspan="2" scope="col">Province</th>
+                <th colspan="2" scope="col">- de 6</th>
+                <th colspan="2" scope="col">- de 12</th>
+                <th colspan="2" scope="col">- de 18</th>
+                <th colspan="2" scope="col">- de 25</th>
+                <th colspan="2" scope="col">- de 35</th>
+                <th colspan="2" scope="col">+ de 35</th>
+                <th colspan="2" scope="col">Total</th>
+                <th rowspan="2" scope="col">Total</th>
+                <th rowspan="2" scope="col"></th>
+            </tr>
+            <tr>
+                <th scope="col">H</th>
+                <th scope="col">F</th>
+                <th scope="col">H</th>
+                <th scope="col">F</th>
+                <th scope="col">H</th>
+                <th scope="col">F</th>
+                <th scope="col">H</th>
+                <th scope="col">F</th>
+                <th scope="col">H</th>
+                <th scope="col">F</th>
+                <th scope="col">H</th>
+                <th scope="col">F</th>
+                <th scope="col">H</th>
+                <th scope="col">F</th>
+            </tr>
         </thead>
         <tbody>
             {% for province in statistics %}
@@ -54,6 +55,18 @@
                 <td><a class="btn btn-primary" href="{{ path('administration_statistics_province', {'province': province.Id}) }}">Détails</a></td>
             </tr>
             {% endfor %}
+            <tr>
+                <td>Total</td>
+                {% for value in total.Limits %}
+                <td>{{ value }}</td>
+                {% else %}
+                <td>0</td>
+                {% endfor %}
+                <td>{{ total.Total.1 }}</td>
+                <td>{{ total.Total.2 }}</td>
+                <td>{{ total.Total.1 + total.Total.2 }}</td>
+                <td></td>
+            </tr>
         </tbody>
     </table>
 {% endblock %}
