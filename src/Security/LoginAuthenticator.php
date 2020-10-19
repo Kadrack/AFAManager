@@ -131,6 +131,8 @@ class LoginAuthenticator extends AbstractFormLoginAuthenticator implements Passw
             $this->entityManager->flush();
         }
 
+        $user->setUserLastActivity(new DateTime('today'));
+
         $this->entityManager->flush();
 
         if (($user->getUserStatus() == 0) || ($user->getUserStatus() > 4))
