@@ -165,8 +165,6 @@ class SecretariatController extends AbstractController
 
         foreach ($active_list as $club)
         {
-            $club['Members'] = 0;
-
             $club['Province'] = $provinces->getProvince($club['Province']);
 
             $active_clubs[$club['Province']]['Clubs'][$club['Id']] = $club;
@@ -1518,6 +1516,9 @@ class SecretariatController extends AbstractController
                     break;
                 case 3 :
                     $commission->setCommissionRole('ROLE_STAGES');
+                    break;
+                case 4 :
+                    $commission->setCommissionRole('ROLE_ADMINISTRATION');
                     break;
                 default :
                     $commission->setCommissionRole(null);

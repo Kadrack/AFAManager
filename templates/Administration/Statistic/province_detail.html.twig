@@ -1,0 +1,62 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    AFA-Manager
+{% endblock %}
+
+{% block stylesheets %}
+{% endblock %}
+
+{% block body %}
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th rowspan="2" scope="col">Numéro</th>
+            <th rowspan="2" scope="col">Nom</th>
+            <th colspan="2" scope="col">- de 6</th>
+            <th colspan="2" scope="col">- de 12</th>
+            <th colspan="2" scope="col">- de 18</th>
+            <th colspan="2" scope="col">- de 25</th>
+            <th colspan="2" scope="col">- de 35</th>
+            <th colspan="2" scope="col">+ de 35</th>
+            <th colspan="2" scope="col">Total</th>
+            <th rowspan="2" scope="col">Total</th>
+        </tr>
+        <tr>
+            <th scope="col">H</th>
+            <th scope="col">F</th>
+            <th scope="col">H</th>
+            <th scope="col">F</th>
+            <th scope="col">H</th>
+            <th scope="col">F</th>
+            <th scope="col">H</th>
+            <th scope="col">F</th>
+            <th scope="col">H</th>
+            <th scope="col">F</th>
+            <th scope="col">H</th>
+            <th scope="col">F</th>
+            <th scope="col">H</th>
+            <th scope="col">F</th>
+        </tr>
+        </thead>
+        <tbody>
+            {% for club in statistics %}
+            <tr>
+                <td>{{ club.Club.Id }}</td>
+                <td>{{ club.Club.Name|title }}</td>
+                {% for value in club.Limits %}
+                <td>{{ value.Total }}</td>
+                {% else %}
+                <td>0</td>
+                {% endfor %}
+                <td>{{ club.Total.1 }}</td>
+                <td>{{ club.Total.2 }}</td>
+                <td>{{ club.Total.1 + club.Total.2 }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
+
+{% block javascripts %}
+{% endblock %}

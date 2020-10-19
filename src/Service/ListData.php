@@ -16,7 +16,7 @@ class ListData
      */
     public function getAccessType(int $type = 0)
     {
-        $access = array('Aucun' => 1, 'CFG' => 2, 'Stage' => 3);
+        $access = array('Aucun' => 1, 'CT' => 2, 'Stage' => 3, 'CA' => 4);
 
         if ($type == 0)
         {
@@ -221,7 +221,7 @@ class ListData
      */
     public function getProvince(int $province)
     {
-        $provinces = array('Bruxelles' => 1, 'Brabant Wallon' => 2, 'Hainaut' => 3, 'Liège' => 4, 'Luxembourg' => 5, 'Namur' => 6, 'Brabant Flamand' => 7, 'Autre' => 8);
+        $provinces = array('Bruxelles' => 1, 'Brabant Wallon' => 2, 'Hainaut' => 3, 'Liège' => 4, 'Luxembourg' => 5, 'Namur' => 6, 'Brabant Flamand' => 7);
 
         if ($province == 0)
         {

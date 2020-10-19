@@ -4,6 +4,11 @@ namespace App\Repository;
 
 use App\Entity\Club;
 use App\Entity\ClubHistory;
+use App\Entity\Member;
+use App\Entity\MemberLicence;
+
+use DateInterval;
+use DateTime;
 
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
@@ -45,5 +50,120 @@ class ClubRepository extends ServiceEntityRepository
             ->orderBy('c.club_id', 'ASC')
             ->getQuery()
             ->getArrayResult();
+    }
+
+    public function getProvinceMembersCount(?DateTime $referenceDate = null): ?array
+    {
+        $result = array();
+
+        if (is_null($referenceDate))
+        {
+            $referenceDate = new DateTime('today');
+        }
+
+        $deadline = $referenceDate->format('Y-m-d');
+
+        $limit[0] = $referenceDate->sub(new DateInterval('P0Y'))->format('Y-m-d');
+        $limit[1] = $referenceDate->sub(new DateInterval('P6Y'))->format('Y-m-d');
+        $limit[2] = $referenceDate->sub(new DateInterval('P6Y'))->format('Y-m-d');
+        $limit[3] = $referenceDate->sub(new DateInterval('P6Y'))->format('Y-m-d');
+        $limit[4] = $referenceDate->sub(new DateInterval('P7Y'))->format('Y-m-d');
+        $limit[5] = $referenceDate->sub(new DateInterval('P10Y'))->format('Y-m-d');
+
+        $qb = $this->createQueryBuilder('c');
+
+        for ($i = 0; $i < count($limit)-1; $i++)
+        {
+            $result[] = $qb->select('c.club_province AS Province', 'm.member_sex AS Sex', 'count(m.member_id) AS Total')
+                ->join(Member::class, 'm', 'WITH', $qb->expr()->eq('m.member_actual_club', 'c.club_id'))
+                ->join(MemberLicence::class, 'l', 'WITH', $qb->expr()->eq('m.member_id', 'l.member_licence'))
+                ->where($qb->expr()->gt('l.member_licence_deadline', "'".$deadline."'"))
+                ->andWhere($qb->expr()->eq('l.member_licence_status', 1))
+                ->andWhere($qb->expr()->between('m.member_birthday', "'".$limit[$i+1]."'", "'".$limit[$i]."'"))
+                ->groupBy('c.club_province')
+                ->addGroupBy('m.member_sex')
+                ->orderBy('Province', 'ASC')
+                ->getQuery()
+                ->getArrayResult();
+
+            $qb = $this->createQueryBuilder('c');
+        }
+
+        $result[] = $qb->select('c.club_province AS Province', 'm.member_sex AS Sex', 'count(m.member_id) AS Total')
+            ->join(Member::class, 'm', 'WITH', $qb->expr()->eq('m.member_actual_club', 'c.club_id'))
+            ->join(MemberLicence::class, 'l', 'WITH', $qb->expr()->eq('m.member_id', 'l.member_licence'))
+            ->where($qb->expr()->gt('l.member_licence_deadline', "'".$deadline."'"))
+            ->andWhere($qb->expr()->eq('l.member_licence_status', 1))
+            ->andWhere($qb->expr()->lte('m.member_birthday', "'".$limit[count($limit)-1]."'"))
+            ->groupBy('c.club_province')
+            ->addGroupBy('m.member_sex')
+            ->orderBy('Province', 'ASC')
+            ->getQuery()
+            ->getArrayResult();
+
+        return $result;
+    }
+
+    public function getClubMembersCount(int $province, ?DateTime $referenceDate = null): ?array
+    {
+        $result = array();
+
+        if (is_null($referenceDate))
+        {
+            $referenceDate = new DateTime('today');
+        }
+
+        $deadline = $referenceDate->format('Y-m-d');
+
+        $limit[0] = $referenceDate->sub(new DateInterval('P0Y'))->format('Y-m-d');
+        $limit[1] = $referenceDate->sub(new DateInterval('P6Y'))->format('Y-m-d');
+        $limit[2] = $referenceDate->sub(new DateInterval('P6Y'))->format('Y-m-d');
+        $limit[3] = $referenceDate->sub(new DateInterval('P6Y'))->format('Y-m-d');
+        $limit[4] = $referenceDate->sub(new DateInterval('P7Y'))->format('Y-m-d');
+        $limit[5] = $referenceDate->sub(new DateInterval('P10Y'))->format('Y-m-d');
+
+        $qb = $this->createQueryBuilder('c');
+
+        $result['Clubs'] = $qb->select('c.club_id AS Id', 'c.club_name AS Name')
+            ->join(ClubHistory::class, 'h', 'WITH', $qb->expr()->eq('h.club_history_id', 'c.club_last_history'))
+            ->where($qb->expr()->eq('h.club_history_status', 1))
+            ->andWhere($qb->expr()->eq('c.club_province', $province))
+            ->orderBy('c.club_province', 'ASC')
+            ->addOrderBy('c.club_id', 'ASC')
+            ->getQuery()
+            ->getArrayResult();
+
+        for ($i = 0; $i < count($limit)-1; $i++)
+        {
+            $result['Details'][] = $qb->select('c.club_id AS Id', 'c.club_name AS Name', 'm.member_sex AS Sex', 'count(m.member_id) AS Total')
+                ->join(Member::class, 'm', 'WITH', $qb->expr()->eq('m.member_actual_club', 'c.club_id'))
+                ->join(MemberLicence::class, 'l', 'WITH', $qb->expr()->eq('m.member_id', 'l.member_licence'))
+                ->where($qb->expr()->gt('l.member_licence_deadline', "'".$deadline."'"))
+                ->andWhere($qb->expr()->eq('l.member_licence_status', 1))
+                ->andWhere($qb->expr()->eq('c.club_province', $province))
+                ->andWhere($qb->expr()->between('m.member_birthday', "'".$limit[$i+1]."'", "'".$limit[$i]."'"))
+                ->groupBy('c.club_id')
+                ->addGroupBy('m.member_sex')
+                ->orderBy('Id', 'ASC')
+                ->getQuery()
+                ->getArrayResult();
+
+            $qb = $this->createQueryBuilder('c');
+        }
+
+        $result['Details'][] = $qb->select('c.club_id AS Id', 'c.club_name AS Name', 'm.member_sex AS Sex', 'count(m.member_id) AS Total')
+            ->join(Member::class, 'm', 'WITH', $qb->expr()->eq('m.member_actual_club', 'c.club_id'))
+            ->join(MemberLicence::class, 'l', 'WITH', $qb->expr()->eq('m.member_id', 'l.member_licence'))
+            ->where($qb->expr()->gt('l.member_licence_deadline', "'".$deadline."'"))
+            ->andWhere($qb->expr()->eq('l.member_licence_status', 1))
+            ->andWhere($qb->expr()->eq('c.club_province', $province))
+            ->andWhere($qb->expr()->lte('m.member_birthday', "'".$limit[count($limit)-1]."'"))
+            ->groupBy('c.club_id')
+            ->addGroupBy('m.member_sex')
+            ->orderBy('Id', 'ASC')
+            ->getQuery()
+            ->getArrayResult();
+
+        return $result;
     }
 }
