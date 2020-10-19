@@ -37,14 +37,6 @@ use Symfony\Component\Routing\Annotation\Route;
 class ClubController extends AbstractController
 {
     /**
-     * @Route("/", name="index")
-     */
-    public function index()
-    {
-        return $this->render('Club/index.html.twig');
-    }
-
-    /**
      * @Route("/index_dojo", name="dojo_index")
      * @param ClubTools $clubTools
      * @return Response
@@ -378,7 +370,7 @@ class ClubController extends AbstractController
         {
             $clubTools->associationDetails($form->getData());
 
-            return $this->redirectToRoute('club_index');
+            return $this->redirectToRoute('common_index');
         }
 
         return $this->render('Club/Association/details.html.twig', array('form' => $form->createView(), 'club' => $clubTools->getClub()));
