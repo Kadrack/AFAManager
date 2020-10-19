@@ -133,15 +133,19 @@ class ClubRepository extends ServiceEntityRepository
             ->getQuery()
             ->getArrayResult();
 
+        $qb = $this->createQueryBuilder('c');
+
         for ($i = 0; $i < count($limit)-1; $i++)
         {
             $result['Details'][] = $qb->select('c.club_id AS Id', 'c.club_name AS Name', 'm.member_sex AS Sex', 'count(m.member_id) AS Total')
                 ->join(Member::class, 'm', 'WITH', $qb->expr()->eq('m.member_actual_club', 'c.club_id'))
                 ->join(MemberLicence::class, 'l', 'WITH', $qb->expr()->eq('m.member_id', 'l.member_licence'))
+                ->join(ClubHistory::class, 'h', 'WITH', $qb->expr()->eq('h.club_history_id', 'c.club_last_history'))
                 ->where($qb->expr()->gt('l.member_licence_deadline', "'".$deadline."'"))
                 ->andWhere($qb->expr()->eq('l.member_licence_status', 1))
                 ->andWhere($qb->expr()->eq('c.club_province', $province))
                 ->andWhere($qb->expr()->between('m.member_birthday', "'".$limit[$i+1]."'", "'".$limit[$i]."'"))
+                ->andWhere($qb->expr()->eq('h.club_history_status', 1))
                 ->groupBy('c.club_id')
                 ->addGroupBy('m.member_sex')
                 ->orderBy('Id', 'ASC')
@@ -154,10 +158,12 @@ class ClubRepository extends ServiceEntityRepository
         $result['Details'][] = $qb->select('c.club_id AS Id', 'c.club_name AS Name', 'm.member_sex AS Sex', 'count(m.member_id) AS Total')
             ->join(Member::class, 'm', 'WITH', $qb->expr()->eq('m.member_actual_club', 'c.club_id'))
             ->join(MemberLicence::class, 'l', 'WITH', $qb->expr()->eq('m.member_id', 'l.member_licence'))
+            ->join(ClubHistory::class, 'h', 'WITH', $qb->expr()->eq('h.club_history_id', 'c.club_last_history'))
             ->where($qb->expr()->gt('l.member_licence_deadline', "'".$deadline."'"))
             ->andWhere($qb->expr()->eq('l.member_licence_status', 1))
             ->andWhere($qb->expr()->eq('c.club_province', $province))
             ->andWhere($qb->expr()->lte('m.member_birthday', "'".$limit[count($limit)-1]."'"))
+            ->andWhere($qb->expr()->eq('h.club_history_status', 1))
             ->groupBy('c.club_id')
             ->addGroupBy('m.member_sex')
             ->orderBy('Id', 'ASC')
