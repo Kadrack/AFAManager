@@ -69,7 +69,73 @@
             </tr>
         </tbody>
     </table>
+    <canvas id="myChart" width="400" height="400"></canvas>
 {% endblock %}
 
 {% block javascripts %}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+    <script>
+        var ctx = document.getElementById('myChart').getContext('2d');
+
+        Chart.defaults.global.defaultFontColor = 'white';
+
+        var myChart = new Chart
+        (ctx,
+            {
+                type: 'horizontalBar',
+                options:
+                    {
+                        title:
+                            {
+                                display: true,
+                                text: 'Totaux par Catégorie (%)',
+                            },
+                        legend:
+                            {
+                                display: false,
+                            }
+                    },
+                data:
+                    {
+                        labels: ['Garçons moins de 6 ans', 'Filles moins de 6 ans', 'Garçons moins de 12 ans', 'Filles moins de 12 ans', 'Adolescents moins de 18 ans', 'Adolescentes moins de 18 ans', 'Hommes moins de 25 ans', 'Femmes moins de 25 ans', 'Hommes moins de 35 ans', 'Femmes moins de 35 ans', 'Hommes plus de 35 ans', 'Femmes plus de 35 ans'],
+                        datasets:
+                            [{
+                                data: [{% for value in total.Limits %}{{ ((value * 100) / (total.Total.1 + total.Total.2))|round(1, 'common') }},{% endfor %}],
+                                backgroundColor:
+                                    [
+                                        'rgba({{ random(255) }}, {{ random(255) }}, {{ random(255) }}, 0.2)',
+                                        'rgba({{ random(255) }}, {{ random(255) }}, {{ random(255) }}, 0.2)',
+                                        'rgba({{ random(255) }}, {{ random(255) }}, {{ random(255) }}, 0.2)',
+                                        'rgba({{ random(255) }}, {{ random(255) }}, {{ random(255) }}, 0.2)',
+                                        'rgba({{ random(255) }}, {{ random(255) }}, {{ random(255) }}, 0.2)',
+                                        'rgba({{ random(255) }}, {{ random(255) }}, {{ random(255) }}, 0.2)',
+                                        'rgba({{ random(255) }}, {{ random(255) }}, {{ random(255) }}, 0.2)',
+                                        'rgba({{ random(255) }}, {{ random(255) }}, {{ random(255) }}, 0.2)',
+                                        'rgba({{ random(255) }}, {{ random(255) }}, {{ random(255) }}, 0.2)',
+                                        'rgba({{ random(255) }}, {{ random(255) }}, {{ random(255) }}, 0.2)',
+                                        'rgba({{ random(255) }}, {{ random(255) }}, {{ random(255) }}, 0.2)',
+                                        'rgba({{ random(255) }}, {{ random(255) }}, {{ random(255) }}, 0.2)'
+                                    ],
+                                borderColor:
+                                    [
+                                        'rgba({{ random(255) }}, {{ random(255) }}, {{ random(255) }}, 1)',
+                                        'rgba({{ random(255) }}, {{ random(255) }}, {{ random(255) }}, 1)',
+                                        'rgba({{ random(255) }}, {{ random(255) }}, {{ random(255) }}, 1)',
+                                        'rgba({{ random(255) }}, {{ random(255) }}, {{ random(255) }}, 1)',
+                                        'rgba({{ random(255) }}, {{ random(255) }}, {{ random(255) }}, 1)',
+                                        'rgba({{ random(255) }}, {{ random(255) }}, {{ random(255) }}, 1)',
+                                        'rgba({{ random(255) }}, {{ random(255) }}, {{ random(255) }}, 1)',
+                                        'rgba({{ random(255) }}, {{ random(255) }}, {{ random(255) }}, 1)',
+                                        'rgba({{ random(255) }}, {{ random(255) }}, {{ random(255) }}, 1)',
+                                        'rgba({{ random(255) }}, {{ random(255) }}, {{ random(255) }}, 1)',
+                                        'rgba({{ random(255) }}, {{ random(255) }}, {{ random(255) }}, 1)',
+                                        'rgba({{ random(255) }}, {{ random(255) }}, {{ random(255) }}, 1)'
+                                    ],
+                                borderWidth: 1,
+                                fontColor: ['rgba(255, 255, 255)'],
+                            }]
+                    },
+            }
+        );
+    </script>
 {% endblock %}
