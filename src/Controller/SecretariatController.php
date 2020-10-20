@@ -688,7 +688,7 @@ class SecretariatController extends AbstractController
             $entityManager->persist($history);
             $entityManager->flush();
 
-            return $this->redirectToRoute('club_index');
+            return $this->redirectToRoute('secretariat_club_list');
         }
 
         return $this->render('Secretariat/Club/reassign.html.twig', array('form' => $form->createView(), 'club' => $club));
