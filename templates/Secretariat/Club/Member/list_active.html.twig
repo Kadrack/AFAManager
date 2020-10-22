@@ -11,7 +11,7 @@
     <h1>{{ club.getClubName()|title }}</h1>
     <h2>Liste des Membres</h2>
     <a class="btn btn-primary" href="{{ path('secretariat_member_create', {'club': club.getClubId()}) }}">Ajouter</a>
-    <table class="table table-sm table-hover table-striped">
+    <table class="table table-sm table-hover">
         <thead>
             <tr>
                 <th scope="col">#</th>

@@ -12,7 +12,7 @@
     <h2>Début de pratique : {{ member.getMemberFirstLicence().getMemberLicenceMedicalCertificate()|date("d/m/Y") }}</h2>
     <h3>Historique Licence n° {{ member.getMemberId() }}</h3>
     {% if next_renew %}<a class="btn btn-primary" href="{{ path('secretariat_member_licence_renew', {'club': club.getClubId(), 'member': member.getMemberId()}) }}">Renouveller</a>{% endif %}
-    <table class="table table-sm table-hover table-striped">
+    <table class="table table-sm table-hover">
         <thead>
             <tr>
                 <th scope="col">Echéance</th>

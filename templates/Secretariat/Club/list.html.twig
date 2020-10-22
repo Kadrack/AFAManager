@@ -11,7 +11,7 @@
     <h1>Liste des clubs <a class="btn btn-primary" href="{{ path('secretariat_club_create') }}">Ajouter</a></h1>
     {% for active in active_clubs %}
     <h2>{{ active.province }}</h2>
-    <table class="table table-sm table-hover table-striped">
+    <table class="table table-sm table-hover">
         <thead>
             <tr>
                 <th scope="col">Numéro</th>
@@ -48,7 +48,7 @@
     {% endfor %}
     {% if inactive_clubs != null %}
     <h2>Clubs Inactifs</h2>
-    <table class="table table-sm table-hover table-striped">
+    <table class="table table-sm table-hover">
         <thead>
             <tr>
                 <th>Numéro</th>

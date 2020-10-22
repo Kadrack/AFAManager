@@ -12,7 +12,7 @@
     <h2>Début de pratique : {{ memberTools.getMember.getMemberFirstLicence().getMemberLicenceMedicalCertificate()|date("d/m/Y") }}</h2>
     <h2>Historique des grades</h2>
     {% if memberTools.getGrades().exam.candidate %}<a href="{{ path('club_member_application', {'member': memberTools.getMember.memberId(), 'type': 1}) }}">Candidature au prochain examen fédéral</a> {% endif %}{% if memberTools.getGrades().kyu %}<a href="{{ path('club_member_add_kyu', {'member': memberTools.getMember.memberId()}) }}">Ajouter un grade Kyu</a> {% endif %}
-    <table class="table table-sm table-hover table-striped">
+    <table class="table table-sm table-hover">
         <thead>
             <tr>
                 <th scope="col">Grade</th>

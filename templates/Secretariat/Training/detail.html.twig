@@ -9,7 +9,7 @@
 
 {% block body %}
     <h1>{{ training.getTrainingName() }}</h1>
-    <table class="table table-sm table-hover table-striped">
+    <table class="table table-sm table-hover">
         <thead>
             <tr>
                 <th scope="col">Titre</th>
@@ -27,7 +27,7 @@
     </table>
     <h2>Cours</h2>
     <a class="btn btn-primary" href="{{ path('secretariat_training_session_add', {'training': training.getTrainingId()}) }}">Ajouter</a>
-    <table class="table table-sm table-hover table-striped">
+    <table class="table table-sm table-hover">
         <thead>
             <tr>
                 <th scope="col">Date</th>
