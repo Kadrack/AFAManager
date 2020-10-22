@@ -10,7 +10,7 @@
 {% block body %}
     <h1>{{ memberTools.getMember.getMemberFirstname()|title }} {{ memberTools.getMember.getMemberName()|title }}</h1>
     <h2>Historique des titres</h2>
-    <table class="table table-hover">
+    <table class="table table-sm table-hover table-striped">
         <thead>
             <tr>
                 <th scope="col">Titre</th>
@@ -21,9 +21,9 @@
         <tbody>
         {% for title in memberTools.getTitles() %}
         <tr>
-            <td>{{ listData.gradeTitle(title.Rank) }}</td>
-            <td>{{ title.Date|date("d/m/Y") }}</td>
-            <td>{{ title.Certificate }}</td>
+            <td class="align-middle">{{ listData.gradeTitle(title.Rank) }}</td>
+            <td class="align-middle">{{ title.Date|date("d/m/Y") }}</td>
+            <td class="align-middle">{{ title.Certificate }}</td>
         </tr>
         {% endfor %}
         </tbody>

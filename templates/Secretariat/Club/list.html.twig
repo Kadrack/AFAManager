@@ -11,7 +11,7 @@
     <h1>Liste des clubs <a class="btn btn-primary" href="{{ path('secretariat_club_create') }}">Ajouter</a></h1>
     {% for active in active_clubs %}
     <h2>{{ active.province }}</h2>
-    <table class="table table-hover">
+    <table class="table table-sm table-hover table-striped">
         <thead>
             <tr>
                 <th scope="col">Numéro</th>
@@ -22,9 +22,9 @@
         <tbody>
         {% for club in active.Clubs %}
             <tr>
-                <td>{{ club.Id }}</td>
-                <td>{{ club.Name|title }}</td>
-                <td style="text-align: right">
+                <td class="align-middle">{{ club.Id }}</td>
+                <td class="align-middle">{{ club.Name|title }}</td>
+                <td class="align-middle text-center">
                     <div class="btn-group" role="group" aria-label="Commandes">
                         <button type="button" class="btn btn-primary">Commandes</button>
                         <div class="btn-group" role="group">
@@ -48,7 +48,7 @@
     {% endfor %}
     {% if inactive_clubs != null %}
     <h2>Clubs Inactifs</h2>
-    <table class="table table-hover">
+    <table class="table table-sm table-hover table-striped">
         <thead>
             <tr>
                 <th>Numéro</th>

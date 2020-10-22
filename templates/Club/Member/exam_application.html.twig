@@ -9,10 +9,8 @@
 
 {% block body %}
     <h1>Candidature examen fédéral</h1>
-
     <h2>Détails session</h2>
-
-    <table class="table table-hover">
+    <table class="table table-sm table-hover table-striped">
         <thead>
             <tr>
                 <th scope="col">Date</th>
@@ -25,12 +23,12 @@
         </thead>
         <tbody>
             <tr>
-                <td>{{ exam.getGradeSessionDate()|date("d/m/Y") }}</td>
-                <td>{{ exam.getGradeSessionStreet() }}</td>
-                <td>{{ exam.getGradeSessionZip() }}</td>
-                <td>{{ exam.getGradeSessionCity() }}</td>
-                <td>{{ exam.getGradeSessionCandidateOpen()|date("d/m/Y") }}</td>
-                <td>{{ exam.getGradeSessionCandidateClose()|date("d/m/Y") }}</td>
+                <td class="align-middle">{{ exam.getGradeSessionDate()|date("d/m/Y") }}</td>
+                <td class="align-middle">{{ exam.getGradeSessionStreet() }}</td>
+                <td class="align-middle">{{ exam.getGradeSessionZip() }}</td>
+                <td class="align-middle">{{ exam.getGradeSessionCity() }}</td>
+                <td class="align-middle">{{ exam.getGradeSessionCandidateOpen()|date("d/m/Y") }}</td>
+                <td class="align-middle">{{ exam.getGradeSessionCandidateClose()|date("d/m/Y") }}</td>
             </tr>
         </tbody>
     </table>

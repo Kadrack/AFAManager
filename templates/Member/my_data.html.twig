@@ -11,7 +11,7 @@
     <h1>{{ member.getMemberFirstname()|title }} {{ member.getMemberName()|title }}</h1>
     <h2>Données personnelles <a class="btn btn-primary" href="{{ path('member_my_data_update') }}">Modifier</a></h2>
     <img alt="" src="{{ asset('uploads/photos/'~member.getMemberPhoto()) }}" /><br />
-    <table class="table table-hover">
+    <table class="table table-sm table-hover table-striped">
         <thead>
             <tr>
                 <th scope="col">Date de naissance</th>
@@ -24,19 +24,19 @@
         </thead>
         <tbody>
             <tr>
-                <td>{{ member.getMemberBirthday()|date("d/m/Y") }}</td>
-                <td>{{ member.getMemberAddress() }}</td>
-                <td>{{ member.getMemberZip() }} {{ member.getMemberCity() }}</td>
-                <td>{{ listData.getCountryName(member.getMemberCountry()) }}</td>
-                <td>{{ member.getMemberEmail() }}</td>
-                <td>{{ member.getMemberPhone() }}</td>
+                <td class="align-middle">{{ member.getMemberBirthday()|date("d/m/Y") }}</td>
+                <td class="align-middle">{{ member.getMemberAddress() }}</td>
+                <td class="align-middle">{{ member.getMemberZip() }} {{ member.getMemberCity() }}</td>
+                <td class="align-middle">{{ listData.getCountryName(member.getMemberCountry()) }}</td>
+                <td class="align-middle">{{ member.getMemberEmail() }}</td>
+                <td class="align-middle">{{ member.getMemberPhone() }}</td>
             </tr>
         </tbody>
     </table>
     {% if member.getMemberModification() != null %}
     <h2>Modification en attente de validation</h2>
     <img alt="" src=" {{ asset('uploads/photos/'~member.getMemberModification().getMemberModificationPhoto()) }}" /><br />
-    <table class="table table-hover">
+    <table class="table table-sm table-hover table-striped">
         <thead>
             <tr>
                 <th scope="col">Prénom</th>
@@ -51,14 +51,14 @@
         </thead>
         <tbody>
             <tr>
-                <td>{{ member.getMemberModification().getMemberModificationFirstname() }}</td>
-                <td>{{ member.getMemberModification().getMemberModificationName() }}</td>
-                <td>{% if member.getMemberModification().getMemberModificationBirthday() != null %}{{ member.getMemberModification().getMemberModificationBirthday()|date("d/m/Y") }}{% endif %}</td>
-                <td>{{ member.getMemberModification().getMemberModificationAddress() }}</td>
-                <td>{{ member.getMemberModification().getMemberModificationZip() }} {{ member.getMemberModification().getMemberModificationCity() }}</td>
-                <td>{% if member.getMemberModification().getMemberModificationCountry() != null %}{{ listData.getCountryName(member.getMemberModification().getMemberModificationCountry()) }}{% endif %}</td>
-                <td>{{ member.getMemberModification().getMemberModificationEmail() }}</td>
-                <td>{{ member.getMemberModification().getMemberModificationPhone() }}</td>
+                <td class="align-middle">{{ member.getMemberModification().getMemberModificationFirstname() }}</td>
+                <td class="align-middle">{{ member.getMemberModification().getMemberModificationName() }}</td>
+                <td class="align-middle">{% if member.getMemberModification().getMemberModificationBirthday() != null %}{{ member.getMemberModification().getMemberModificationBirthday()|date("d/m/Y") }}{% endif %}</td>
+                <td class="align-middle">{{ member.getMemberModification().getMemberModificationAddress() }}</td>
+                <td class="align-middle">{{ member.getMemberModification().getMemberModificationZip() }} {{ member.getMemberModification().getMemberModificationCity() }}</td>
+                <td class="align-middle">{% if member.getMemberModification().getMemberModificationCountry() != null %}{{ listData.getCountryName(member.getMemberModification().getMemberModificationCountry()) }}{% endif %}</td>
+                <td class="align-middle">{{ member.getMemberModification().getMemberModificationEmail() }}</td>
+                <td class="align-middle">{{ member.getMemberModification().getMemberModificationPhone() }}</td>
             </tr>
         </tbody>
     </table>

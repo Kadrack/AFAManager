@@ -10,12 +10,12 @@
 
         {% if app.user != null %}
             {% if app.user.login == "Carine" %}
-                <link rel="stylesheet" type="text/css" href="{{ asset('css/test/bootstrap.css') }}">
+                <link rel="stylesheet" type="text/css" href="{{ asset('css/test/bootstrap.min.css') }}">
             {% else %}
-                <link rel="stylesheet" type="text/css" href="{{ asset('css/bootstrap.css') }}">
+                <link rel="stylesheet" type="text/css" href="{{ asset('css/bootstrap.min.css') }}">
             {% endif %}
         {% else %}
-            <link rel="stylesheet" type="text/css" href="{{ asset('css/bootstrap.css') }}">
+            <link rel="stylesheet" type="text/css" href="{{ asset('css/bootstrap.min.css') }}">
         {% endif %}
 
         {% block stylesheets %}{% endblock %}

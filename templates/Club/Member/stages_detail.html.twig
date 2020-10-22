@@ -10,7 +10,7 @@
 {% block body %}
     <h1>{{ memberTools.getMember.getMemberFirstname()|title }} {{ memberTools.getMember.getMemberName()|title }}</h1>
     <h2>Historique des stages ({{ memberTools.getStages().total }} h)</h2>
-    <table class="table table-hover">
+    <table class="table table-sm table-hover table-striped">
         <thead>
             <tr>
                 <th scope="col">Nom</th>
@@ -20,11 +20,11 @@
         </thead>
         <tbody>
         {% for stage in memberTools.getStages().history.Stage %}
-        <tr>
-            <td>{{ stage.Name }}</td>
-            <td>{{ stage.Date|date("d/m/Y") }}</td>
-            <td>{{ stage.Duration }}</td>
-        </tr>
+            <tr>
+                <td class="align-middle">{{ stage.Name }}</td>
+                <td class="align-middle">{{ stage.Date|date("d/m/Y") }}</td>
+                <td class="align-middle">{{ stage.Duration }}</td>
+            </tr>
         {% endfor %}
         </tbody>
     </table>

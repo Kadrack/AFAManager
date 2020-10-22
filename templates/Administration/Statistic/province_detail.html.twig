@@ -9,7 +9,7 @@
 
 {% block body %}
     <h1>Statistique en temps réel</h1>
-    <table class="table table-hover">
+    <table class="table table-sm table-hover table-striped">
         <thead>
         <tr>
             <th rowspan="2" scope="col">Numéro</th>
@@ -43,16 +43,16 @@
         <tbody>
             {% for club in statistics %}
             <tr>
-                <td>{{ club.Club.Id }}</td>
-                <td>{{ club.Club.Name|title }}</td>
+                <td class="align-middle">{{ club.Club.Id }}</td>
+                <td class="align-middle">{{ club.Club.Name|title }}</td>
                 {% for value in club.Limits %}
-                <td>{{ value.Total }}</td>
+                <td class="align-middle">{{ value.Total }}</td>
                 {% else %}
-                <td>0</td>
+                <td class="align-middle">0</td>
                 {% endfor %}
-                <td>{{ club.Total.1 }}</td>
-                <td>{{ club.Total.2 }}</td>
-                <td>{{ club.Total.1 + club.Total.2 }}</td>
+                <td class="align-middle">{{ club.Total.1 }}</td>
+                <td class="align-middle">{{ club.Total.2 }}</td>
+                <td class="align-middle">{{ club.Total.1 + club.Total.2 }}</td>
             </tr>
             {% endfor %}
         </tbody>

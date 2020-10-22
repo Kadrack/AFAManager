@@ -9,17 +9,21 @@
 
 {% block body %}
     <h1>Fiche candidat</h1>
-    <table>
-        <tr>
-            <th>Photo</th>
-            <th>Prénom</th>
-            <th>Nom</th>
-        </tr>
-        <tr>
-            <td><img alt="" src=" {{ asset('uploads/photos/'~member.getMemberPhoto()) }}" /></td>
-            <td>{{ member.getMemberFirstname() }}</td>
-            <td>{{ member.getMemberName() }}</td>
-        </tr>
+    <table class="table table-sm table-hover table-striped">
+        <thead>
+            <tr>
+                <th scope="col">Photo</th>
+                <th scope="col">Prénom</th>
+                <th scope="col">Nom</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="align-middle"><img alt="" src=" {{ asset('uploads/photos/'~member.getMemberPhoto()) }}" /></td>
+                <td class="align-middle">{{ member.getMemberFirstname() }}</td>
+                <td class="align-middle">{{ member.getMemberName() }}</td>
+            </tr>
+        </tbody>
     </table>
     {{ form_start(form) }}
     {{ form_widget(form) }}

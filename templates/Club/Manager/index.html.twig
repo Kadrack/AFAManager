@@ -9,7 +9,7 @@
 
 {% block body %}
     <h1>Liste des gestionnaire du club</h1>
-    <table class="table table-hover">
+    <table class="table table-sm table-hover table-striped">
         <thead>
             <tr>
                 <th scope="col">Login</th>
@@ -22,11 +22,11 @@
         <tbody>
         {% for manager in clubTools.managerList %}
             <tr>
-                <td>{{ manager.login|title }}</td>
-                <td>{% if manager.userMember != null %}{{ manager.userMember.getMemberFirstname|title }}{% else %}{{ manager.userFirstname }}{% endif %}</td>
-                <td>{% if manager.userMember != null %}{{ manager.userMember.getMemberName|title }}{% else %}{{ manager.userName|title }}{% endif %}</td>
-                <td>{% if manager.userMember != null %}{{ manager.userMember.memberId }}{% else %}Aucun{% endif %}</td>
-                <td>{% if manager.userLastActivity != null %}{{ manager.userLastActivity|date("d/m/Y") }}{% else %}Aucune{% endif %}</td>
+                <td class="align-middle">{{ manager.login|title }}</td>
+                <td class="align-middle">{% if manager.userMember != null %}{{ manager.userMember.getMemberFirstname|title }}{% else %}{{ manager.userFirstname }}{% endif %}</td>
+                <td class="align-middle">{% if manager.userMember != null %}{{ manager.userMember.getMemberName|title }}{% else %}{{ manager.userName|title }}{% endif %}</td>
+                <td class="align-middle">{% if manager.userMember != null %}{{ manager.userMember.memberId }}{% else %}Aucun{% endif %}</td>
+                <td class="align-middle">{% if manager.userLastActivity != null %}{{ manager.userLastActivity|date("d/m/Y") }}{% else %}Aucune{% endif %}</td>
             </tr>
         {% endfor %}
         </tbody>

@@ -11,7 +11,7 @@
     <h1>{{ clubTools.getClub.getClubName()|title }} n°{{ clubTools.getClub.getClubId() }}</h1>
     {% if clubTools.getLessonsDetails().Dojos != null %}
     <h2>Dojo(s)</h2>
-    <table class="table table-hover">
+    <table class="table table-sm table-hover table-striped">
         <thead>
             <tr>
                 <th scope="col">Salle</th>
@@ -25,12 +25,12 @@
         <tbody>
         {% for dojo in clubTools.getLessonsDetails().Dojos %}
             <tr>
-                <td>{{ dojo.getTrainingAddressName() }}</td>
-                <td>{{ dojo.getTrainingAddressStreet() }}</td>
-                <td>{{ dojo.getTrainingAddressZip() }}</td>
-                <td>{{ dojo.getTrainingAddressCity() }}</td>
-                <td>{{ dojo.getTrainingAddressTatamis() }}</td>
-                <td>{% if dojo.getTrainingAddressDEA() %}Oui{% else %}Non{% endif %}</td>
+                <td class="align-middle">{{ dojo.getTrainingAddressName() }}</td>
+                <td class="align-middle">{{ dojo.getTrainingAddressStreet() }}</td>
+                <td class="align-middle">{{ dojo.getTrainingAddressZip() }}</td>
+                <td class="align-middle">{{ dojo.getTrainingAddressCity() }}</td>
+                <td class="align-middle">{{ dojo.getTrainingAddressTatamis() }}</td>
+                <td class="align-middle">{% if dojo.getTrainingAddressDEA() %}Oui{% else %}Non{% endif %}</td>
             </tr>
         {% endfor %}
         </tbody>
@@ -38,7 +38,7 @@
     {% endif %}
     {% if clubTools.getLessonsDetails().Trainings != null %}
     <h2>Horaire cours</h2>
-    <table class="table table-hover">
+    <table class="table table-sm table-hover table-striped">
         <thead>
             <tr>
                 <th scope="col">Jour</th>
@@ -51,11 +51,11 @@
         <tbody>
         {% for training in clubTools.getLessonsDetails().Trainings %}
             <tr>
-                <td>{{ listData.getDay(training.getTrainingDay()) }}</td>
-                <td>{{ training.getTrainingStartingHour()|date('H:i') }}</td>
-                <td>{{ training.getTrainingEndingHour()|date('H:i') }}</td>
-                <td>{{ listData.getTrainingType(training.getTrainingType()) }}</td>
-                <td>{{ training.getTrainingAddress().getTrainingAddressName() }}</td>
+                <td class="align-middle">{{ listData.getDay(training.getTrainingDay()) }}</td>
+                <td class="align-middle">{{ training.getTrainingStartingHour()|date('H:i') }}</td>
+                <td class="align-middle">{{ training.getTrainingEndingHour()|date('H:i') }}</td>
+                <td class="align-middle">{{ listData.getTrainingType(training.getTrainingType()) }}</td>
+                <td class="align-middle">{{ training.getTrainingAddress().getTrainingAddressName() }}</td>
             </tr>
         {% endfor %}
         </tbody>
@@ -63,7 +63,7 @@
     {% endif %}
     {% if clubTools.getLessonsDetails().AFA_teachers != null %}
     <h2>Professeur(s) & Assistant(s) AFA</h2>
-    <table class="table table-hover">
+    <table class="table table-sm table-hover table-striped">
         <thead>
             <tr>
                 <th scope="col">Titre</th>
@@ -78,13 +78,13 @@
         <tbody>
         {% for teacher in clubTools.getLessonsDetails().AFA_teachers %}
             <tr>
-                <td>{{ listData.getTeacherTitle(teacher.Title) }}</td>
-                <td>{{ listData.getTeacherType(teacher.Type) }}</td>
-                <td>{{ teacher.Firstname|title }}</td>
-                <td>{{ teacher.Name|title }}</td>
-                <td>{{ listData.getGrade(teacher.Grade) }}</td>
-                <td>{% if teacher.GradeTitleAikikai != null %}{{ listData.getGradeTitle(teacher.GradeTitleAikikai) }}{% else %}Aucun{% endif %}</td>
-                <td>{% if teacher.GradeTitleAdeps != null %}{{ listData.getGradeTitle(teacher.GradeTitleAdeps) }}{% else %}Aucun{% endif %}</td>
+                <td class="align-middle">{{ listData.getTeacherTitle(teacher.Title) }}</td>
+                <td class="align-middle">{{ listData.getTeacherType(teacher.Type) }}</td>
+                <td class="align-middle">{{ teacher.Firstname|title }}</td>
+                <td class="align-middle">{{ teacher.Name|title }}</td>
+                <td class="align-middle">{{ listData.getGrade(teacher.Grade) }}</td>
+                <td class="align-middle">{% if teacher.GradeTitleAikikai != null %}{{ listData.getGradeTitle(teacher.GradeTitleAikikai) }}{% else %}Aucun{% endif %}</td>
+                <td class="align-middle">{% if teacher.GradeTitleAdeps != null %}{{ listData.getGradeTitle(teacher.GradeTitleAdeps) }}{% else %}Aucun{% endif %}</td>
             </tr>
         {% endfor %}
         </tbody>
@@ -92,7 +92,7 @@
     {% endif %}
     {% if clubTools.getLessonsDetails().Foreign_teachers != null %}
     <h2>Professeur(s) & Assistant(s) Autre</h2>
-    <table class="table table-hover">
+    <table class="table table-sm table-hover table-striped">
         <thead>
             <tr>
                 <th scope="col">Titre</th>
@@ -107,13 +107,13 @@
         <tbody>
         {% for teacher in clubTools.getLessonsDetails().Foreign_teachers %}
             <tr>
-                <td>{{ listData.getTeacherTitle(teacher.Title) }}</td>
-                <td>{{ listData.getTeacherType(teacher.Type) }}</td>
-                <td>{{ teacher.Firstname|title }}</td>
-                <td>{{ teacher.Name|title }}</td>
-                <td>{{ listData.getGrade(teacher.Grade) }}</td>
-                <td>{% if teacher.GradeTitleAikikai != null %}{{ listData.getGradeTitle(teacher.GradeTitleAikikai) }}{% else %}Aucun{% endif %}</td>
-                <td>{% if teacher.GradeTitleAdeps != null %}{{ listData.getGradeTitle(teacher.GradeTitleAdeps) }}{% else %}Aucun{% endif %}</td>
+                <td class="align-middle">{{ listData.getTeacherTitle(teacher.Title) }}</td>
+                <td class="align-middle">{{ listData.getTeacherType(teacher.Type) }}</td>
+                <td class="align-middle">{{ teacher.Firstname|title }}</td>
+                <td class="align-middle">{{ teacher.Name|title }}</td>
+                <td class="align-middle">{{ listData.getGrade(teacher.Grade) }}</td>
+                <td class="align-middle">{% if teacher.GradeTitleAikikai != null %}{{ listData.getGradeTitle(teacher.GradeTitleAikikai) }}{% else %}Aucun{% endif %}</td>
+                <td class="align-middle">{% if teacher.GradeTitleAdeps != null %}{{ listData.getGradeTitle(teacher.GradeTitleAdeps) }}{% else %}Aucun{% endif %}</td>
             </tr>
         </tbody>
         {% endfor %}

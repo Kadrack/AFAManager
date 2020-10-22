@@ -24,7 +24,7 @@
         </div>
     </h1>
     <h2>Dojo(s)</h2>
-    <table class="table table-hover">
+    <table class="table table-sm table-hover table-striped">
         <thead>
             <tr>
                 <th scope="col">Salle</th>
@@ -40,14 +40,14 @@
         <tbody>
         {% for address in clubTools.getLessonsDetails().Dojos %}
             <tr>
-                <td>{{ address.getTrainingAddressName()|title }}</td>
-                <td>{{ address.getTrainingAddressStreet()|title }}</td>
-                <td>{{ address.getTrainingAddressZip() }}</td>
-                <td>{{ address.getTrainingAddressCity()|title }}</td>
-                <td>{{ address.getTrainingAddressTatamis() }}</td>
-                <td>{% if address.getTrainingAddressDEA() %}Oui{% else %}Non{% endif %}</td>
-                <td>{% if address.getTrainingAddressDEAFormation != null %}{{ address.getTrainingAddressDEAFormation()|date("d/m/Y") }}{% else %}N/A{% endif %}</td>
-                <td style="text-align: right">
+                <td class="align-middle">{{ address.getTrainingAddressName()|title }}</td>
+                <td class="align-middle">{{ address.getTrainingAddressStreet()|title }}</td>
+                <td class="align-middle">{{ address.getTrainingAddressZip() }}</td>
+                <td class="align-middle">{{ address.getTrainingAddressCity()|title }}</td>
+                <td class="align-middle">{{ address.getTrainingAddressTatamis() }}</td>
+                <td class="align-middle">{% if address.getTrainingAddressDEA() %}Oui{% else %}Non{% endif %}</td>
+                <td class="align-middle">{% if address.getTrainingAddressDEAFormation != null %}{{ address.getTrainingAddressDEAFormation()|date("d/m/Y") }}{% else %}N/A{% endif %}</td>
+                <td class="align-middle text-center">
                     <div class="btn-group" role="group" aria-label="Commandes">
                         <button type="button" class="btn btn-primary">Commandes</button>
                         <div class="btn-group" role="group">
@@ -64,7 +64,7 @@
         </tbody>
     </table>
     <h2>Horaire des cours</h2>
-    <table class="table table-hover">
+    <table class="table table-sm table-hover table-striped">
         <thead>
             <tr>
                 <th scope="col">Jour</th>
@@ -78,12 +78,12 @@
         <tbody>
         {% for training in clubTools.getLessonsDetails().Trainings %}
             <tr>
-                <td>{{ listData.getDay(training.getTrainingDay()) }}</td>
-                <td>{{ training.getTrainingStartingHour()|date('H:i') }}</td>
-                <td>{{ training.getTrainingEndingHour()|date('H:i') }}</td>
-                <td>{{ listData.getTrainingType(training.getTrainingType()) }}</td>
-                <td>{{ training.getTrainingAddress().getTrainingAddressName() }}</td>
-                <td style="text-align: right">
+                <td class="align-middle">{{ listData.getDay(training.getTrainingDay()) }}</td>
+                <td class="align-middle">{{ training.getTrainingStartingHour()|date('H:i') }}</td>
+                <td class="align-middle">{{ training.getTrainingEndingHour()|date('H:i') }}</td>
+                <td class="align-middle">{{ listData.getTrainingType(training.getTrainingType()) }}</td>
+                <td class="align-middle">{{ training.getTrainingAddress().getTrainingAddressName() }}</td>
+                <td class="align-middle text-center">
                     <div class="btn-group" role="group" aria-label="Commandes">
                         <button type="button" class="btn btn-primary">Commandes</button>
                         <div class="btn-group" role="group">
@@ -100,7 +100,7 @@
         </tbody>
     </table>
     <h2>Professeur(s) & Assistant(s) AFA</h2>
-    <table class="table table-hover">
+    <table class="table table-sm table-hover table-striped">
         <thead>
             <tr>
                 <th scope="col">Titre</th>
@@ -116,14 +116,14 @@
         <tbody>
         {% for teacher in clubTools.getLessonsDetails().AFA_teachers %}
             <tr>
-                <td>{{ listData.getTeacherTitle(teacher.Title) }}</td>
-                <td>{{ listData.getTeacherType(teacher.Type) }}</td>
-                <td>{{ teacher.Firstname|title }}</td>
-                <td>{{ teacher.Name|title }}</td>
-                <td>{{ listData.getGrade(teacher.Grade) }}</td>
-                <td>{% if teacher.GradeTitleAikikai != null %}{{ listData.getGradeTitle(teacher.GradeTitleAikikai) }}{% else %}Aucun{% endif %}</td>
-                <td>{% if teacher.GradeTitleAdeps != null %}{{ listData.getGradeTitle(teacher.GradeTitleAdeps) }}{% else %}Aucun{% endif %}</td>
-                <td style="text-align: right">
+                <td class="align-middle">{{ listData.getTeacherTitle(teacher.Title) }}</td>
+                <td class="align-middle">{{ listData.getTeacherType(teacher.Type) }}</td>
+                <td class="align-middle">{{ teacher.Firstname|title }}</td>
+                <td class="align-middle">{{ teacher.Name|title }}</td>
+                <td class="align-middle">{{ listData.getGrade(teacher.Grade) }}</td>
+                <td class="align-middle">{% if teacher.GradeTitleAikikai != null %}{{ listData.getGradeTitle(teacher.GradeTitleAikikai) }}{% else %}Aucun{% endif %}</td>
+                <td class="align-middle">{% if teacher.GradeTitleAdeps != null %}{{ listData.getGradeTitle(teacher.GradeTitleAdeps) }}{% else %}Aucun{% endif %}</td>
+                <td class="align-middle text-center">
                     <div class="btn-group" role="group" aria-label="Commandes">
                         <button type="button" class="btn btn-primary">Commandes</button>
                         <div class="btn-group" role="group">
@@ -140,7 +140,7 @@
         </tbody>
     </table>
     <h2>Professeur(s) & Assistant(s) Autre</h2>
-    <table class="table table-hover">
+    <table class="table table-sm table-hover table-striped">
         <thead>
             <tr>
                 <th scope="col">Titre</th>
@@ -156,14 +156,14 @@
         <tbody>
         {% for teacher in clubTools.getLessonsDetails().Foreign_teachers %}
             <tr>
-                <td>{{ listData.getTeacherTitle(teacher.Title) }}</td>
-                <td>{{ listData.getTeacherType(teacher.Type) }}</td>
-                <td>{{ teacher.Firstname|title }}</td>
-                <td>{{ teacher.Name|title }}</td>
-                <td>{{ listData.getGrade(teacher.Grade) }}</td>
-                <td>{% if teacher.GradeTitleAikikai != null %}{{ listData.getGradeTitle(teacher.GradeTitleAikikai) }}{% else %}Aucun{% endif %}</td>
-                <td>{% if teacher.GradeTitleAdeps != null %}{{ listData.getGradeTitle(teacher.GradeTitleAdeps) }}{% else %}Aucun{% endif %}</td>
-                <td style="text-align: right">
+                <td class="align-middle">{{ listData.getTeacherTitle(teacher.Title) }}</td>
+                <td class="align-middle">{{ listData.getTeacherType(teacher.Type) }}</td>
+                <td class="align-middle">{{ teacher.Firstname|title }}</td>
+                <td class="align-middle">{{ teacher.Name|title }}</td>
+                <td class="align-middle">{{ listData.getGrade(teacher.Grade) }}</td>
+                <td class="align-middle">{% if teacher.GradeTitleAikikai != null %}{{ listData.getGradeTitle(teacher.GradeTitleAikikai) }}{% else %}Aucun{% endif %}</td>
+                <td class="align-middle">{% if teacher.GradeTitleAdeps != null %}{{ listData.getGradeTitle(teacher.GradeTitleAdeps) }}{% else %}Aucun{% endif %}</td>
+                <td class="align-middle text-center">
                     <div class="btn-group" role="group" aria-label="Commandes">
                         <button type="button" class="btn btn-primary">Commandes</button>
                         <div class="btn-group" role="group">

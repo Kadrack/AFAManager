@@ -10,23 +10,27 @@
 {% block body %}
     <h1>Passages de grade Dan</h1>
     {% if sessions != null %}
-        <h2>Liste sessions</h2>
-        <table>
+    <h2>Liste sessions</h2>
+    <table class="table table-sm table-hover table-striped">
+        <thead>
             <tr>
-                <th>Date</th>
-                <th>Ouverture inscription</th>
-                <th>Fermeture inscription</th>
-                <th>Commandes</th>
+                <th scope="col">Date</th>
+                <th scope="col">Ouverture inscription</th>
+                <th scope="col">Fermeture inscription</th>
+                <th scope="col">Commandes</th>
             </tr>
-            {%  for session in sessions %}
-                <tr>
-                    <td>{{ session.getGradeSessionDate()|date("d/m/Y") }}</td>
-                    <td>{{ session.getGradeSessionCandidateOpen()|date("d/m/Y") }}</td>
-                    <td>{{ session.getGradeSessionCandidateClose()|date("d/m/Y") }}</td>
-                    <td><a href="{{ path('grade_exam_detail', {'session': session.getGradeSessionId()}) }}">Détails</a></td>
-                </tr>
-            {% endfor %}
-        </table>
+        </thead>
+        <tbody>
+        {%  for session in sessions %}
+            <tr>
+                <td class="align-middle">{{ session.getGradeSessionDate()|date("d/m/Y") }}</td>
+                <td class="align-middle">{{ session.getGradeSessionCandidateOpen()|date("d/m/Y") }}</td>
+                <td class="align-middle">{{ session.getGradeSessionCandidateClose()|date("d/m/Y") }}</td>
+                <td class="align-middle"><a class="btn btn-primary" href="{{ path('grade_exam_detail', {'session': session.getGradeSessionId()}) }}">Détails</a></td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
     {% endif %}
 {% endblock %}
 

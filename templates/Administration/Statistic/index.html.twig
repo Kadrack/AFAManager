@@ -9,7 +9,7 @@
 
 {% block body %}
     <h1>Statistique en temps réel</h1>
-    <table class="table table-hover">
+    <table class="table table-sm table-hover table-striped">
         <thead>
             <tr>
                 <th rowspan="2" scope="col">Province</th>
@@ -43,29 +43,29 @@
         <tbody>
             {% for province in statistics %}
             <tr>
-                <td>{{ listData.province(province.Id) }}</td>
+                <td class="align-middle">{{ listData.province(province.Id) }}</td>
                 {% for value in province.Limits %}
-                <td>{{ value.Total }}</td>
+                <td class="align-middle">{{ value.Total }}</td>
                 {% else %}
-                <td>0</td>
+                <td class="align-middle">0</td>
                 {% endfor %}
-                <td>{{ province.Total.1 }}</td>
-                <td>{{ province.Total.2 }}</td>
-                <td>{{ province.Total.1 + province.Total.2 }}</td>
-                <td><a class="btn btn-primary" href="{{ path('administration_statistics_province', {'province': province.Id}) }}">Détails</a></td>
+                <td class="align-middle">{{ province.Total.1 }}</td>
+                <td class="align-middle">{{ province.Total.2 }}</td>
+                <td class="align-middle">{{ province.Total.1 + province.Total.2 }}</td>
+                <td class="align-middle"><a class="btn btn-primary" href="{{ path('administration_statistics_province', {'province': province.Id}) }}">Détails</a></td>
             </tr>
             {% endfor %}
             <tr>
-                <td>Total</td>
+                <td class="align-middle">Total</td>
                 {% for value in total.Limits %}
-                <td>{{ value }}</td>
+                <td class="align-middle">{{ value }}</td>
                 {% else %}
-                <td>0</td>
+                <td class="align-middle">0</td>
                 {% endfor %}
-                <td>{{ total.Total.1 }}</td>
-                <td>{{ total.Total.2 }}</td>
-                <td>{{ total.Total.1 + total.Total.2 }}</td>
-                <td></td>
+                <td class="align-middle">{{ total.Total.1 }}</td>
+                <td class="align-middle">{{ total.Total.2 }}</td>
+                <td class="align-middle">{{ total.Total.1 + total.Total.2 }}</td>
+                <td class="align-middle"></td>
             </tr>
         </tbody>
     </table>

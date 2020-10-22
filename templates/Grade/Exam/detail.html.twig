@@ -10,8 +10,9 @@
 {% block body %}
     <h1>Détails session</h1>
     {% if applicants != null %}
-        <h2>Candidats en attente</h2>
-        <table>
+    <h2>Candidats en attente</h2>
+    <table class="table table-sm table-hover table-striped">
+        <thead>
             <tr>
                 <th>Prénom</th>
                 <th>Nom</th>
@@ -21,60 +22,72 @@
                 <th>Dernière évaluation</th>
                 <th>Commandes</th>
             </tr>
+        </thead>
+        <tbody>
             {% for applicant in applicants %}
-                <tr>
-                    <td>{{ applicant.getGradeMember().getMemberFirstName() }}</td>
-                    <td>{{ applicant.getGradeMember().getMemberName() }}</td>
-                    <td>{{ applicant.getGradeClub().getClubName() }}</td>
-                    <td>{% if applicant.getGradeClub().getClubMainTeacher().getClubTeacherFirstname() is defined %}{{ applicant.getGradeClub().getClubMainTeacher().getClubTeacherFirstname() }} {{ applicant.getGradeClub().getClubMainTeacher().getClubTeacherName() }}{% else %}Non défini{% endif %}</td>
-                    <td>{% if applicant.getGradeMember().getMemberLastGrade().getGradeExam() is not null %}{{ applicant.getGradeMember().getMemberLastGrade().getGradeExam().getGradeSessionDate()|date("d/m/Y") }}{% else %}{{ applicant.getGradeMember().getMemberFirstLicence().getMemberLicenceUpdate()|date("d/m/Y") }}{% endif %}</td>
-                    <td>{% if applicant.getGradeMember().getMemberLastGrade().getGradeExam() is not null %}{{ applicant.getGradeMember().getMemberLastGrade().getGradeStatus() }}{% else %}Aucune{% endif %}</td>
-                    <td><a href="{{ path('grade_exam_applicant_detail', {'session': session.gradeSessionId(), 'member': applicant.getGradeMember().getMemberId(), 'grade': applicant.getGradeId()}) }}">Détails</a></td>
-                </tr>
+            <tr>
+                <td class="align-middle">{{ applicant.getGradeMember().getMemberFirstName() }}</td>
+                <td class="align-middle">{{ applicant.getGradeMember().getMemberName() }}</td>
+                <td class="align-middle">{{ applicant.getGradeClub().getClubName() }}</td>
+                <td class="align-middle">{% if applicant.getGradeClub().getClubMainTeacher().getClubTeacherFirstname() is defined %}{{ applicant.getGradeClub().getClubMainTeacher().getClubTeacherFirstname() }} {{ applicant.getGradeClub().getClubMainTeacher().getClubTeacherName() }}{% else %}Non défini{% endif %}</td>
+                <td class="align-middle">{% if applicant.getGradeMember().getMemberLastGrade().getGradeExam() is not null %}{{ applicant.getGradeMember().getMemberLastGrade().getGradeExam().getGradeSessionDate()|date("d/m/Y") }}{% else %}{{ applicant.getGradeMember().getMemberFirstLicence().getMemberLicenceUpdate()|date("d/m/Y") }}{% endif %}</td>
+                <td class="align-middle">{% if applicant.getGradeMember().getMemberLastGrade().getGradeExam() is not null %}{{ applicant.getGradeMember().getMemberLastGrade().getGradeStatus() }}{% else %}Aucune{% endif %}</td>
+                <td class="align-middle"><a class="btn btn-primary" href="{{ path('grade_exam_applicant_detail', {'session': session.gradeSessionId(), 'member': applicant.getGradeMember().getMemberId(), 'grade': applicant.getGradeId()}) }}">Détails</a></td>
+            </tr>
             {% endfor %}
-        </table>
+        </tbody>
+    </table>
     {% endif %}
     {% if candidates != null %}
-        <h2>Candidats validés</h2>
-        <table>
+    <h2>Candidats validés</h2>
+    <table class="table table-sm table-hover table-striped">
+        <thead>
             <tr>
                 <th>Prénom</th>
                 <th>Nom</th>
                 <th>Grade présenté</th>
                 <th>Commandes</th>
             </tr>
+        </thead>
+        <tbody>
             {% for candidate in candidates %}
-                <tr>
-                    <td>{{ candidate.getGradeMember().getMemberFirstName() }}</td>
-                    <td>{{ candidate.getGradeMember().getMemberName() }}</td>
-                    <td>{{ listData.getGrade(candidate.getGradeRank()) }}</td>
-                    <td><a href="{{ path('grade_exam_candidate_detail', {'session': session.gradeSessionId(), 'member': candidate.getGradeMember().getMemberId(), 'grade': candidate.getGradeId()}) }}">Résultats</a></td>
-                </tr>
+            <tr>
+                <td class="align-middle">{{ candidate.getGradeMember().getMemberFirstName() }}</td>
+                <td class="align-middle">{{ candidate.getGradeMember().getMemberName() }}</td>
+                <td class="align-middle">{{ listData.getGrade(candidate.getGradeRank()) }}</td>
+                <td class="align-middle"><a class="btn btn-primary" href="{{ path('grade_exam_candidate_detail', {'session': session.gradeSessionId(), 'member': candidate.getGradeMember().getMemberId(), 'grade': candidate.getGradeId()}) }}">Résultats</a></td>
+            </tr>
             {% endfor %}
-        </table>
+        </tbody>
+    </table>
     {% endif %}
     {% if refused != null %}
-        <h2>Candidats refusé</h2>
-        <table>
+    <h2>Candidats refusé</h2>
+    <table class="table table-sm table-hover table-striped">
+        <thead>
             <tr>
                 <th>Prénom</th>
                 <th>Nom</th>
                 <th>Grade raté</th>
                 <th>Commandes</th>
             </tr>
+        </thead>
+        <tbody>
             {% for candidate in refused %}
-                <tr>
-                    <td>{{ candidate.getGradeMember().getMemberFirstName() }}</td>
-                    <td>{{ candidate.getGradeMember().getMemberName() }}</td>
-                    <td>{{ listData.getGrade(candidate.getGradeMember().getMemberLastGrade().getGradeRank()) }}</td>
-                    <td><a href="{{ path('grade_exam_candidate_detail', {'session': session.gradeSessionId(), 'member': candidate.getGradeMember().getMemberId(), 'grade': candidate.getGradeId()}) }}">Modifier</a></td>
-                </tr>
+            <tr>
+                <td class="align-middle">{{ candidate.getGradeMember().getMemberFirstName() }}</td>
+                <td class="align-middle">{{ candidate.getGradeMember().getMemberName() }}</td>
+                <td class="align-middle">{{ listData.getGrade(candidate.getGradeMember().getMemberLastGrade().getGradeRank()) }}</td>
+                <td class="align-middle"><a class="btn btn-primary" href="{{ path('grade_exam_candidate_detail', {'session': session.gradeSessionId(), 'member': candidate.getGradeMember().getMemberId(), 'grade': candidate.getGradeId()}) }}">Modifier</a></td>
+            </tr>
             {% endfor %}
-        </table>
+        </tbody>
+    </table>
     {% endif %}
     {% if promoted != null %}
-        <h2>Candidats promu</h2>
-        <table>
+    <h2>Candidats promu</h2>
+    <table class="table table-sm table-hover table-striped">
+        <thead>
             <tr>
                 <th>Prénom</th>
                 <th>Nom</th>
@@ -83,17 +96,20 @@
                 <th>Diplôme Aïkikaï</th>
                 <th>Commandes</th>
             </tr>
+        </thead>
+        <tbody>
             {% for candidate in promoted %}
-                <tr>
-                    <td>{{ candidate.FirstName }}</td>
-                    <td>{{ candidate.Name }}</td>
-                    <td>{{ listData.getGrade(candidate.Grade) }}</td>
-                    <td>{{ candidate.Federal_Certificate }}</td>
-                    <td>{{ candidate.Aikikai_Certificate }}</td>
-                    <td><a href="{{ path('grade_exam_candidate_detail_update', {'session': session.gradeSessionId(), 'member': candidate.Id, 'grade': candidate.Grade_Id}) }}">Modifier</a>{% if candidate.Aikikai_Certificate == null %} - <a href="{{ path('grade_exam_candidate_add_aikikai', {'session': session.gradeSessionId(), 'member': candidate.Id, 'grade': candidate.Grade_Id}) }}">Ajouter Aïkikaï</a>{% else %} - <a href="{{ path('grade_exam_candidate_detail_aikikai', {'session': session.gradeSessionId(), 'member': candidate.Id, 'grade': candidate.Grade_Aikikai_Id}) }}">Modifier Aïkikaï</a>{% endif %}</td>
-                </tr>
+            <tr>
+                <td class="align-middle">{{ candidate.FirstName }}</td>
+                <td class="align-middle">{{ candidate.Name }}</td>
+                <td class="align-middle">{{ listData.getGrade(candidate.Grade) }}</td>
+                <td class="align-middle">{{ candidate.Federal_Certificate }}</td>
+                <td class="align-middle">{{ candidate.Aikikai_Certificate }}</td>
+                <td class="align-middle"><a class="btn btn-primary" href="{{ path('grade_exam_candidate_detail_update', {'session': session.gradeSessionId(), 'member': candidate.Id, 'grade': candidate.Grade_Id}) }}">Modifier</a>{% if candidate.Aikikai_Certificate == null %}<a class="btn btn-primary" href="{{ path('grade_exam_candidate_add_aikikai', {'session': session.gradeSessionId(), 'member': candidate.Id, 'grade': candidate.Grade_Id}) }}">Ajouter Aïkikaï</a>{% else %}<a class="btn btn-primary" href="{{ path('grade_exam_candidate_detail_aikikai', {'session': session.gradeSessionId(), 'member': candidate.Id, 'grade': candidate.Grade_Aikikai_Id}) }}">Modifier Aïkikaï</a>{% endif %}</td>
+            </tr>
             {% endfor %}
-        </table>
+        </tbody>
+    </table>
     {% endif %}
 {% endblock %}
 
