@@ -25,11 +25,11 @@
         <tbody>
         {% for grade in memberTools.getGrades().history %}
             <tr>
-                <td class="align-middle">{{ listData.getGrade(grade.Rank) }}</td>
-                <td class="align-middle">{{ grade.Date|date("d/m/Y") }}</td>
-                <td class="align-middle">{{ grade.Certificate }}</td>
-                <td class="align-middle">{{ listData.getExamResult(grade.Result) }}</td>
-                <td class="align-middle">{{ listData.getExamType(grade.Type) }}</td>
+                <td>{{ listData.getGrade(grade.Rank) }}</td>
+                <td>{{ grade.Date|date("d/m/Y") }}</td>
+                <td>{{ grade.Certificate }}</td>
+                <td>{{ listData.getExamResult(grade.Result) }}</td>
+                <td>{{ listData.getExamType(grade.Type) }}</td>
             </tr>
         {% endfor %}
         </tbody>

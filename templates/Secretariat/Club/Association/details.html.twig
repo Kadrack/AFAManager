@@ -11,7 +11,7 @@
     {{ form_start(form) }}
     <h1>{{ club.getClubName()|title }}</h1>
     <h2>Siège</h2>
-    <table class="table table-hover">
+    <table class="table table-sm table-hover table-striped">
         <thead>
             <tr>
                 <th scope="col">Nom</th>
@@ -30,7 +30,7 @@
         </tbody>
     </table>
     <h2>Détails association</h2>
-    <table class="table table-hover">
+    <table class="table table-sm table-hover table-striped">
         <thead>
             <tr>
                 <th scope="col">Type Association</th>
@@ -51,15 +51,12 @@
         </tbody>
     </table>
     <h2>Correspondant</h2>
-    <table class="table table-hover">
+    <table class="table table-sm table-hover table-striped">
         <thead>
             <tr>
                 <th scope="col">Nom</th>
                 <th scope="col">Email</th>
                 <th scope="col">N° de téléphone</th>
-                <th scope="col">Adresse</th>
-                <th scope="col">Code postal</th>
-                <th scope="col">Localité</th>
             </tr>
         </thead>
         <tbody>
@@ -67,6 +64,19 @@
                 <td>{{ form_widget(form.ClubNameContact) }}</td>
                 <td>{{ form_widget(form.ClubEmailContact) }}</td>
                 <td>{{ form_widget(form.ClubPhoneContact) }}</td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-hover table-striped">
+        <thead>
+            <tr>
+                <th scope="col">Adresse</th>
+                <th scope="col">Code postal</th>
+                <th scope="col">Localité</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
                 <td>{{ form_widget(form.ClubAddressContact) }}</td>
                 <td>{{ form_widget(form.ClubZipContact) }}</td>
                 <td>{{ form_widget(form.ClubCityContact) }}</td>

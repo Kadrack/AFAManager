@@ -10,7 +10,7 @@
 {% block body %}
     <h1>{{ commission.commissionName() }}</h1>
     <a class="btn btn-primary" href="{{ path('secretariat_commission_member_add', {'commission': commission.commissionId()}) }}">Ajouter</a>
-    <table class="table table-hover">
+    <table class="table table-sm table-hover table-striped">
         <thead>
             <tr>
                 <th>N° de licence</th>
@@ -22,10 +22,10 @@
         <tbody>
         {% for member in members %}
             <tr>
-                <td>{{ member.Id }}</td>
-                <td>{{ member.Firstname|title }}</td>
-                <td>{{ member.Name|title }}</td>
-                <td><a class="btn btn-primary" href="{{ path('secretariat_commission_member_delete', {'commission': commission.commissionId(), 'member': member.Id}) }}">Supprimer</a></td>
+                <td class="align-middle">{{ member.Id }}</td>
+                <td class="align-middle">{{ member.Firstname|title }}</td>
+                <td class="align-middle">{{ member.Name|title }}</td>
+                <td class="align-middle"><a class="btn btn-primary" href="{{ path('secretariat_commission_member_delete', {'commission': commission.commissionId(), 'member': member.Id}) }}">Supprimer</a></td>
             </tr>
         {% endfor %}
         </tbody>

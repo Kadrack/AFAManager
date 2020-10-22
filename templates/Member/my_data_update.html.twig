@@ -20,48 +20,55 @@
     <table class="table table-sm table-hover table-striped">
         <thead>
             <tr>
-                <th scope="col"></th>
                 <th scope="col">Prénom</th>
                 <th scope="col">Nom</th>
                 <th scope="col">Date de naissance</th>
-                <th scope="col">Adresse</th>
-                <th scope="col">Code postal</th>
-                <th scope="col">Localité</th>
-                <th scope="col">Pays</th>
                 <th scope="col">Email</th>
                 <th scope="col">N° téléphone</th>
-                <th scope="col">Commande</th>
             </tr>
         </thead>
         <tbody>
             <tr>
-                <th scope="row">Données actuelle</th>
-                <td class="align-middle">{{ memberTools.getMember.getMemberFirstname() }}</td>
-                <td class="align-middle">{{ memberTools.getMember.getMemberName() }}</td>
-                <td class="align-middle">{{ memberTools.getMember.getMemberBirthday()|date("d/m/Y") }}</td>
-                <td class="align-middle">{{ memberTools.getMember.getMemberAddress() }}</td>
-                <td class="align-middle">{{ memberTools.getMember.getMemberZip() }}</td>
-                <td class="align-middle">{{ memberTools.getMember.getMemberCity() }}</td>
-                <td class="align-middle">{{ listData.countryName(memberTools.getMember.getMemberCountry()) }}</td>
-                <td class="align-middle">{{ memberTools.getMember.getMemberEmail() }}</td>
-                <td class="align-middle">{{ memberTools.getMember.getMemberPhone() }}</td>
-                <td class="align-middle"></td>
+                <td>{{ memberTools.getMember.getMemberFirstname() }}</td>
+                <td>{{ memberTools.getMember.getMemberName() }}</td>
+                <td>{{ memberTools.getMember.getMemberBirthday()|date("d/m/Y") }}</td>
+                <td>{{ memberTools.getMember.getMemberEmail() }}</td>
+                <td>{{ memberTools.getMember.getMemberPhone() }}</td>
             </tr>
             <tr>
-                <th scope="row">Modification</th>
-                <td class="align-middle">{{ form_widget(form.MemberModificationFirstname) }}</td>
-                <td class="align-middle">{{ form_widget(form.MemberModificationName) }}</td>
-                <td class="align-middle">{{ form_widget(form.MemberModificationBirthday) }}</td>
-                <td class="align-middle">{{ form_widget(form.MemberModificationAddress) }}</td>
-                <td class="align-middle">{{ form_widget(form.MemberModificationZip) }}</td>
-                <td class="align-middle">{{ form_widget(form.MemberModificationCity) }}</td>
-                <td class="align-middle">{{ form_widget(form.MemberModificationCountry) }}</td>
-                <td class="align-middle">{{ form_widget(form.MemberModificationEmail) }}</td>
-                <td class="align-middle">{{ form_widget(form.MemberModificationPhone) }}</td>
-                <td class="align-middle">{{ form_end(form) }}</td>
+                <td>{{ form_widget(form.MemberModificationFirstname) }}</td>
+                <td>{{ form_widget(form.MemberModificationName) }}</td>
+                <td>{{ form_widget(form.MemberModificationBirthday) }}</td>
+                <td>{{ form_widget(form.MemberModificationEmail) }}</td>
+                <td>{{ form_widget(form.MemberModificationPhone) }}</td>
             </tr>
         </tbody>
     </table>
+    <table class="table table-sm table-hover table-striped">
+        <thead>
+            <tr>
+                <th scope="col">Adresse</th>
+                <th scope="col">Code postal</th>
+                <th scope="col">Localité</th>
+                <th scope="col">Pays</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{ memberTools.getMember.getMemberAddress() }}</td>
+                <td>{{ memberTools.getMember.getMemberZip() }}</td>
+                <td>{{ memberTools.getMember.getMemberCity() }}</td>
+                <td>{{ listData.countryName(memberTools.getMember.getMemberCountry()) }}</td>
+            </tr>
+            <tr>
+                <td>{{ form_widget(form.MemberModificationAddress) }}</td>
+                <td>{{ form_widget(form.MemberModificationZip) }}</td>
+                <td>{{ form_widget(form.MemberModificationCity) }}</td>
+                <td>{{ form_widget(form.MemberModificationCountry) }}</td>
+            </tr>
+        </tbody>
+    </table>
+    {{ form_end(form) }}
 {% endblock %}
 
 {% block javascripts %}

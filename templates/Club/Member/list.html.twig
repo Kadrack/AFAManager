@@ -65,10 +65,10 @@
         {% for member in old_members %}
         {% if member.Id != null %}
             <tr>
-                <td class="align-middle">{{ member.Id }}</td>
-                <td class="align-middle">{{ member.FirstName|title }}</td>
-                <td class="align-middle">{{ member.Name|title }}</td>
-                <td class="align-middle">{{ member.Deadline|date("d/m/Y") }}</td>
+                <td>{{ member.Id }}</td>
+                <td>{{ member.FirstName|title }}</td>
+                <td>{{ member.Name|title }}</td>
+                <td>{{ member.Deadline|date("d/m/Y") }}</td>
             </tr>
         {% endif %}
         {% endfor %}

@@ -113,10 +113,13 @@ class SecretariatType extends AbstractType
 
     private function modificationValidate(FormBuilderInterface $builder)
     {
+        $list = new ListData();
+
         $builder
             ->add('MemberModificationPhoto', FileType::class, array('label' => 'Photo : ', 'required' => false, 'mapped' => false, 'disabled' => true))
             ->add('MemberModificationFirstname', TextType::class, array('label' => 'Prénom : ', 'required' => false, 'disabled' => true))
             ->add('MemberModificationName', TextType::class, array('label' => 'Nom : ', 'required' => false, 'disabled' => true))
+            ->add('MemberModificationSex', ChoiceType::class, array('label' => 'Sexe : ', 'multiple' => false, 'expanded' => true, 'choices' => $list->getSex(0), 'required' => false, 'disabled' => true))
             ->add('MemberModificationBirthday', DateType::class, array('label' => 'Date de naissance : ', 'widget' => 'single_text', 'required' => false, 'disabled' => true))
             ->add('MemberModificationAddress', TextType::class, array('label' => 'Adresse : ', 'required' => false, 'disabled' => true))
             ->add('MemberModificationZip', IntegerType::class, array('label' => 'Code postal : ', 'required' => false, 'disabled' => true))
@@ -130,10 +133,13 @@ class SecretariatType extends AbstractType
 
     private function modificationCancel(FormBuilderInterface $builder)
     {
+        $list = new ListData();
+
         $builder
             ->add('MemberModificationPhoto', FileType::class, array('label' => 'Photo : ', 'required' => false, 'mapped' => false, 'disabled' => true))
             ->add('MemberModificationFirstname', TextType::class, array('label' => 'Prénom : ', 'required' => false, 'disabled' => true))
             ->add('MemberModificationName', TextType::class, array('label' => 'Nom : ', 'required' => false, 'disabled' => true))
+            ->add('MemberModificationSex', ChoiceType::class, array('label' => 'Sexe : ', 'multiple' => false, 'expanded' => true, 'choices' => $list->getSex(0), 'required' => false, 'disabled' => true))
             ->add('MemberModificationBirthday', DateType::class, array('label' => 'Date de naissance : ', 'widget' => 'single_text', 'required' => false, 'disabled' => true))
             ->add('MemberModificationAddress', TextType::class, array('label' => 'Adresse : ', 'required' => false, 'disabled' => true))
             ->add('MemberModificationZip', IntegerType::class, array('label' => 'Code postal : ', 'required' => false, 'disabled' => true))
@@ -147,10 +153,13 @@ class SecretariatType extends AbstractType
 
     private function memberUpdate(FormBuilderInterface $builder)
     {
+        $list = new ListData();
+
         $builder
             ->add('MemberPhoto', FileType::class, array('label' => 'Photo : ', 'required' => false, 'mapped' => false))
             ->add('MemberFirstname', TextType::class, array('label' => 'Prénom : '))
             ->add('MemberName', TextType::class, array('label' => 'Nom : '))
+            ->add('MemberSex', ChoiceType::class, array('label' => 'Sexe : ', 'multiple' => false, 'expanded' => true, 'choices' => $list->getSex(0)))
             ->add('MemberBirthday', DateType::class, array('label' => 'Date de naissance : ', 'widget' => 'single_text'))
             ->add('MemberAddress', TextType::class, array('label' => 'Adresse : '))
             ->add('MemberZip', IntegerType::class, array('label' => 'Code postal : '))

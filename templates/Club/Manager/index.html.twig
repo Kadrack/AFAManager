@@ -22,11 +22,11 @@
         <tbody>
         {% for manager in clubTools.managerList %}
             <tr>
-                <td class="align-middle">{{ manager.login|title }}</td>
-                <td class="align-middle">{% if manager.userMember != null %}{{ manager.userMember.getMemberFirstname|title }}{% else %}{{ manager.userFirstname }}{% endif %}</td>
-                <td class="align-middle">{% if manager.userMember != null %}{{ manager.userMember.getMemberName|title }}{% else %}{{ manager.userName|title }}{% endif %}</td>
-                <td class="align-middle">{% if manager.userMember != null %}{{ manager.userMember.memberId }}{% else %}Aucun{% endif %}</td>
-                <td class="align-middle">{% if manager.userLastActivity != null %}{{ manager.userLastActivity|date("d/m/Y") }}{% else %}Aucune{% endif %}</td>
+                <td>{{ manager.login|title }}</td>
+                <td>{% if manager.userMember != null %}{{ manager.userMember.getMemberFirstname|title }}{% else %}{{ manager.userFirstname }}{% endif %}</td>
+                <td>{% if manager.userMember != null %}{{ manager.userMember.getMemberName|title }}{% else %}{{ manager.userName|title }}{% endif %}</td>
+                <td>{% if manager.userMember != null %}{{ manager.userMember.memberId }}{% else %}Aucun{% endif %}</td>
+                <td>{% if manager.userLastActivity != null %}{{ manager.userLastActivity|date("d/m/Y") }}{% else %}Aucune{% endif %}</td>
             </tr>
         {% endfor %}
         </tbody>

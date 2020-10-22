@@ -8,51 +8,51 @@
 {% endblock %}
 
 {% block body %}
-    <h1>Statistique en temps réel</h1>
+    <h1>Statistique en temps réel par club</h1>
     <table class="table table-sm table-hover table-striped">
-        <thead>
-        <tr>
-            <th rowspan="2" scope="col">Numéro</th>
-            <th rowspan="2" scope="col">Nom</th>
-            <th colspan="2" scope="col">- de 6</th>
-            <th colspan="2" scope="col">- de 12</th>
-            <th colspan="2" scope="col">- de 18</th>
-            <th colspan="2" scope="col">- de 25</th>
-            <th colspan="2" scope="col">- de 35</th>
-            <th colspan="2" scope="col">+ de 35</th>
-            <th colspan="2" scope="col">Total</th>
-            <th rowspan="2" scope="col">Total</th>
-        </tr>
-        <tr>
-            <th scope="col">H</th>
-            <th scope="col">F</th>
-            <th scope="col">H</th>
-            <th scope="col">F</th>
-            <th scope="col">H</th>
-            <th scope="col">F</th>
-            <th scope="col">H</th>
-            <th scope="col">F</th>
-            <th scope="col">H</th>
-            <th scope="col">F</th>
-            <th scope="col">H</th>
-            <th scope="col">F</th>
-            <th scope="col">H</th>
-            <th scope="col">F</th>
-        </tr>
+        <thead class="text-center">
+            <tr>
+                <th class="align-middle" rowspan="2" scope="col">Numéro</th>
+                <th class="align-middle" rowspan="2" scope="col">Nom</th>
+                <th colspan="2" scope="col">- de 6</th>
+                <th colspan="2" scope="col">- de 12</th>
+                <th colspan="2" scope="col">- de 18</th>
+                <th colspan="2" scope="col">- de 25</th>
+                <th colspan="2" scope="col">- de 35</th>
+                <th colspan="2" scope="col">+ de 35</th>
+                <th colspan="2" scope="col">Total</th>
+                <th class="align-middle" rowspan="2" scope="col">Total</th>
+            </tr>
+            <tr>
+                <th scope="col">H</th>
+                <th scope="col">F</th>
+                <th scope="col">H</th>
+                <th scope="col">F</th>
+                <th scope="col">H</th>
+                <th scope="col">F</th>
+                <th scope="col">H</th>
+                <th scope="col">F</th>
+                <th scope="col">H</th>
+                <th scope="col">F</th>
+                <th scope="col">H</th>
+                <th scope="col">F</th>
+                <th scope="col">H</th>
+                <th scope="col">F</th>
+            </tr>
         </thead>
-        <tbody>
+        <tbody class="text-center">
             {% for club in statistics %}
             <tr>
-                <td class="align-middle">{{ club.Club.Id }}</td>
-                <td class="align-middle">{{ club.Club.Name|title }}</td>
+                <td>{{ club.Club.Id }}</td>
+                <td class="text-left">{{ club.Club.Name|title }}</td>
                 {% for value in club.Limits %}
-                <td class="align-middle">{{ value.Total }}</td>
+                <td>{{ value.Total }}</td>
                 {% else %}
-                <td class="align-middle">0</td>
+                <td>0</td>
                 {% endfor %}
-                <td class="align-middle">{{ club.Total.1 }}</td>
-                <td class="align-middle">{{ club.Total.2 }}</td>
-                <td class="align-middle">{{ club.Total.1 + club.Total.2 }}</td>
+                <td>{{ club.Total.1 }}</td>
+                <td>{{ club.Total.2 }}</td>
+                <td>{{ club.Total.1 + club.Total.2 }}</td>
             </tr>
             {% endfor %}
         </tbody>

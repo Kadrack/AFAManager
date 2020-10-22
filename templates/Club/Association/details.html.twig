@@ -22,10 +22,10 @@
         </thead>
         <tbody>
             <tr>
-                <td class="align-middle">{{ form_widget(form.ClubName) }}</td>
-                <td class="align-middle">{{ form_widget(form.ClubAddress) }}</td>
-                <td class="align-middle">{{ form_widget(form.ClubZip) }}</td>
-                <td class="align-middle">{{ form_widget(form.ClubCity) }}</td>
+                <td>{{ form_widget(form.ClubName) }}</td>
+                <td>{{ form_widget(form.ClubAddress) }}</td>
+                <td>{{ form_widget(form.ClubZip) }}</td>
+                <td>{{ form_widget(form.ClubCity) }}</td>
             </tr>
         </tbody>
     </table>
@@ -42,11 +42,11 @@
         </thead>
         <tbody>
             <tr>
-                <td class="align-middle">{{ form_widget(form.ClubType) }}</td>
-                <td class="align-middle">{{ form_widget(form.ClubBceNumber) }}</td>
-                <td class="align-middle">{{ form_widget(form.ClubIban) }}</td>
-                <td class="align-middle">{{ form_widget(form.ClubUrl) }}</td>
-                <td class="align-middle">{{ form_widget(form.ClubEmailPublic) }}</td>
+                <td>{{ form_widget(form.ClubType) }}</td>
+                <td>{{ form_widget(form.ClubBceNumber) }}</td>
+                <td>{{ form_widget(form.ClubIban) }}</td>
+                <td>{{ form_widget(form.ClubUrl) }}</td>
+                <td>{{ form_widget(form.ClubEmailPublic) }}</td>
             </tr>
         </tbody>
     </table>
@@ -57,6 +57,19 @@
                 <th scope="col">Nom</th>
                 <th scope="col">Email</th>
                 <th scope="col">N° de téléphone</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{ form_widget(form.ClubNameContact) }}</td>
+                <td>{{ form_widget(form.ClubEmailContact) }}</td>
+                <td>{{ form_widget(form.ClubPhoneContact) }}</td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-hover table-striped">
+        <thead>
+            <tr>
                 <th scope="col">Adresse</th>
                 <th scope="col">Code postal</th>
                 <th scope="col">Localité</th>
@@ -64,12 +77,9 @@
         </thead>
         <tbody>
             <tr>
-                <td class="align-middle">{{ form_widget(form.ClubNameContact) }}</td>
-                <td class="align-middle">{{ form_widget(form.ClubEmailContact) }}</td>
-                <td class="align-middle">{{ form_widget(form.ClubPhoneContact) }}</td>
-                <td class="align-middle">{{ form_widget(form.ClubAddressContact) }}</td>
-                <td class="align-middle">{{ form_widget(form.ClubZipContact) }}</td>
-                <td class="align-middle">{{ form_widget(form.ClubCityContact) }}</td>
+                <td>{{ form_widget(form.ClubAddressContact) }}</td>
+                <td>{{ form_widget(form.ClubZipContact) }}</td>
+                <td>{{ form_widget(form.ClubCityContact) }}</td>
             </tr>
         </tbody>
     </table>

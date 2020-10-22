@@ -22,10 +22,10 @@
         </thead>
         <tbody>
             <tr>
-                <td class="align-middle">{{ memberTools.getMember.getMemberAddress() }}</td>
-                <td class="align-middle">{{ memberTools.getMember.getMemberZip() }} {{ memberTools.getMember.getMemberCity() }}</td>
-                <td class="align-middle">{{ listData.getCountryName(memberTools.getMember.getMemberCountry()) }}</td>
-                <td class="align-middle">{{ memberTools.getMember.getMemberEmail() }}</td>
+                <td>{{ memberTools.getMember.getMemberAddress() }}</td>
+                <td>{{ memberTools.getMember.getMemberZip() }} {{ memberTools.getMember.getMemberCity() }}</td>
+                <td>{{ listData.getCountryName(memberTools.getMember.getMemberCountry()) }}</td>
+                <td>{{ memberTools.getMember.getMemberEmail() }}</td>
             </tr>
         </tbody>
     </table>
@@ -43,10 +43,10 @@
         </thead>
         <tbody>
             <tr>
-                <td class="align-middle">{{ memberTools.getMember.getMemberModification().getMemberModificationAddress() }}</td>
-                <td class="align-middle">{{ memberTools.getMember.getMemberModification().getMemberModificationZip() }} {{ memberTools.getMember.getMemberModification().getMemberModificationCity() }}</td>
-                <td class="align-middle">{% if memberTools.getMember.getMemberModification().getMemberModificationCountry() != null %}{{ listData.getCountryName(memberTools.getMember.getMemberModification().getMemberModificationCountry()) }}{% endif %}</td>
-                <td class="align-middle">{{ memberTools.getMember.getMemberModification().getMemberModificationEmail() }}</td>
+                <td>{{ memberTools.getMember.getMemberModification().getMemberModificationAddress() }}</td>
+                <td>{{ memberTools.getMember.getMemberModification().getMemberModificationZip() }} {{ memberTools.getMember.getMemberModification().getMemberModificationCity() }}</td>
+                <td>{% if memberTools.getMember.getMemberModification().getMemberModificationCountry() != null %}{{ listData.getCountryName(memberTools.getMember.getMemberModification().getMemberModificationCountry()) }}{% endif %}</td>
+                <td>{{ memberTools.getMember.getMemberModification().getMemberModificationEmail() }}</td>
             </tr>
         </tbody>
     </table>

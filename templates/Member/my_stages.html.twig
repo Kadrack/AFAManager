@@ -21,9 +21,9 @@
         <tbody>
         {% for stage in memberTools.getStages().history.Stage %}
         <tr>
-            <td class="align-middle">{{ stage.Name }}</td>
-            <td class="align-middle">{{ stage.Date|date("d/m/Y") }}</td>
-            <td class="align-middle">{{ stage.Duration }}</td>
+            <td>{{ stage.Name }}</td>
+            <td>{{ stage.Date|date("d/m/Y") }}</td>
+            <td>{{ stage.Duration }}</td>
         </tr>
         {% endfor %}
         </tbody>

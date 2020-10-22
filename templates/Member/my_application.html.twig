@@ -23,12 +23,12 @@
         </thead>
         <tbody>
             <tr>
-                <td class="align-middle">{{ exam.getGradeSessionDate()|date("d/m/Y") }}</td>
-                <td class="align-middle">{{ exam.getGradeSessionStreet() }}</td>
-                <td class="align-middle">{{ exam.getGradeSessionZip() }}</td>
-                <td class="align-middle">{{ exam.getGradeSessionCity() }}</td>
-                <td class="align-middle">{{ exam.getGradeSessionCandidateOpen()|date("d/m/Y") }}</td>
-                <td class="align-middle">{{ exam.getGradeSessionCandidateClose()|date("d/m/Y") }}</td>
+                <td>{{ exam.getGradeSessionDate()|date("d/m/Y") }}</td>
+                <td>{{ exam.getGradeSessionStreet() }}</td>
+                <td>{{ exam.getGradeSessionZip() }}</td>
+                <td>{{ exam.getGradeSessionCity() }}</td>
+                <td>{{ exam.getGradeSessionCandidateOpen()|date("d/m/Y") }}</td>
+                <td>{{ exam.getGradeSessionCandidateClose()|date("d/m/Y") }}</td>
             </tr>
         </tbody>
     </table>

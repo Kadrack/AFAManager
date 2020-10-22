@@ -11,7 +11,7 @@
     <h1>{{ club.getClubName()|title }}</h1>
     <h2>Liste des Membres</h2>
     <a class="btn btn-primary" href="{{ path('secretariat_member_create', {'club': club.getClubId()}) }}">Ajouter</a>
-    <table class="table table-hover">
+    <table class="table table-sm table-hover table-striped">
         <thead>
             <tr>
                 <th scope="col">#</th>
@@ -26,12 +26,12 @@
         {% for member in members %}
         {% if member.Id != null %}
             <tr>
-                <td>{{ loop.index }}</td>
-                <td>{{ member.Id }}</td>
-                <td>{{ member.FirstName|title }}</td>
-                <td>{{ member.Name|title }}</td>
-                <td>{{ member.Deadline|date("d/m/Y") }}</td>
-                <td>
+                <td class="align-middle">{{ loop.index }}</td>
+                <td class="align-middle">{{ member.Id }}</td>
+                <td class="align-middle">{{ member.FirstName|title }}</td>
+                <td class="align-middle">{{ member.Name|title }}</td>
+                <td class="align-middle">{{ member.Deadline|date("d/m/Y") }}</td>
+                <td class="align-middle">
                     <div class="btn-group" role="group" aria-label="Commandes">
                         <button type="button" class="btn btn-primary">Commandes</button>
                         <div class="btn-group" role="group">

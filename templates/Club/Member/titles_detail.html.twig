@@ -21,9 +21,9 @@
         <tbody>
         {% for title in memberTools.getTitles() %}
             <tr>
-                <td class="align-middle">{{ listData.gradeTitle(title.Rank) }}</td>
-                <td class="align-middle">{{ title.Date|date("d/m/Y") }}</td>
-                <td class="align-middle">{{ title.Certificate }}</td>
+                <td>{{ listData.gradeTitle(title.Rank) }}</td>
+                <td>{{ title.Date|date("d/m/Y") }}</td>
+                <td>{{ title.Certificate }}</td>
             </tr>
         {% endfor %}
         </tbody>
