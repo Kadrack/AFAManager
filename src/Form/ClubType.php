@@ -240,8 +240,8 @@ class ClubType extends AbstractType
             ->add('ClubTeacherFirstname', TextType::class, array('label' => 'Prénom : '))
             ->add('ClubTeacherName', TextType::class, array('label' => 'Nom : '))
             ->add('ClubTeacherGrade', ChoiceType::class, array('label' => 'Grade : ', 'placeholder' => 'Choississez un grade', 'choices' => $list->getGrade(0)))
-            ->add('ClubTeacherGradeTitleAikikai', ChoiceType::class, array('label' => 'Grade enseignement Aïkikaï: ', 'placeholder' => 'Choississez un grade', 'choices' => $list->getGradeTitleAikikai(0), 'required' => false))
-            ->add('ClubTeacherGradeTitleAdeps', ChoiceType::class, array('label' => 'Grade enseignement ADEPS : ', 'placeholder' => 'Choississez un grade', 'choices' => $list->getGradeTitleAdeps(0), 'required' => false))
+            ->add('ClubTeacherGradeTitleAikikai', ChoiceType::class, array('label' => 'Grade enseignement Aïkikaï: ', 'placeholder' => 'Choississez un grade', 'choices' => $list->getGradeTitle(0), 'required' => false))
+            ->add('ClubTeacherGradeTitleAdeps', ChoiceType::class, array('label' => 'Grade enseignement ADEPS : ', 'placeholder' => 'Choississez un grade', 'choices' => $list->getGradeTitle(0), 'required' => false))
             ->add('Submit', SubmitType::class, array('label' => 'Ajouter'))
         ;
     }
@@ -256,8 +256,8 @@ class ClubType extends AbstractType
             ->add('ClubTeacherFirstname', TextType::class, array('label' => 'Prénom : '))
             ->add('ClubTeacherName', TextType::class, array('label' => 'Nom : '))
             ->add('ClubTeacherGrade', ChoiceType::class, array('label' => 'Grade : ', 'placeholder' => 'Choississez un grade', 'choices' => $list->getGrade(0)))
-            ->add('ClubTeacherGradeTitleAikikai', ChoiceType::class, array('label' => 'Grade enseignement Aïkikaï: ', 'placeholder' => 'Choississez un grade', 'choices' => $list->getGradeTitleAikikai(0), 'required' => false))
-            ->add('ClubTeacherGradeTitleAdeps', ChoiceType::class, array('label' => 'Grade enseignement ADEPS : ', 'placeholder' => 'Choississez un grade', 'choices' => $list->getGradeTitleAdeps(0), 'required' => false))
+            ->add('ClubTeacherGradeTitleAikikai', ChoiceType::class, array('label' => 'Grade enseignement Aïkikaï: ', 'placeholder' => 'Choississez un grade', 'choices' => $list->getGradeTitle(0), 'required' => false))
+            ->add('ClubTeacherGradeTitleAdeps', ChoiceType::class, array('label' => 'Grade enseignement ADEPS : ', 'placeholder' => 'Choississez un grade', 'choices' => $list->getGradeTitle(0), 'required' => false))
             ->add('Submit', SubmitType::class, array('label' => 'Modifier'))
         ;
     }
@@ -271,8 +271,8 @@ class ClubType extends AbstractType
             ->add('ClubTeacherType', ChoiceType::class, array('label' => 'Type : ', 'placeholder' => 'Choississez un type', 'choices' => $list->getTeacherType(0), 'disabled' => true))
             ->add('ClubTeacherFirstname', TextType::class, array('label' => 'Prénom : ', 'disabled' => true))
             ->add('ClubTeacherName', TextType::class, array('label' => 'Nom : ', 'disabled' => true))
-            ->add('ClubTeacherGradeTitleAikikai', ChoiceType::class, array('label' => 'Grade enseignement Aïkikaï: ', 'placeholder' => 'Choississez un grade', 'choices' => $list->getGradeTitleAikikai(0), 'required' => false, 'disabled' => true))
-            ->add('ClubTeacherGradeTitleAdeps', ChoiceType::class, array('label' => 'Grade enseignement ADEPS : ', 'placeholder' => 'Choississez un grade', 'choices' => $list->getGradeTitleAdeps(0), 'required' => false, 'disabled' => true))
+            ->add('ClubTeacherGradeTitleAikikai', ChoiceType::class, array('label' => 'Grade enseignement Aïkikaï: ', 'placeholder' => 'Choississez un grade', 'choices' => $list->getGradeTitle(0), 'required' => false, 'disabled' => true))
+            ->add('ClubTeacherGradeTitleAdeps', ChoiceType::class, array('label' => 'Grade enseignement ADEPS : ', 'placeholder' => 'Choississez un grade', 'choices' => $list->getGradeTitle(0), 'required' => false, 'disabled' => true))
             ->add('Submit', SubmitType::class, array('label' => 'Supprimer'))
         ;
     }

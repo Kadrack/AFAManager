@@ -151,8 +151,6 @@ class TrainingType extends AbstractType
 
     private function trainingCreate(FormBuilderInterface $builder)
     {
-        $list = new ListData();
-
         $builder
             ->add('TrainingName', TextType::class, array('label' => 'Nom : '))
             ->add('TrainingPlace', TextType::class, array('label' => 'Lieu : ', 'required' => false))

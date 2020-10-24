@@ -49,11 +49,10 @@ class MemberController extends AbstractController
     /**
      * @Route("/mes_donnees/modifier", name="my_data_update")
      * @param Request $request
-     * @param PhotoUploader $photoUploader
      * @param MemberTools $memberTools
      * @return Response
      */
-    public function myDataUpdate(Request $request, PhotoUploader $photoUploader, MemberTools $memberTools)
+    public function myDataUpdate(Request $request, MemberTools $memberTools)
     {
         $memberTools->setMember($this->getUser()->getUserMember());
 
