@@ -72,7 +72,12 @@ class MemberModification
      * @ORM\Column(type="date", nullable=true)
      */
     private $member_modification_birthday;
-    
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $member_modification_aikikai_id;
+
     /**
      * @ORM\Column(type="text", nullable=true)
      */
@@ -233,7 +238,19 @@ class MemberModification
 
         return $this;
     }
-    
+
+    public function getMemberModificationAikikaiId(): ?string
+    {
+        return $this->member_modification_aikikai_id;
+    }
+
+    public function setMemberModificationAikikaiId(?string $member_modification_aikikai_id): self
+    {
+        $this->member_modification_aikikai_id = $member_modification_aikikai_id;
+
+        return $this;
+    }
+
     public function getMemberModificationComment(): ?string
     {
         return $this->member_modification_comment;
