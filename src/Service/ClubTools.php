@@ -137,7 +137,7 @@ class ClubTools
      * @param string|null $action
      * @return bool
      */
-    public function dojoAddress(TrainingAddress $trainingAddress, ?string $action)
+    public function dojoAddress(TrainingAddress $trainingAddress, ?string $action = null)
     {
         if ($action == 'Add')
         {
