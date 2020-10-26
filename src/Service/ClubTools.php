@@ -69,41 +69,44 @@ class ClubTools
 
         $afa_teachers = $this->em->getRepository(ClubTeacher::class)->getAFATeachers($this->club);
 
-        for ($i = 1; $i <= count($afa_teachers); $i++)
+        if (count($afa_teachers) > 1)
         {
-            if ($afa_teachers[$i]['Licence'] == $afa_teachers[$i+1]['Licence'])
+            for ($i = 0; $i <= count($afa_teachers); $i++)
             {
-                if ($afa_teachers[$i+1]['GradeTitleAikikai'] > 3)
+                if ($afa_teachers[$i]['Licence'] == $afa_teachers[$i+1]['Licence'])
                 {
-                    $afa_teachers[$i+1]['GradeTitleAikikai'] = null;
-                }
+                    if ($afa_teachers[$i+1]['GradeTitleAikikai'] > 3)
+                    {
+                        $afa_teachers[$i+1]['GradeTitleAikikai'] = null;
+                    }
 
-                if (($afa_teachers[$i+1]['GradeTitleAikikai'] == null) && ($afa_teachers[$i]['GradeTitleAikikai'] <= 3))
-                {
-                    $afa_teachers[$i+1]['GradeTitleAikikai'] = $afa_teachers[$i]['GradeTitleAikikai'];
-                }
+                    if (($afa_teachers[$i+1]['GradeTitleAikikai'] == null) && ($afa_teachers[$i]['GradeTitleAikikai'] <= 3))
+                    {
+                        $afa_teachers[$i+1]['GradeTitleAikikai'] = $afa_teachers[$i]['GradeTitleAikikai'];
+                    }
 
-                if (($afa_teachers[$i+1]['GradeTitleAdeps'] < 4 ) || ($afa_teachers[$i+1]['GradeTitleAdeps'] > 9 ))
-                {
-                    $afa_teachers[$i+1]['GradeTitleAdeps'] = null;
-                }
+                    if (($afa_teachers[$i+1]['GradeTitleAdeps'] < 4 ) || ($afa_teachers[$i+1]['GradeTitleAdeps'] > 9 ))
+                    {
+                        $afa_teachers[$i+1]['GradeTitleAdeps'] = null;
+                    }
 
-                if (($afa_teachers[$i+1]['GradeTitleAdeps'] == null) && (($afa_teachers[$i+1]['GradeTitleAdeps'] >= 4 ) && ($afa_teachers[$i+1]['GradeTitleAdeps'] <= 9 )))
-                {
-                    $afa_teachers[$i+1]['GradeTitleAdeps'] = $afa_teachers[$i]['GradeTitleAdeps'];
-                }
+                    if (($afa_teachers[$i+1]['GradeTitleAdeps'] == null) && (($afa_teachers[$i+1]['GradeTitleAdeps'] >= 4 ) && ($afa_teachers[$i+1]['GradeTitleAdeps'] <= 9 )))
+                    {
+                        $afa_teachers[$i+1]['GradeTitleAdeps'] = $afa_teachers[$i]['GradeTitleAdeps'];
+                    }
 
-                unset($afa_teachers[$i]);
-            }
-            else
-            {
-                if (($afa_teachers[$i]['GradeTitleAdeps'] < 4 ) || ($afa_teachers[$i]['GradeTitleAdeps'] > 9 ))
-                {
-                    $afa_teachers[$i]['GradeTitleAdeps'] = null;
+                    unset($afa_teachers[$i]);
                 }
-                elseif ($afa_teachers[$i]['GradeTitleAikikai'] > 3)
+                else
                 {
-                    $afa_teachers[$i]['GradeTitleAikikai'] = null;
+                    if (($afa_teachers[$i]['GradeTitleAdeps'] < 4 ) || ($afa_teachers[$i]['GradeTitleAdeps'] > 9 ))
+                    {
+                        $afa_teachers[$i]['GradeTitleAdeps'] = null;
+                    }
+                    elseif ($afa_teachers[$i]['GradeTitleAikikai'] > 3)
+                    {
+                        $afa_teachers[$i]['GradeTitleAikikai'] = null;
+                    }
                 }
             }
         }
