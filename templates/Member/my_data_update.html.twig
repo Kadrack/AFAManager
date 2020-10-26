@@ -25,6 +25,7 @@
                 <th scope="col">Date de naissance</th>
                 <th scope="col">Email</th>
                 <th scope="col">N° téléphone</th>
+                <th scope="col">Aïkikaï Id</th>
             </tr>
         </thead>
         <tbody>
@@ -34,6 +35,7 @@
                 <td>{{ memberTools.getMember.getMemberBirthday()|date("d/m/Y") }}</td>
                 <td>{{ memberTools.getMember.getMemberEmail() }}</td>
                 <td>{{ memberTools.getMember.getMemberPhone() }}</td>
+                <td>{{ memberTools.getMember.getMemberAikikaiId() }}</td>
             </tr>
             <tr>
                 <td>{{ form_widget(form.MemberModificationFirstname) }}</td>
@@ -41,6 +43,7 @@
                 <td>{{ form_widget(form.MemberModificationBirthday) }}</td>
                 <td>{{ form_widget(form.MemberModificationEmail) }}</td>
                 <td>{{ form_widget(form.MemberModificationPhone) }}</td>
+                <td>{{ form_widget(form.MemberModificationAikikaiId) }}</td>
             </tr>
         </tbody>
     </table>

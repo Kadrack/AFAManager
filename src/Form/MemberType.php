@@ -77,6 +77,7 @@ class MemberType extends AbstractType
             ->add('MemberModificationPhone', TextType::class, array('label' => 'N° téléphone : ', 'required' => false))
             ->add('MemberModificationCountry', CountryType::class, array('label' => 'Pays : ', 'choice_translation_locale' => 'fr', 'preferred_choices' => array('BE', 'FR')))
             ->add('MemberModificationEmail', EmailType::class, array('label' => 'Email : ', 'required' => false))
+            ->add('MemberModificationAikikaiId', TextType::class, array('label' => 'Id Aïkikaï : ', 'required' => false))
             ->add('Submit', SubmitType::class, array('label' => 'Modifier'))
         ;
     }

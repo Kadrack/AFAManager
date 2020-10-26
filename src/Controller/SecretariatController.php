@@ -1438,6 +1438,7 @@ class SecretariatController extends AbstractController
             $modification->getMemberModificationCountry()   != null ? $member->setMemberCountry($modification->getMemberModificationCountry()) : null;
             $modification->getMemberModificationEmail()     != null ? $member->setMemberEmail($modification->getMemberModificationEmail()) : null;
             $modification->getMemberModificationPhone()     != null ? $member->setMemberPhone($modification->getMemberModificationPhone()) : null;
+            $modification->getMemberModificationAikikaiId() != null ? $member->setMemberAikikaiId($modification->getMemberModificationAikikaiId()) : null;
 
             $member->setMemberModification(null);
 

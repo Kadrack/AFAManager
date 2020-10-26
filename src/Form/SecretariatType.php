@@ -127,6 +127,7 @@ class SecretariatType extends AbstractType
             ->add('MemberModificationPhone', TextType::class, array('label' => 'N° téléphone : ', 'required' => false, 'disabled' => true))
             ->add('MemberModificationCountry', CountryType::class, array('label' => 'Pays : ', 'choice_translation_locale' => 'fr', 'preferred_choices' => array('BE', 'FR'), 'disabled' => true))
             ->add('MemberModificationEmail', EmailType::class, array('label' => 'Email : ', 'required' => false, 'disabled' => true))
+            ->add('MemberModificationAikikaiId', TextType::class, array('label' => 'Aïkikaï Id : ', 'required' => false, 'disabled' => true))
             ->add('Submit', SubmitType::class, array('label' => 'Valider'))
         ;
     }
@@ -147,6 +148,7 @@ class SecretariatType extends AbstractType
             ->add('MemberModificationPhone', TextType::class, array('label' => 'N° téléphone : ', 'required' => false, 'disabled' => true))
             ->add('MemberModificationCountry', CountryType::class, array('label' => 'Pays : ', 'choice_translation_locale' => 'fr', 'preferred_choices' => array('BE', 'FR'), 'disabled' => true))
             ->add('MemberModificationEmail', EmailType::class, array('label' => 'Email : ', 'required' => false, 'disabled' => true))
+            ->add('MemberModificationAikikaiId', TextType::class, array('label' => 'Aïkikaï Id : ', 'required' => false, 'disabled' => true))
             ->add('Submit', SubmitType::class, array('label' => 'Valider'))
         ;
     }
@@ -167,6 +169,7 @@ class SecretariatType extends AbstractType
             ->add('MemberPhone', TextType::class, array('label' => 'N° téléphone : ', 'required' => false))
             ->add('MemberCountry', CountryType::class, array('label' => 'Pays : ', 'choice_translation_locale' => 'fr', 'preferred_choices' => array('BE', 'FR')))
             ->add('MemberEmail', EmailType::class, array('label' => 'Email : ', 'required' => false))
+            ->add('MemberAikikaiId', TextType::class, array('label' => 'Aikikai Id : ', 'required' => false))
             ->add('Submit', SubmitType::class, array('label' => 'Modifier'))
         ;
     }
