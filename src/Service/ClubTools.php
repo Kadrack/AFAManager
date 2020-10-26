@@ -69,7 +69,7 @@ class ClubTools
 
         $afa_teachers = $this->em->getRepository(ClubTeacher::class)->getAFATeachers($this->club);
 
-        for ($i = 0; $i <= count($afa_teachers); $i++)
+        for ($i = 1; $i <= count($afa_teachers); $i++)
         {
             if ($afa_teachers[$i]['Licence'] == $afa_teachers[$i+1]['Licence'])
             {
