@@ -14,7 +14,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("", name="administration_")
+ * @Route("/administration", name="administration_")
  *
  * @IsGranted("ROLE_ADMINISTRATION")
  */
@@ -36,7 +36,7 @@ class AdministrationController extends AbstractController
 
             for ($i = 1; $i <= 12; $i++)
             {
-                $statistics[$province]['Limits'][$i] = array('Province' => $province, 'Sex' => is_int($i/2) ? 2 : 1, 'Total' => 0);
+                $statistics[$province]['Limits'][$i] = array('Province' => $province, 'Sex' => is_int($i / 2) ? 2 : 1, 'Total' => 0);
             }
 
             $statistics[$province]['Total'][1] = 0;
@@ -106,13 +106,11 @@ class AdministrationController extends AbstractController
 
         $query = $this->getDoctrine()->getRepository(Club::class)->getClubMembersCount($province);
 
-        foreach ($query['Clubs'] as $club)
-        {
+        foreach ($query['Clubs'] as $club) {
             $statistics[$club['Id']]['Club'] = $club;
 
-            for ($i = 1; $i <= 12; $i++)
-            {
-                $statistics[$club['Id']]['Limits'][$i] = array('Id' => $club['Id'], 'Name' => $club['Name'], 'Sex' => is_int($i/2) ? 2 : 1, 'Total' => 0);
+            for ($i = 1; $i <= 12; $i++) {
+                $statistics[$club['Id']]['Limits'][$i] = array('Id' => $club['Id'], 'Name' => $club['Name'], 'Sex' => is_int($i / 2) ? 2 : 1, 'Total' => 0);
             }
 
             $statistics[$club['Id']]['Total'][1] = 0;
@@ -121,18 +119,13 @@ class AdministrationController extends AbstractController
 
         $i = 1;
 
-        foreach ($query['Details'] as $limits)
-        {
-            foreach ($limits as $club)
-            {
-                if ($club['Sex'] == 1)
-                {
+        foreach ($query['Details'] as $limits) {
+            foreach ($limits as $club) {
+                if ($club['Sex'] == 1) {
                     $statistics[$club['Id']]['Total'][1] = $statistics[$club['Id']]['Total'][1] + $club['Total'];
 
                     $limit = ($i * 2) - 1;
-                }
-                else
-                {
+                } else {
                     $statistics[$club['Id']]['Total'][2] = $statistics[$club['Id']]['Total'][2] + $club['Total'];
 
                     $limit = $i * 2;
@@ -147,13 +140,3 @@ class AdministrationController extends AbstractController
         return $this->render('Administration/Statistic/province_detail.html.twig', array('statistics' => $statistics));
     }
 }
-
-
-
-
-
-
-
-
-
-
