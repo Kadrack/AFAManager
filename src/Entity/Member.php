@@ -96,6 +96,11 @@ class Member
     private $member_birthday;
 
     /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $member_aikikai_id;
+
+    /**
      * @ORM\Column(type="text", nullable=true)
      */
     private $member_comment;
@@ -310,6 +315,18 @@ class Member
     public function setMemberBirthday(DateTimeInterface $member_birthday): self
     {
         $this->member_birthday = $member_birthday;
+
+        return $this;
+    }
+
+    public function getMemberAikikaiId(): ?string
+    {
+        return $this->member_aikikai_id;
+    }
+
+    public function setMemberAikikaiId(?string $member_aikikai_id): self
+    {
+        $this->member_aikikai_id = $member_aikikai_id;
 
         return $this;
     }
