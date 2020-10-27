@@ -55,7 +55,7 @@
                             </div>
                         </li>
                     {% endif %}
-                    {% if is_granted('ROLE_ADMINISTRATION') %}
+                    {% if is_granted('ROLE_CA') %}
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Administration</a>
                             <div class="dropdown-menu">
@@ -63,7 +63,7 @@
                             </div>
                         </li>
                     {% endif %}
-                    {% if is_granted('ROLE_CFG') %}
+                    {% if is_granted('ROLE_CT') %}
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">CFG</a>
                             <div class="dropdown-menu">

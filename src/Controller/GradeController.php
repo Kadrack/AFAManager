@@ -20,7 +20,7 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * @Route("/grade", name="grade_")
  *
- * @IsGranted("ROLE_CFG")
+ * @IsGranted("ROLE_CT")
  */
 class GradeController extends AbstractController
 {
