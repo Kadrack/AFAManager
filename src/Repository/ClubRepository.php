@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Club;
 use App\Entity\ClubHistory;
+use App\Entity\ClubTeacher;
 use App\Entity\Member;
 use App\Entity\MemberLicence;
 
@@ -48,6 +49,43 @@ class ClubRepository extends ServiceEntityRepository
             ->join(ClubHistory::class, 'h', 'WITH', $qb->expr()->eq('h.club_history_id', 'c.club_last_history'))
             ->where($qb->expr()->neq('h.club_history_status', 1))
             ->orderBy('c.club_id', 'ASC')
+            ->getQuery()
+            ->getArrayResult();
+    }
+
+    public function getProvinceTeachersTotal(): ?array
+    {
+        $qb = $this->createQueryBuilder('c');
+
+        return $qb->select('c.club_province AS Province', 'count(t.club_teacher) AS Total')
+            ->join(ClubTeacher::class, 't', 'WITH', $qb->expr()->eq('t.club_teacher', 'c.club_id'))
+            ->join(ClubHistory::class, 'h', 'WITH', $qb->expr()->eq('h.club_history_id', 'c.club_last_history'))
+            ->where($qb->expr()->eq('h.club_history_status', 1))
+            ->groupBy('c.club_province')
+            ->orderBy('Province', 'ASC')
+            ->getQuery()
+            ->getArrayResult();
+    }
+
+    public function getProvinceMembersTotal(?DateTime $referenceDate = null): ?array
+    {
+        if (is_null($referenceDate))
+        {
+            $referenceDate = new DateTime('today');
+        }
+
+        $deadline = $referenceDate->format('Y-m-d');
+
+        $qb = $this->createQueryBuilder('c');
+
+        return $qb->select('c.club_province AS Province', 'm.member_sex AS Sex', 'count(m.member_id) AS Total')
+            ->join(Member::class, 'm', 'WITH', $qb->expr()->eq('m.member_actual_club', 'c.club_id'))
+            ->join(MemberLicence::class, 'l', 'WITH', $qb->expr()->eq('m.member_id', 'l.member_licence'))
+            ->where($qb->expr()->gt('l.member_licence_deadline', "'".$deadline."'"))
+            ->andWhere($qb->expr()->eq('l.member_licence_status', 1))
+            ->groupBy('c.club_province')
+            ->addGroupBy('m.member_sex')
+            ->orderBy('Province', 'ASC')
             ->getQuery()
             ->getArrayResult();
     }

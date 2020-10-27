@@ -16,7 +16,7 @@ class ListData
      */
     public function getAccessType(int $type = 0)
     {
-        $access = array('Aucun' => 1, 'CT' => 2, 'Stage' => 3, 'CA' => 4);
+        $access = array('Aucun' => 1, 'CT' => 2, 'Stage' => 3, 'CA' => 4, 'CP' => 5);
 
         if ($type == 0)
         {

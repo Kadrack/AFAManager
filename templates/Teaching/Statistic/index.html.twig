@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    AFA-Manager
+{% endblock %}
+
+{% block stylesheets %}
+{% endblock %}
+
+{% block body %}
+    <h1>Statistique en temps réel (Page en cours de développement)</h1>
+    <table class="table table-sm table-hover">
+        <thead class="text-center">
+            <tr>
+                <th class="align-middle" rowspan="2" scope="col">Province</th>
+                <th colspan="3" scope="col"># Pratiquants</th>
+                <th class="align-middle" rowspan="2" scope="col"># Professeurs</th>
+                <th class="align-middle" rowspan="2" scope="col"></th>
+            </tr>
+            <tr>
+                <th scope="col">H</th>
+                <th scope="col">F</th>
+                <th scope="col">Total</th>
+            </tr>
+        </thead>
+        <tbody class="text-center">
+            {% for province in statistics %}
+            <tr>
+                <td class="align-middle text-left">{{ listData.province(province.Id) }}</td>
+                <td class="align-middle">{{ province.Total.1 }}</td>
+                <td class="align-middle">{{ province.Total.2 }}</td>
+                <td class="align-middle">{{ province.Total.1 + province.Total.2 }}</td>
+                <td class="align-middle">{{ province.Total.3 }}</td>
+                <td class="align-middle"></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
+
+{% block javascripts %}
+{% endblock %}
