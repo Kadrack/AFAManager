@@ -53,14 +53,26 @@ class ClubRepository extends ServiceEntityRepository
             ->getArrayResult();
     }
 
-    public function getProvinceTeachersTotal(): ?array
+    public function getProvinceTeachersTotal(?DateTime $referenceDate = null): ?array
     {
+        if (is_null($referenceDate))
+        {
+            $referenceDate = new DateTime('today');
+        }
+
+        $deadline = $referenceDate->format('Y-m-d');
+
         $qb = $this->createQueryBuilder('c');
 
-        return $qb->select('c.club_province AS Province', 'count(t.club_teacher) AS Total')
-            ->join(ClubTeacher::class, 't', 'WITH', $qb->expr()->eq('t.club_teacher', 'c.club_id'))
-            ->join(ClubHistory::class, 'h', 'WITH', $qb->expr()->eq('h.club_history_id', 'c.club_last_history'))
-            ->where($qb->expr()->eq('h.club_history_status', 1))
+        return $qb->select('c.club_province AS Province', 'count(m.member_id) AS Total')
+            ->join(Member::class, 'm', 'WITH', $qb->expr()->eq('m.member_actual_club', 'c.club_id'))
+            ->join(MemberLicence::class, 'l', 'WITH', $qb->expr()->eq('m.member_id', 'l.member_licence'))
+            ->leftJoin(ClubTeacher::class, 't', 'WITH', $qb->expr()->eq('t.club_teacher_member', 'm.member_id'))
+            ->join(ClubHistory::class, 'h', 'WITH', $qb->expr()->eq('h.club_history', 'm.member_actual_club'))
+            ->where($qb->expr()->gt('l.member_licence_deadline', "'".$deadline."'"))
+            ->andWhere($qb->expr()->eq('l.member_licence_status', 1))
+            ->andWhere($qb->expr()->eq('h.club_history_status', 1))
+            ->andWhere($qb->expr()->isNotNull('t.club_teacher_id'))
             ->groupBy('c.club_province')
             ->orderBy('Province', 'ASC')
             ->getQuery()
@@ -81,11 +93,16 @@ class ClubRepository extends ServiceEntityRepository
         return $qb->select('c.club_province AS Province', 'm.member_sex AS Sex', 'count(m.member_id) AS Total')
             ->join(Member::class, 'm', 'WITH', $qb->expr()->eq('m.member_actual_club', 'c.club_id'))
             ->join(MemberLicence::class, 'l', 'WITH', $qb->expr()->eq('m.member_id', 'l.member_licence'))
+            ->leftJoin(ClubTeacher::class, 't', 'WITH', $qb->expr()->eq('t.club_teacher_member', 'm.member_id'))
+            ->join(ClubHistory::class, 'h', 'WITH', $qb->expr()->eq('h.club_history', 'm.member_actual_club'))
             ->where($qb->expr()->gt('l.member_licence_deadline', "'".$deadline."'"))
             ->andWhere($qb->expr()->eq('l.member_licence_status', 1))
+            ->andWhere($qb->expr()->eq('h.club_history_status', 1))
+            ->andWhere($qb->expr()->isNull('t.club_teacher_id'))
             ->groupBy('c.club_province')
             ->addGroupBy('m.member_sex')
             ->orderBy('Province', 'ASC')
+            ->addOrderBy('Sex', 'ASC')
             ->getQuery()
             ->getArrayResult();
     }
@@ -115,12 +132,16 @@ class ClubRepository extends ServiceEntityRepository
             $result[] = $qb->select('c.club_province AS Province', 'm.member_sex AS Sex', 'count(m.member_id) AS Total')
                 ->join(Member::class, 'm', 'WITH', $qb->expr()->eq('m.member_actual_club', 'c.club_id'))
                 ->join(MemberLicence::class, 'l', 'WITH', $qb->expr()->eq('m.member_id', 'l.member_licence'))
+                ->leftJoin(ClubTeacher::class, 't', 'WITH', $qb->expr()->eq('t.club_teacher_member', 'm.member_id'))
+                ->join(ClubHistory::class, 'h', 'WITH', $qb->expr()->eq('h.club_history', 'm.member_actual_club'))
                 ->where($qb->expr()->gt('l.member_licence_deadline', "'".$deadline."'"))
                 ->andWhere($qb->expr()->eq('l.member_licence_status', 1))
+                ->andWhere($qb->expr()->eq('h.club_history_status', 1))
                 ->andWhere($qb->expr()->between('m.member_birthday', "'".$limit[$i+1]."'", "'".$limit[$i]."'"))
                 ->groupBy('c.club_province')
                 ->addGroupBy('m.member_sex')
                 ->orderBy('Province', 'ASC')
+                ->addOrderBy('Sex', 'ASC')
                 ->getQuery()
                 ->getArrayResult();
 
@@ -130,12 +151,16 @@ class ClubRepository extends ServiceEntityRepository
         $result[] = $qb->select('c.club_province AS Province', 'm.member_sex AS Sex', 'count(m.member_id) AS Total')
             ->join(Member::class, 'm', 'WITH', $qb->expr()->eq('m.member_actual_club', 'c.club_id'))
             ->join(MemberLicence::class, 'l', 'WITH', $qb->expr()->eq('m.member_id', 'l.member_licence'))
+            ->leftJoin(ClubTeacher::class, 't', 'WITH', $qb->expr()->eq('t.club_teacher_member', 'm.member_id'))
+            ->join(ClubHistory::class, 'h', 'WITH', $qb->expr()->eq('h.club_history', 'm.member_actual_club'))
             ->where($qb->expr()->gt('l.member_licence_deadline', "'".$deadline."'"))
             ->andWhere($qb->expr()->eq('l.member_licence_status', 1))
+            ->andWhere($qb->expr()->eq('h.club_history_status', 1))
             ->andWhere($qb->expr()->lte('m.member_birthday', "'".$limit[count($limit)-1]."'"))
             ->groupBy('c.club_province')
             ->addGroupBy('m.member_sex')
             ->orderBy('Province', 'ASC')
+            ->addOrderBy('Sex', 'ASC')
             ->getQuery()
             ->getArrayResult();
 
@@ -178,12 +203,13 @@ class ClubRepository extends ServiceEntityRepository
             $result['Details'][] = $qb->select('c.club_id AS Id', 'c.club_name AS Name', 'm.member_sex AS Sex', 'count(m.member_id) AS Total')
                 ->join(Member::class, 'm', 'WITH', $qb->expr()->eq('m.member_actual_club', 'c.club_id'))
                 ->join(MemberLicence::class, 'l', 'WITH', $qb->expr()->eq('m.member_id', 'l.member_licence'))
-                ->join(ClubHistory::class, 'h', 'WITH', $qb->expr()->eq('h.club_history_id', 'c.club_last_history'))
+                ->leftJoin(ClubTeacher::class, 't', 'WITH', $qb->expr()->eq('t.club_teacher_member', 'm.member_id'))
+                ->join(ClubHistory::class, 'h', 'WITH', $qb->expr()->eq('h.club_history', 'm.member_actual_club'))
                 ->where($qb->expr()->gt('l.member_licence_deadline', "'".$deadline."'"))
                 ->andWhere($qb->expr()->eq('l.member_licence_status', 1))
-                ->andWhere($qb->expr()->eq('c.club_province', $province))
-                ->andWhere($qb->expr()->between('m.member_birthday', "'".$limit[$i+1]."'", "'".$limit[$i]."'"))
                 ->andWhere($qb->expr()->eq('h.club_history_status', 1))
+                ->andWhere($qb->expr()->between('m.member_birthday', "'".$limit[$i+1]."'", "'".$limit[$i]."'"))
+                ->andWhere($qb->expr()->eq('c.club_province', $province))
                 ->groupBy('c.club_id')
                 ->addGroupBy('m.member_sex')
                 ->orderBy('Id', 'ASC')
@@ -196,12 +222,13 @@ class ClubRepository extends ServiceEntityRepository
         $result['Details'][] = $qb->select('c.club_id AS Id', 'c.club_name AS Name', 'm.member_sex AS Sex', 'count(m.member_id) AS Total')
             ->join(Member::class, 'm', 'WITH', $qb->expr()->eq('m.member_actual_club', 'c.club_id'))
             ->join(MemberLicence::class, 'l', 'WITH', $qb->expr()->eq('m.member_id', 'l.member_licence'))
-            ->join(ClubHistory::class, 'h', 'WITH', $qb->expr()->eq('h.club_history_id', 'c.club_last_history'))
+            ->leftJoin(ClubTeacher::class, 't', 'WITH', $qb->expr()->eq('t.club_teacher_member', 'm.member_id'))
+            ->join(ClubHistory::class, 'h', 'WITH', $qb->expr()->eq('h.club_history', 'm.member_actual_club'))
             ->where($qb->expr()->gt('l.member_licence_deadline', "'".$deadline."'"))
             ->andWhere($qb->expr()->eq('l.member_licence_status', 1))
-            ->andWhere($qb->expr()->eq('c.club_province', $province))
-            ->andWhere($qb->expr()->lte('m.member_birthday', "'".$limit[count($limit)-1]."'"))
             ->andWhere($qb->expr()->eq('h.club_history_status', 1))
+            ->andWhere($qb->expr()->lte('m.member_birthday', "'".$limit[count($limit)-1]."'"))
+            ->andWhere($qb->expr()->eq('c.club_province', $province))
             ->groupBy('c.club_id')
             ->addGroupBy('m.member_sex')
             ->orderBy('Id', 'ASC')
