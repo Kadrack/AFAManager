@@ -1461,9 +1461,10 @@ class SecretariatController extends AbstractController
      *
      * @param Request $request
      * @param Member $member
+     * @param PhotoUploader $photoUploader
      * @return RedirectResponse|Response
      */
-    public function memberModificationValidationCancel(Request $request, Member $member)
+    public function memberModificationValidationCancel(Request $request, Member $member, PhotoUploader $photoUploader)
     {
         $modification = $member->getMemberModification();
 
@@ -1473,6 +1474,8 @@ class SecretariatController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid())
         {
+            $photoUploader->delete($modification->getMemberModificationPhoto());
+
             $member->setMemberModification(null);
 
             $entityManager = $this->getDoctrine()->getManager();
