@@ -106,12 +106,12 @@ class PhotoUploader
      */
     public function delete(?string $photo)
     {
-        if (file_exists($this->targetDirectory.'/'.$photo))
+        if ((file_exists($this->targetDirectory.'/'.$photo)) && ($photo != null))
         {
             unlink($this->targetDirectory.'/'.$photo);
         }
 
-        if (file_exists($this->targetDirectory.'/original/'.$photo))
+        if ((file_exists($this->targetDirectory.'/original/'.$photo)) && ($photo != null))
         {
             unlink($this->targetDirectory.'/original/'.$photo);
         }
