@@ -153,6 +153,7 @@ class MemberRepository extends ServiceEntityRepository
         else
         {
             $qb->where($qb->expr()->like('m.member_name', "'%".$search."%'"));
+            $qb->andWhere($qb->expr()->neq('m.member_actual_club', 9999));
         }
 
         return $qb->orderBy('FirstName', 'ASC')
