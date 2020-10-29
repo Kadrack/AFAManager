@@ -1,0 +1,3 @@
+# config/services_dev.yaml
+services:
+    Symfony\Component\HttpKernel\Profiler\Profiler: '@profiler'
