@@ -40,6 +40,16 @@ class AccountingController extends AbstractController
             return $this->render('Accounting/Member/search.html.twig', array('form' => $form->createView(), 'results' => $results));
         }
 
-        return $this->render('Accounting/Member/search.html.twig', array('form' => $form->createView(), 'results' => $results));
+        return $this->render('Accounting/Member/search.html.twig', array('form' => $form->createView(), 'results' => isset($results) ? $results : null));
+    }
+
+    /**
+     * @Route("/donnees_contact/{member<\d+>}", name="member_contact_data")
+     * @param Member $member
+     * @return Response
+     */
+    public function memberContactData(Member $member)
+    {
+        return $this->render('Accounting/Member/contact_data.html.twig', array('member' => $member));
     }
 }

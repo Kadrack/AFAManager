@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    AFA-Manager
+{% endblock %}
+
+{% block stylesheets %}
+{% endblock %}
+
+{% block body %}
+    <h1>{{ member.getMemberFirstname()|title }} {{ member.getMemberName()|title }}</h1>
+    <h2>Données de contact</h2>
+    <table class="table table-sm table-hover">
+        <thead>
+            <tr>
+                <th scope="col">Club</th>
+                <th scope="col">Adresse</th>
+                <th scope="col">Localité</th>
+                <th scope="col">Pays</th>
+                <th scope="col">Email</th>
+                <th scope="col">Téléphone</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{ member.memberActualClub.clubId }} - {{ member.memberActualClub.clubName|title }}</td>
+                <td>{{ member.getMemberAddress() }}</td>
+                <td>{{ member.getMemberZip() }} {{ member.getMemberCity()|title }}</td>
+                <td>{{ listData.getCountryName(member.getMemberCountry()) }}</td>
+                <td>{{ member.getMemberEmail() }}</td>
+                <td>{{ member.getMemberPhone() }}</td>
+            </tr>
+        </tbody>
+    </table>
+{% endblock %}
+
+{% block javascripts %}
+{% endblock %}
