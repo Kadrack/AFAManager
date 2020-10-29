@@ -12,25 +12,27 @@ use DateTime;
 
 use Doctrine\ORM\EntityManagerInterface;
 
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+
 /**
  * Class Tools
  * @package App\Service
  */
 class MemberTools
 {
-    private $em;
+    private EntityManagerInterface $em;
 
-    private $grades;
+    private ?array $grades;
 
-    private $licences;
+    private ?array $licences;
 
-    private $member;
+    private Member $member;
 
-    private $photoUploader;
+    private PhotoUploader $photoUploader;
 
-    private $stages;
+    private ?array $stages;
 
-    private $titles;
+    private ?array $titles;
 
     /**
      * MemberTools constructor.
@@ -364,15 +366,15 @@ class MemberTools
 
     /**
      * @param MemberModification $memberModification
-     * @param string|null $photo
+     * @param UploadedFile|null $photo
      * @param string|null $country
      * @return bool
      */
-    public function setModification(MemberModification $memberModification, ?string $photo, ?string $country)
+    public function setModification(MemberModification $memberModification, ?UploadedFile $photo, ?string $country)
     {
-        if (($photo != 'nophoto.png') && ($memberModification->getMemberModificationPhoto() !== null))
+        if ($photo != null)
         {
-            $memberModification->setMemberModificationPhoto($this->photoUploader->upload($photo, $memberModification->getMemberModificationPhoto()));
+            $memberModification->setMemberModificationPhoto($this->photoUploader->upload($photo, $memberModification->getMemberModificationPhoto() !== null ? $memberModification->getMemberModificationPhoto() : ""));
         }
 
         if ($this->member->getMemberModification() == null)

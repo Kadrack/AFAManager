@@ -1415,9 +1415,10 @@ class SecretariatController extends AbstractController
      *
      * @param Request $request
      * @param Member $member
+     * @param PhotoUploader $photoUploader
      * @return RedirectResponse|Response
      */
-    public function memberModificationValidationValidate(Request $request, Member $member)
+    public function memberModificationValidationValidate(Request $request, Member $member, PhotoUploader $photoUploader)
     {
         $modification = $member->getMemberModification();
 
@@ -1429,6 +1430,9 @@ class SecretariatController extends AbstractController
         {
             $modification = $form->getData();
 
+            $photoUploader->delete($member->getMemberPhoto());
+
+            $modification->getMemberModificationPhoto()     != null ? $member->setMemberPhoto($modification->getMemberModificationPhoto()) : null;
             $modification->getMemberModificationFirstname() != null ? $member->setMemberFirstname($modification->getMemberModificationFirstname()) : null;
             $modification->getMemberModificationName()      != null ? $member->setMemberName($modification->getMemberModificationName()) : null;
             $modification->getMemberModificationBirthday()  != null ? $member->setMemberBirthday($modification->getMemberModificationBirthday()) : null;

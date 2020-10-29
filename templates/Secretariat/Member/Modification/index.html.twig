@@ -9,9 +9,12 @@
 
 {% block body %}
     <h1>Liste des modifications en attente</h1>
+    {% for modification in modifications %}
+    <h2>{{ modification.FirstName|title }} {{ modification.Name|title }}<a class="btn btn-primary" href="{{ path('secretariat_member_modification_validation_validate', {'member': modification.Member}) }}">Valider</a><a class="btn btn-primary" href="{{ path('secretariat_member_modification_validation_cancel', {'member': modification.Member}) }}">Refuser</a></h2>
     <table class="table table-sm table-hover">
         <thead>
             <tr>
+                <th scope="col">Photo</th>
                 <th scope="col">Prénom</th>
                 <th scope="col">Nom</th>
                 <th scope="col">Date de naissance</th>
@@ -22,14 +25,13 @@
                 <th scope="col">Email</th>
                 <th scope="col">Téléphone</th>
                 <th scope="col">Aïkikaï Id</th>
-                <th scope="col"></th>
             </tr>
         </thead>
         <tbody>
-        {% for modification in modifications %}
             <tr>
-                <td class="align-middle">{{ modification.FirstName|title }} ({{ modification.NewFirstName }})</td>
-                <td class="align-middle">{{ modification.Name|title }} ({{ modification.NewName }})</td>
+                <td class="align-middle"><img alt="" src="{{ asset('uploads/photos/'~modification.Photo) }}" /></td>
+                <td class="align-middle">{{ modification.NewFirstName|title }}</td>
+                <td class="align-middle">{{ modification.NewName|title }}</td>
                 <td class="align-middle">{% if modification.Birthday != null %}{{ modification.Birthday|date("d/m/Y") }}{% endif %}</td>
                 <td class="align-middle">{{ modification.Address }}</td>
                 <td class="align-middle">{{ modification.Zip }}</td>
@@ -38,11 +40,10 @@
                 <td class="align-middle">{{ modification.Email }}</td>
                 <td class="align-middle">{{ modification.Phone }}</td>
                 <td class="align-middle">{{ modification.AikikaiId }}</td>
-                <td class="align-middle"><a class="btn btn-primary" href="{{ path('secretariat_member_modification_validation_validate', {'member': modification.Member}) }}">Valider</a><a class="btn btn-primary" href="{{ path('secretariat_member_modification_validation_cancel', {'member': modification.Member}) }}">Refuser</a></td>
             </tr>
-        {% endfor %}
         </tbody>
     </table>
+    {% endfor %}
 {% endblock %}
 
 {% block javascripts %}

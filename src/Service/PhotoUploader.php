@@ -95,12 +95,27 @@ class PhotoUploader
             imagepng($this->image, $this->targetDirectory.'/'.$fileName);
         }
 
-        if (($old != '') && ($old != 'nophoto.png'))
-        {
-            unlink($this->targetDirectory.'/'.$old);
-            unlink($this->targetDirectory.'/original/'.$old);
-        }
+        $this->delete($old);
 
         return $fileName;
+    }
+
+    /**
+     * @param string|null $photo
+     * @return string
+     */
+    public function delete(?string $photo)
+    {
+        if (file_exists($this->targetDirectory.'/'.$photo))
+        {
+            unlink($this->targetDirectory.'/'.$photo);
+        }
+
+        if (file_exists($this->targetDirectory.'/original/'.$photo))
+        {
+            unlink($this->targetDirectory.'/original/'.$photo);
+        }
+
+        return true;
     }
 }
