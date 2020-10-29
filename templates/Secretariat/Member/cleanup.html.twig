@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    AFA-Manager
+{% endblock %}
+
+{% block stylesheets %}
+{% endblock %}
+
+{% block body %}
+    {% if list != null %}
+
+        {{ form_start(form) }}
+        {{ form_widget(form) }}
+        {{ form_end(form) }}
+
+    <h1>Liste des membres à nettoyer</h1>
+    <table class="table table-sm table-hover">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Licence n°</th>
+                <th scope="col">Prénom</th>
+                <th scope="col">Nom</th>
+                <th scope="col">Club</th>
+                <th scope="col">Echéance</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for member in list %}
+            <tr>
+                <td class="align-middle">{{ loop.index }}</td>
+                <td class="align-middle">{{ member.Id }}</td>
+                <td class="align-middle">{{ member.FirstName|title }}</td>
+                <td class="align-middle">{{ member.Name|title }}</td>
+                <td class="align-middle">{{ member.ClubId }} - {{ member.Club|title }}</td>
+                <td class="align-middle">{{ member.Deadline|date("d/m/Y") }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% endif %}
+
+{% endblock %}
+
+{% block javascripts %}
+{% endblock %}

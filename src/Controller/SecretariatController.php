@@ -1897,4 +1897,60 @@ class SecretariatController extends AbstractController
 
         return $this->render('Secretariat/renew_form.html.twig', array('form' => $form->createView()));
     }
+
+    /**
+     * @Route("/nettoyage_liste_membres", name="member_list_cleanup")
+     *
+     * @param Request $request
+     * @return RedirectResponse|Response
+     * @throws Exception
+     */
+    public function memberListCleanup(Request $request)
+    {
+        $list = $this->getDoctrine()->getRepository(Member::class)->getMemberListCleanup();
+
+        $form = $this->createForm(SecretariatType::class,null, array('form' => 'cleanup_member', 'data_class' => null));
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid())
+        {
+            $fridge = $this->getDoctrine()->getRepository(Club::class)->findOneBy(['club_id' => 9999]);
+
+            $entityManager = $this->getDoctrine()->getManager();
+
+            for ($i = 0; $i <= 50; $i++)
+            {
+                if (!isset($list[$i]))
+                {
+                    break;
+                }
+
+                $member = $this->getDoctrine()->getRepository(Member::class)->findOneBy(['member_id' => $list[$i]['Id']]);
+
+                $licence_old = $member->getMemberLastLicence();
+
+                $licence_old->setMemberLicenceStatus(0);
+
+                $licence_new = new MemberLicence();
+
+                $licence_new->setMemberLicence($member);
+                $licence_new->setMemberLicenceClub($fridge);
+                $licence_new->setMemberLicenceUpdate(new DateTime('today'));
+                $licence_new->setMemberLicenceDeadline($licence_old->getMemberLicenceDeadline());
+                $licence_new->setMemberLicenceStatus(1);
+                $licence_new->setMemberLicenceMedicalCertificate($licence_old->getMemberLicenceMedicalCertificate());
+
+                $member->setMemberActualClub($fridge);
+                $member->setMemberLastLicence($licence_new);
+
+                $entityManager->persist($licence_new);
+                $entityManager->flush();
+            }
+
+            return $this->redirectToRoute('secretariat_member_list_cleanup');
+        }
+
+        return $this->render('Secretariat/Member/cleanup.html.twig', array('form' => $form->createView(), 'list' => $list));
+    }
 }

@@ -3,6 +3,8 @@
 namespace App\Repository;
 
 use App\Entity\Club;
+use App\Entity\ClubHistory;
+use App\Entity\ClubTeacher;
 use App\Entity\Grade;
 use App\Entity\GradeTitle;
 use App\Entity\Member;
@@ -192,5 +194,24 @@ class MemberRepository extends ServiceEntityRepository
             ->getQuery()
             ->getArrayResult();
 
+    }
+
+    public function getMemberListCleanup(): ?array
+    {
+        $limit = new DateTime('-5 year today');
+
+        $deadline = $limit->format('Y-m-d');
+
+        $qb = $this->createQueryBuilder('m');
+
+        return $qb->select('m.member_id AS Id', 'm.member_firstname AS FirstName', 'm.member_name AS Name', 'c.club_id AS ClubId', 'c.club_name AS Club', 'l.member_licence_deadline AS Deadline')
+            ->join(Club::class, 'c', 'WITH', $qb->expr()->eq('m.member_actual_club', 'c.club_id'))
+            ->join(MemberLicence::class, 'l', 'WITH', $qb->expr()->eq('m.member_last_licence', 'l.member_licence_id'))
+            ->where($qb->expr()->lt('l.member_licence_deadline', "'".$deadline."'"))
+            ->andWhere($qb->expr()->neq('m.member_actual_club', 9999))
+            ->andWhere($qb->expr()->eq('l.member_licence_status', 1))
+            ->orderBy('l.member_licence_deadline', 'ASC')
+            ->getQuery()
+            ->getArrayResult();
     }
 }

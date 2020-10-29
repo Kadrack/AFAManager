@@ -65,6 +65,9 @@ class SecretariatType extends AbstractType
             case 'search_members':
                 $this->searchMembers($builder);
                 break;
+            case 'cleanup_member':
+                $this->cleanupMember($builder);
+                break;
             default:
                 null;
         }
@@ -231,6 +234,13 @@ class SecretariatType extends AbstractType
         $builder
             ->add('Search', TextType::class, array('label' => 'N° licence, Nom', 'mapped' => false))
             ->add('Submit', SubmitType::class, array('label' => 'Rechercher'))
+        ;
+    }
+
+    private function cleanupMember(FormBuilderInterface $builder)
+    {
+        $builder
+            ->add('Submit', SubmitType::class, array('label' => 'Nettoyer les 50 premiers'))
         ;
     }
 }
