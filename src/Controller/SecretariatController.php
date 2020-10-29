@@ -1531,6 +1531,9 @@ class SecretariatController extends AbstractController
                 case 5 :
                     $commission->setCommissionRole('ROLE_CP');
                     break;
+                case 6 :
+                    $commission->setCommissionRole('ROLE_BANK');
+                    break;
                 default :
                     $commission->setCommissionRole(null);
             }

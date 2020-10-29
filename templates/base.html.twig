@@ -10,119 +10,126 @@
 
         {% if app.user != null %}
             {% if app.user.login == "Carine" %}
-                <link rel="stylesheet" type="text/css" href="{{ asset('css/test/bootstrap.min.css') }}">
+                <link rel="stylesheet" type="text/css" href="{{ asset('css/test/bootstrap.min.css') }}" />
             {% else %}
-                <link rel="stylesheet" type="text/css" href="{{ asset('css/bootstrap.min.css') }}">
+                <link rel="stylesheet" type="text/css" href="{{ asset('css/bootstrap.min.css') }}" />
             {% endif %}
         {% else %}
-            <link rel="stylesheet" type="text/css" href="{{ asset('css/bootstrap.min.css') }}">
+            <link rel="stylesheet" type="text/css" href="{{ asset('css/bootstrap.min.css') }}" />
         {% endif %}
 
         {% block stylesheets %}{% endblock %}
     </head>
     <body class="container">
         {% if app.request.pathinfo != '/login' %}
-        <nav class="navbar navbar-expand-lg navbar-dark {% if app.user != null %}{% if app.user.login == "Carine" %}bg-dark{% else %}bg-primary{% endif %}{% else %}bg-primary{% endif %}">
-            <a class="navbar-brand" href="{{ path('common_index') }}">AFA-Manager</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-
-            <div class="collapse navbar-collapse" id="navbarColor01">
-                <ul class="navbar-nav mr-auto">
-                    {% if is_granted('ROLE_MEMBER') %}
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Membre</a>
-                            <div class="dropdown-menu">
-                                <a class="dropdown-item" href="{{ path('member_my_data') }}">Mes Données</a>
-                                <a class="dropdown-item" href="{{ path('member_my_grades') }}">Mes Grades</a>
-                                <a class="dropdown-item" href="{{ path('member_my_stages') }}">Mes Stages</a>
-                                <a class="dropdown-item" href="{{ path('member_my_titles') }}">Mes Titres</a>
-                                <a class="dropdown-item" href="{{ path('member_my_licence') }}">Ma Licence</a>
-                                <a class="dropdown-item" href="{{ path('member_my_club') }}">Mon Club</a>
-                            </div>
-                    </li>
-                    {% endif %}
-                    {% if is_granted('ROLE_CLUB') %}
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Club</a>
-                            <div class="dropdown-menu">
-                                <a class="dropdown-item" href="{{ path('club_dojo_index') }}">Dojo(s), horaires & professeurs</a>
-                                <a class="dropdown-item" href="{{ path('club_members_list') }}">Liste des membres</a>
-                                <a class="dropdown-item" href="{{ path('club_association_details') }}">Détails Association</a>
-                                <a class="dropdown-item" href="{{ path('club_manager_index') }}">Liste des gestionnaires</a>
-                                <a class="dropdown-item" href="{{ path('club_search_members') }}" target="_blank">Recherche membres</a>
-                            </div>
-                        </li>
-                    {% endif %}
-                    {% if is_granted('ROLE_CP') %}
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Enseignement</a>
-                            <div class="dropdown-menu">
-                                <a class="dropdown-item" href="{{ path('teaching_statistics_index') }}">Statistiques</a>
-                            </div>
-                        </li>
-                    {% endif %}
-                    {% if is_granted('ROLE_CA') %}
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Administration</a>
-                            <div class="dropdown-menu">
-                                <a class="dropdown-item" href="{{ path('administration_statistics_index') }}">Statistiques</a>
-                            </div>
-                        </li>
-                    {% endif %}
-                    {% if is_granted('ROLE_CT') %}
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Grades</a>
-                            <div class="dropdown-menu">
-                                <a class="dropdown-item" href="{{ path('grade_exam_index') }}">Examens Fédéraux</a>
-                            </div>
-                    </li>
-                    {% endif %}
-                    {% if is_granted('ROLE_STAGES') %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ path('training_index') }}">Stages</a>
-                    </li>
-                    {% endif %}
-                    {% if is_granted('ROLE_SECRETARIAT') %}
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Secrétariat</a>
-                            <div class="dropdown-menu">
-                                <a class="dropdown-item" href="{{ path('secretariat_supporter_index') }}">Sympathisants</a>
-                                <a class="dropdown-item" href="{{ path('secretariat_search_members') }}" target="_blank">Recherche membres</a>
-                                <a class="dropdown-item" href="{{ path('secretariat_club_list') }}">Les Clubs</a>
-                                <a class="dropdown-item" href="{{ path('secretariat_access_list_index') }}">Liste accès interface</a>
-                                <a class="dropdown-item" href="{{ path('secretariat_exam_index') }}">Examens Fédéraux</a>
-                                <a class="dropdown-item" href="{{ path('secretariat_training_index') }}">Stages</a>
-                                <a class="dropdown-item" href="{{ path('secretariat_member_modification_validation_index') }}">Modifications en attente</a>
-                                <a class="dropdown-item" href="{{ path('secretariat_commission_index') }}">Commissions</a>
-                                <a class="dropdown-item" href="{{ path('secretariat_print_stamp') }}" target="_blank">Impression timbres</a>
-                                <a class="dropdown-item" href="{{ path('secretariat_print_card') }}" target="_blank">Impression carte</a>
-                                <a class="dropdown-item" href="{{ path('secretariat_member_list_cleanup') }}">Nettoyage ancien membres</a>
-                            </div>
-                    </li>
-                    {% endif %}
-                    {% if is_granted('ROLE_USER') %}
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Mon Compte</a>
-                            <div class="dropdown-menu">
-                                <a class="dropdown-item" href="{{ path('common_change_login') }}">Modification Login</a>
-                                <a class="dropdown-item" href="{{ path('common_change_password') }}">Modification Mot de Passe</a>
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="{{ path('app_logout') }}">Déconnexion</a>
-                            </div>
-                    </li>
-                    {% endif %}
-                </ul>
-            </div>
-        </nav>
+            <nav class="navbar navbar-expand-lg navbar-dark {% if app.user != null %}{% if app.user.login == "Carine" %}bg-dark{% else %}bg-primary{% endif %}{% else %}bg-primary{% endif %}">
+                <a class="navbar-brand" href="{{ path('common_index') }}">AFA-Manager</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarColor01">
+                    <ul class="navbar-nav mr-auto">
+                        {% if is_granted('ROLE_MEMBER') %}
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Membre</a>
+                                <div class="dropdown-menu">
+                                    <a class="dropdown-item" href="{{ path('member_my_data') }}">Mes Données</a>
+                                    <a class="dropdown-item" href="{{ path('member_my_grades') }}">Mes Grades</a>
+                                    <a class="dropdown-item" href="{{ path('member_my_stages') }}">Mes Stages</a>
+                                    <a class="dropdown-item" href="{{ path('member_my_titles') }}">Mes Titres</a>
+                                    <a class="dropdown-item" href="{{ path('member_my_licence') }}">Ma Licence</a>
+                                    <a class="dropdown-item" href="{{ path('member_my_club') }}">Mon Club</a>
+                                </div>
+                            </li>
+                        {% endif %}
+                        {% if is_granted('ROLE_CLUB') %}
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Club</a>
+                                <div class="dropdown-menu">
+                                    <a class="dropdown-item" href="{{ path('club_dojo_index') }}">Dojo(s), horaires & professeurs</a>
+                                    <a class="dropdown-item" href="{{ path('club_members_list') }}">Liste des membres</a>
+                                    <a class="dropdown-item" href="{{ path('club_association_details') }}">Détails Association</a>
+                                    <a class="dropdown-item" href="{{ path('club_manager_index') }}">Liste des gestionnaires</a>
+                                    <a class="dropdown-item" href="{{ path('club_search_members') }}" target="_blank">Recherche membres</a>
+                                </div>
+                            </li>
+                        {% endif %}
+                        {% if is_granted('ROLE_BANK') %}
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Comptabilité</a>
+                                <div class="dropdown-menu">
+                                    <a class="dropdown-item" href="{{ path('secretariat_search_members') }}" target="_blank">Recherche membres</a>
+                                </div>
+                            </li>
+                        {% endif %}
+                        {% if is_granted('ROLE_CP') %}
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Enseignement</a>
+                                <div class="dropdown-menu">
+                                    <a class="dropdown-item" href="{{ path('teaching_statistics_index') }}">Statistiques</a>
+                                </div>
+                            </li>
+                        {% endif %}
+                        {% if is_granted('ROLE_CA') %}
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Administration</a>
+                                <div class="dropdown-menu">
+                                    <a class="dropdown-item" href="{{ path('administration_statistics_index') }}">Statistiques</a>
+                                </div>
+                            </li>
+                        {% endif %}
+                        {% if is_granted('ROLE_CT') %}
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Grades</a>
+                                <div class="dropdown-menu">
+                                    <a class="dropdown-item" href="{{ path('grade_exam_index') }}">Examens Fédéraux</a>
+                                </div>
+                            </li>
+                        {% endif %}
+                        {% if is_granted('ROLE_STAGES') %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ path('training_index') }}">Stages</a>
+                            </li>
+                        {% endif %}
+                        {% if is_granted('ROLE_SECRETARIAT') %}
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Secrétariat</a>
+                                <div class="dropdown-menu">
+                                    <a class="dropdown-item" href="{{ path('secretariat_supporter_index') }}">Sympathisants</a>
+                                    <a class="dropdown-item" href="{{ path('secretariat_search_members') }}" target="_blank">Recherche membres</a>
+                                    <a class="dropdown-item" href="{{ path('secretariat_club_list') }}">Les Clubs</a>
+                                    <a class="dropdown-item" href="{{ path('secretariat_access_list_index') }}">Liste accès interface</a>
+                                    <a class="dropdown-item" href="{{ path('secretariat_exam_index') }}">Examens Fédéraux</a>
+                                    <a class="dropdown-item" href="{{ path('secretariat_training_index') }}">Stages</a>
+                                    <a class="dropdown-item" href="{{ path('secretariat_member_modification_validation_index') }}">Modifications en attente</a>
+                                    <a class="dropdown-item" href="{{ path('secretariat_commission_index') }}">Commissions</a>
+                                    <a class="dropdown-item" href="{{ path('secretariat_print_stamp') }}" target="_blank">Impression timbres</a>
+                                    <a class="dropdown-item" href="{{ path('secretariat_print_card') }}" target="_blank">Impression carte</a>
+                                    <a class="dropdown-item" href="{{ path('secretariat_member_list_cleanup') }}">Nettoyage ancien membres</a>
+                                </div>
+                            </li>
+                        {% endif %}
+                        {% if is_granted('ROLE_USER') %}
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Mon Compte</a>
+                                <div class="dropdown-menu">
+                                    <a class="dropdown-item" href="{{ path('common_change_login') }}">Modification Login</a>
+                                    <a class="dropdown-item" href="{{ path('common_change_password') }}">Modification Mot de Passe</a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" href="{{ path('app_logout') }}">Déconnexion</a>
+                                </div>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </nav>
         {% endif %}
 
         <main class="container">
             {% block body %}{% endblock %}
         </main>
 
-        <footer>
+        <footer class="container">
             <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
             <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
 
