@@ -11,7 +11,7 @@
     <h1>{{ memberTools.getMember.getMemberFirstname()|title }} {{ memberTools.getMember.getMemberName()|title }}</h1>
     <h2>Début de pratique : {{ memberTools.getMember.getMemberFirstLicence().getMemberLicenceMedicalCertificate()|date("d/m/Y") }}</h2>
     <h2>Historique des grades</h2>
-    {% if memberTools.getGrades().exam.candidate %}<a href="{{ path('club_member_application', {'member': memberTools.getMember.memberId(), 'type': 1}) }}">Candidature au prochain examen fédéral</a> {% endif %}{% if memberTools.getGrades().kyu %}<a href="{{ path('club_member_add_kyu', {'member': memberTools.getMember.memberId()}) }}">Ajouter un grade Kyu</a> {% endif %}
+    {% if memberTools.getGrades().exam.candidate %}<a class="btn btn-primary" href="{{ path('club_member_application', {'member': memberTools.getMember.memberId(), 'type': 1}) }}">Candidature au prochain examen fédéral</a> {% endif %}{% if memberTools.getGrades().kyu %}<a class="btn btn-primary" href="{{ path('club_member_kyu_add', {'member': memberTools.getMember.memberId()}) }}">Ajouter un grade Kyu</a> {% endif %}
     <table class="table table-sm table-hover">
         <thead>
             <tr>
@@ -20,16 +20,18 @@
                 <th scope="col">N° Diplôme</th>
                 <th scope="col">Résultat</th>
                 <th scope="col">Type</th>
+                <th scope="col"></th>
             </tr>
         </thead>
         <tbody>
         {% for grade in memberTools.getGrades().history %}
             <tr>
-                <td>{{ listData.getGrade(grade.Rank) }}</td>
-                <td>{{ grade.Date|date("d/m/Y") }}</td>
-                <td>{{ grade.Certificate }}</td>
-                <td>{{ listData.getExamResult(grade.Result) }}</td>
-                <td>{{ listData.getExamType(grade.Type) }}</td>
+                <td class="align-middle">{{ listData.getGrade(grade.Rank) }}</td>
+                <td class="align-middle">{{ grade.Date|date("d/m/Y") }}</td>
+                <td class="align-middle">{{ grade.Certificate }}</td>
+                <td class="align-middle">{{ listData.getExamResult(grade.Result) }}</td>
+                <td class="align-middle">{{ listData.getExamType(grade.Type) }}</td>
+                <td class="align-middle">{% if grade.Rank <= 6 %}<a class="btn btn-primary" href="{{ path('club_member_kyu_modify', {'member': memberTools.getMember.memberId, 'grade': grade.Id}) }}">Modifier</a>{% endif %}</td>
             </tr>
         {% endfor %}
         </tbody>

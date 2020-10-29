@@ -47,8 +47,11 @@ class GradeType extends AbstractType
             case 'kagami_candidate_result':
                 $this->kagami_candidate_result($builder);
                 break;
-            case 'add_kyu':
-                $this->addKyu($builder);
+            case 'kyu_add':
+                $this->kyuAdd($builder);
+                break;
+            case 'kyu_modify':
+                $this->kyuModify($builder);
                 break;
             default:
                 $this->exam_create($builder);
@@ -156,7 +159,7 @@ class GradeType extends AbstractType
         ;
     }
 
-    private function addKyu(FormBuilderInterface $builder)
+    private function kyuAdd(FormBuilderInterface $builder)
     {
         $list = new ListData();
 
@@ -165,6 +168,15 @@ class GradeType extends AbstractType
             ->add('GradeDate', DateType::class, array('label' => 'Date : ', 'widget' => 'single_text'))
             ->add('GradeComment', TextareaType::class, array('label' => 'Commentaire : ', 'required' => false))
             ->add('Submit', SubmitType::class, array('label' => 'Ajouter'))
+        ;
+    }
+
+    private function kyuModify(FormBuilderInterface $builder)
+    {
+        $builder
+            ->add('GradeDate', DateType::class, array('label' => 'Date : ', 'widget' => 'single_text'))
+            ->add('GradeComment', TextareaType::class, array('label' => 'Commentaire : ', 'required' => false))
+            ->add('Submit', SubmitType::class, array('label' => 'Modifier'))
         ;
     }
 }

@@ -328,6 +328,22 @@ class MemberTools
     }
 
     /**
+     * @param Grade $grade
+     * @return bool
+     */
+    public function modifyKyu(Grade $grade)
+    {
+        if ($this->member->getMemberLastGrade()->getGradeDate() <= $grade->getGradeDate())
+        {
+            $this->member->setMemberLastGrade($grade);
+        }
+
+        $this->em->flush();
+
+        return true;
+    }
+
+    /**
      * @return MemberModification
      */
     public function getModification()

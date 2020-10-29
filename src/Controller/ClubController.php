@@ -570,14 +570,81 @@ class ClubController extends AbstractController
     }
 
     /**
-     * @Route("/membre/{member<\d+>}/ajouter_kyu", name="member_add_kyu")
+     * @Route("/membre/{member<\d+>}/ajouter_kyu", name="member_kyu_add")
      * @param Request $request
      * @param Member $member
      * @param MemberTools $memberTools
      * @param ClubTools $clubTools
      * @return RedirectResponse|Response
      */
-    public function memberAddKyu(Request $request, Member $member, MemberTools $memberTools, ClubTools $clubTools)
+    public function memberKyuAdd(Request $request, Member $member, MemberTools $memberTools, ClubTools $clubTools)
+    {
+        $clubTools->setClub($this->getUser()->getUserClub());
+
+        $memberTools->setMember($member);
+
+        if ($member->getMemberActualClub() !== $clubTools->getClub())
+        {
+            return $this->redirectToRoute('club_members_list');
+        }
+
+        $form = $this->createForm(GradeType::class, $memberTools->newKyu(), array('form' => 'kyu_add', 'data_class' => Grade::class));
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid())
+        {
+            $memberTools->addKyu($form->getData());
+
+            return $this->redirectToRoute('club_member_grades_detail', array('member' => $member->getMemberId()));
+        }
+
+        return $this->render('Club/Member/kyu_add.html.twig', array('form' => $form->createView()));
+    }
+
+    /**
+     * @Route("/membre/{member<\d+>}/modifier_kyu/{grade<\d+>}", name="member_kyu_modify")
+     * @param Request $request
+     * @param Member $member
+     * @param MemberTools $memberTools
+     * @param ClubTools $clubTools
+     * @param Grade $grade
+     * @return RedirectResponse|Response
+     */
+    public function memberKyuModify(Request $request, Member $member, MemberTools $memberTools, ClubTools $clubTools, Grade $grade)
+    {
+        $clubTools->setClub($this->getUser()->getUserClub());
+
+        $memberTools->setMember($member);
+
+        if ($member->getMemberActualClub() !== $clubTools->getClub())
+        {
+            return $this->redirectToRoute('club_members_list');
+        }
+
+        $form = $this->createForm(GradeType::class, $grade, array('form' => 'kyu_modify', 'data_class' => Grade::class));
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid())
+        {
+            $memberTools->modifyKyu($form->getData());
+
+            return $this->redirectToRoute('club_member_grades_detail', array('member' => $member->getMemberId()));
+        }
+
+        return $this->render('Club/Member/kyu_modify.html.twig', array('form' => $form->createView()));
+    }
+
+    /**
+     * @Route("/membre/{member<\d+>}/supprimer_kyu/{grade<\d+>}", name="member_kyu_delete")
+     * @param Request $request
+     * @param Member $member
+     * @param MemberTools $memberTools
+     * @param ClubTools $clubTools
+     * @return RedirectResponse|Response
+     */
+    public function memberKyuDelete(Request $request, Member $member, MemberTools $memberTools, ClubTools $clubTools)
     {
         $clubTools->setClub($this->getUser()->getUserClub());
 
@@ -599,7 +666,7 @@ class ClubController extends AbstractController
             return $this->redirectToRoute('club_member_grades_detail', array('member' => $member->getMemberId()));
         }
 
-        return $this->render('Club/Member/add_kyu.html.twig', array('form' => $form->createView()));
+        return $this->render('Club/Member/kyu_modify.html.twig', array('form' => $form->createView()));
     }
 
     /**
