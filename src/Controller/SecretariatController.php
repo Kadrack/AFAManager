@@ -985,6 +985,7 @@ class SecretariatController extends AbstractController
                     $grade->setGradeRank($form->get('GradeKyuRank')->getData());
                     $grade->setGradeMember($member);
                     $grade->setGradeStatus(4);
+                    $grade->setGradeClub($club);
 
                     $member->setMemberLastGrade($grade);
 
@@ -1030,6 +1031,7 @@ class SecretariatController extends AbstractController
         {
             $grade = new Grade();
     
+            $grade->setGradeClub($club);
             $grade->setGradeMember($member);
             $grade->setGradeStatus(4);
         }
