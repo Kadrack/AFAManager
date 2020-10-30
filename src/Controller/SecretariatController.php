@@ -980,7 +980,8 @@ class SecretariatController extends AbstractController
                 if ($update)
                 {
                     $grade = new Grade();
-
+                    
+                    $grade->setGradeDate($licence_new->getMemberLicenceUpdate());
                     $grade->setGradeRank($form->get('GradeKyuRank')->getData());
                     $grade->setGradeMember($member);
                     $grade->setGradeStatus(4);
@@ -1025,7 +1026,17 @@ class SecretariatController extends AbstractController
      */
     public function memberLicenceRenewUpdate(SessionInterface $session, Request $request, Club $club, Member $member, MemberLicence $renew)
     {
-        $grade = $renew->getMemberLicenceGrade() == null ? new Grade() : $renew->getMemberLicenceGrade();
+        if ($renew->getMemberLicenceGrade() == null)
+        {
+            $grade = new Grade();
+    
+            $grade->setGradeMember($member);
+            $grade->setGradeStatus(4);
+        }
+        else
+        {
+            $grade = $renew->getMemberLicenceGrade();
+        }
 
         $kyus = $member->getMemberGrades();
 
@@ -1076,8 +1087,7 @@ class SecretariatController extends AbstractController
                     if ($update)
                     {
                         $grade->setGradeRank($form->get('GradeKyuRank')->getData());
-
-                        $grade->setGradeMember($member);
+                        $grade->setGradeDate(new DateTime('today'));
 
                         if ($renew->getMemberLicenceGrade() == null)
                         {
@@ -1097,7 +1107,7 @@ class SecretariatController extends AbstractController
 
             if ($session->get('origin') == 'active')
             {
-                return $this->redirectToRoute('secretariat_members_active', array('club' => $club->getClubId(), 'member' => $member->getMemberId()));
+                return $this->redirectToRoute('secretariat_members_active', array('club' => $club->getClubId()));
             }
             else
             {
