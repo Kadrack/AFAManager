@@ -14,7 +14,7 @@ use Symfony\Component\Mime\Email;
  */
 class Mailing
 {
-    private $mailer;
+    private MailerInterface $mailer;
 
     /**
      * ClubTools constructor.
@@ -32,9 +32,9 @@ class Mailing
     public function sendEmail()
     {
         $email = (new Email())
-            ->from('')
-            ->to('')
-            ->cc('')
+            ->from('afa-manager@aikido.be')
+            ->to('frederic.buchon@aikido.be')
+            //->cc('')
             //->bcc('bcc@example.com')
             //->replyTo('fabien@example.com')
             //->priority(Email::PRIORITY_HIGH)

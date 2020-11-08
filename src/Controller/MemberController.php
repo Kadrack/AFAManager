@@ -10,7 +10,6 @@ use App\Form\MemberType;
 
 use App\Service\ClubTools;
 use App\Service\MemberTools;
-use App\Service\PhotoUploader;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
