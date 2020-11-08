@@ -47,6 +47,7 @@ class MemberTools
         $this->grades   = null;
         $this->licences = null;
         $this->stages   = null;
+        $this->titles   = null;
     }
 
     /**
