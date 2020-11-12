@@ -126,7 +126,7 @@ class MemberTools
 
         $open_session = $this->em->getRepository(GradeSession::class)->getOpenSession($today->format('Y-m-d'));
 
-        if ($open_session == null)
+        if (($open_session == null) || ($this->grades['history'][0]['Rank'] < 6 ))
         {
             $is_candidate = false;
         }

@@ -962,37 +962,21 @@ class SecretariatController extends AbstractController
                 $entityManager->persist($card);
             }
 
-            if ($kyu)
+            if ($kyu && ($member->getMemberLastGrade()->getGradeRank() < $form->get('GradeKyuRank')->getData()))
             {
-                if (($licence_old->getMemberLicenceGrade() == null) and ($form->get('GradeKyuRank')->getData() != null))
-                {
-                    $update = true;
-                }
-                else if ($licence_old->getMemberLicenceGrade() != null)
-                {
-                    $update = $licence_old->getMemberLicenceGrade()->getGradeRank() < $form->get('GradeKyuRank')->getData();
-                }
-                else
-                {
-                    $update = false;
-                }
-
-                if ($update)
-                {
-                    $grade = new Grade();
-                    
-                    $grade->setGradeDate($licence_new->getMemberLicenceUpdate());
-                    $grade->setGradeRank($form->get('GradeKyuRank')->getData());
-                    $grade->setGradeMember($member);
-                    $grade->setGradeStatus(4);
-                    $grade->setGradeClub($club);
-
-                    $member->setMemberLastGrade($grade);
-
-                    $licence_new->setMemberLicenceGrade($grade);
-
-                    $entityManager->persist($grade);
-                }
+                $grade = new Grade();
+    
+                $grade->setGradeDate($licence_new->getMemberLicenceUpdate());
+                $grade->setGradeRank($form->get('GradeKyuRank')->getData());
+                $grade->setGradeMember($member);
+                $grade->setGradeStatus(4);
+                $grade->setGradeClub($club);
+    
+                $member->setMemberLastGrade($grade);
+    
+                $licence_new->setMemberLicenceGrade($grade);
+    
+                $entityManager->persist($grade);
             }
 
             $member->setMemberLastLicence($licence_new);
