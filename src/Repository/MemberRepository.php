@@ -123,15 +123,15 @@ class MemberRepository extends ServiceEntityRepository
     {
         $qb = $this->createQueryBuilder('m');
 
-        return $qb->select('m.member_id AS Id', 'm.member_firstname AS FirstName', 'm.member_name AS Name', 'm.member_sex AS Sex', 'm.member_address AS Address', 'm.member_zip AS Zip', 'm.member_city AS City', 'm.member_country AS Country', 'm.member_phone AS Phone', 'm.member_birthday AS Birthday', 'm.member_email AS Email',  'g.grade_rank AS Grade', 'l.member_licence_deadline AS Deadline', 'max(t.grade_title_rank) AS Title')
+        return $qb->select('m.member_id AS Id', 'm.member_firstname AS FirstName', 'm.member_name AS Name', 'm.member_sex AS Sex', 'm.member_address AS Address', 'm.member_zip AS Zip', 'm.member_city AS City', 'm.member_country AS Country', 'm.member_phone AS Phone', 'm.member_birthday AS Birthday', 'm.member_email AS Email',  'g.grade_rank AS Grade', 'l.member_licence_deadline AS Deadline')//, 'max(t.grade_title_rank) AS Title')
             ->join(MemberLicence::class, 'l', 'WITH', $qb->expr()->eq('m.member_id', 'l.member_licence'))
             ->join(Grade::class, 'g', 'WITH', $qb->expr()->eq('m.member_last_grade', 'g.grade_id'))
-            ->leftJoin(GradeTitle::class, 't', 'WITH', $qb->expr()->eq('m.member_id', 't.grade_title_member'))
+            //->leftJoin(GradeTitle::class, 't', 'WITH', $qb->expr()->eq('m.member_id', 't.grade_title_member'))
             ->where($qb->expr()->eq('l.member_licence_club', $club->getClubId()))
             ->andWhere($qb->expr()->gte('l.member_licence_deadline', "'".$start."'"))
             ->andWhere($qb->expr()->lte('l.member_licence_deadline', "'".$end."'"))
             ->andWhere($qb->expr()->eq('l.member_licence_status', 1))
-            ->andWhere($qb->expr()->gt('t.grade_title_rank', 3))
+            //->andWhere($qb->expr()->gt('t.grade_title_rank', 3))
             ->orderBy('FirstName', 'ASC')
             ->addOrderBy('Name', 'ASC')
             ->getQuery()
