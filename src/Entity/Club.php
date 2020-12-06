@@ -136,42 +136,42 @@ class Club
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\TrainingAddress", mappedBy="training_address_club", orphanRemoval=true, cascade={"persist"})
      */
-    private ArrayCollection $club_addresses;
+    private ?Collection $club_addresses;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Grade", mappedBy="grade_club", orphanRemoval=true, cascade={"persist"})
      */
-    private ArrayCollection $club_grades;
+    private ?Collection $club_grades;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\ClubHistory", mappedBy="club_history", orphanRemoval=true, cascade={"persist"})
      */
-    private ArrayCollection $club_histories;
+    private ?Collection $club_histories;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\MemberLicence", mappedBy="member_licence_club", orphanRemoval=true, cascade={"persist"})
      */
-    private ArrayCollection $club_licences;
+    private ?Collection $club_licences;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\ClubTeacher", mappedBy="club_teacher", orphanRemoval=true, cascade={"persist"})
      */
-    private ArrayCollection $club_teachers;
+    private ?Collection $club_teachers;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Training", mappedBy="training_club", orphanRemoval=true, cascade={"persist"})
      */
-    private ArrayCollection $club_trainings;
+    private ?Collection $club_trainings;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\UserAccess", mappedBy="user_access_club", orphanRemoval=true, cascade={"persist"})
      */
-    private ArrayCollection $club_user_accesses;
+    private ?Collection $club_accesses;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\UserAuditTrail", mappedBy="user_audit_trail_club", orphanRemoval=true, cascade={"persist"})
      */
-    private ArrayCollection $club_user_audit_trails;
+    private ?Collection $club_user_audit_trails;
 
     public function __construct()
     {
@@ -626,25 +626,25 @@ class Club
     /**
      * @return Collection|UserAccess[]
      */
-    public function getClubUserAccesses(): Collection
+    public function getClubAccesses(): Collection
     {
-        return $this->club_user_accesses;
+        return $this->club_accesses;
     }
 
-    public function addClubUserAccesses(UserAccess $userAccess): self
+    public function addClubAccesses(UserAccess $userAccess): self
     {
-        if (!$this->club_user_accesses->contains($userAccess)) {
-            $this->club_user_accesses[] = $userAccess;
+        if (!$this->club_accesses->contains($userAccess)) {
+            $this->club_accesses[] = $userAccess;
             $userAccess->setUserAccessClub($this);
         }
 
         return $this;
     }
 
-    public function removeClubUserAccesses(UserAccess $userAccess): self
+    public function removeClubAccesses(UserAccess $userAccess): self
     {
-        if ($this->club_user_accesses->contains($userAccess)) {
-            $this->club_user_accesses->removeElement($userAccess);
+        if ($this->club_accesses->contains($userAccess)) {
+            $this->club_accesses->removeElement($userAccess);
             // set the owning side to null (unless already changed)
             if ($userAccess->getUserAccessClub() === $this) {
                 $userAccess->setUserAccessClub(null);

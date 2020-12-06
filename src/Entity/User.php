@@ -44,7 +44,7 @@ class User implements UserInterface
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private ?array $roles;
+    private $roles;
 
     /**
      * @var string The hashed password
@@ -71,17 +71,17 @@ class User implements UserInterface
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\UserAccess", mappedBy="user_access_user", orphanRemoval=true, cascade={"persist"})
      */
-    private ArrayCollection $user_accesses;
+    private ?Collection $user_accesses;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\UserAuditTrail", mappedBy="user_audit_trail_user", orphanRemoval=true, cascade={"persist"})
      */
-    private ArrayCollection $user_audit_trails;
+    private ?Collection $user_audit_trails;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\UserAuditTrail", mappedBy="user_audit_trail_who", orphanRemoval=true, cascade={"persist"})
      */
-    private ArrayCollection $user_audit_whos;
+    private ?Collection $user_audit_whos;
 
     public function __construct()
     {
@@ -110,7 +110,7 @@ class User implements UserInterface
     /**
      * @see UserInterface
      */
-    public function getRoles(): array
+    public function getRoles()
     {
         $roles = json_decode($this->roles);
         // guarantee every user at least has ROLE_USER
