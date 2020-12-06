@@ -119,11 +119,16 @@ class User implements UserInterface
         if ($this->getUserMember() != null)
         {
             $roles[] = 'ROLE_MEMBER';
+        }
 
-            foreach ($this->getUserAccesses() as $access)
+        foreach ($this->getUserAccesses() as $access)
+        {
+            if (($access->getUserAccessRole() == 'ROLE_CLUB') || ($access->getUserAccessRole() == 'ROLE_TEACHER'))
             {
-                $roles[] = $access->getUserAccessRole();
+                $roles[] = $access->getUserAccessRole().'_'.$access->getUserAccessClub()->getClubId();
             }
+
+            $roles[] = $access->getUserAccessRole();
         }
 
         return array_unique($roles);

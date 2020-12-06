@@ -2,6 +2,7 @@
 // src/Controller/ClubController.php
 namespace App\Controller;
 
+use App\Entity\Club;
 use App\Entity\ClubTeacher;
 use App\Entity\Grade;
 use App\Entity\Member;
@@ -30,33 +31,35 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/club", name="club_")
+ * @Route("/club-", name="club_")
  *
  * @IsGranted("ROLE_CLUB")
  */
 class ClubController extends AbstractController
 {
     /**
-     * @Route("/index_dojo", name="dojo_index")
+     * @Route("{club<\d+>}/index_dojo", name="dojo_index")
      * @param ClubTools $clubTools
+     * @param Club $club
      * @return Response
      */
-    public function dojoIndex(ClubTools $clubTools): Response
+    public function dojoIndex(ClubTools $clubTools, Club $club): Response
     {
-        $clubTools->setClub($this->getUser()->getUserClub());
+        $clubTools->setClub($club);
 
         return $this->render('Club/Dojo/index.html.twig', array('clubTools' => $clubTools));
     }
 
     /**
-     * @Route("/ajouter_dojo", name="dojo_address_add")
+     * @Route("{club<\d+>}/ajouter_dojo", name="dojo_address_add")
      * @param Request $request
      * @param ClubTools $clubTools
+     * @param Club $club
      * @return RedirectResponse|Response
      */
-    public function dojoAddressAdd(Request $request, ClubTools $clubTools)
+    public function dojoAddressAdd(Request $request, ClubTools $clubTools, Club $club)
     {
-        $clubTools->setClub($this->getUser()->getUserClub());
+        $clubTools->setClub($club);
 
         $form = $this->createForm(ClubType::class, new TrainingAddress(), array('form' => 'dojo_create', 'data_class' => TrainingAddress::class));
 
@@ -73,15 +76,16 @@ class ClubController extends AbstractController
     }
 
     /**
-     * @Route("/modifier_dojo/{address<\d+>}", name="dojo_address_update")
+     * @Route("{club<\d+>}/modifier_dojo/{address<\d+>}", name="dojo_address_update")
      * @param Request $request
      * @param TrainingAddress $address
      * @param ClubTools $clubTools
+     * @param Club $club
      * @return RedirectResponse|Response
      */
-    public function dojoAddressUpdate(Request $request, TrainingAddress $address, ClubTools $clubTools)
+    public function dojoAddressUpdate(Request $request, TrainingAddress $address, ClubTools $clubTools, Club $club)
     {
-        $clubTools->setClub($this->getUser()->getUserClub());
+        $clubTools->setClub($club);
 
         $form = $this->createForm(ClubType::class, $address, array('form' => 'dojo_update', 'data_class' => TrainingAddress::class));
 
@@ -98,15 +102,16 @@ class ClubController extends AbstractController
     }
 
     /**
-     * @Route("/supprimer_dojo/{address<\d+>}", name="dojo_address_delete")
+     * @Route("{club<\d+>}/supprimer_dojo/{address<\d+>}", name="dojo_address_delete")
      * @param Request $request
      * @param TrainingAddress $address
      * @param ClubTools $clubTools
+     * @param Club $club
      * @return RedirectResponse|Response
      */
-    public function dojoAddressDelete(Request $request, TrainingAddress $address, ClubTools $clubTools)
+    public function dojoAddressDelete(Request $request, TrainingAddress $address, ClubTools $clubTools, Club $club)
     {
-        $clubTools->setClub($this->getUser()->getUserClub());
+        $clubTools->setClub($club);
 
         $form = $this->createForm(ClubType::class, $address, array('form' => 'dojo_delete', 'data_class' => TrainingAddress::class));
 
@@ -123,14 +128,15 @@ class ClubController extends AbstractController
     }
 
     /**
-     * @Route("/ajouter_horaire", name="dojo_training_add")
+     * @Route("{club<\d+>}/ajouter_horaire", name="dojo_training_add")
      * @param Request $request
      * @param ClubTools $clubTools
+     * @param Club $club
      * @return RedirectResponse|Response
      */
-    public function dojoTrainingAdd(Request $request, ClubTools $clubTools)
+    public function dojoTrainingAdd(Request $request, ClubTools $clubTools, Club $club)
     {
-        $clubTools->setClub($this->getUser()->getUserClub());
+        $clubTools->setClub($club);
 
         $form = $this->createForm(ClubType::class, new Training(), array('form' => 'training_create', 'data_class' => Training::class, 'choices' => $clubTools->getClub()->getClubAddresses()));
 
@@ -147,15 +153,16 @@ class ClubController extends AbstractController
     }
 
     /**
-     * @Route("/modifier_horaire/{training<\d+>}", name="dojo_training_update")
+     * @Route("{club<\d+>}/modifier_horaire/{training<\d+>}", name="dojo_training_update")
      * @param Request $request
      * @param Training $training
      * @param ClubTools $clubTools
+     * @param Club $club
      * @return RedirectResponse|Response
      */
-    public function dojoTrainingUpdate(Request $request, Training $training, ClubTools $clubTools)
+    public function dojoTrainingUpdate(Request $request, Training $training, ClubTools $clubTools, Club $club)
     {
-        $clubTools->setClub($this->getUser()->getUserClub());
+        $clubTools->setClub($club);
 
         $form = $this->createForm(ClubType::class, $training, array('form' => 'training_update', 'data_class' => Training::class));
 
@@ -172,15 +179,16 @@ class ClubController extends AbstractController
     }
 
     /**
-     * @Route("/supprimer_horaire/{training<\d+>}", name="dojo_training_delete")
+     * @Route("{club<\d+>}/supprimer_horaire/{training<\d+>}", name="dojo_training_delete")
      * @param Request $request
      * @param Training $training
      * @param ClubTools $clubTools
+     * @param Club $club
      * @return RedirectResponse|Response
      */
-    public function dojoTrainingDelete(Request $request, Training $training, ClubTools $clubTools)
+    public function dojoTrainingDelete(Request $request, Training $training, ClubTools $clubTools, Club $club)
     {
-        $clubTools->setClub($this->getUser()->getUserClub());
+        $clubTools->setClub($club);
 
         $form = $this->createForm(ClubType::class, $training, array('form' => 'training_delete', 'data_class' => Training::class));
 
@@ -197,14 +205,15 @@ class ClubController extends AbstractController
     }
 
     /**
-     * @Route("/ajouter_professeur_afa", name="dojo_teacher_afa_add")
+     * @Route("{club<\d+>}/ajouter_professeur_afa", name="dojo_teacher_afa_add")
      * @param Request $request
      * @param ClubTools $clubTools
+     * @param Club $club
      * @return RedirectResponse|Response
      */
-    public function dojoTeacherAFAAdd(Request $request, ClubTools $clubTools)
+    public function dojoTeacherAFAAdd(Request $request, ClubTools $clubTools, Club $club)
     {
-        $clubTools->setClub($this->getUser()->getUserClub());
+        $clubTools->setClub($club);
 
         $form = $this->createForm(ClubType::class, new ClubTeacher(), array('form' => 'teacher_afa_create', 'data_class' => ClubTeacher::class));
 
@@ -221,15 +230,16 @@ class ClubController extends AbstractController
     }
 
     /**
-     * @Route("/modifier_professeur_afa/{teacher<\d+>}", name="dojo_teacher_afa_update")
+     * @Route("{club<\d+>}/modifier_professeur_afa/{teacher<\d+>}", name="dojo_teacher_afa_update")
      * @param Request $request
      * @param ClubTeacher $teacher
      * @param ClubTools $clubTools
+     * @param Club $club
      * @return RedirectResponse|Response
      */
-    public function dojoTeacherAFAUpdate(Request $request, ClubTeacher $teacher, ClubTools $clubTools)
+    public function dojoTeacherAFAUpdate(Request $request, ClubTeacher $teacher, ClubTools $clubTools, Club $club)
     {
-        $clubTools->setClub($this->getUser()->getUserClub());
+        $clubTools->setClub($club);
 
         $form = $this->createForm(ClubType::class, $teacher, array('form' => 'teacher_afa_update', 'data_class' => ClubTeacher::class));
 
@@ -250,15 +260,16 @@ class ClubController extends AbstractController
     }
 
     /**
-     * @Route("/supprimer_professeur_afa/{teacher<\d+>}", name="dojo_teacher_afa_delete")
+     * @Route("{club<\d+>}/supprimer_professeur_afa/{teacher<\d+>}", name="dojo_teacher_afa_delete")
      * @param Request $request
      * @param ClubTeacher $teacher
      * @param ClubTools $clubTools
+     * @param Club $club
      * @return RedirectResponse|Response
      */
-    public function dojoTeacherAFADelete(Request $request, ClubTeacher $teacher, ClubTools $clubTools)
+    public function dojoTeacherAFADelete(Request $request, ClubTeacher $teacher, ClubTools $clubTools, Club $club)
     {
-        $clubTools->setClub($this->getUser()->getUserClub());
+        $clubTools->setClub($club);
 
         $form = $this->createForm(ClubType::class, $teacher, array('form' => 'teacher_afa_delete', 'data_class' => ClubTeacher::class));
 
@@ -279,14 +290,15 @@ class ClubController extends AbstractController
     }
 
     /**
-     * @Route("/ajouter_professeur_etranger", name="dojo_teacher_foreign_add")
+     * @Route("{club<\d+>}/ajouter_professeur_etranger", name="dojo_teacher_foreign_add")
      * @param Request $request
      * @param ClubTools $clubTools
+     * @param Club $club
      * @return RedirectResponse|Response
      */
-    public function dojoTeacherForeignAdd(Request $request, ClubTools $clubTools)
+    public function dojoTeacherForeignAdd(Request $request, ClubTools $clubTools, Club $club)
     {
-        $clubTools->setClub($this->getUser()->getUserClub());
+        $clubTools->setClub($club);
 
         $form = $this->createForm(ClubType::class, new ClubTeacher(), array('form' => 'teacher_foreign_create', 'data_class' => ClubTeacher::class));
 
@@ -303,15 +315,16 @@ class ClubController extends AbstractController
     }
 
     /**
-     * @Route("/modifier_professeur_etranger/{teacher<\d+>}", name="dojo_teacher_foreign_update")
+     * @Route("{club<\d+>}/modifier_professeur_etranger/{teacher<\d+>}", name="dojo_teacher_foreign_update")
      * @param Request $request
      * @param ClubTeacher $teacher
      * @param ClubTools $clubTools
+     * @param Club $club
      * @return RedirectResponse|Response
      */
-    public function dojoTeacherForeignUpdate(Request $request, ClubTeacher $teacher, ClubTools $clubTools)
+    public function dojoTeacherForeignUpdate(Request $request, ClubTeacher $teacher, ClubTools $clubTools, Club $club)
     {
-        $clubTools->setClub($this->getUser()->getUserClub());
+        $clubTools->setClub($club);
 
         $form = $this->createForm(ClubType::class, $teacher, array('form' => 'teacher_foreign_update', 'data_class' => ClubTeacher::class));
 
@@ -328,15 +341,16 @@ class ClubController extends AbstractController
     }
 
     /**
-     * @Route("/supprimer_professeur_etranger/{teacher<\d+>}", name="dojo_teacher_foreign_delete")
+     * @Route("{club<\d+>}/supprimer_professeur_etranger/{teacher<\d+>}", name="dojo_teacher_foreign_delete")
      * @param Request $request
      * @param ClubTeacher $teacher
      * @param ClubTools $clubTools
+     * @param Club $club
      * @return RedirectResponse|Response
      */
-    public function dojoTeacherForeignDelete(Request $request, ClubTeacher $teacher, ClubTools $clubTools)
+    public function dojoTeacherForeignDelete(Request $request, ClubTeacher $teacher, ClubTools $clubTools, Club $club)
     {
-        $clubTools->setClub($this->getUser()->getUserClub());
+        $clubTools->setClub($club);
 
         $form = $this->createForm(ClubType::class, $teacher, array('form' => 'teacher_foreign_delete', 'data_class' => ClubTeacher::class));
 
@@ -353,14 +367,15 @@ class ClubController extends AbstractController
     }
 
     /**
-     * @Route("/detail_association", name="association_details")
+     * @Route("{club<\d+>}/detail_association", name="association_details")
      * @param Request $request
      * @param ClubTools $clubTools
+     * @param Club $club
      * @return RedirectResponse|Response
      */
-    public function associationDetails(Request $request, ClubTools $clubTools)
+    public function associationDetails(Request $request, ClubTools $clubTools, Club $club)
     {
-        $clubTools->setClub($this->getUser()->getUserClub());
+        $clubTools->setClub($club);
 
         $form = $this->createForm(ClubType::class, $clubTools->getClub(), array('form' => 'detail_association'));
 
@@ -377,13 +392,14 @@ class ClubController extends AbstractController
     }
 
     /**
-     * @Route("/liste_des_membres", name="members_list")
+     * @Route("{club<\d+>}/liste_des_membres", name="members_list")
      * @param ClubTools $clubTools
+     * @param Club $club
      * @return Response
      */
-    public function membersList(ClubTools $clubTools): Response
+    public function membersList(ClubTools $clubTools, Club $club): Response
     {
-        $clubTools->setClub($this->getUser()->getUserClub());
+        $clubTools->setClub($club);
 
         $members = $this->getDoctrine()->getRepository(Member::class)->getClubActiveMembers($clubTools->getClub());
 
@@ -393,15 +409,16 @@ class ClubController extends AbstractController
     }
 
     /**
-     * @Route("/donnees_personnelles/{member<\d+>}", name="member_personal_data")
+     * @Route("{club<\d+>}/donnees_personnelles/{member<\d+>}", name="member_personal_data")
      * @param Member $member
      * @param MemberTools $memberTools
      * @param ClubTools $clubTools
+     * @param Club $club
      * @return Response
      */
-    public function memberPersonalData(Member $member, MemberTools $memberTools, ClubTools $clubTools): Response
+    public function memberPersonalData(Member $member, MemberTools $memberTools, ClubTools $clubTools, Club $club): Response
     {
-        $clubTools->setClub($this->getUser()->getUserClub());
+        $clubTools->setClub($club);
 
         if ($member->getMemberActualClub() !== $clubTools->getClub())
         {
@@ -414,17 +431,18 @@ class ClubController extends AbstractController
     }
 
     /**
-     * @Route("/creer_login/{member<\d+>}", name="member_login_create")
+     * @Route("{club<\d+>}/creer_login/{member<\d+>}", name="member_login_create")
      * @param UserTools $userTools
      * @param SessionInterface $session
      * @param Request $request
      * @param Member $member
      * @param ClubTools $clubTools
+     * @param Club $club
      * @return Response
      */
-    public function memberLoginCreate(UserTools $userTools, SessionInterface $session, Request $request, Member $member, ClubTools $clubTools): Response
+    public function memberLoginCreate(UserTools $userTools, SessionInterface $session, Request $request, Member $member, ClubTools $clubTools, Club $club): Response
     {
-        $clubTools->setClub($this->getUser()->getUserClub());
+        $clubTools->setClub($club);
 
         if ($member->getMemberActualClub() !== $clubTools->getClub())
         {
@@ -453,15 +471,16 @@ class ClubController extends AbstractController
     }
 
     /**
-     * @Route("/detail_licence/{member<\d+>}", name="member_licence_detail")
+     * @Route("{club<\d+>}/detail_licence/{member<\d+>}", name="member_licence_detail")
      * @param Member $member
      * @param MemberTools $memberTools
      * @param ClubTools $clubTools
+     * @param Club $club
      * @return Response
      */
-    public function memberLicenceDetail(Member $member, MemberTools $memberTools, ClubTools $clubTools): Response
+    public function memberLicenceDetail(Member $member, MemberTools $memberTools, ClubTools $clubTools, Club $club): Response
     {
-        $clubTools->setClub($this->getUser()->getUserClub());
+        $clubTools->setClub($club);
 
         if ($member->getMemberActualClub() !== $clubTools->getClub())
         {
@@ -474,15 +493,16 @@ class ClubController extends AbstractController
     }
 
     /**
-     * @Route("/detail_grades/{member<\d+>}", name="member_grades_detail")
+     * @Route("{club<\d+>}/detail_grades/{member<\d+>}", name="member_grades_detail")
      * @param Member $member
      * @param MemberTools $memberTools
      * @param ClubTools $clubTools
+     * @param Club $club
      * @return Response
      */
-    public function memberGradesDetail(Member $member, MemberTools $memberTools, ClubTools $clubTools): Response
+    public function memberGradesDetail(Member $member, MemberTools $memberTools, ClubTools $clubTools, Club $club): Response
     {
-        $clubTools->setClub($this->getUser()->getUserClub());
+        $clubTools->setClub($club);
 
         if ($member->getMemberActualClub() !== $clubTools->getClub())
         {
@@ -495,15 +515,16 @@ class ClubController extends AbstractController
     }
 
     /**
-     * @Route("/detail_stages/{member<\d+>}", name="member_stages_detail")
+     * @Route("{club<\d+>}/detail_stages/{member<\d+>}", name="member_stages_detail")
      * @param Member $member
      * @param MemberTools $memberTools
      * @param ClubTools $clubTools
+     * @param Club $club
      * @return Response
      */
-    public function memberStagesDetail(Member $member, MemberTools $memberTools, ClubTools $clubTools): Response
+    public function memberStagesDetail(Member $member, MemberTools $memberTools, ClubTools $clubTools, Club $club): Response
     {
-        $clubTools->setClub($this->getUser()->getUserClub());
+        $clubTools->setClub($club);
 
         if ($member->getMemberActualClub() !== $clubTools->getClub())
         {
@@ -516,15 +537,16 @@ class ClubController extends AbstractController
     }
 
     /**
-     * @Route("/detail_titres/{member<\d+>}", name="member_titles_detail")
+     * @Route("{club<\d+>}/detail_titres/{member<\d+>}", name="member_titles_detail")
      * @param Member $member
      * @param MemberTools $memberTools
      * @param ClubTools $clubTools
+     * @param Club $club
      * @return Response
      */
-    public function memberTitlesDetail(Member $member, MemberTools $memberTools, ClubTools $clubTools): Response
+    public function memberTitlesDetail(Member $member, MemberTools $memberTools, ClubTools $clubTools, Club $club): Response
     {
-        $clubTools->setClub($this->getUser()->getUserClub());
+        $clubTools->setClub($club);
 
         if ($member->getMemberActualClub() !== $clubTools->getClub())
         {
@@ -537,16 +559,17 @@ class ClubController extends AbstractController
     }
 
     /**
-     * @Route("/membre/{member<\d+>}/candidature", name="member_application")
+     * @Route("{club<\d+>}/membre/{member<\d+>}/candidature", name="member_application")
      * @param Request $request
      * @param Member $member
      * @param MemberTools $memberTools
      * @param ClubTools $clubTools
+     * @param Club $club
      * @return RedirectResponse|Response
      */
-    public function memberApplication(Request $request, Member $member, MemberTools $memberTools, ClubTools $clubTools)
+    public function memberApplication(Request $request, Member $member, MemberTools $memberTools, ClubTools $clubTools, Club $club)
     {
-        $clubTools->setClub($this->getUser()->getUserClub());
+        $clubTools->setClub($club);
 
         if ($member->getMemberActualClub() !== $clubTools->getClub())
         {
@@ -570,16 +593,17 @@ class ClubController extends AbstractController
     }
 
     /**
-     * @Route("/membre/{member<\d+>}/ajouter_kyu", name="member_kyu_add")
+     * @Route("{club<\d+>}/membre/{member<\d+>}/ajouter_kyu", name="member_kyu_add")
      * @param Request $request
      * @param Member $member
      * @param MemberTools $memberTools
      * @param ClubTools $clubTools
+     * @param Club $club
      * @return RedirectResponse|Response
      */
-    public function memberKyuAdd(Request $request, Member $member, MemberTools $memberTools, ClubTools $clubTools)
+    public function memberKyuAdd(Request $request, Member $member, MemberTools $memberTools, ClubTools $clubTools, Club $club)
     {
-        $clubTools->setClub($this->getUser()->getUserClub());
+        $clubTools->setClub($club);
 
         $memberTools->setMember($member);
 
@@ -603,17 +627,18 @@ class ClubController extends AbstractController
     }
 
     /**
-     * @Route("/membre/{member<\d+>}/modifier_kyu/{grade<\d+>}", name="member_kyu_modify")
+     * @Route("{club<\d+>}/membre/{member<\d+>}/modifier_kyu/{grade<\d+>}", name="member_kyu_modify")
      * @param Request $request
      * @param Member $member
      * @param MemberTools $memberTools
      * @param ClubTools $clubTools
      * @param Grade $grade
+     * @param Club $club
      * @return RedirectResponse|Response
      */
-    public function memberKyuModify(Request $request, Member $member, MemberTools $memberTools, ClubTools $clubTools, Grade $grade)
+    public function memberKyuModify(Request $request, Member $member, MemberTools $memberTools, ClubTools $clubTools, Grade $grade, Club $club)
     {
-        $clubTools->setClub($this->getUser()->getUserClub());
+        $clubTools->setClub($club);
 
         $memberTools->setMember($member);
 
@@ -637,16 +662,17 @@ class ClubController extends AbstractController
     }
 
     /**
-     * @Route("/membre/{member<\d+>}/supprimer_kyu/{grade<\d+>}", name="member_kyu_delete")
+     * @Route("{club<\d+>}/membre/{member<\d+>}/supprimer_kyu/{grade<\d+>}", name="member_kyu_delete")
      * @param Request $request
      * @param Member $member
      * @param MemberTools $memberTools
      * @param ClubTools $clubTools
+     * @param Club $club
      * @return RedirectResponse|Response
      */
-    public function memberKyuDelete(Request $request, Member $member, MemberTools $memberTools, ClubTools $clubTools)
+    public function memberKyuDelete(Request $request, Member $member, MemberTools $memberTools, ClubTools $clubTools, Club $club)
     {
-        $clubTools->setClub($this->getUser()->getUserClub());
+        $clubTools->setClub($club);
 
         $memberTools->setMember($member);
 
@@ -670,26 +696,26 @@ class ClubController extends AbstractController
     }
 
     /**
-     * @Route("/liste_gestionnaire", name="manager_index")
+     * @Route("{club<\d+>}/liste_gestionnaire", name="manager_index")
      * @param ClubTools $clubTools
+     * @param Club $club
      * @return Response
      */
-    public function managerIndex(ClubTools $clubTools): Response
+    public function managerIndex(ClubTools $clubTools, Club $club): Response
     {
-        $clubTools->setClub($this->getUser()->getUserClub());
+        $clubTools->setClub($club);
 
         return $this->render('Club/Manager/index.html.twig', array('clubTools' => $clubTools));
     }
 
     /**
-     * @Route("/rechercher_membres", name="search_members")
+     * @Route("{club<\d+>}/rechercher_membres", name="search_members")
      * @param Request $request
+     * @param Club $club
      * @return Response
      */
-    public function searchMembers(Request $request): Response
+    public function searchMembers(Request $request, Club $club): Response
     {
-        $club = $this->getUser()->getUserClub();
-
         $search = null; $results = null;
 
         $form = $this->createForm(ClubType::class, $search, array('form' => 'search_members', 'data_class' => null));
