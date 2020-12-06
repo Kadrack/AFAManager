@@ -32,6 +32,9 @@ class ClubTools
     public function __construct(EntityManagerInterface $entityManager)
     {
         $this->em = $entityManager;
+
+        $this->lessons  = null;
+        $this->managers = null;
     }
 
     /**
