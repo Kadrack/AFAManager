@@ -234,7 +234,7 @@ class UserTools
         $userAccess = new UserAccess();
 
         $userAccess->setUserAccessClub($club);
-        $userAccess->setUserAccessRole(["ROLE_CLUB"]);
+        $userAccess->setUserAccessRole('ROLE_CLUB');
         $userAccess->setUserAccessUser($user);
 
         $auditTrail = new UserAuditTrail();
@@ -258,7 +258,7 @@ class UserTools
      */
     public function clubManagerDelete(User $user, Club $club, User $who): bool
     {
-        $access = $this->entityManager->getRepository(UserAccess::class)->findOneBy(['user_access_club' => $club, 'user_access_role' => '["ROLE_CLUB"]', 'user_access_user' => $user]);
+        $access = $this->entityManager->getRepository(UserAccess::class)->findOneBy(['user_access_club' => $club, 'user_access_role' => 'ROLE_CLUB', 'user_access_user' => $user]);
 
         $this->entityManager->remove($access);
 

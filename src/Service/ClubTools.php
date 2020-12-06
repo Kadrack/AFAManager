@@ -128,7 +128,7 @@ class ClubTools
             return $this->managers;
         }
 
-        $managers = $this->em->getRepository(UserAccess::class)->findBy(['user_access_club' => $this->club, 'user_access_role' => '["ROLE_CLUB"]']);
+        $managers = $this->em->getRepository(UserAccess::class)->findBy(['user_access_club' => $this->club, 'user_access_role' => 'ROLE_CLUB']);
 
         foreach ($managers as $manager)
         {
