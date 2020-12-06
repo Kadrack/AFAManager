@@ -7,7 +7,7 @@ use App\Entity\ClubTeacher;
 use App\Entity\Member;
 use App\Entity\Training;
 use App\Entity\TrainingAddress;
-use App\Entity\User;
+use App\Entity\UserAccess;
 
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -17,13 +17,13 @@ use Doctrine\ORM\EntityManagerInterface;
  */
 class ClubTools
 {
-    private $club;
+    private Club $club;
 
-    private $lessons;
+    private ?array $lessons;
 
-    private $managers;
+    private ?array $managers;
 
-    private $em;
+    private EntityManagerInterface $em;
 
     /**
      * ClubTools constructor.
@@ -37,7 +37,7 @@ class ClubTools
     /**
      * @return Club
      */
-    public function getClub()
+    public function getClub(): Club
     {
         return $this->club;
     }
@@ -46,7 +46,7 @@ class ClubTools
      * @param Club $club
      * @return Club
      */
-    public function setClub(Club $club)
+    public function setClub(Club $club): Club
     {
         $this->club = $club;
 
@@ -128,9 +128,12 @@ class ClubTools
             return $this->managers;
         }
 
-        $managers = $this->em->getRepository(User::class)->findBy(['user_club' => $this->club]);
+        $managers = $this->em->getRepository(UserAccess::class)->findBy(['user_access_club' => $this->club, 'user_access_role' => '["ROLE_CLUB"]']);
 
-        $this->managers = $managers;
+        foreach ($managers as $manager)
+        {
+            $this->managers[] = $manager->getUserAccessUser();
+        }
 
         return $this->managers;
     }
@@ -140,7 +143,7 @@ class ClubTools
      * @param string|null $action
      * @return bool
      */
-    public function dojoAddress(TrainingAddress $trainingAddress, ?string $action = null)
+    public function dojoAddress(TrainingAddress $trainingAddress, ?string $action = null): bool
     {
         if ($action == 'Add')
         {
@@ -169,7 +172,7 @@ class ClubTools
      * @param string|null $action
      * @return bool
      */
-    public function dojoTraining(Training $training, ?string $action = null)
+    public function dojoTraining(Training $training, ?string $action = null): bool
     {
         if ($action == 'Add')
         {
@@ -194,7 +197,7 @@ class ClubTools
      * @param int|null $member_id
      * @return bool
      */
-    public function dojoTeacher(ClubTeacher $clubTeacher, ?string $action = null, ?int $member_id = null)
+    public function dojoTeacher(ClubTeacher $clubTeacher, ?string $action = null, ?int $member_id = null): bool
     {
         if ($action == 'Add')
         {
@@ -240,7 +243,7 @@ class ClubTools
     /**
      * @return bool
      */
-    public function associationDetails()
+    public function associationDetails(): bool
     {
         $this->em->flush();
 

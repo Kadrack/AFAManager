@@ -41,7 +41,7 @@ class ClubController extends AbstractController
      * @param ClubTools $clubTools
      * @return Response
      */
-    public function dojoIndex(ClubTools $clubTools)
+    public function dojoIndex(ClubTools $clubTools): Response
     {
         $clubTools->setClub($this->getUser()->getUserClub());
 
@@ -381,7 +381,7 @@ class ClubController extends AbstractController
      * @param ClubTools $clubTools
      * @return Response
      */
-    public function membersList(ClubTools $clubTools)
+    public function membersList(ClubTools $clubTools): Response
     {
         $clubTools->setClub($this->getUser()->getUserClub());
 
@@ -399,7 +399,7 @@ class ClubController extends AbstractController
      * @param ClubTools $clubTools
      * @return Response
      */
-    public function memberPersonalData(Member $member, MemberTools $memberTools, ClubTools $clubTools)
+    public function memberPersonalData(Member $member, MemberTools $memberTools, ClubTools $clubTools): Response
     {
         $clubTools->setClub($this->getUser()->getUserClub());
 
@@ -422,7 +422,7 @@ class ClubController extends AbstractController
      * @param ClubTools $clubTools
      * @return Response
      */
-    public function memberLoginCreate(UserTools $userTools, SessionInterface $session, Request $request, Member $member, ClubTools $clubTools)
+    public function memberLoginCreate(UserTools $userTools, SessionInterface $session, Request $request, Member $member, ClubTools $clubTools): Response
     {
         $clubTools->setClub($this->getUser()->getUserClub());
 
@@ -459,7 +459,7 @@ class ClubController extends AbstractController
      * @param ClubTools $clubTools
      * @return Response
      */
-    public function memberLicenceDetail(Member $member, MemberTools $memberTools, ClubTools $clubTools)
+    public function memberLicenceDetail(Member $member, MemberTools $memberTools, ClubTools $clubTools): Response
     {
         $clubTools->setClub($this->getUser()->getUserClub());
 
@@ -480,7 +480,7 @@ class ClubController extends AbstractController
      * @param ClubTools $clubTools
      * @return Response
      */
-    public function memberGradesDetail(Member $member, MemberTools $memberTools, ClubTools $clubTools)
+    public function memberGradesDetail(Member $member, MemberTools $memberTools, ClubTools $clubTools): Response
     {
         $clubTools->setClub($this->getUser()->getUserClub());
 
@@ -501,7 +501,7 @@ class ClubController extends AbstractController
      * @param ClubTools $clubTools
      * @return Response
      */
-    public function memberStagesDetail(Member $member, MemberTools $memberTools, ClubTools $clubTools)
+    public function memberStagesDetail(Member $member, MemberTools $memberTools, ClubTools $clubTools): Response
     {
         $clubTools->setClub($this->getUser()->getUserClub());
 
@@ -522,7 +522,7 @@ class ClubController extends AbstractController
      * @param ClubTools $clubTools
      * @return Response
      */
-    public function memberTitlesDetail(Member $member, MemberTools $memberTools, ClubTools $clubTools)
+    public function memberTitlesDetail(Member $member, MemberTools $memberTools, ClubTools $clubTools): Response
     {
         $clubTools->setClub($this->getUser()->getUserClub());
 
@@ -674,7 +674,7 @@ class ClubController extends AbstractController
      * @param ClubTools $clubTools
      * @return Response
      */
-    public function managerIndex(ClubTools $clubTools)
+    public function managerIndex(ClubTools $clubTools): Response
     {
         $clubTools->setClub($this->getUser()->getUserClub());
 
@@ -686,7 +686,7 @@ class ClubController extends AbstractController
      * @param Request $request
      * @return Response
      */
-    public function searchMembers(Request $request)
+    public function searchMembers(Request $request): Response
     {
         $club = $this->getUser()->getUserClub();
 

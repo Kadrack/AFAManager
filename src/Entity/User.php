@@ -24,68 +24,68 @@ class User implements UserInterface
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private ?int $id;
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
      */
-    private $login;
+    private ?string $login;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $user_firstname;
+    private ?string $user_firstname;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $user_real_name;
+    private ?string $user_real_name;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $roles;
+    private ?array $roles;
 
     /**
      * @var string The hashed password
      * @ORM\Column(type="string")
      */
-    private $password;
+    private string $password;
 
     /**
      * @ORM\Column(type="date", nullable=true)
      */
-    private $user_last_activity;
+    private ?DateTimeInterface $user_last_activity;
 
     /**
      * @ORM\Column(type="integer")
      */
-    private $user_status;
+    private ?int $user_status;
 
     /**
      * @ORM\OneToOne(targetEntity="App\Entity\Member")
      * @ORM\JoinColumn(nullable=true, name="user_join_member", referencedColumnName="member_id")
      */
-    private $user_member;
+    private ?Member $user_member;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Club")
-     * @ORM\JoinColumn(nullable=true, name="user_join_club", referencedColumnName="club_id")
+     * @ORM\OneToMany(targetEntity="App\Entity\UserAccess", mappedBy="user_access_user", orphanRemoval=true, cascade={"persist"})
      */
-    private $user_club;
+    private ArrayCollection $user_accesses;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\UserAuditTrail", mappedBy="user_audit_trail_user", orphanRemoval=true, cascade={"persist"})
      */
-    private $user_audit_trails;
+    private ArrayCollection $user_audit_trails;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\UserAuditTrail", mappedBy="user_audit_trail_who", orphanRemoval=true, cascade={"persist"})
      */
-    private $user_audit_whos;
+    private ArrayCollection $user_audit_whos;
 
     public function __construct()
     {
+        $this->user_accesses     = new ArrayCollection();
         $this->user_audit_whos   = new ArrayCollection();
         $this->user_audit_trails = new ArrayCollection();
     }
@@ -120,18 +120,10 @@ class User implements UserInterface
         {
             $roles[] = 'ROLE_MEMBER';
 
-            foreach ($this->getUserMember()->getMemberCommissions() as $commission)
+            foreach ($this->getUserAccesses() as $access)
             {
-                if (is_null($commission->getCommissionMemberDateOut()))
-                {
-                    $roles[] = $commission->getCommission()->getCommissionRole();
-                }
+                $roles[] = $access->getUserAccessRole();
             }
-        }
-
-        if ($this->getUserClub() != null)
-        {
-            $roles[] = 'ROLE_CLUB';
         }
 
         return array_unique($roles);
@@ -219,18 +211,6 @@ class User implements UserInterface
         return $this;
     }
 
-    public function getUserClub(): ?Club
-    {
-        return $this->user_club;
-    }
-
-    public function setUserClub(?Club $user_club): self
-    {
-        $this->user_club = $user_club;
-
-        return $this;
-    }
-
     /**
      * A visual identifier that represents this user.
      *
@@ -256,6 +236,37 @@ class User implements UserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
+    }
+
+    /**
+     * @return Collection|UserAccess[]
+     */
+    public function getUserAccesses(): Collection
+    {
+        return $this->user_accesses;
+    }
+
+    public function addUserAccesses(UserAccess $userAccess): self
+    {
+        if (!$this->user_accesses->contains($userAccess)) {
+            $this->user_accesses[] = $userAccess;
+            $userAccess->setUserAccessUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUserAccesses(UserAccess $userAccess): self
+    {
+        if ($this->user_accesses->contains($userAccess)) {
+            $this->user_accesses->removeElement($userAccess);
+            // set the owning side to null (unless already changed)
+            if ($userAccess->getUserAccessUser() === $this) {
+                $userAccess->setUserAccessUser(null);
+            }
+        }
+
+        return $this;
     }
 
     /**

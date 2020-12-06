@@ -21,152 +21,157 @@ class Club
      * @ORM\Id
      * @ORM\Column(type="integer")
      */
-    private $club_id;
+    private ?int $club_id;
 
     /**
      * @ORM\Column(type="string", length=255)
      *
      * @Assert\NotBlank()
      */
-    private $club_name;
+    private ?string $club_name;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $club_address;
+    private ?string $club_address;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
      */
-    private $club_zip;
+    private ?int $club_zip;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $club_city;
+    private ?string $club_city;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
      */
-    private $club_province;
+    private ?int $club_province;
 
     /**
      * @ORM\Column(type="date", nullable=true)
      */
-    private $club_creation;
+    private ?DateTimeInterface $club_creation;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
      */
-    private $club_type;
+    private ?int $club_type;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $club_bce_number;
+    private ?string $club_bce_number;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $club_iban;
+    private ?string $club_iban;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      *
      * @Assert\Url()
      */
-    private $club_url;
+    private ?string $club_url;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      *
      * @Assert\Email()
      */
-    private $club_email_public;
+    private ?string $club_email_public;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $club_name_contact;
+    private ?string $club_name_contact;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      *
      * @Assert\Email()
      */
-    private $club_email_contact;
+    private ?string $club_email_contact;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $club_phone_contact;
+    private ?string $club_phone_contact;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $club_address_contact;
+    private ?string $club_address_contact;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
      */
-    private $club_zip_contact;
+    private ?int $club_zip_contact;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $club_city_contact;
+    private ?string $club_city_contact;
 
     /**
      * @ORM\Column(type="text", nullable=true)
      */
-    private $club_comment;
+    private ?string $club_comment;
 
     /**
      * @ORM\OneToOne(targetEntity="App\Entity\ClubHistory")
      * @ORM\JoinColumn(nullable=true, name="club_join_club_last_history", referencedColumnName="club_history_id")
      */
-    private $club_last_history;
+    private ?ClubHistory $club_last_history;
 
     /**
      * @ORM\OneToOne(targetEntity="App\Entity\ClubTeacher")
      * @ORM\JoinColumn(nullable=true, name="club_join_club_main_teacher", referencedColumnName="club_teacher_id")
      */
-    private $club_main_teacher;
+    private ?ClubTeacher $club_main_teacher;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\TrainingAddress", mappedBy="training_address_club", orphanRemoval=true, cascade={"persist"})
      */
-    private $club_addresses;
+    private ArrayCollection $club_addresses;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Grade", mappedBy="grade_club", orphanRemoval=true, cascade={"persist"})
      */
-    private $club_grades;
+    private ArrayCollection $club_grades;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\ClubHistory", mappedBy="club_history", orphanRemoval=true, cascade={"persist"})
      */
-    private $club_histories;
+    private ArrayCollection $club_histories;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\MemberLicence", mappedBy="member_licence_club", orphanRemoval=true, cascade={"persist"})
      */
-    private $club_licences;
+    private ArrayCollection $club_licences;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\ClubTeacher", mappedBy="club_teacher", orphanRemoval=true, cascade={"persist"})
      */
-    private $club_teachers;
+    private ArrayCollection $club_teachers;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Training", mappedBy="training_club", orphanRemoval=true, cascade={"persist"})
      */
-    private $club_trainings;
+    private ArrayCollection $club_trainings;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\UserAccess", mappedBy="user_access_club", orphanRemoval=true, cascade={"persist"})
+     */
+    private ArrayCollection $club_user_accesses;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\UserAuditTrail", mappedBy="user_audit_trail_club", orphanRemoval=true, cascade={"persist"})
      */
-    private $club_user_audit_trails;
+    private ArrayCollection $club_user_audit_trails;
 
     public function __construct()
     {
@@ -176,6 +181,7 @@ class Club
         $this->club_licences          = new ArrayCollection();
         $this->club_teachers          = new ArrayCollection();
         $this->club_trainings         = new ArrayCollection();
+        $this->club_user_accesses     = new ArrayCollection();
         $this->club_user_audit_trails = new ArrayCollection();
     }
 
@@ -239,12 +245,12 @@ class Club
         return $this;
     }
 
-    public function getClubProvince(): ?string
+    public function getClubProvince(): ?int
     {
         return $this->club_province;
     }
 
-    public function setClubProvince(?string $club_province): self
+    public function setClubProvince(?int $club_province): self
     {
         $this->club_province = $club_province;
 
@@ -611,6 +617,37 @@ class Club
             // set the owning side to null (unless already changed)
             if ($training->getTrainingClub() === $this) {
                 $training->setTrainingClub(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|UserAccess[]
+     */
+    public function getClubUserAccesses(): Collection
+    {
+        return $this->club_user_accesses;
+    }
+
+    public function addClubUserAccesses(UserAccess $userAccess): self
+    {
+        if (!$this->club_user_accesses->contains($userAccess)) {
+            $this->club_user_accesses[] = $userAccess;
+            $userAccess->setUserAccessClub($this);
+        }
+
+        return $this;
+    }
+
+    public function removeClubUserAccesses(UserAccess $userAccess): self
+    {
+        if ($this->club_user_accesses->contains($userAccess)) {
+            $this->club_user_accesses->removeElement($userAccess);
+            // set the owning side to null (unless already changed)
+            if ($userAccess->getUserAccessClub() === $this) {
+                $userAccess->setUserAccessClub(null);
             }
         }
 

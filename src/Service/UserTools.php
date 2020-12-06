@@ -5,6 +5,7 @@ namespace App\Service;
 use App\Entity\Club;
 use App\Entity\Member;
 use App\Entity\User;
+use App\Entity\UserAccess;
 use App\Entity\UserAuditTrail;
 
 use Doctrine\ORM\EntityManagerInterface;
@@ -17,11 +18,11 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
  */
 class UserTools
 {
-    private $entityManager;
+    private EntityManagerInterface $entityManager;
 
-    private $isDuplicate;
+    private bool $isDuplicate;
 
-    private $passwordEncoder;
+    private UserPasswordEncoderInterface $passwordEncoder;
 
     /**
      * UserTools constructor.
@@ -41,7 +42,7 @@ class UserTools
      * @param int|null $member_id
      * @return bool
      */
-    public function newUser(User $user, User $who, string $password, ?int $member_id)
+    public function newUser(User $user, User $who, string $password, ?int $member_id): bool
     {
         if ($this->checkDuplicate($user))
         {
@@ -82,7 +83,7 @@ class UserTools
     /**
      * @return bool
      */
-    public function isDuplicate()
+    public function isDuplicate(): bool
     {
         return $this->isDuplicate;
     }
@@ -91,7 +92,7 @@ class UserTools
      * @param User $user
      * @return bool
      */
-    public function checkDuplicate(User $user)
+    public function checkDuplicate(User $user): bool
     {
         if (is_null($this->entityManager->getRepository(User::class)->findOneBy(['login' => $user->getLogin()])))
         {
@@ -112,7 +113,7 @@ class UserTools
      * @param string $password
      * @return User
      */
-    public function setPassword(User $user, string $password)
+    public function setPassword(User $user, string $password): User
     {
         $user->setPassword($this->passwordEncoder->encodePassword($user, $password));
 
@@ -126,7 +127,7 @@ class UserTools
      * @param User|null $who
      * @return bool
      */
-    public function updateMyAccount(User $user, ?string $new_login, ?string $new_password, ?User $who = null)
+    public function updateMyAccount(User $user, ?string $new_login, ?string $new_password, ?User $who = null): bool
     {
         if (!is_null($new_login) && ($new_login != $user->getLogin()))
         {
@@ -146,7 +147,7 @@ class UserTools
      * @param string $new_login
      * @return bool
      */
-    public function changeLogin(User $user, string $new_login)
+    public function changeLogin(User $user, string $new_login): bool
     {
         $user->setLogin($new_login);
 
@@ -169,7 +170,7 @@ class UserTools
      * @param User|null $who
      * @return bool
      */
-    public function changePassword(User $user, string $new_password1, string $new_password2, ?User $who = null)
+    public function changePassword(User $user, string $new_password1, string $new_password2, ?User $who = null): bool
     {
         if ($new_password1 != $new_password2)
         {
@@ -195,7 +196,7 @@ class UserTools
      * @param User $who
      * @return bool
      */
-    public function reactivate(User $user, User $who)
+    public function reactivate(User $user, User $who): bool
     {
         $user->setUserStatus(1);
 
@@ -219,7 +220,7 @@ class UserTools
      * @param int|null $member_id
      * @return bool
      */
-    public function clubManagerAdd(User $user, Club $club, User $who, string $password, ?int $member_id)
+    public function clubManagerAdd(User $user, Club $club, User $who, string $password, ?int $member_id): bool
     {
         if (is_null($this->entityManager->getRepository(User::class)->findOneBy(['user_member' => $member_id])))
         {
@@ -230,7 +231,11 @@ class UserTools
             $user = $this->entityManager->getRepository(User::class)->findOneBy(['user_member' => $member_id]);
         }
 
-        $user->setUserClub($club);
+        $userAccess = new UserAccess();
+
+        $userAccess->setUserAccessClub($club);
+        $userAccess->setUserAccessRole(["ROLE_CLUB"]);
+        $userAccess->setUserAccessUser($user);
 
         $auditTrail = new UserAuditTrail();
 
@@ -251,11 +256,11 @@ class UserTools
      * @param User $who
      * @return bool
      */
-    public function clubManagerDelete(User $user, Club $club, User $who)
+    public function clubManagerDelete(User $user, Club $club, User $who): bool
     {
-        $user->setUserClub(null);
+        $access = $this->entityManager->getRepository(UserAccess::class)->findOneBy(['user_access_club' => $club, 'user_access_role' => '["ROLE_CLUB"]', 'user_access_user' => $user]);
 
-        $this->entityManager->flush();
+        $this->entityManager->remove($access);
 
         $auditTrail = new UserAuditTrail();
 
