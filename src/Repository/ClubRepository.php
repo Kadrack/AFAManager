@@ -62,6 +62,8 @@ class ClubRepository extends ServiceEntityRepository
 
         $deadline = $referenceDate->format('Y-m-d');
 
+        $deadline_high = $referenceDate->add(new DateInterval('P1Y'))->format('Y-m-d');
+
         $qb = $this->createQueryBuilder('c');
 
         return $qb->select('c.club_province AS Province', 'count(m.member_id) AS Total')
@@ -70,7 +72,7 @@ class ClubRepository extends ServiceEntityRepository
             ->leftJoin(ClubTeacher::class, 't', 'WITH', $qb->expr()->eq('t.club_teacher_member', 'm.member_id'))
             ->join(ClubHistory::class, 'h', 'WITH', $qb->expr()->eq('h.club_history', 'm.member_actual_club'))
             ->where($qb->expr()->gt('l.member_licence_deadline', "'".$deadline."'"))
-            ->andWhere($qb->expr()->eq('l.member_licence_status', 1))
+            ->andWhere($qb->expr()->lte('l.member_licence_deadline', "'".$deadline_high."'"))
             ->andWhere($qb->expr()->eq('h.club_history_status', 1))
             ->andWhere($qb->expr()->isNotNull('t.club_teacher_id'))
             ->groupBy('c.club_province')
@@ -88,6 +90,8 @@ class ClubRepository extends ServiceEntityRepository
 
         $deadline = $referenceDate->format('Y-m-d');
 
+        $deadline_high = $referenceDate->add(new DateInterval('P1Y'))->format('Y-m-d');
+
         $qb = $this->createQueryBuilder('c');
 
         return $qb->select('c.club_province AS Province', 'm.member_sex AS Sex', 'count(m.member_id) AS Total')
@@ -96,7 +100,7 @@ class ClubRepository extends ServiceEntityRepository
             ->leftJoin(ClubTeacher::class, 't', 'WITH', $qb->expr()->eq('t.club_teacher_member', 'm.member_id'))
             ->join(ClubHistory::class, 'h', 'WITH', $qb->expr()->eq('h.club_history', 'm.member_actual_club'))
             ->where($qb->expr()->gt('l.member_licence_deadline', "'".$deadline."'"))
-            ->andWhere($qb->expr()->eq('l.member_licence_status', 1))
+            ->andWhere($qb->expr()->lte('l.member_licence_deadline', "'".$deadline_high."'"))
             ->andWhere($qb->expr()->eq('h.club_history_status', 1))
             ->andWhere($qb->expr()->isNull('t.club_teacher_id'))
             ->groupBy('c.club_province')
@@ -118,6 +122,8 @@ class ClubRepository extends ServiceEntityRepository
 
         $deadline = $referenceDate->format('Y-m-d');
 
+        $deadline_high = $referenceDate->add(new DateInterval('P1Y'))->format('Y-m-d');
+
         $limit[0] = $referenceDate->sub(new DateInterval('P0Y'))->format('Y-m-d');
         $limit[1] = $referenceDate->sub(new DateInterval('P6Y'))->format('Y-m-d');
         $limit[2] = $referenceDate->sub(new DateInterval('P6Y'))->format('Y-m-d');
@@ -135,7 +141,7 @@ class ClubRepository extends ServiceEntityRepository
                 ->leftJoin(ClubTeacher::class, 't', 'WITH', $qb->expr()->eq('t.club_teacher_member', 'm.member_id'))
                 ->join(ClubHistory::class, 'h', 'WITH', $qb->expr()->eq('h.club_history', 'm.member_actual_club'))
                 ->where($qb->expr()->gt('l.member_licence_deadline', "'".$deadline."'"))
-                ->andWhere($qb->expr()->eq('l.member_licence_status', 1))
+                ->andWhere($qb->expr()->lte('l.member_licence_deadline', "'".$deadline_high."'"))
                 ->andWhere($qb->expr()->eq('h.club_history_status', 1))
                 ->andWhere($qb->expr()->between('m.member_birthday', "'".$limit[$i+1]."'", "'".$limit[$i]."'"))
                 ->groupBy('c.club_province')
@@ -154,7 +160,7 @@ class ClubRepository extends ServiceEntityRepository
             ->leftJoin(ClubTeacher::class, 't', 'WITH', $qb->expr()->eq('t.club_teacher_member', 'm.member_id'))
             ->join(ClubHistory::class, 'h', 'WITH', $qb->expr()->eq('h.club_history', 'm.member_actual_club'))
             ->where($qb->expr()->gt('l.member_licence_deadline', "'".$deadline."'"))
-            ->andWhere($qb->expr()->eq('l.member_licence_status', 1))
+            ->andWhere($qb->expr()->lte('l.member_licence_deadline', "'".$deadline_high."'"))
             ->andWhere($qb->expr()->eq('h.club_history_status', 1))
             ->andWhere($qb->expr()->lte('m.member_birthday', "'".$limit[count($limit)-1]."'"))
             ->groupBy('c.club_province')
@@ -177,6 +183,8 @@ class ClubRepository extends ServiceEntityRepository
         }
 
         $deadline = $referenceDate->format('Y-m-d');
+
+        $deadline_high = $referenceDate->add(new DateInterval('P1Y'))->format('Y-m-d');
 
         $limit[0] = $referenceDate->sub(new DateInterval('P0Y'))->format('Y-m-d');
         $limit[1] = $referenceDate->sub(new DateInterval('P6Y'))->format('Y-m-d');
@@ -206,7 +214,7 @@ class ClubRepository extends ServiceEntityRepository
                 ->leftJoin(ClubTeacher::class, 't', 'WITH', $qb->expr()->eq('t.club_teacher_member', 'm.member_id'))
                 ->join(ClubHistory::class, 'h', 'WITH', $qb->expr()->eq('h.club_history', 'm.member_actual_club'))
                 ->where($qb->expr()->gt('l.member_licence_deadline', "'".$deadline."'"))
-                ->andWhere($qb->expr()->eq('l.member_licence_status', 1))
+                ->andWhere($qb->expr()->lte('l.member_licence_deadline', "'".$deadline_high."'"))
                 ->andWhere($qb->expr()->eq('h.club_history_status', 1))
                 ->andWhere($qb->expr()->between('m.member_birthday', "'".$limit[$i+1]."'", "'".$limit[$i]."'"))
                 ->andWhere($qb->expr()->eq('c.club_province', $province))
@@ -225,7 +233,7 @@ class ClubRepository extends ServiceEntityRepository
             ->leftJoin(ClubTeacher::class, 't', 'WITH', $qb->expr()->eq('t.club_teacher_member', 'm.member_id'))
             ->join(ClubHistory::class, 'h', 'WITH', $qb->expr()->eq('h.club_history', 'm.member_actual_club'))
             ->where($qb->expr()->gt('l.member_licence_deadline', "'".$deadline."'"))
-            ->andWhere($qb->expr()->eq('l.member_licence_status', 1))
+            ->andWhere($qb->expr()->lte('l.member_licence_deadline', "'".$deadline_high."'"))
             ->andWhere($qb->expr()->eq('h.club_history_status', 1))
             ->andWhere($qb->expr()->lte('m.member_birthday', "'".$limit[count($limit)-1]."'"))
             ->andWhere($qb->expr()->eq('c.club_province', $province))

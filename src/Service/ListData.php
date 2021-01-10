@@ -221,7 +221,7 @@ class ListData
      */
     public function getProvince(int $province)
     {
-        $provinces = array('Bruxelles' => 1, 'Brabant Wallon' => 2, 'Hainaut' => 3, 'Liège' => 4, 'Luxembourg' => 5, 'Namur' => 6, 'Brabant Flamand' => 7);
+        $provinces = array('Bruxelles' => 1, 'Brabant Wallon' => 2, 'Hainaut' => 3, 'Liège' => 4, 'Luxembourg' => 5, 'Namur' => 6, 'Brabant Flamand' => 7, 'Frigo' => 20);
 
         if ($province == 0)
         {

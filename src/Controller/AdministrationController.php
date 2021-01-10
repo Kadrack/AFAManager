@@ -6,6 +6,7 @@ use App\Entity\Club;
 
 use App\Service\ListData;
 
+use DateTime;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -24,7 +25,7 @@ class AdministrationController extends AbstractController
      * @Route("/index_statistique", name="statistics_index")
      * @return Response
      */
-    public function statisticsIndex()
+    public function statisticsIndex(): Response
     {
         $statistics = array();
 
@@ -51,7 +52,10 @@ class AdministrationController extends AbstractController
         $total['Total'][1] = 0;
         $total['Total'][2] = 0;
 
-        $query = $this->getDoctrine()->getRepository(Club::class)->getProvinceMembersCount();
+        $date = new DateTime();
+        $date->setDate(2020, 12, 31);
+
+        $query = $this->getDoctrine()->getRepository(Club::class)->getProvinceMembersCount($date);
 
         $i = 1;
 
@@ -100,11 +104,14 @@ class AdministrationController extends AbstractController
      * @param int $province
      * @return Response
      */
-    public function statisticsProvince(int $province)
+    public function statisticsProvince(int $province): Response
     {
         $statistics = array();
 
-        $query = $this->getDoctrine()->getRepository(Club::class)->getClubMembersCount($province);
+        $date = new DateTime();
+        $date->setDate(2020, 12, 31);
+
+        $query = $this->getDoctrine()->getRepository(Club::class)->getClubMembersCount($province, $date);
 
         foreach ($query['Clubs'] as $club) {
             $statistics[$club['Id']]['Club'] = $club;
