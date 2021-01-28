@@ -3,7 +3,7 @@
 namespace App\Form;
 
 use App\Entity\Club;
-use App\Entity\TrainingAddress;
+use App\Entity\ClubDojo;
 
 use App\Service\ListData;
 
@@ -286,7 +286,7 @@ class ClubType extends AbstractType
             ->add('TrainingStartingHour', TimeType::class, array ('label' => 'Début : '))
             ->add('TrainingEndingHour', TimeType::class, array ('label' => 'Fin : '))
             ->add('TrainingType', ChoiceType::class, array('label' => 'Type de cours : ', 'placeholder' => 'Choississez un type de cours', 'choices' => $list->getTrainingType(0)))
-            ->add('TrainingAddress', EntityType::class, array ('label' => 'Adresse : ', 'class' => TrainingAddress::class, 'choices' => $choices, 'choice_label' => 'training_address_street'))
+            ->add('TrainingAddress', EntityType::class, array ('label' => 'Adresse : ', 'class' => ClubDojo::class, 'choices' => $choices, 'choice_label' => 'training_address_street'))
             ->add('TrainingComment', TextareaType::class, array('label' => 'Commentaire : ', 'required' => false))
             ->add('Submit', SubmitType::class, array('label' => 'Ajouter'))
         ;
@@ -301,7 +301,7 @@ class ClubType extends AbstractType
             ->add('TrainingStartingHour', TimeType::class, array ('label' => 'Début : ', 'disabled' => true))
             ->add('TrainingEndingHour', TimeType::class, array ('label' => 'Fin : ', 'disabled' => true))
             ->add('TrainingType', ChoiceType::class, array('label' => 'Type de cours : ', 'placeholder' => 'Choississez un type de cours', 'choices' => $list->getTrainingType(0), 'disabled' => true))
-            ->add('TrainingAddress', EntityType::class, array ('label' => 'Adresse : ', 'class' => TrainingAddress::class, 'choices' => $choices, 'choice_label' => 'training_address_street', 'disabled' => true))
+            ->add('TrainingAddress', EntityType::class, array ('label' => 'Adresse : ', 'class' => ClubDojo::class, 'choices' => $choices, 'choice_label' => 'training_address_street', 'disabled' => true))
             ->add('TrainingComment', TextareaType::class, array('label' => 'Commentaire : ', 'required' => false, 'disabled' => true))
             ->add('Submit', SubmitType::class, array('label' => 'Supprimer'))
         ;
@@ -316,7 +316,7 @@ class ClubType extends AbstractType
             ->add('TrainingStartingHour', TimeType::class, array ('label' => 'Début : '))
             ->add('TrainingEndingHour', TimeType::class, array ('label' => 'Fin : '))
             ->add('TrainingType', ChoiceType::class, array('label' => 'Type de cours : ', 'placeholder' => 'Choississez un type de cours', 'choices' => $list->getTrainingType(0)))
-            ->add('TrainingAddress', EntityType::class, array ('label' => 'Adresse : ', 'class' => TrainingAddress::class, 'choices' => $choices, 'choice_label' => 'training_address_street'))
+            ->add('TrainingAddress', EntityType::class, array ('label' => 'Adresse : ', 'class' => ClubDojo::class, 'choices' => $choices, 'choice_label' => 'training_address_street'))
             ->add('TrainingComment', TextareaType::class, array('label' => 'Commentaire : ', 'required' => false))
             ->add('Submit', SubmitType::class, array('label' => 'Modifier'))
         ;

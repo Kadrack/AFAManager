@@ -3,11 +3,11 @@
 namespace App\Controller;
 
 use App\Entity\Club;
+use App\Entity\ClubDojo;
 use App\Entity\ClubTeacher;
 use App\Entity\Grade;
 use App\Entity\Member;
 use App\Entity\Training;
-use App\Entity\TrainingAddress;
 use App\Entity\User;
 
 use App\Form\ClubType;
@@ -61,7 +61,7 @@ class ClubController extends AbstractController
     {
         $clubTools->setClub($club);
 
-        $form = $this->createForm(ClubType::class, new TrainingAddress(), array('form' => 'dojo_create', 'data_class' => TrainingAddress::class));
+        $form = $this->createForm(ClubType::class, new ClubDojo(), array('form' => 'dojo_create', 'data_class' => ClubDojo::class));
 
         $form->handleRequest($request);
 
@@ -78,16 +78,16 @@ class ClubController extends AbstractController
     /**
      * @Route("{club<\d+>}/modifier_dojo/{address<\d+>}", name="dojo_address_update")
      * @param Request $request
-     * @param TrainingAddress $address
+     * @param ClubDojo $clubDojo
      * @param ClubTools $clubTools
      * @param Club $club
      * @return RedirectResponse|Response
      */
-    public function dojoAddressUpdate(Request $request, TrainingAddress $address, ClubTools $clubTools, Club $club)
+    public function dojoAddressUpdate(Request $request, ClubDojo $clubDojo, ClubTools $clubTools, Club $club)
     {
         $clubTools->setClub($club);
 
-        $form = $this->createForm(ClubType::class, $address, array('form' => 'dojo_update', 'data_class' => TrainingAddress::class));
+        $form = $this->createForm(ClubType::class, $clubDojo, array('form' => 'dojo_update', 'data_class' => ClubDojo::class));
 
         $form->handleRequest($request);
 
@@ -104,16 +104,16 @@ class ClubController extends AbstractController
     /**
      * @Route("{club<\d+>}/supprimer_dojo/{address<\d+>}", name="dojo_address_delete")
      * @param Request $request
-     * @param TrainingAddress $address
+     * @param ClubDojo $clubDojo
      * @param ClubTools $clubTools
      * @param Club $club
      * @return RedirectResponse|Response
      */
-    public function dojoAddressDelete(Request $request, TrainingAddress $address, ClubTools $clubTools, Club $club)
+    public function dojoAddressDelete(Request $request, ClubDojo $clubDojo, ClubTools $clubTools, Club $club)
     {
         $clubTools->setClub($club);
 
-        $form = $this->createForm(ClubType::class, $address, array('form' => 'dojo_delete', 'data_class' => TrainingAddress::class));
+        $form = $this->createForm(ClubType::class, $clubDojo, array('form' => 'dojo_delete', 'data_class' => ClubDojo::class));
 
         $form->handleRequest($request);
 

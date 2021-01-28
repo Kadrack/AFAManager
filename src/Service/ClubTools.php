@@ -3,10 +3,10 @@
 namespace App\Service;
 
 use App\Entity\Club;
+use App\Entity\ClubDojo;
 use App\Entity\ClubTeacher;
 use App\Entity\Member;
 use App\Entity\Training;
-use App\Entity\TrainingAddress;
 use App\Entity\UserAccess;
 
 use Doctrine\ORM\EntityManagerInterface;
@@ -66,7 +66,7 @@ class ClubTools
             return $this->lessons;
         }
 
-        $dojos = $this->em->getRepository(TrainingAddress::class)->findBy(['training_address_club' => $this->club->getClubId()]);
+        $dojos = $this->em->getRepository(ClubDojo::class)->findBy(['club_dojo' => $this->club->getClubId()]);
 
         $trainings = $this->em->getRepository(Training::class)->findBy(['training_club' => $this->club->getClubId(), 'training_type' => array(1, 2, 3)], ['training_day' => 'ASC', 'training_starting_hour' => 'ASC']);
 
@@ -142,27 +142,27 @@ class ClubTools
     }
 
     /**
-     * @param TrainingAddress $trainingAddress
+     * @param ClubDojo $clubDojo
      * @param string|null $action
      * @return bool
      */
-    public function dojoAddress(TrainingAddress $trainingAddress, ?string $action = null): bool
+    public function dojoAddress(ClubDojo $clubDojo, ?string $action = null): bool
     {
         if ($action == 'Add')
         {
-            if ($trainingAddress->getTrainingAddressDEA() == false)
+            if ($clubDojo->getClubDojoDEA() == false)
             {
-                $trainingAddress->setTrainingAddressDEAFormation(null);
+                $clubDojo->setClubDojoDEAFormation(null);
             }
 
-            $trainingAddress->setTrainingAddressClub($this->getClub());
+            $clubDojo->setClubDojo($this->getClub());
 
             $this->em->persist($trainingAddress);
         }
 
         if ($action == 'Delete')
         {
-            $this->em->remove($trainingAddress);
+            $this->em->remove($clubDojo);
         }
 
         $this->em->flush();

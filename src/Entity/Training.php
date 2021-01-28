@@ -2,8 +2,6 @@
 // src/Entity/Training.php
 namespace App\Entity;
 
-use DateTimeInterface;
-
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 
@@ -22,101 +20,80 @@ class Training
      * @ORM\GeneratedValue(strategy="AUTO")
      * @ORM\Column(type="integer")
      */
-    private $training_id;
+    private ?int $training_id;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $training_name;
-
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     */
-    private $training_day;
-
-    /**
-     * @ORM\Column(type="time", nullable=true)
-     */
-    private $training_starting_hour;
-
-    /**
-     * @ORM\Column(type="time", nullable=true)
-     */
-    private $training_ending_hour;
+    private ?string $training_name;
 
     /**
      * @ORM\Column(type="integer")
      */
-    private $training_type;
+    private ?int $training_type;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $training_place;
+    private ?string $training_place;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $training_street;
+    private ?string $training_street;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
      */
-    private $training_zip;
+    private ?int $training_zip;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $training_city;
+    private ?string $training_city;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
      */
-    private $training_total_sessions;
+    private ?int $training_total_sessions;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
      */
-    private $training_old_id;
+    private ?int $training_old_id;
 
     /**
      * @ORM\Column(type="text", nullable=true)
      */
-    private $training_comment;
+    private ?string $training_comment;
 
     /**
      * @Assert\Type(type="App\Entity\TrainingSession")
      * @Assert\Valid
      */
-    protected $session;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\TrainingAddress", inversedBy="training_addresses", cascade={"persist"})
-     * @ORM\JoinColumn(nullable=true, name="training_join_training_address", referencedColumnName="training_address_id")
-     */
-    private $training_address;
+    protected ?TrainingSession $session;
 
     /**
      * @ORM\OneToOne(targetEntity="App\Entity\TrainingSession", cascade={"persist"})
      * @ORM\JoinColumn(nullable=true, name="training_join_training_first_session", referencedColumnName="training_session_id")
      */
-    private $training_first_session;
+    private ?TrainingSession $training_first_session;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Club", inversedBy="club_trainings", cascade={"persist"})
      * @ORM\JoinColumn(nullable=true, name="training_join_club", referencedColumnName="club_id")
      */
-    private $training_club;
+    private ?Club $training_club;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\TrainingAttendance", mappedBy="training", orphanRemoval=true, cascade={"persist"})
      */
-    private $training_attendances;
+    private ArrayCollection $training_attendances;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\TrainingSession", mappedBy="training", orphanRemoval=true, cascade={"persist"})
      */
-    private $training_sessions;
+    private ArrayCollection $training_sessions;
 
     public function __construct()
     {
@@ -144,42 +121,6 @@ class Training
     public function setTrainingName(?string $training_name): self
     {
         $this->training_name = $training_name;
-
-        return $this;
-    }
-
-    public function getTrainingDay(): ?int
-    {
-        return $this->training_day;
-    }
-
-    public function setTrainingDay(?int $training_day): self
-    {
-        $this->training_day = $training_day;
-
-        return $this;
-    }
-
-    public function getTrainingStartingHour(): ?DateTimeInterface
-    {
-        return $this->training_starting_hour;
-    }
-
-    public function setTrainingStartingHour(?DateTimeInterface $training_starting_hour): self
-    {
-        $this->training_starting_hour = $training_starting_hour;
-
-        return $this;
-    }
-
-    public function getTrainingEndingHour(): ?DateTimeInterface
-    {
-        return $this->training_ending_hour;
-    }
-
-    public function setTrainingEndingHour(?DateTimeInterface $training_ending_hour): self
-    {
-        $this->training_ending_hour = $training_ending_hour;
 
         return $this;
     }
@@ -288,18 +229,6 @@ class Training
     public function setSession(?TrainingSession $session = null)
     {
         $this->session = $session;
-    }
-
-    public function getTrainingAddress(): ?TrainingAddress
-    {
-        return $this->training_address;
-    }
-
-    public function setTrainingAddress(?TrainingAddress $training_address): self
-    {
-        $this->training_address = $training_address;
-
-        return $this;
     }
 
     public function getTrainingFirstSession(): ?TrainingSession
