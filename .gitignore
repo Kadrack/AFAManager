@@ -22,3 +22,6 @@
 /composer.phar
 
 .php-version
+
+*.lock
+.env.local.php
