@@ -5,3 +5,4 @@ twig:
 
     globals:
         listData: '@App\Service\ListData'
+        tools: '@App\Service\Tools'
