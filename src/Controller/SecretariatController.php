@@ -1198,7 +1198,7 @@ class SecretariatController extends AbstractController
 
             $duration = date_diff($session->getTrainingSessionEndingHour(), $session->getTrainingSessionStartingHour());
 
-            $session->setTrainingSessionDuration($duration->format('%h')*60 . $duration->format('%i'));
+            $session->setTrainingSessionDuration($duration->h*60 + $duration->i);
 
             $training->addTrainingSessions($session);
             $training->setTrainingFirstSession($session);
