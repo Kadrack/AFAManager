@@ -88,12 +88,12 @@ class Training
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\TrainingAttendance", mappedBy="training", orphanRemoval=true, cascade={"persist"})
      */
-    private ArrayCollection $training_attendances;
+    private $training_attendances;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\TrainingSession", mappedBy="training", orphanRemoval=true, cascade={"persist"})
      */
-    private ArrayCollection $training_sessions;
+    private $training_sessions;
 
     public function __construct()
     {
