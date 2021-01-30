@@ -18,3 +18,6 @@ php bin/console doctrine:migrations:migrate
 # Create User
 ```bash
 ```
+
+# Database Diagram
+![](DBDiagram.png)

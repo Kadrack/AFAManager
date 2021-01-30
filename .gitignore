@@ -25,3 +25,4 @@
 
 *.lock
 .env.local.php
+phpMyAdmin*
