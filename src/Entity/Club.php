@@ -134,7 +134,7 @@ class Club
     private ?ClubTeacher $club_main_teacher;
 
     /**
-     * @ORM\OneToMany(targetEntity="ClubDojo", mappedBy="club_dojo", orphanRemoval=true, cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="App\Entity\ClubDojo", mappedBy="club_dojo_club", orphanRemoval=true, cascade={"persist"})
      */
     private ?Collection $club_dojos;
 
@@ -159,7 +159,7 @@ class Club
     private ?Collection $club_teachers;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Training", mappedBy="training_club", orphanRemoval=true, cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="App\Entity\ClubLesson", mappedBy="club_lesson_club", orphanRemoval=true, cascade={"persist"})
      */
     private ?Collection $club_lessons;
 

@@ -74,12 +74,12 @@ class ClubDojo
      * @ORM\ManyToOne(targetEntity="App\Entity\Club", inversedBy="club_dojos", cascade={"persist"})
      * @ORM\JoinColumn(nullable=true, name="club_dojo_join_club", referencedColumnName="club_id")
      */
-    private ?Club $club_dojo;
+    private ?Club $club_dojo_club;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\ClubLesson", mappedBy="club_lesson_dojo", orphanRemoval=true, cascade={"persist"})
      */
-    private ArrayCollection $club_lessons;
+    private $club_dojo_lessons;
 
     public function __construct()
     {
@@ -187,14 +187,14 @@ class ClubDojo
         return $this;
     }
 
-    public function getClubDojo(): ?Club
+    public function getClubDojoClub(): ?Club
     {
-        return $this->club_dojo;
+        return $this->club_dojo_club;
     }
 
-    public function setClubDojo(?Club $club_dojo): self
+    public function setClubDojoClub(?Club $club_dojo_club): self
     {
-        $this->club_dojo = $club_dojo;
+        $this->club_dojo_club = $club_dojo_club;
 
         return $this;
     }
@@ -202,28 +202,28 @@ class ClubDojo
     /**
      * @return Collection|ClubLesson[]
      */
-    public function getClubLessons(): Collection
+    public function getClubDojoLessons(): Collection
     {
         return $this->club_lessons;
     }
 
-    public function addClubLessons(ClubLesson $club_lesson): self
+    public function addClubDojoLessons(ClubLesson $club_dojo_lesson): self
     {
-        if (!$this->club_lessons->contains($club_lesson)) {
-            $this->club_lessons[] = $club_lesson;
-            $club_lesson->setClubLessonDojo($this);
+        if (!$this->club_dojo_lessons->contains($club_dojo_lesson)) {
+            $this->club_dojo_lessons[] = $club_dojo_lesson;
+            $club_dojo_lesson->setClubLessonDojo($this);
         }
 
         return $this;
     }
 
-    public function removeClubLessons(ClubLesson $club_lesson): self
+    public function removeClubDojoLessons(ClubLesson $club_dojo_lesson): self
     {
-        if ($this->club_lessons->contains($club_lesson)) {
-            $this->club_lessons->removeElement($club_lesson);
+        if ($this->club_dojo_lessons->contains($club_dojo_lesson)) {
+            $this->club_dojo_lessons->removeElement($club_dojo_lesson);
             // set the owning side to null (unless already changed)
-            if ($club_lesson->getClubLessonDojo() === $this) {
-                $club_lesson->setClubLessonDojo(null);
+            if ($club_dojo_lesson->getClubLessonDojo() === $this) {
+                $club_dojo_lesson->setClubLessonDojo(null);
             }
         }
 
