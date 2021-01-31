@@ -18,6 +18,8 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
  */
 class UserTools
 {
+    private ?array $listManagedClub;
+
     private EntityManagerInterface $entityManager;
 
     private bool $isDuplicate;
@@ -31,8 +33,10 @@ class UserTools
      */
     public function __construct(EntityManagerInterface $entityManager, UserPasswordEncoderInterface $passwordEncoder)
     {
-        $this->entityManager   = $entityManager;
-        $this->passwordEncoder = $passwordEncoder;
+        $this->listManagedClub  = null;
+
+        $this->entityManager    = $entityManager;
+        $this->passwordEncoder  = $passwordEncoder;
     }
 
     /**
@@ -273,5 +277,22 @@ class UserTools
         $this->entityManager->flush();
 
         return true;
+    }
+
+    public function listManagedClub(User $user): ?array
+    {
+        if ($this->listManagedClub !== null)
+        {
+            return $this->listManagedClub;
+        }
+
+        $clubs = $this->entityManager->getRepository(UserAccess::class)->findBy(['user_access_role' => 'ROLE_CLUB', 'user_access_user' => $user]);
+
+        foreach ($clubs as $club)
+        {
+            $this->listManagedClub[] = $club->getUserAccessClub()->getClubId();
+        }
+
+        return $this->listManagedClub;
     }
 }
