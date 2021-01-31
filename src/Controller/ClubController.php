@@ -68,13 +68,16 @@ class ClubController extends AbstractController
     {
         $managedClubs = $userTools->listManagedClub($this->getUser());
 
-        if (isset($managedClubs[$request->query->get('change_actual')]))
+        if ($request->query->has('change_actual'))
         {
-            $session->set('actual_club', $request->query->get('change_actual'));
-        }
-        else
-        {
-            $session->set('actual_club', 0);
+            if (isset($managedClubs[$request->query->getInt('change_actual')]))
+            {
+                $session->set('actual_club', $request->query->get('change_actual'));
+            }
+            else
+            {
+                $session->set('actual_club', 0);
+            }
         }
 
         $this->clubTools->setClub($this->getDoctrine()->getRepository(Club::class)->findOneBy(['club_id' => $managedClubs[$session->get('actual_club')]]));
@@ -361,13 +364,16 @@ class ClubController extends AbstractController
     {
         $managedClubs = $userTools->listManagedClub($this->getUser());
 
-        if (isset($managedClubs[$request->query->get('change_actual')]))
+        if ($request->query->has('change_actual'))
         {
-            $session->set('actual_club', $request->query->get('change_actual'));
-        }
-        else
-        {
-            $session->set('actual_club', 0);
+            if (isset($managedClubs[$request->query->getInt('change_actual')]))
+            {
+                $session->set('actual_club', $request->query->get('change_actual'));
+            }
+            else
+            {
+                $session->set('actual_club', 0);
+            }
         }
 
         $this->clubTools->setClub($this->getDoctrine()->getRepository(Club::class)->findOneBy(['club_id' => $managedClubs[$session->get('actual_club')]]));
@@ -397,13 +403,16 @@ class ClubController extends AbstractController
     {
         $managedClubs = $userTools->listManagedClub($this->getUser());
 
-        if (isset($managedClubs[$request->query->get('change_actual')]))
+        if ($request->query->has('change_actual'))
         {
-            $session->set('actual_club', $request->query->get('change_actual'));
-        }
-        else
-        {
-            $session->set('actual_club', 0);
+            if (isset($managedClubs[$request->query->getInt('change_actual')]))
+            {
+                $session->set('actual_club', $request->query->get('change_actual'));
+            }
+            else
+            {
+                $session->set('actual_club', 0);
+            }
         }
 
         $this->clubTools->setClub($this->getDoctrine()->getRepository(Club::class)->findOneBy(['club_id' => $managedClubs[$session->get('actual_club')]]));
@@ -673,13 +682,16 @@ class ClubController extends AbstractController
     {
         $managedClubs = $userTools->listManagedClub($this->getUser());
 
-        if (isset($managedClubs[$request->query->get('change_actual')]))
+        if ($request->query->has('change_actual'))
         {
-            $session->set('actual_club', $request->query->get('change_actual'));
-        }
-        else
-        {
-            $session->set('actual_club', 0);
+            if (isset($managedClubs[$request->query->getInt('change_actual')]))
+            {
+                $session->set('actual_club', $request->query->get('change_actual'));
+            }
+            else
+            {
+                $session->set('actual_club', 0);
+            }
         }
 
         $this->clubTools->setClub($this->getDoctrine()->getRepository(Club::class)->findOneBy(['club_id' => $managedClubs[$session->get('actual_club')]]));
@@ -698,13 +710,16 @@ class ClubController extends AbstractController
     {
         $managedClubs = $userTools->listManagedClub($this->getUser());
 
-        if (isset($managedClubs[$request->query->get('change_actual')]))
+        if ($request->query->has('change_actual'))
         {
-            $session->set('actual_club', $request->query->get('change_actual'));
-        }
-        else
-        {
-            $session->set('actual_club', 0);
+            if (isset($managedClubs[$request->query->getInt('change_actual')]))
+            {
+                $session->set('actual_club', $request->query->get('change_actual'));
+            }
+            else
+            {
+                $session->set('actual_club', 0);
+            }
         }
 
         $this->clubTools->setClub($this->getDoctrine()->getRepository(Club::class)->findOneBy(['club_id' => $managedClubs[$session->get('actual_club')]]));
