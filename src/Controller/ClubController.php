@@ -8,7 +8,6 @@ use App\Entity\ClubLesson;
 use App\Entity\ClubTeacher;
 use App\Entity\Grade;
 use App\Entity\Member;
-use App\Entity\Training;
 use App\Entity\User;
 
 use App\Form\ClubType;
@@ -50,7 +49,7 @@ class ClubController extends AbstractController
 
         $managedClubs = $userTools->listManagedClub($security->getUser());
 
-        if (!is_int($session->get('actual_club')))
+        if (!isset($managedClubs[$session->get('actual_club')]))
         {
             $session->set('actual_club', 0);
         }
@@ -60,11 +59,27 @@ class ClubController extends AbstractController
 
     /**
      * @Route("/index_dojo", name="dojo_index")
+     * @param Request $request
+     * @param SessionInterface $session
+     * @param UserTools $userTools
      * @return Response
      */
-    public function dojoIndex(): Response
+    public function dojoIndex(Request $request, SessionInterface $session, UserTools $userTools): Response
     {
-        return $this->render('Club/Dojo/index.html.twig', array('clubTools' => $this->clubTools));
+        $managedClubs = $userTools->listManagedClub($this->getUser());
+
+        if (isset($managedClubs[$request->query->get('change_actual')]))
+        {
+            $session->set('actual_club', $request->query->get('change_actual'));
+        }
+        else
+        {
+            $session->set('actual_club', 0);
+        }
+
+        $this->clubTools->setClub($this->getDoctrine()->getRepository(Club::class)->findOneBy(['club_id' => $managedClubs[$session->get('actual_club')]]));
+
+        return $this->render('Club/Dojo/index.html.twig', array('clubTools' => $this->clubTools, 'nextManagedClub' => sizeof($managedClubs) == 1 ? 0 : $session->get('actual_club')+1));
     }
 
     /**
@@ -338,10 +353,25 @@ class ClubController extends AbstractController
     /**
      * @Route("/detail_association", name="association_details")
      * @param Request $request
+     * @param SessionInterface $session
+     * @param UserTools $userTools
      * @return RedirectResponse|Response
      */
-    public function associationDetails(Request $request)
+    public function associationDetails(Request $request, SessionInterface $session, UserTools $userTools)
     {
+        $managedClubs = $userTools->listManagedClub($this->getUser());
+
+        if (isset($managedClubs[$request->query->get('change_actual')]))
+        {
+            $session->set('actual_club', $request->query->get('change_actual'));
+        }
+        else
+        {
+            $session->set('actual_club', 0);
+        }
+
+        $this->clubTools->setClub($this->getDoctrine()->getRepository(Club::class)->findOneBy(['club_id' => $managedClubs[$session->get('actual_club')]]));
+
         $form = $this->createForm(ClubType::class, $this->clubTools->getClub(), array('form' => 'detail_association'));
 
         $form->handleRequest($request);
@@ -353,20 +383,36 @@ class ClubController extends AbstractController
             return $this->redirectToRoute('common_index');
         }
 
-        return $this->render('Club/Association/details.html.twig', array('form' => $form->createView(), 'club' => $this->clubTools->getClub()));
+        return $this->render('Club/Association/details.html.twig', array('form' => $form->createView(), 'club' => $this->clubTools->getClub(), 'nextManagedClub' => sizeof($managedClubs) == 1 ? 0 : $session->get('actual_club')+1));
     }
 
     /**
      * @Route("/liste_des_membres", name="members_list")
+     * @param Request $request
+     * @param SessionInterface $session
+     * @param UserTools $userTools
      * @return Response
      */
-    public function membersList(): Response
+    public function membersList(Request $request, SessionInterface $session, UserTools $userTools): Response
     {
+        $managedClubs = $userTools->listManagedClub($this->getUser());
+
+        if (isset($managedClubs[$request->query->get('change_actual')]))
+        {
+            $session->set('actual_club', $request->query->get('change_actual'));
+        }
+        else
+        {
+            $session->set('actual_club', 0);
+        }
+
+        $this->clubTools->setClub($this->getDoctrine()->getRepository(Club::class)->findOneBy(['club_id' => $managedClubs[$session->get('actual_club')]]));
+
         $members = $this->getDoctrine()->getRepository(Member::class)->getClubActiveMembers($this->clubTools->getClub());
 
         $old_members = $this->getDoctrine()->getRepository(Member::class)->getClubRecentInactiveMembers($this->clubTools->getClub());
 
-        return $this->render('Club/Member/list.html.twig', array('members' => $members, 'old_members' => $old_members, 'club' => $this->clubTools->getClub()));
+        return $this->render('Club/Member/list.html.twig', array('members' => $members, 'old_members' => $old_members, 'club' => $this->clubTools->getClub(), 'nextManagedClub' => sizeof($managedClubs) == 1 ? 0 : $session->get('actual_club')+1));
     }
 
     /**
@@ -618,20 +664,51 @@ class ClubController extends AbstractController
 
     /**
      * @Route("/liste_gestionnaire", name="manager_index")
+     * @param Request $request
+     * @param SessionInterface $session
+     * @param UserTools $userTools
      * @return Response
      */
-    public function managerIndex(): Response
+    public function managerIndex(Request $request, SessionInterface $session, UserTools $userTools): Response
     {
-        return $this->render('Club/Manager/index.html.twig', array('clubTools' => $this->clubTools));
+        $managedClubs = $userTools->listManagedClub($this->getUser());
+
+        if (isset($managedClubs[$request->query->get('change_actual')]))
+        {
+            $session->set('actual_club', $request->query->get('change_actual'));
+        }
+        else
+        {
+            $session->set('actual_club', 0);
+        }
+
+        $this->clubTools->setClub($this->getDoctrine()->getRepository(Club::class)->findOneBy(['club_id' => $managedClubs[$session->get('actual_club')]]));
+
+        return $this->render('Club/Manager/index.html.twig', array('clubTools' => $this->clubTools, 'nextManagedClub' => sizeof($managedClubs) == 1 ? 0 : $session->get('actual_club')+1));
     }
 
     /**
      * @Route("/rechercher_membres", name="search_members")
      * @param Request $request
+     * @param SessionInterface $session
+     * @param UserTools $userTools
      * @return Response
      */
-    public function searchMembers(Request $request): Response
+    public function searchMembers(Request $request, SessionInterface $session, UserTools $userTools): Response
     {
+        $managedClubs = $userTools->listManagedClub($this->getUser());
+
+        if (isset($managedClubs[$request->query->get('change_actual')]))
+        {
+            $session->set('actual_club', $request->query->get('change_actual'));
+        }
+        else
+        {
+            $session->set('actual_club', 0);
+        }
+
+        $this->clubTools->setClub($this->getDoctrine()->getRepository(Club::class)->findOneBy(['club_id' => $managedClubs[$session->get('actual_club')]]));
+
         $search = null; $results = null;
 
         $form = $this->createForm(ClubType::class, $search, array('form' => 'search_members', 'data_class' => null));
@@ -642,9 +719,9 @@ class ClubController extends AbstractController
         {
             $results = $this->getDoctrine()->getRepository(Member::class)->getFullSearchClubMembers($form->get('Search')->getData(), $club->getClubId());
 
-            return $this->render('Club/Member/search.html.twig', array('form' => $form->createView(), 'results' => $results));
+            return $this->render('Club/Member/search.html.twig', array('form' => $form->createView(), 'results' => $results, 'clubTools' => $this->clubTools, 'nextManagedClub' => sizeof($managedClubs) == 1 ? 0 : $session->get('actual_club')+1));
         }
 
-        return $this->render('Club/Member/search.html.twig', array('form' => $form->createView(), 'results' => $results));
+        return $this->render('Club/Member/search.html.twig', array('form' => $form->createView(), 'results' => $results, 'clubTools' => $this->clubTools, 'nextManagedClub' => sizeof($managedClubs) == 1 ? 0 : $session->get('actual_club')+1));
     }
 }

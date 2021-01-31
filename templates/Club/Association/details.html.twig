@@ -9,7 +9,7 @@
 
 {% block body %}
     {{ form_start(form) }}
-    <h1>{{ club.getClubName()|title }}</h1>
+    <h1>{{ club.getClubName()|title }}{% if nextManagedClub != 0 %}<a class="btn btn-primary" href="{{ path('club_association_details') }}?change_actual={{ nextManagedClub }}">Club Suivant</a>{% endif %}</h1>
     <h2>Siège</h2>
     <table class="table table-sm table-hover">
         <thead>

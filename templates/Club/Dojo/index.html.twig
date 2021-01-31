@@ -9,7 +9,7 @@
 
 {% block body %}
     <h1>
-        {{ clubTools.getClub.getClubName()|title }} n°{{ clubTools.getClub.getClubId() }}
+        {{ clubTools.getClub.getClubName()|title }}
         <div class="btn-group" role="group" aria-label="Ajouter">
             <button type="button" class="btn btn-primary">Ajouter</button>
             <div class="btn-group" role="group">
@@ -22,6 +22,7 @@
                 </div>
             </div>
         </div>
+        {% if nextManagedClub != 0 %}<a class="btn btn-primary" href="{{ path('club_dojo_index') }}?change_actual={{ nextManagedClub }}">Club Suivant</a>{% endif %}
     </h1>
     <h2>Dojo(s)</h2>
     <table class="table table-sm table-hover">

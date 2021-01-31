@@ -8,6 +8,7 @@
 {% endblock %}
 
 {% block body %}
+    <h1>Recherche membres {{ clubTools.club.clubName|title }}{% if nextManagedClub != 0 %}<a class="btn btn-primary" href="{{ path('club_search_members') }}?change_actual={{ nextManagedClub }}">Club Suivant</a>{% endif %}</h1>
     {{ form_start(form) }}
     {{ form_widget(form) }}
     {{ form_end(form) }}
