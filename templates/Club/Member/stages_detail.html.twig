@@ -19,6 +19,7 @@
             </tr>
         </thead>
         <tbody>
+        {% if memberTools.getStages().history.Stage is defined %}
         {% for stage in memberTools.getStages().history.Stage %}
             <tr>
                 <td>{{ stage.Name }}</td>
@@ -26,6 +27,7 @@
                 <td>{{ stage.Duration }}</td>
             </tr>
         {% endfor %}
+        {% endif %}
         </tbody>
     </table>
 {% endblock %}

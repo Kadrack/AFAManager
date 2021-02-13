@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Club;
 use App\Entity\ClubDojo;
 use App\Entity\ClubHistory;
+use App\Entity\ClubLesson;
 use App\Entity\ClubTeacher;
 use App\Entity\Commission;
 use App\Entity\CommissionMember;
@@ -219,7 +220,7 @@ class SecretariatController extends AbstractController
     }
 
     /**
-     * @Route("/modifier_dojo/{address<\d+>}/{club<\d+>}", name="dojo_address_update")
+     * @Route("/modifier_dojo/{clubDojo<\d+>}/{club<\d+>}", name="dojo_address_update")
      * @param Request $request
      * @param ClubDojo $clubDojo
      * @param Club $club
@@ -245,7 +246,7 @@ class SecretariatController extends AbstractController
     }
 
     /**
-     * @Route("/supprimer_dojo/{address<\d+>}/{club<\d+>}", name="dojo_address_delete")
+     * @Route("/supprimer_dojo/{clubDojo<\d+>}/{club<\d+>}", name="dojo_address_delete")
      * @param Request $request
      * @param ClubDojo $clubDojo
      * @param Club $club
@@ -281,7 +282,7 @@ class SecretariatController extends AbstractController
     {
         $clubTools->setClub($club);
 
-        $form = $this->createForm(ClubType::class, new Training(), array('form' => 'training_create', 'data_class' => Training::class, 'choices' => $club->getClubAddresses()));
+        $form = $this->createForm(ClubType::class, new ClubLesson(), array('form' => 'training_create', 'data_class' => ClubLesson::class, 'choices' => $club->getClubDojos()));
 
         $form->handleRequest($request);
 
@@ -296,18 +297,18 @@ class SecretariatController extends AbstractController
     }
 
     /**
-     * @Route("/modifier_horaire/{training<\d+>}/{club<\d+>}", name="dojo_training_update")
+     * @Route("/modifier_horaire/{clubLesson<\d+>}/{club<\d+>}", name="dojo_training_update")
      * @param Request $request
-     * @param Training $training
+     * @param ClubLesson $clubLesson
      * @param Club $club
      * @param ClubTools $clubTools
      * @return RedirectResponse|Response
      */
-    public function dojoTrainingUpdate(Request $request, Training $training, Club $club, ClubTools $clubTools)
+    public function dojoTrainingUpdate(Request $request, ClubLesson $clubLesson, Club $club, ClubTools $clubTools)
     {
         $clubTools->setClub($club);
 
-        $form = $this->createForm(ClubType::class, $training, array('form' => 'training_update', 'data_class' => Training::class));
+        $form = $this->createForm(ClubType::class, $clubLesson, array('form' => 'training_update', 'data_class' => ClubLesson::class));
 
         $form->handleRequest($request);
 
@@ -322,18 +323,18 @@ class SecretariatController extends AbstractController
     }
 
     /**
-     * @Route("/supprimer_horaire/{training<\d+>}/{club<\d+>}", name="dojo_training_delete")
+     * @Route("/supprimer_horaire/{clubLesson<\d+>}/{club<\d+>}", name="dojo_training_delete")
      * @param Request $request
-     * @param Training $training
+     * @param ClubLesson $clubLesson
      * @param Club $club
      * @param ClubTools $clubTools
      * @return RedirectResponse|Response
      */
-    public function dojoTrainingDelete(Request $request, Training $training, Club $club, ClubTools $clubTools)
+    public function dojoTrainingDelete(Request $request, ClubLesson $clubLesson, Club $club, ClubTools $clubTools)
     {
         $clubTools->setClub($club);
 
-        $form = $this->createForm(ClubType::class, $training, array('form' => 'training_delete', 'data_class' => Training::class));
+        $form = $this->createForm(ClubType::class, $clubLesson, array('form' => 'training_delete', 'data_class' => ClubLesson::class));
 
         $form->handleRequest($request);
 

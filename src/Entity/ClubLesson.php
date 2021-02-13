@@ -45,7 +45,7 @@ class ClubLesson
     private ?string $club_lesson_comment;
 
     /**
-     * @ORM\ManyToOne(targetEntity="ClubDojo", inversedBy="club_dojos", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="ClubDojo", inversedBy="club_dojo_lessons", cascade={"persist"})
      * @ORM\JoinColumn(nullable=true, name="club_lesson_join_club_dojo", referencedColumnName="club_dojo_id")
      */
     private ?ClubDojo $club_lesson_dojo;
@@ -54,7 +54,7 @@ class ClubLesson
      * @ORM\ManyToOne(targetEntity="App\Entity\Club", inversedBy="club_lessons", cascade={"persist"})
      * @ORM\JoinColumn(nullable=true, name="club_lesson_join_club", referencedColumnName="club_id")
      */
-    private ?Club $club_lesson;
+    private ?Club $club_lesson_club;
 
     public function getClubLessonId(): ?int
     {
@@ -140,14 +140,14 @@ class ClubLesson
         return $this;
     }
 
-    public function getClubLesson(): ?Club
+    public function getClubLessonClub(): ?Club
     {
-        return $this->club_lesson;
+        return $this->club_lesson_club;
     }
 
-    public function setClubLesson(?Club $club_lesson): self
+    public function setClubLessonClub(?Club $club_lesson_club): self
     {
-        $this->club_lesson = $club_lesson;
+        $this->club_lesson_club = $club_lesson_club;
 
         return $this;
     }
