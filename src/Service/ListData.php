@@ -307,9 +307,9 @@ class ListData
      * @param int $type
      * @return false|int|int[]|string|void
      */
-    public function getTrainingType(int $type)
+    public function getLessonType(int $type)
     {
-        $types = array('Cours Adultes' => 1, 'Cours Enfants' => 2, 'Cours Adultes/Enfants' => 3, 'Stage Fédéral' => 4, 'Stage Privé' => 5);
+        $types = array('Cours Adultes' => 1, 'Cours Enfants' => 2, 'Cours Adultes/Enfants' => 3);
 
         if ($type == 0)
         {

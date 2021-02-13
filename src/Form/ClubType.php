@@ -139,14 +139,14 @@ class ClubType extends AbstractType
     private function dojoCreate(FormBuilderInterface $builder)
     {
         $builder
-            ->add('TrainingAddressName', TextType::class, array('label' => 'Lieu : ', 'required' => false))
-            ->add('TrainingAddressStreet', TextType::class, array('label' => 'Adresse : '))
-            ->add('TrainingAddressZip', IntegerType::class, array('label' => 'Code postal : '))
-            ->add('TrainingAddressCity', TextType::class, array('label' => 'Localité : '))
-            ->add('TrainingAddressTatamis', IntegerType::class, array('label' => 'Tatamis (m²) : ', 'required' => false))
-            ->add('TrainingAddressDEA', ChoiceType::class, array('label' => 'Présence d\'un DEA : ', 'multiple' => false, 'expanded' => true, 'choices' => array('Non' => 0, 'Oui' => 1)))
-            ->add('TrainingAddressDEAFormation', DateType::class, array('label' => 'Date de formation : ', 'widget' => 'single_text', 'required' => false))
-            ->add('TrainingAddressComment', TextareaType::class, array('label' => 'Commentaire salle : ', 'required' => false))
+            ->add('ClubDojoName', TextType::class, array('label' => 'Lieu : ', 'required' => false))
+            ->add('ClubDojoStreet', TextType::class, array('label' => 'Adresse : '))
+            ->add('ClubDojoZip', IntegerType::class, array('label' => 'Code postal : '))
+            ->add('ClubDojoCity', TextType::class, array('label' => 'Localité : '))
+            ->add('ClubDojoTatamis', IntegerType::class, array('label' => 'Tatamis (m²) : ', 'required' => false))
+            ->add('ClubDojoDEA', ChoiceType::class, array('label' => 'Présence d\'un DEA : ', 'multiple' => false, 'expanded' => true, 'choices' => array('Non' => 0, 'Oui' => 1)))
+            ->add('ClubDojoDEAFormation', DateType::class, array('label' => 'Date de formation : ', 'widget' => 'single_text', 'required' => false))
+            ->add('ClubDojoComment', TextareaType::class, array('label' => 'Commentaire salle : ', 'required' => false))
             ->add('Submit', SubmitType::class, array('label' => 'Ajouter'))
         ;
     }
@@ -154,14 +154,14 @@ class ClubType extends AbstractType
     private function dojoUpdate(FormBuilderInterface $builder)
     {
         $builder
-            ->add('TrainingAddressName', TextType::class, array('label' => 'Lieu : ', 'required' => false))
-            ->add('TrainingAddressStreet', TextType::class, array('label' => 'Adresse : '))
-            ->add('TrainingAddressZip', IntegerType::class, array('label' => 'Code postal : '))
-            ->add('TrainingAddressCity', TextType::class, array('label' => 'Localité : '))
-            ->add('TrainingAddressTatamis', IntegerType::class, array('label' => 'Tatamis (m²) : ', 'required' => false))
-            ->add('TrainingAddressDEA', ChoiceType::class, array('label' => 'Présence d\'un DEA : ', 'multiple' => false, 'expanded' => true, 'choices' => array('Non' => 0, 'Oui' => 1)))
-            ->add('TrainingAddressDEAFormation', DateType::class, array('label' => 'Date de formation : ', 'widget' => 'single_text', 'required' => false))
-            ->add('TrainingAddressComment', TextareaType::class, array('label' => 'Commentaire salle : ', 'required' => false))
+            ->add('ClubDojoName', TextType::class, array('label' => 'Lieu : ', 'required' => false))
+            ->add('ClubDojoStreet', TextType::class, array('label' => 'Adresse : '))
+            ->add('ClubDojoZip', IntegerType::class, array('label' => 'Code postal : '))
+            ->add('ClubDojoCity', TextType::class, array('label' => 'Localité : '))
+            ->add('ClubDojoTatamis', IntegerType::class, array('label' => 'Tatamis (m²) : ', 'required' => false))
+            ->add('ClubDojoDEA', ChoiceType::class, array('label' => 'Présence d\'un DEA : ', 'multiple' => false, 'expanded' => true, 'choices' => array('Non' => 0, 'Oui' => 1)))
+            ->add('ClubDojoDEAFormation', DateType::class, array('label' => 'Date de formation : ', 'widget' => 'single_text', 'required' => false))
+            ->add('ClubDojoComment', TextareaType::class, array('label' => 'Commentaire salle : ', 'required' => false))
             ->add('Submit', SubmitType::class, array('label' => 'Modifier'))
         ;
     }
@@ -169,14 +169,14 @@ class ClubType extends AbstractType
     private function dojoDelete(FormBuilderInterface $builder)
     {
         $builder
-            ->add('TrainingAddressName', TextType::class, array('label' => 'Lieu : ', 'required' => false, 'disabled' => true))
-            ->add('TrainingAddressStreet', TextType::class, array('label' => 'Adresse : ', 'disabled' => true))
-            ->add('TrainingAddressZip', IntegerType::class, array('label' => 'Code postal : ', 'disabled' => true))
-            ->add('TrainingAddressCity', TextType::class, array('label' => 'Localité : ', 'disabled' => true))
-            ->add('TrainingAddressTatamis', IntegerType::class, array('label' => 'Tatamis (m²) : ', 'required' => false, 'disabled' => true))
-            ->add('TrainingAddressDEA', ChoiceType::class, array('label' => 'Présence d\'un DEA : ', 'multiple' => false, 'expanded' => true, 'choices' => array('Non' => 0, 'Oui' => 1), 'required' => false, 'disabled' => true))
-            ->add('TrainingAddressDEAFormation', DateType::class, array('label' => 'Date de formation : ', 'widget' => 'single_text', 'disabled' => true))
-            ->add('TrainingAddressComment', TextareaType::class, array('label' => 'Commentaire salle : ', 'required' => false, 'disabled' => true))
+            ->add('ClubDojoName', TextType::class, array('label' => 'Lieu : ', 'required' => false, 'disabled' => true))
+            ->add('ClubDojoStreet', TextType::class, array('label' => 'Adresse : ', 'disabled' => true))
+            ->add('ClubDojoZip', IntegerType::class, array('label' => 'Code postal : ', 'disabled' => true))
+            ->add('ClubDojoCity', TextType::class, array('label' => 'Localité : ', 'disabled' => true))
+            ->add('ClubDojoTatamis', IntegerType::class, array('label' => 'Tatamis (m²) : ', 'required' => false, 'disabled' => true))
+            ->add('ClubDojoDEA', ChoiceType::class, array('label' => 'Présence d\'un DEA : ', 'multiple' => false, 'expanded' => true, 'choices' => array('Non' => 0, 'Oui' => 1), 'required' => false, 'disabled' => true))
+            ->add('ClubDojoDEAFormation', DateType::class, array('label' => 'Date de formation : ', 'widget' => 'single_text', 'disabled' => true))
+            ->add('ClubDojoComment', TextareaType::class, array('label' => 'Commentaire salle : ', 'required' => false, 'disabled' => true))
             ->add('Submit', SubmitType::class, array('label' => 'Supprimer'))
         ;
     }
@@ -282,12 +282,12 @@ class ClubType extends AbstractType
         $list = new ListData();
 
         $builder
-            ->add('TrainingDay', ChoiceType::class, array('label' => 'Jour : ', 'placeholder' => 'Choississez un jour', 'choices' => $list->getDay(0)))
-            ->add('TrainingStartingHour', TimeType::class, array ('label' => 'Début : '))
-            ->add('TrainingEndingHour', TimeType::class, array ('label' => 'Fin : '))
-            ->add('TrainingType', ChoiceType::class, array('label' => 'Type de cours : ', 'placeholder' => 'Choississez un type de cours', 'choices' => $list->getTrainingType(0)))
-            ->add('TrainingAddress', EntityType::class, array ('label' => 'Adresse : ', 'class' => ClubDojo::class, 'choices' => $choices, 'choice_label' => 'training_address_street'))
-            ->add('TrainingComment', TextareaType::class, array('label' => 'Commentaire : ', 'required' => false))
+            ->add('ClubLessonDay', ChoiceType::class, array('label' => 'Jour : ', 'placeholder' => 'Choississez un jour', 'choices' => $list->getDay(0)))
+            ->add('ClubLessonStartingHour', TimeType::class, array ('label' => 'Début : '))
+            ->add('ClubLessonEndingHour', TimeType::class, array ('label' => 'Fin : '))
+            ->add('ClubLessonType', ChoiceType::class, array('label' => 'Type de cours : ', 'placeholder' => 'Choississez un type de cours', 'choices' => $list->getLessonType(0)))
+            ->add('ClubLessonDojo', EntityType::class, array ('label' => 'Adresse : ', 'class' => ClubDojo::class, 'choices' => $choices, 'choice_label' => 'club_dojo_street'))
+            ->add('ClubLessonComment', TextareaType::class, array('label' => 'Commentaire : ', 'required' => false))
             ->add('Submit', SubmitType::class, array('label' => 'Ajouter'))
         ;
     }
@@ -297,12 +297,12 @@ class ClubType extends AbstractType
         $list = new ListData();
 
         $builder
-            ->add('TrainingDay', ChoiceType::class, array('label' => 'Jour : ', 'placeholder' => 'Choississez un jour', 'choices' => $list->getDay(0), 'disabled' => true))
-            ->add('TrainingStartingHour', TimeType::class, array ('label' => 'Début : ', 'disabled' => true))
-            ->add('TrainingEndingHour', TimeType::class, array ('label' => 'Fin : ', 'disabled' => true))
-            ->add('TrainingType', ChoiceType::class, array('label' => 'Type de cours : ', 'placeholder' => 'Choississez un type de cours', 'choices' => $list->getTrainingType(0), 'disabled' => true))
-            ->add('TrainingAddress', EntityType::class, array ('label' => 'Adresse : ', 'class' => ClubDojo::class, 'choices' => $choices, 'choice_label' => 'training_address_street', 'disabled' => true))
-            ->add('TrainingComment', TextareaType::class, array('label' => 'Commentaire : ', 'required' => false, 'disabled' => true))
+            ->add('ClubLessonDay', ChoiceType::class, array('label' => 'Jour : ', 'placeholder' => 'Choississez un jour', 'choices' => $list->getDay(0), 'disabled' => true))
+            ->add('ClubLessonStartingHour', TimeType::class, array ('label' => 'Début : ', 'disabled' => true))
+            ->add('ClubLessonEndingHour', TimeType::class, array ('label' => 'Fin : ', 'disabled' => true))
+            ->add('ClubLessonType', ChoiceType::class, array('label' => 'Type de cours : ', 'placeholder' => 'Choississez un type de cours', 'choices' => $list->getLessonType(0), 'disabled' => true))
+            ->add('ClubLessonDojo', EntityType::class, array ('label' => 'Adresse : ', 'class' => ClubDojo::class, 'choices' => $choices, 'choice_label' => 'club_dojo_street', 'disabled' => true))
+            ->add('ClubLessonComment', TextareaType::class, array('label' => 'Commentaire : ', 'required' => false, 'disabled' => true))
             ->add('Submit', SubmitType::class, array('label' => 'Supprimer'))
         ;
     }
@@ -312,12 +312,12 @@ class ClubType extends AbstractType
         $list = new ListData();
 
         $builder
-            ->add('TrainingDay', ChoiceType::class, array('label' => 'Jour : ', 'placeholder' => 'Choississez un jour', 'choices' => $list->getDay(0)))
-            ->add('TrainingStartingHour', TimeType::class, array ('label' => 'Début : '))
-            ->add('TrainingEndingHour', TimeType::class, array ('label' => 'Fin : '))
-            ->add('TrainingType', ChoiceType::class, array('label' => 'Type de cours : ', 'placeholder' => 'Choississez un type de cours', 'choices' => $list->getTrainingType(0)))
-            ->add('TrainingAddress', EntityType::class, array ('label' => 'Adresse : ', 'class' => ClubDojo::class, 'choices' => $choices, 'choice_label' => 'training_address_street'))
-            ->add('TrainingComment', TextareaType::class, array('label' => 'Commentaire : ', 'required' => false))
+            ->add('ClubLessonDay', ChoiceType::class, array('label' => 'Jour : ', 'placeholder' => 'Choississez un jour', 'choices' => $list->getDay(0)))
+            ->add('ClubLessonStartingHour', TimeType::class, array ('label' => 'Début : '))
+            ->add('ClubLessonEndingHour', TimeType::class, array ('label' => 'Fin : '))
+            ->add('ClubLessonType', ChoiceType::class, array('label' => 'Type de cours : ', 'placeholder' => 'Choississez un type de cours', 'choices' => $list->getLessonType(0)))
+            ->add('ClubLessonDojo', EntityType::class, array ('label' => 'Adresse : ', 'class' => ClubDojo::class, 'choices' => $choices, 'choice_label' => 'club_dojo_street'))
+            ->add('ClubLessonComment', TextareaType::class, array('label' => 'Commentaire : ', 'required' => false))
             ->add('Submit', SubmitType::class, array('label' => 'Modifier'))
         ;
     }

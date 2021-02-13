@@ -4,6 +4,7 @@ namespace App\Service;
 
 use App\Entity\Club;
 use App\Entity\ClubDojo;
+use App\Entity\ClubLesson;
 use App\Entity\ClubTeacher;
 use App\Entity\Member;
 use App\Entity\Training;
@@ -66,9 +67,9 @@ class ClubTools
             return $this->lessons;
         }
 
-        $dojos = $this->em->getRepository(ClubDojo::class)->findBy(['club_dojo' => $this->club->getClubId()]);
+        $dojos = $this->em->getRepository(ClubDojo::class)->findBy(['club_dojo_club' => $this->club->getClubId()]);
 
-        $trainings = $this->em->getRepository(Training::class)->findBy(['training_club' => $this->club->getClubId(), 'training_type' => array(1, 2, 3)], ['training_day' => 'ASC', 'training_starting_hour' => 'ASC']);
+        $lessons = $this->em->getRepository(ClubLesson::class)->findBy(['club_lesson_club' => $this->club->getClubId(), 'club_lesson_type' => array(1, 2, 3)], ['club_lesson_day' => 'ASC', 'club_lesson_starting_hour' => 'ASC']);
 
         $afa_teachers = $this->em->getRepository(ClubTeacher::class)->getAFATeachers($this->club);
 
@@ -116,7 +117,7 @@ class ClubTools
 
         $foreign_teachers = $this->em->getRepository(ClubTeacher::class)->getForeignTeachers($this->club);
 
-        $this->lessons = array('Dojos' => $dojos, 'Trainings' => $trainings, 'AFA_teachers' => $afa_teachers, 'Foreign_teachers' => $foreign_teachers);
+        $this->lessons = array('Dojos' => $dojos, 'Lessons' => $lessons, 'AFA_teachers' => $afa_teachers, 'Foreign_teachers' => $foreign_teachers);
 
         return $this->lessons;
     }
@@ -155,9 +156,9 @@ class ClubTools
                 $clubDojo->setClubDojoDEAFormation(null);
             }
 
-            $clubDojo->setClubDojo($this->getClub());
+            $clubDojo->setClubDojoClub($this->getClub());
 
-            $this->em->persist($trainingAddress);
+            $this->em->persist($clubDojo);
         }
 
         if ($action == 'Delete')
@@ -171,22 +172,22 @@ class ClubTools
     }
 
     /**
-     * @param Training $training
+     * @param ClubLesson $clubLesson
      * @param string|null $action
      * @return bool
      */
-    public function dojoTraining(Training $training, ?string $action = null): bool
+    public function dojoTraining(ClubLesson $clubLesson, ?string $action = null): bool
     {
         if ($action == 'Add')
         {
-            $training->setTrainingClub($this->getClub());
+            $clubLesson->setClubLessonClub($this->getClub());
 
-            $this->em->persist($training);
+            $this->em->persist($clubLesson);
         }
 
         if ($action == 'Delete')
         {
-            $this->em->remove($training);
+            $this->em->remove($clubLesson);
         }
 
         $this->em->flush();
