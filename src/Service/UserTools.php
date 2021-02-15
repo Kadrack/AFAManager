@@ -18,9 +18,11 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
  */
 class UserTools
 {
+    private ?array $listManagedClub = null;
+
     private EntityManagerInterface $entityManager;
 
-    private bool $isDuplicate;
+    private bool $isDuplicate = false;
 
     private UserPasswordEncoderInterface $passwordEncoder;
 
@@ -31,8 +33,8 @@ class UserTools
      */
     public function __construct(EntityManagerInterface $entityManager, UserPasswordEncoderInterface $passwordEncoder)
     {
-        $this->entityManager   = $entityManager;
-        $this->passwordEncoder = $passwordEncoder;
+        $this->entityManager    = $entityManager;
+        $this->passwordEncoder  = $passwordEncoder;
     }
 
     /**
@@ -97,15 +99,13 @@ class UserTools
         if (is_null($this->entityManager->getRepository(User::class)->findOneBy(['login' => $user->getLogin()])))
         {
             $this->isDuplicate = false;
-
-            return false;
         }
         else
         {
             $this->isDuplicate = true;
-
-            return true;
         }
+
+        return $this->isDuplicate;
     }
 
     /**
@@ -222,7 +222,12 @@ class UserTools
      */
     public function clubManagerAdd(User $user, Club $club, User $who, string $password, ?int $member_id): bool
     {
-        if (is_null($this->entityManager->getRepository(User::class)->findOneBy(['user_member' => $member_id])))
+        if ($this->checkDuplicate($user))
+        {
+            return false;
+        }
+
+        if (is_null($this->entityManager->getRepository(User::class)->findOneBy(['user_member' => $member_id == null ? 0 : $member_id])))
         {
             $this->newUser($user, $who, $password, $member_id);
         }
@@ -231,23 +236,31 @@ class UserTools
             $user = $this->entityManager->getRepository(User::class)->findOneBy(['user_member' => $member_id]);
         }
 
-        $userAccess = new UserAccess();
+        if (is_null($this->entityManager->getRepository(UserAccess::class)->findOneBy(['user_access_user' => $user, 'user_access_role' => 'ROLE_CLUB'])))
+        {
+            $userAccess = new UserAccess();
 
-        $userAccess->setUserAccessClub($club);
-        $userAccess->setUserAccessRole('ROLE_CLUB');
-        $userAccess->setUserAccessUser($user);
+            $userAccess->setUserAccessClub($club);
+            $userAccess->setUserAccessRole('ROLE_CLUB');
+            $userAccess->setUserAccessUser($user);
 
-        $auditTrail = new UserAuditTrail();
+            $auditTrail = new UserAuditTrail();
 
-        $auditTrail->setUserAuditTrailAction(8);
-        $auditTrail->setUserAuditTrailClub($club);
-        $auditTrail->setUserAuditTrailUser($user);
-        $auditTrail->setUserAuditTrailWho($who);
+            $auditTrail->setUserAuditTrailAction(8);
+            $auditTrail->setUserAuditTrailClub($club);
+            $auditTrail->setUserAuditTrailUser($user);
+            $auditTrail->setUserAuditTrailWho($who);
 
-        $this->entityManager->persist($auditTrail);
-        $this->entityManager->flush();
+            $this->entityManager->persist($userAccess);
+            $this->entityManager->persist($auditTrail);
+            $this->entityManager->flush();
 
-        return true;
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
     /**
@@ -273,5 +286,22 @@ class UserTools
         $this->entityManager->flush();
 
         return true;
+    }
+
+    public function listManagedClub(User $user): ?array
+    {
+        if ($this->listManagedClub !== null)
+        {
+            return $this->listManagedClub;
+        }
+
+        $clubs = $this->entityManager->getRepository(UserAccess::class)->findBy(['user_access_role' => 'ROLE_CLUB', 'user_access_user' => $user]);
+
+        foreach ($clubs as $club)
+        {
+            $this->listManagedClub[] = $club->getUserAccessClub()->getClubId();
+        }
+
+        return $this->listManagedClub;
     }
 }

@@ -24,7 +24,7 @@ class UserAccess
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="user_accesses", cascade={"persist"})
-     * @ORM\JoinColumn(nullable=true, name="user_access_join_user_user", referencedColumnName="id")
+     * @ORM\JoinColumn(nullable=true, name="user_access_join_user", referencedColumnName="id")
      */
     private ?User $user_access_user;
 

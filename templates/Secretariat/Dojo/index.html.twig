@@ -9,7 +9,7 @@
 
 {% block body %}
     <h1>
-        {{ clubTools.getClub.getClubName()|title }} n°{{ clubTools.getClub.getClubId() }}
+        {{ clubTools.getClub.getClubName()|title }}
         <div class="btn-group" role="group" aria-label="Ajouter">
             <button type="button" class="btn btn-primary">Ajouter</button>
             <div class="btn-group" role="group">
@@ -40,21 +40,21 @@
         <tbody>
         {% for address in clubTools.getLessonsDetails().Dojos %}
             <tr>
-                <td class="align-middle">{{ address.getTrainingAddressName()|title }}</td>
-                <td class="align-middle">{{ address.getTrainingAddressStreet()|title }}</td>
-                <td class="align-middle">{{ address.getTrainingAddressZip() }}</td>
-                <td class="align-middle">{{ address.getTrainingAddressCity()|title }}</td>
-                <td class="align-middle">{{ address.getTrainingAddressTatamis() }}</td>
-                <td class="align-middle">{% if address.getTrainingAddressDEA() %}Oui{% else %}Non{% endif %}</td>
-                <td class="align-middle">{% if address.getTrainingAddressDEAFormation != null %}{{ address.getTrainingAddressDEAFormation()|date("d/m/Y") }}{% else %}N/A{% endif %}</td>
+                <td class="align-middle">{{ address.getClubDojoName()|title }}</td>
+                <td class="align-middle">{{ address.getClubDojoStreet()|title }}</td>
+                <td class="align-middle">{{ address.getClubDojoZip() }}</td>
+                <td class="align-middle">{{ address.getClubDojoCity()|title }}</td>
+                <td class="align-middle">{{ address.getClubDojoTatamis() }}</td>
+                <td class="align-middle">{% if address.getClubDojoDEA() %}Oui{% else %}Non{% endif %}</td>
+                <td class="align-middle">{% if address.getClubDojoDEAFormation != null %}{{ address.getClubDojoDEAFormation()|date("d/m/Y") }}{% else %}N/A{% endif %}</td>
                 <td class="align-middle">
                     <div class="btn-group" role="group" aria-label="Commandes">
                         <button type="button" class="btn btn-primary">Commandes</button>
                         <div class="btn-group" role="group">
                             <button id="btnGroupDrop1" type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
                             <div class="dropdown-menu" aria-labelledby="btnGroupDrop1" style="">
-                                <a class="dropdown-item" href="{{ path('secretariat_dojo_address_update', {'address': address.getTrainingAddressId(), 'club': clubTools.getClub.getClubId()}) }}">Modifier</a>
-                                <a class="dropdown-item" href="{{ path('secretariat_dojo_address_delete', {'address': address.getTrainingAddressId(), 'club': clubTools.getClub.getClubId()}) }}">Supprimer</a>
+                                <a class="dropdown-item" href="{{ path('secretariat_dojo_address_update', {'clubDojo': address.getClubDojoId(), 'club': clubTools.getClub.getClubId()}) }}">Modifier</a>
+                                <a class="dropdown-item" href="{{ path('secretariat_dojo_address_delete', {'clubDojo': address.getClubDojoId(), 'club': clubTools.getClub.getClubId()}) }}">Supprimer</a>
                             </div>
                         </div>
                     </div>
@@ -76,21 +76,21 @@
         </tr>
         </thead>
         <tbody>
-        {% for training in clubTools.getLessonsDetails().Trainings %}
+        {% for lesson in clubTools.getLessonsDetails().Lessons %}
             <tr>
-                <td class="align-middle">{{ listData.getDay(training.getTrainingDay()) }}</td>
-                <td class="align-middle">{{ training.getTrainingStartingHour()|date('H:i') }}</td>
-                <td class="align-middle">{{ training.getTrainingEndingHour()|date('H:i') }}</td>
-                <td class="align-middle">{{ listData.getTrainingType(training.getTrainingType()) }}</td>
-                <td class="align-middle">{{ training.getTrainingAddress().getTrainingAddressName() }}</td>
+                <td class="align-middle">{{ listData.getDay(lesson.getClubLessonDay()) }}</td>
+                <td class="align-middle">{{ lesson.getClubLessonStartingHour()|date('H:i') }}</td>
+                <td class="align-middle">{{ lesson.getClubLessonEndingHour()|date('H:i') }}</td>
+                <td class="align-middle">{{ listData.getLessonType(lesson.getClubLessonType()) }}</td>
+                <td class="align-middle">{{ lesson.getClubLessonDojo().getClubDojoName() }}</td>
                 <td class="align-middle">
                     <div class="btn-group" role="group" aria-label="Commandes">
                         <button type="button" class="btn btn-primary">Commandes</button>
                         <div class="btn-group" role="group">
                             <button id="btnGroupDrop1" type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
                             <div class="dropdown-menu" aria-labelledby="btnGroupDrop1" style="">
-                                <a class="dropdown-item" href="{{ path('secretariat_dojo_training_update', {'training': training.getTrainingId(), 'club': clubTools.getClub.getClubId()}) }}">Modifier</a>
-                                <a class="dropdown-item" href="{{ path('secretariat_dojo_training_delete', {'training': training.getTrainingId(), 'club': clubTools.getClub.getClubId()}) }}">Supprimer</a>
+                                <a class="dropdown-item" href="{{ path('secretariat_dojo_training_update', {'clubLesson': lesson.getClubLessonId(), 'club': clubTools.getClub.getClubId()}) }}">Modifier</a>
+                                <a class="dropdown-item" href="{{ path('secretariat_dojo_training_delete', {'clubLesson': lesson.getClubLessonId(), 'club': clubTools.getClub.getClubId()}) }}">Supprimer</a>
                             </div>
                         </div>
                     </div>

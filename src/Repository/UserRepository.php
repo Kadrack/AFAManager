@@ -4,14 +4,18 @@ namespace App\Repository;
 
 use App\Entity\Member;
 use App\Entity\User;
+use App\Entity\UserAccess;
+
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
+
 use Doctrine\Persistence\ManagerRegistry;
+
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
-use function get_class;
 
 /**
  * @method User|null find($id, $lockMode = null, $lockVersion = null)
@@ -36,10 +40,12 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
 
         return $qb->select('u.id AS UserId', 'u.login AS Login', 'u.user_firstname AS UserFirstname', 'u.user_real_name AS UserRealName', 'm.member_id AS LicenceId', 'm.member_firstname AS MemberFirstname', 'm.member_name AS MemberName', 'u.user_last_activity AS Activity', 'u.user_status AS Status')
             ->leftJoin(Member::class, 'm', 'WITH', $qb->expr()->eq('u.user_member', 'm.member_id'))
-            ->where($qb->expr()->isNotNull('u.user_club'))
+            ->leftJoin(UserAccess::class, 'a', 'WITH', $qb->expr()->eq('u.id', 'a.user_access_user'))
+            ->where($qb->expr()->isNotNull('a.user_access_club'))
             ->orderBy('u.roles', 'DESC')
-            ->addOrderBy('u.user_club', 'ASC')
+            ->addOrderBy('a.user_access_club', 'ASC')
             ->addOrderBy('u.login', 'ASC')
+            ->groupBy('u.id')
             ->getQuery()
             ->getArrayResult();
     }
