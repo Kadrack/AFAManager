@@ -732,7 +732,7 @@ class ClubController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid())
         {
-            $results = $this->getDoctrine()->getRepository(Member::class)->getFullSearchClubMembers($form->get('Search')->getData(), $club->getClubId());
+            $results = $this->getDoctrine()->getRepository(Member::class)->getFullSearchClubMembers($form->get('Search')->getData(), $managedClubs[$session->get('actual_club')]);
 
             return $this->render('Club/Member/search.html.twig', array('form' => $form->createView(), 'results' => $results, 'clubTools' => $this->clubTools, 'nextManagedClub' => sizeof($managedClubs) == 1 ? 0 : $session->get('actual_club')+1));
         }
