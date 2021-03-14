@@ -6,6 +6,7 @@ use App\Entity\Club;
 use App\Entity\ClubDojo;
 use App\Entity\ClubHistory;
 use App\Entity\ClubLesson;
+use App\Entity\ClubModificationLog;
 use App\Entity\ClubTeacher;
 use App\Entity\Commission;
 use App\Entity\CommissionMember;
@@ -1959,5 +1960,25 @@ class SecretariatController extends AbstractController
         }
 
         return $this->render('Secretariat/Member/cleanup.html.twig', array('form' => $form->createView(), 'list' => $list));
+    }
+
+    /**
+     * @Route("/liste_modification_dojo/{modification<\d+>}", name="dojo_modification_list")
+     * @param ClubModificationLog|null $modification
+     * @return Response
+     */
+    public function dojoModificationList(?ClubModificationLog $modification = null)
+    {
+        if (!is_null($modification))
+        {
+            $entityManager = $this->getDoctrine()->getManager();
+
+            $entityManager->remove($modification);
+            $entityManager->flush();
+        }
+
+        $modification_list = $this->getDoctrine()->getManager()->getRepository(ClubModificationLog::class)->findAll();
+
+        return $this->render('Secretariat/Club/modification_list.html.twig', array('modification_list' => $modification_list));
     }
 }

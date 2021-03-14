@@ -5,6 +5,7 @@ namespace App\Service;
 use App\Entity\Club;
 use App\Entity\ClubDojo;
 use App\Entity\ClubLesson;
+use App\Entity\ClubModificationLog;
 use App\Entity\ClubTeacher;
 use App\Entity\Member;
 use App\Entity\UserAccess;
@@ -144,6 +145,13 @@ class ClubTools
             $this->em->remove($clubDojo);
         }
 
+        $log = new ClubModificationLog();
+
+        $log->setClubModificationLogClub($this->getClub());
+        $log->setClubModificationLogAction("Modification adresse dojo");
+
+        $this->em->persist($log);
+
         $this->em->flush();
 
         return true;
@@ -167,6 +175,13 @@ class ClubTools
         {
             $this->em->remove($clubLesson);
         }
+
+        $log = new ClubModificationLog();
+
+        $log->setClubModificationLogClub($this->getClub());
+        $log->setClubModificationLogAction("Modification horaire");
+
+        $this->em->persist($log);
 
         $this->em->flush();
 
@@ -216,6 +231,13 @@ class ClubTools
         {
             $this->club->setClubMainTeacher($clubTeacher);
         }
+
+        $log = new ClubModificationLog();
+
+        $log->setClubModificationLogClub($this->getClub());
+        $log->setClubModificationLogAction("Modification liste professeur");
+
+        $this->em->persist($log);
 
         $this->em->flush();
 
