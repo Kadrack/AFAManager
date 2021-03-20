@@ -2,7 +2,7 @@
     "type": "project",
     "license": "proprietary",
     "require": {
-        "php": "^7.4|^8.0",
+        "php": "^8.0",
         "ext-ctype": "*",
         "ext-iconv": "*",
         "composer/package-versions-deprecated": "^1.11",
@@ -10,7 +10,7 @@
         "doctrine/doctrine-bundle": "^2.1",
         "doctrine/doctrine-migrations-bundle": "^3.0",
         "doctrine/orm": "^2.7",
-        "dompdf/dompdf": "^0.8.6",
+        "dompdf/dompdf": "^1.0.0",
         "phpdocumentor/reflection-docblock": "^5.2",
         "picqer/php-barcode-generator": "^2.0",
         "sensio/framework-extra-bundle": "^5.2",
