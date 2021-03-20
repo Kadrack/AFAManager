@@ -25,18 +25,18 @@
         <tbody>
         {% for dojo in clubTools.getLessonsDetails().Dojos %}
             <tr>
-                <td>{{ dojo.getTrainingAddressName() }}</td>
-                <td>{{ dojo.getTrainingAddressStreet() }}</td>
-                <td>{{ dojo.getTrainingAddressZip() }}</td>
-                <td>{{ dojo.getTrainingAddressCity() }}</td>
-                <td>{{ dojo.getTrainingAddressTatamis() }}</td>
-                <td>{% if dojo.getTrainingAddressDEA() %}Oui{% else %}Non{% endif %}</td>
+                <td>{{ dojo.getClubDojoName() }}</td>
+                <td>{{ dojo.getClubDojoStreet() }}</td>
+                <td>{{ dojo.getClubDojoZip() }}</td>
+                <td>{{ dojo.getClubDojoCity() }}</td>
+                <td>{{ dojo.getClubDojoTatamis() }}</td>
+                <td>{% if dojo.getClubDojoDEA() %}Oui{% else %}Non{% endif %}</td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
     {% endif %}
-    {% if clubTools.getLessonsDetails().Trainings != null %}
+    {% if clubTools.getLessonsDetails().Lessons != null %}
     <h2>Horaire cours</h2>
     <table class="table table-sm table-hover">
         <thead>
@@ -49,13 +49,13 @@
             </tr>
         </thead>
         <tbody>
-        {% for training in clubTools.getLessonsDetails().Trainings %}
+        {% for lesson in clubTools.getLessonsDetails().Lessons %}
             <tr>
-                <td>{{ listData.getDay(training.getTrainingDay()) }}</td>
-                <td>{{ training.getTrainingStartingHour()|date('H:i') }}</td>
-                <td>{{ training.getTrainingEndingHour()|date('H:i') }}</td>
-                <td>{{ listData.getTrainingType(training.getTrainingType()) }}</td>
-                <td>{{ training.getTrainingAddress().getTrainingAddressName() }}</td>
+                <td>{{ listData.getDay(lesson.getClubLessonDay()) }}</td>
+                <td>{{ lesson.getClubLessonStartingHour()|date('H:i') }}</td>
+                <td>{{ lesson.getClubLessonEndingHour()|date('H:i') }}</td>
+                <td>{{ listData.getLessonType(lesson.getClubLessonType()) }}</td>
+                <td>{{ lesson.getClubLessonDojo().getClubDojoName() }}</td>
             </tr>
         {% endfor %}
         </tbody>
