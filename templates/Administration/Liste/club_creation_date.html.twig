@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    AFA-Manager
+{% endblock %}
+
+{% block stylesheets %}
+{% endblock %}
+
+{% block body %}
+    <h1>Liste des dates de création des clubs</h1>
+    <table class="table table-sm table-hover">
+        <thead>
+            <tr>
+                <th scope="col">Club n°</th>
+                <th scope="col">Nom</th>
+                <th scope="col">Date</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for club in list %}
+            <tr>
+                <td class="align-middle">{{ club.Id }}</td>
+                <td class="align-middle">{{ club.Name|title }}</td>
+                <td class="align-middle">{{ club.Creation|date("d/m/Y") }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
+
+{% block javascripts %}
+{% endblock %}
