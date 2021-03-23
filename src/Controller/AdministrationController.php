@@ -146,4 +146,15 @@ class AdministrationController extends AbstractController
 
         return $this->render('Administration/Statistic/province_detail.html.twig', array('statistics' => $statistics));
     }
+
+    /**
+     * @Route("/liste-date-creation-club", name="creation_club_list")
+     * @return Response
+     */
+    public function creationClubList(): Response
+    {
+        $list = $this->getDoctrine()->getRepository(Club::class)->getCreationDateList();
+
+        return $this->render('Administration/Liste/club_creation_date.html.twig', array('list' => $list));
+    }
 }
