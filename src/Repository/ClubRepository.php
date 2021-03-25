@@ -32,7 +32,7 @@ class ClubRepository extends ServiceEntityRepository
     {
         $qb = $this->createQueryBuilder('c');
 
-        return $qb->select('c.club_id AS Id', 'c.club_name AS Name', 'c.club_creation AS Creation')
+        return $qb->select('c.club_id AS Id', 'c.club_name AS Name', 'c.club_creation AS Creation', 'h.club_history_update AS Affiliation')
             ->join(ClubHistory::class, 'h', 'WITH', $qb->expr()->eq('h.club_history_id', 'c.club_last_history'))
             ->where($qb->expr()->eq('h.club_history_status', 1))
             ->orderBy('c.club_name', 'ASC')
