@@ -8,7 +8,6 @@ use App\Entity\ClubTeacher;
 use App\Entity\Member;
 use App\Entity\MemberLicence;
 
-use DateInterval;
 use DateTime;
 
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -67,9 +66,9 @@ class ClubRepository extends ServiceEntityRepository
 
     public function getProvinceTeachersTotal(DateTime $referenceDate): ?array
     {
-        $deadline = $referenceDate->format('Y-m-d');
+        $deadline = date('Y-m-d', $referenceDate->getTimestamp());
 
-        $deadline_high = $referenceDate->add(new DateInterval('P1Y'))->format('Y-m-d');
+        $deadline_high = date('Y-m-d', strtotime('+1 year', $referenceDate->getTimestamp()));
 
         $qb = $this->createQueryBuilder('c');
 
@@ -90,9 +89,9 @@ class ClubRepository extends ServiceEntityRepository
 
     public function getProvinceMembersTotal(DateTime $referenceDate): ?array
     {
-        $deadline = $referenceDate->format('Y-m-d');
+        $deadline = date('Y-m-d', $referenceDate->getTimestamp());
 
-        $deadline_high = $referenceDate->add(new DateInterval('P1Y'))->format('Y-m-d');
+        $deadline_high = date('Y-m-d', strtotime('+1 year', $referenceDate->getTimestamp()));
 
         $qb = $this->createQueryBuilder('c');
 
@@ -117,16 +116,16 @@ class ClubRepository extends ServiceEntityRepository
     {
         $result = array();
 
-        $deadline = $referenceDate->format('Y-m-d');
+        $deadline = date('Y-m-d', $referenceDate->getTimestamp());
 
-        $deadline_high = $referenceDate->add(new DateInterval('P1Y'))->format('Y-m-d');
+        $deadline_high = date('Y-m-d', strtotime('+1 year', $referenceDate->getTimestamp()));
 
-        $limit[0] = $referenceDate->sub(new DateInterval('P0Y'))->format('Y-m-d');
-        $limit[1] = $referenceDate->sub(new DateInterval('P6Y'))->format('Y-m-d');
-        $limit[2] = $referenceDate->sub(new DateInterval('P6Y'))->format('Y-m-d');
-        $limit[3] = $referenceDate->sub(new DateInterval('P6Y'))->format('Y-m-d');
-        $limit[4] = $referenceDate->sub(new DateInterval('P7Y'))->format('Y-m-d');
-        $limit[5] = $referenceDate->sub(new DateInterval('P10Y'))->format('Y-m-d');
+        $limit[0] = date('Y-m-d', strtotime('-0 years', $referenceDate->getTimestamp()));
+        $limit[1] = date('Y-m-d', strtotime('-6 years', $referenceDate->getTimestamp()));
+        $limit[2] = date('Y-m-d', strtotime('-12 years', $referenceDate->getTimestamp()));
+        $limit[3] = date('Y-m-d', strtotime('-18 years', $referenceDate->getTimestamp()));
+        $limit[4] = date('Y-m-d', strtotime('-25 years', $referenceDate->getTimestamp()));
+        $limit[5] = date('Y-m-d', strtotime('-35 years', $referenceDate->getTimestamp()));
 
         $qb = $this->createQueryBuilder('c');
 
@@ -174,16 +173,16 @@ class ClubRepository extends ServiceEntityRepository
     {
         $result = array();
 
-        $deadline = $referenceDate->format('Y-m-d');
+        $deadline = date('Y-m-d', $referenceDate->getTimestamp());
 
-        $deadline_high = $referenceDate->add(new DateInterval('P1Y'))->format('Y-m-d');
+        $deadline_high = date('Y-m-d', strtotime('+1 year', $referenceDate->getTimestamp()));
 
-        $limit[0] = $referenceDate->sub(new DateInterval('P0Y'))->format('Y-m-d');
-        $limit[1] = $referenceDate->sub(new DateInterval('P6Y'))->format('Y-m-d');
-        $limit[2] = $referenceDate->sub(new DateInterval('P6Y'))->format('Y-m-d');
-        $limit[3] = $referenceDate->sub(new DateInterval('P6Y'))->format('Y-m-d');
-        $limit[4] = $referenceDate->sub(new DateInterval('P7Y'))->format('Y-m-d');
-        $limit[5] = $referenceDate->sub(new DateInterval('P10Y'))->format('Y-m-d');
+        $limit[0] = date('Y-m-d', strtotime('-0 years', $referenceDate->getTimestamp()));
+        $limit[1] = date('Y-m-d', strtotime('-6 years', $referenceDate->getTimestamp()));
+        $limit[2] = date('Y-m-d', strtotime('-12 years', $referenceDate->getTimestamp()));
+        $limit[3] = date('Y-m-d', strtotime('-18 years', $referenceDate->getTimestamp()));
+        $limit[4] = date('Y-m-d', strtotime('-25 years', $referenceDate->getTimestamp()));
+        $limit[5] = date('Y-m-d', strtotime('-35 years', $referenceDate->getTimestamp()));
 
         $qb = $this->createQueryBuilder('c');
 
