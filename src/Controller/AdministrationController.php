@@ -3,10 +3,12 @@
 namespace App\Controller;
 
 use App\Entity\Club;
+use App\Entity\ClubTeacher;
 
 use App\Service\ListData;
 
 use DateTime;
+
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -156,5 +158,16 @@ class AdministrationController extends AbstractController
         $list = $this->getDoctrine()->getRepository(Club::class)->getCreationDateList();
 
         return $this->render('Administration/Liste/club_creation_date.html.twig', array('list' => $list));
+    }
+
+    /**
+     * @Route("/liste-anniversaire-pratique-dojo-cho", name="dojo_cho_starting_practice")
+     * @return Response
+     */
+    public function dojoChoStartingPractice(): Response
+    {
+        $list = $this->getDoctrine()->getRepository(ClubTeacher::class)->getDojoChoStartingPractice();
+
+        return $this->render('Administration/Liste/dojo_cho_starting_practice.html.twig', array('list' => $list));
     }
 }

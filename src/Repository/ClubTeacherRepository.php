@@ -3,11 +3,13 @@
 namespace App\Repository;
 
 use App\Entity\Club;
+use App\Entity\ClubHistory;
 use App\Entity\ClubTeacher;
 use App\Entity\Grade;
 use App\Entity\GradeTitle;
 use App\Entity\Member;
 
+use App\Entity\MemberLicence;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 use Doctrine\Persistence\ManagerRegistry;
@@ -23,6 +25,21 @@ class ClubTeacherRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, ClubTeacher::class);
+    }
+
+    public function getDojoChoStartingPractice(): ?array
+    {
+        $qb = $this->createQueryBuilder('t');
+
+        return $qb->select('m.member_firstname AS Firstname', 'm.member_name AS Name', 'l.member_licence_medical_certificate AS Starting')
+            ->join(Member::class, 'm', 'WITH', $qb->expr()->eq('m.member_id', 't.club_teacher_member'))
+            ->join(MemberLicence::class, 'l', 'WITH', $qb->expr()->eq('m.member_first_licence', 'l.member_licence_id'))
+            ->join(Club::class, 'c', 'WITH', $qb->expr()->eq('c.club_id', 't.club_teacher'))
+            ->join(ClubHistory::class, 'h', 'WITH', $qb->expr()->eq('h.club_history_id', 'c.club_last_history'))
+            ->where($qb->expr()->eq('t.club_teacher_type', 1))
+            ->andWhere($qb->expr()->eq('h.club_history_status', 1))
+            ->getQuery()
+            ->getArrayResult();
     }
 
     public function getAFATeachers(Club $club): ?array
