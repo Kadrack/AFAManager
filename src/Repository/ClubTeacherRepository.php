@@ -38,6 +38,7 @@ class ClubTeacherRepository extends ServiceEntityRepository
             ->join(ClubHistory::class, 'h', 'WITH', $qb->expr()->eq('h.club_history_id', 'c.club_last_history'))
             ->where($qb->expr()->eq('t.club_teacher_title', 1))
             ->andWhere($qb->expr()->eq('h.club_history_status', 1))
+            ->orderBy('Firstname', 'ASC')
             ->getQuery()
             ->getArrayResult();
     }
