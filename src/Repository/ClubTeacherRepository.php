@@ -36,7 +36,7 @@ class ClubTeacherRepository extends ServiceEntityRepository
             ->join(MemberLicence::class, 'l', 'WITH', $qb->expr()->eq('m.member_first_licence', 'l.member_licence_id'))
             ->join(Club::class, 'c', 'WITH', $qb->expr()->eq('c.club_id', 't.club_teacher'))
             ->join(ClubHistory::class, 'h', 'WITH', $qb->expr()->eq('h.club_history_id', 'c.club_last_history'))
-            ->where($qb->expr()->eq('t.club_teacher_type', 1))
+            ->where($qb->expr()->eq('t.club_teacher_title', 1))
             ->andWhere($qb->expr()->eq('h.club_history_status', 1))
             ->getQuery()
             ->getArrayResult();
