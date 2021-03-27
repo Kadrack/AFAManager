@@ -55,7 +55,6 @@ class AdministrationController extends AbstractController
         $total['Total'][2] = 0;
 
         $date = new DateTime();
-        $date->setDate(2020, 12, 31);
 
         $query = $this->getDoctrine()->getRepository(Club::class)->getProvinceMembersCount($date);
 
@@ -111,14 +110,15 @@ class AdministrationController extends AbstractController
         $statistics = array();
 
         $date = new DateTime();
-        $date->setDate(2020, 12, 31);
 
         $query = $this->getDoctrine()->getRepository(Club::class)->getClubMembersCount($province, $date);
 
-        foreach ($query['Clubs'] as $club) {
+        foreach ($query['Clubs'] as $club)
+        {
             $statistics[$club['Id']]['Club'] = $club;
 
-            for ($i = 1; $i <= 12; $i++) {
+            for ($i = 1; $i <= 12; $i++)
+            {
                 $statistics[$club['Id']]['Limits'][$i] = array('Id' => $club['Id'], 'Name' => $club['Name'], 'Sex' => is_int($i / 2) ? 2 : 1, 'Total' => 0);
             }
 
@@ -128,13 +128,18 @@ class AdministrationController extends AbstractController
 
         $i = 1;
 
-        foreach ($query['Details'] as $limits) {
-            foreach ($limits as $club) {
-                if ($club['Sex'] == 1) {
+        foreach ($query['Details'] as $limits)
+        {
+            foreach ($limits as $club)
+            {
+                if ($club['Sex'] == 1)
+                {
                     $statistics[$club['Id']]['Total'][1] = $statistics[$club['Id']]['Total'][1] + $club['Total'];
 
                     $limit = ($i * 2) - 1;
-                } else {
+                }
+                else
+                {
                     $statistics[$club['Id']]['Total'][2] = $statistics[$club['Id']]['Total'][2] + $club['Total'];
 
                     $limit = $i * 2;
