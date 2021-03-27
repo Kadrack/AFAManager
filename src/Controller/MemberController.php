@@ -9,6 +9,7 @@ use App\Form\GradeType;
 use App\Form\MemberType;
 
 use App\Service\ClubTools;
+use App\Service\Mailing;
 use App\Service\MemberTools;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -18,6 +19,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+
+use Symfony\Component\Mailer\MailerInterface;
 
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -40,8 +43,12 @@ class MemberController extends AbstractController
      * @Route("/mes_donnees", name="my_data")
      * @return Response
      */
-    public function myData()
+    public function myData(MailerInterface $mailer)
     {
+        $mail = new Mailing($mailer);
+
+        $mail->sendEmail();
+
         return $this->render('Member/my_data.html.twig', array('member' => $this->getUser()->getUserMember()));
     }
 

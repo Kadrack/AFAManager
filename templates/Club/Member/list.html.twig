@@ -10,7 +10,7 @@
 {% block body %}
     <h1>{{ club.getClubName()|title }}{% if nextManagedClub != 0 %}<a class="btn btn-primary" href="{{ path('club_members_list') }}?change_actual={{ nextManagedClub }}">Club Suivant</a>{% endif %}</h1>
     <h2>Liste des Membres</h2>
-    <table class="table table-sm table-hover">
+    <table class="table table-sm table-hover unselectable">
         <thead>
             <tr>
                 <th scope="col">Licence n°</th>
@@ -52,7 +52,7 @@
         </tbody>
     </table>
     <h2>Liste ancien membres récent (moins de 3 mois)</h2>
-    <table class="table table-sm table-hover">
+    <table class="table table-sm table-hover unselectable">
         <thead>
             <tr>
                 <th scope="col">Licence n°</th>

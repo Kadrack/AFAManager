@@ -9,7 +9,7 @@
 
 {% block body %}
     <h1>Liste des gestionnaire {{ clubTools.club.clubName|title }}{% if nextManagedClub != 0 %}<a class="btn btn-primary" href="{{ path('club_manager_index') }}?change_actual={{ nextManagedClub }}">Club Suivant</a>{% endif %}</h1>
-    <table class="table table-sm table-hover">
+    <table class="table table-sm table-hover unselectable">
         <thead>
             <tr>
                 <th scope="col">Login</th>

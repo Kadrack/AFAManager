@@ -11,7 +11,7 @@
     <h1>Liste des modifications en attente</h1>
     {% for modification in modifications %}
     <h2>{{ modification.FirstName|title }} {{ modification.Name|title }}<a class="btn btn-primary" href="{{ path('secretariat_member_modification_validation_validate', {'member': modification.Member}) }}">Valider</a><a class="btn btn-primary" href="{{ path('secretariat_member_modification_validation_cancel', {'member': modification.Member}) }}">Refuser</a></h2>
-    <table class="table table-sm table-hover">
+    <table class="table table-sm table-hover unselectable">
         <thead>
             <tr>
                 <th scope="col">Photo</th>

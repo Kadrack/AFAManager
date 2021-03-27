@@ -18,6 +18,25 @@
             <link rel="stylesheet" type="text/css" href="{{ asset('css/bootstrap.min.css') }}" />
         {% endif %}
 
+        <style>
+            @media print
+            {
+                body
+                {
+                    display: none;
+                }
+            }
+
+            .unselectable
+            {
+                -webkit-user-select: none;
+                -webkit-touch-callout: none;
+                -moz-user-select: none;
+                -ms-user-select: none;
+                user-select: none;
+            }
+        </style>
+
         {% block stylesheets %}{% endblock %}
     </head>
     <body class="container">

@@ -9,7 +9,7 @@
 
 {% block body %}
     <h1>Liste des gestionnaires du club <a class="btn btn-primary" href="{{ path('secretariat_club_manager_add', {'club': clubTools.getClub.getClubId()}) }}">Ajouter</a></h1>
-    <table class="table table-sm table-hover">
+    <table class="table table-sm table-hover unselectable">
         <thead>
             <tr>
                 <th scope="col">Login</th>
