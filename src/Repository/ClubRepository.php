@@ -65,13 +65,8 @@ class ClubRepository extends ServiceEntityRepository
             ->getArrayResult();
     }
 
-    public function getProvinceTeachersTotal(?DateTime $referenceDate = null): ?array
+    public function getProvinceTeachersTotal(DateTime $referenceDate): ?array
     {
-        if (is_null($referenceDate))
-        {
-            $referenceDate = new DateTime('today');
-        }
-
         $deadline = $referenceDate->format('Y-m-d');
 
         $deadline_high = $referenceDate->add(new DateInterval('P1Y'))->format('Y-m-d');
@@ -93,13 +88,8 @@ class ClubRepository extends ServiceEntityRepository
             ->getArrayResult();
     }
 
-    public function getProvinceMembersTotal(?DateTime $referenceDate = null): ?array
+    public function getProvinceMembersTotal(DateTime $referenceDate): ?array
     {
-        if (is_null($referenceDate))
-        {
-            $referenceDate = new DateTime('today');
-        }
-
         $deadline = $referenceDate->format('Y-m-d');
 
         $deadline_high = $referenceDate->add(new DateInterval('P1Y'))->format('Y-m-d');
@@ -126,11 +116,6 @@ class ClubRepository extends ServiceEntityRepository
     public function getProvinceMembersCount(?DateTime $referenceDate = null): ?array
     {
         $result = array();
-
-        if (is_null($referenceDate))
-        {
-            $referenceDate = new DateTime('today');
-        }
 
         $deadline = $referenceDate->format('Y-m-d');
 
@@ -185,14 +170,9 @@ class ClubRepository extends ServiceEntityRepository
         return $result;
     }
 
-    public function getClubMembersCount(int $province, ?DateTime $referenceDate = null): ?array
+    public function getClubMembersCount(int $province, DateTime $referenceDate): ?array
     {
         $result = array();
-
-        if (is_null($referenceDate))
-        {
-            $referenceDate = new DateTime('today');
-        }
 
         $deadline = $referenceDate->format('Y-m-d');
 

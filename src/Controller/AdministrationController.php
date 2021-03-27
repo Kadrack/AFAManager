@@ -54,7 +54,7 @@ class AdministrationController extends AbstractController
         $total['Total'][1] = 0;
         $total['Total'][2] = 0;
 
-        $date = new DateTime();
+        $date = new DateTime('today');
 
         $query = $this->getDoctrine()->getRepository(Club::class)->getProvinceMembersCount($date);
 
@@ -109,7 +109,7 @@ class AdministrationController extends AbstractController
     {
         $statistics = array();
 
-        $date = new DateTime();
+        $date = new DateTime('today');
 
         $query = $this->getDoctrine()->getRepository(Club::class)->getClubMembersCount($province, $date);
 
