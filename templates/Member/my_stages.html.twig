@@ -9,7 +9,10 @@
 
 {% block body %}
     <h1>{{ memberTools.getMember.getMemberFirstname()|title }} {{ memberTools.getMember.getMemberName()|title }}</h1>
-    <h2>Historique des stages ({{ memberTools.getStages().total }} h)</h2>
+    <h2>Historique des stages ({{ memberTools.getStages.total }} h)</h2>
+    {% for grade in memberTools.getStages().history %}
+    <h3>{{ listData.grade(grade.Rank) }} ({{ grade.Total }} h)</h3>
+    {% if grade.Stage is defined %}
     <table class="table table-sm table-hover">
         <thead>
             <tr>
@@ -19,15 +22,17 @@
             </tr>
         </thead>
         <tbody>
-        {% for stage in memberTools.getStages().history.Stage %}
-        <tr>
-            <td>{{ stage.Name }}</td>
-            <td>{{ stage.Date|date("d/m/Y") }}</td>
-            <td>{{ stage.Duration }}</td>
-        </tr>
+        {% for stage in grade.Stage %}
+            <tr>
+                <td>{{ stage.Name }}</td>
+                <td>{{ stage.Date|date("d/m/Y") }}</td>
+                <td>{{ stage.Duration }}</td>
+            </tr>
         {% endfor %}
         </tbody>
     </table>
+    {% endif %}
+    {% endfor %}
 {% endblock %}
 
 {% block javascripts %}

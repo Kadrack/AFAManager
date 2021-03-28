@@ -12,6 +12,7 @@ use DateTime;
 
 use Doctrine\ORM\EntityManagerInterface;
 
+use JetBrains\PhpStorm\ArrayShape;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
@@ -62,7 +63,7 @@ class MemberTools
      * @param Member $member
      * @return Member
      */
-    public function setMember(Member $member)
+    public function setMember(Member $member): Member
     {
         $this->member = $member;
 
@@ -120,6 +121,7 @@ class MemberTools
     /**
      * @return array
      */
+    #[ArrayShape(['candidate' => "bool", 'grade' => "\App\Entity\Grade|int"])]
     private function isCandidateDan(): array
     {
         $today = new DateTime('today');
@@ -241,19 +243,36 @@ class MemberTools
             return $this->stages;
         }
 
+        if ($this->grades == null)
+        {
+            $this->getGrades();
+        }
+
         $stage_history = $this->em->getRepository(Member::class)->getMemberAttendances($this->member->getMemberId());
 
-        $stage_count = 0; $total = 0; $history = array(); $history['Total'] = 0;
+        $stage_count = 0; $total = 0; $history = array();
 
-        while (isset($stage_history[$stage_count]))
+        for ($i = 0; $i < sizeof($this->grades['history']); $i++)
         {
-            $stage_history[$stage_count]['Duration'] = $stage_history[$stage_count]['Duration'] / 60;
+            $history[$i]['Total'] = 0;
+            $history[$i]['Rank']  = $this->grades['history'][$i]['Rank'];
 
-            $history['Stage'][] = $stage_history[$stage_count];
+            while (isset($stage_history[$stage_count]))
+            {
+                if (($this->grades['history'][$i]['Date'] > $stage_history[$stage_count]['Date']) && ($i != sizeof($this->grades['history']) - 1))
+                {
+                    break;
+                }
 
-            $total = $total + $stage_history[$stage_count]['Duration'];
+                $stage_history[$stage_count]['Duration'] = $stage_history[$stage_count]['Duration'] / 60;
 
-            $stage_count++;
+                $history[$i]['Total']   = $history[$i]['Total'] + $stage_history[$stage_count]['Duration'];
+                $history[$i]['Stage'][] = $stage_history[$stage_count];
+
+                $total = $total + $stage_history[$stage_count]['Duration'];
+
+                $stage_count++;
+            }
         }
 
         $this->stages = array('history' => $history, 'total' => $total);
@@ -280,7 +299,7 @@ class MemberTools
      * @param Grade $grade
      * @return bool
      */
-    public function application(Grade $grade)
+    public function application(Grade $grade): bool
     {
         $this->em->persist($grade);
         $this->em->flush();
@@ -291,7 +310,7 @@ class MemberTools
     /**
      * @return Grade
      */
-    public function newKyu()
+    public function newKyu(): Grade
     {
         if ($this->member->getMemberLastGrade()->getGradeRank() < 6)
         {
@@ -317,7 +336,7 @@ class MemberTools
      * @param Grade $grade
      * @return bool
      */
-    public function addKyu(Grade $grade)
+    public function addKyu(Grade $grade): bool
     {
         if ($this->member->getMemberLastGrade()->getGradeDate() <= $grade->getGradeDate())
         {
@@ -334,7 +353,7 @@ class MemberTools
      * @param Grade $grade
      * @return bool
      */
-    public function modifyKyu(Grade $grade)
+    public function modifyKyu(Grade $grade): bool
     {
         if ($this->member->getMemberLastGrade()->getGradeDate() <= $grade->getGradeDate())
         {
@@ -349,7 +368,7 @@ class MemberTools
     /**
      * @return MemberModification
      */
-    public function getModification()
+    public function getModification(): MemberModification
     {
         if ($this->member->getMemberModification() == null)
         {
@@ -371,7 +390,7 @@ class MemberTools
      * @param string|null $country
      * @return bool
      */
-    public function setModification(MemberModification $memberModification, ?UploadedFile $photo, ?string $country)
+    public function setModification(MemberModification $memberModification, ?UploadedFile $photo, ?string $country): bool
     {
         if ($photo != null)
         {
