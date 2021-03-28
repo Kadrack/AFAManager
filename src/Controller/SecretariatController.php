@@ -726,7 +726,6 @@ class SecretariatController extends AbstractController
 
             $member->setMemberActualClub($club);
             $member->setMemberLastLicence($licence);
-            $member->setMemberFirstLicence($licence);
             $member->setMemberStartPractice($form->get('MemberLicenceMedicalCertificate')->getData());
             $member->setMemberPhoto($form['MemberPhoto']->getData() == null ? 'nophoto.png' : $photoUploader->upload($form['MemberPhoto']->getData()));
 
