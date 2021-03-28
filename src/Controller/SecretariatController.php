@@ -61,7 +61,7 @@ class SecretariatController extends AbstractController
     /**
      * @Route("/", name="index")
      */
-    public function index()
+    public function index(): Response
     {
         return $this->render('Secretariat/index.html.twig');
     }
@@ -69,7 +69,7 @@ class SecretariatController extends AbstractController
     /**
      * @Route("/liste_sympathisant", name="supporter_index")
      */
-    public function supporterIndex()
+    public function supporterIndex(): Response
     {
         $supporters = $this->getDoctrine()->getRepository(SecretariatSupporter::class)->findAll();
 
@@ -82,7 +82,7 @@ class SecretariatController extends AbstractController
      * @param Request $request
      * @return RedirectResponse|Response
      */
-    public function supporterAdd(Request $request)
+    public function supporterAdd(Request $request): RedirectResponse|Response
     {
         $form = $this->createForm(SecretariatType::class, new SecretariatSupporter(), array('form' => 'supporter_create', 'data_class' => SecretariatSupporter::class));
 
@@ -110,7 +110,7 @@ class SecretariatController extends AbstractController
      * @param SecretariatSupporter $supporter
      * @return RedirectResponse|Response
      */
-    public function supporterUpdate(Request $request, SecretariatSupporter $supporter)
+    public function supporterUpdate(Request $request, SecretariatSupporter $supporter): RedirectResponse|Response
     {
         $form = $this->createForm(SecretariatType::class, $supporter, array('form' => 'supporter_update', 'data_class' => SecretariatSupporter::class));
 
@@ -135,7 +135,7 @@ class SecretariatController extends AbstractController
      * @param SecretariatSupporter $supporter
      * @return RedirectResponse|Response
      */
-    public function supporterDelete(Request $request, SecretariatSupporter $supporter)
+    public function supporterDelete(Request $request, SecretariatSupporter $supporter): RedirectResponse|Response
     {
         $form = $this->createForm(SecretariatType::class, $supporter, array('form' => 'supporter_delete', 'data_class' => SecretariatSupporter::class));
 
@@ -157,7 +157,7 @@ class SecretariatController extends AbstractController
     /**
      * @Route("/liste_clubs", name="club_list")
      */
-    public function clubList()
+    public function clubList(): Response
     {
         $provinces = new ListData();
 
@@ -188,7 +188,7 @@ class SecretariatController extends AbstractController
      * @param ClubTools $clubTools
      * @return Response
      */
-    public function dojoIndex(Club $club, ClubTools $clubTools)
+    public function dojoIndex(Club $club, ClubTools $clubTools): Response
     {
         $clubTools->setClub($club);
 
@@ -202,7 +202,7 @@ class SecretariatController extends AbstractController
      * @param ClubTools $clubTools
      * @return RedirectResponse|Response
      */
-    public function dojoAddressAdd(Request $request, Club $club, ClubTools $clubTools)
+    public function dojoAddressAdd(Request $request, Club $club, ClubTools $clubTools): RedirectResponse|Response
     {
         $clubTools->setClub($club);
 
@@ -228,7 +228,7 @@ class SecretariatController extends AbstractController
      * @param ClubTools $clubTools
      * @return RedirectResponse|Response
      */
-    public function dojoAddressUpdate(Request $request, ClubDojo $clubDojo, Club $club, ClubTools $clubTools)
+    public function dojoAddressUpdate(Request $request, ClubDojo $clubDojo, Club $club, ClubTools $clubTools): RedirectResponse|Response
     {
         $clubTools->setClub($club);
 
@@ -254,7 +254,7 @@ class SecretariatController extends AbstractController
      * @param ClubTools $clubTools
      * @return RedirectResponse|Response
      */
-    public function dojoAddressDelete(Request $request, ClubDojo $clubDojo, Club $club, ClubTools $clubTools)
+    public function dojoAddressDelete(Request $request, ClubDojo $clubDojo, Club $club, ClubTools $clubTools): RedirectResponse|Response
     {
         $clubTools->setClub($club);
 
@@ -279,7 +279,7 @@ class SecretariatController extends AbstractController
      * @param ClubTools $clubTools
      * @return RedirectResponse|Response
      */
-    public function dojoTrainingAdd(Request $request, Club $club, ClubTools $clubTools)
+    public function dojoTrainingAdd(Request $request, Club $club, ClubTools $clubTools): RedirectResponse|Response
     {
         $clubTools->setClub($club);
 
@@ -305,7 +305,7 @@ class SecretariatController extends AbstractController
      * @param ClubTools $clubTools
      * @return RedirectResponse|Response
      */
-    public function dojoTrainingUpdate(Request $request, ClubLesson $clubLesson, Club $club, ClubTools $clubTools)
+    public function dojoTrainingUpdate(Request $request, ClubLesson $clubLesson, Club $club, ClubTools $clubTools): RedirectResponse|Response
     {
         $clubTools->setClub($club);
 
@@ -331,7 +331,7 @@ class SecretariatController extends AbstractController
      * @param ClubTools $clubTools
      * @return RedirectResponse|Response
      */
-    public function dojoTrainingDelete(Request $request, ClubLesson $clubLesson, Club $club, ClubTools $clubTools)
+    public function dojoTrainingDelete(Request $request, ClubLesson $clubLesson, Club $club, ClubTools $clubTools): RedirectResponse|Response
     {
         $clubTools->setClub($club);
 
@@ -356,7 +356,7 @@ class SecretariatController extends AbstractController
      * @param ClubTools $clubTools
      * @return RedirectResponse|Response
      */
-    public function dojoTeacherAFAAdd(Request $request, Club $club, ClubTools $clubTools)
+    public function dojoTeacherAFAAdd(Request $request, Club $club, ClubTools $clubTools): RedirectResponse|Response
     {
         $clubTools->setClub($club);
 
@@ -382,7 +382,7 @@ class SecretariatController extends AbstractController
      * @param ClubTools $clubTools
      * @return RedirectResponse|Response
      */
-    public function dojoTeacherAFAUpdate(Request $request, ClubTeacher $teacher, Club $club, ClubTools $clubTools)
+    public function dojoTeacherAFAUpdate(Request $request, ClubTeacher $teacher, Club $club, ClubTools $clubTools): RedirectResponse|Response
     {
         $clubTools->setClub($club);
 
@@ -412,7 +412,7 @@ class SecretariatController extends AbstractController
      * @param ClubTools $clubTools
      * @return RedirectResponse|Response
      */
-    public function dojoTeacherAFADelete(Request $request, ClubTeacher $teacher, Club $club, ClubTools $clubTools)
+    public function dojoTeacherAFADelete(Request $request, ClubTeacher $teacher, Club $club, ClubTools $clubTools): RedirectResponse|Response
     {
         $clubTools->setClub($club);
 
@@ -441,7 +441,7 @@ class SecretariatController extends AbstractController
      * @param ClubTools $clubTools
      * @return RedirectResponse|Response
      */
-    public function dojoTeacherForeignAdd(Request $request, Club $club, ClubTools $clubTools)
+    public function dojoTeacherForeignAdd(Request $request, Club $club, ClubTools $clubTools): RedirectResponse|Response
     {
         $clubTools->setClub($club);
 
@@ -467,7 +467,7 @@ class SecretariatController extends AbstractController
      * @param ClubTools $clubTools
      * @return RedirectResponse|Response
      */
-    public function dojoTeacherForeignUpdate(Request $request, ClubTeacher $teacher, Club $club, ClubTools $clubTools)
+    public function dojoTeacherForeignUpdate(Request $request, ClubTeacher $teacher, Club $club, ClubTools $clubTools): RedirectResponse|Response
     {
         $clubTools->setClub($club);
 
@@ -493,7 +493,7 @@ class SecretariatController extends AbstractController
      * @param ClubTools $clubTools
      * @return RedirectResponse|Response
      */
-    public function dojoTeacherForeignDelete(Request $request, ClubTeacher $teacher, Club $club, ClubTools $clubTools)
+    public function dojoTeacherForeignDelete(Request $request, ClubTeacher $teacher, Club $club, ClubTools $clubTools): RedirectResponse|Response
     {
         $clubTools->setClub($club);
 
@@ -518,7 +518,7 @@ class SecretariatController extends AbstractController
      * @param ClubTools $clubTools
      * @return RedirectResponse|Response
      */
-    public function associationDetails(Request $request, Club $club, ClubTools $clubTools)
+    public function associationDetails(Request $request, Club $club, ClubTools $clubTools): RedirectResponse|Response
     {
         $clubTools->setClub($club);
 
@@ -541,7 +541,7 @@ class SecretariatController extends AbstractController
      * @param Request $request
      * @return Response
      */
-    public function searchMembers(Request $request)
+    public function searchMembers(Request $request): Response
     {
         $search = null; $results = null;
 
@@ -565,7 +565,7 @@ class SecretariatController extends AbstractController
      * @param Club $club
      * @return Response
      */
-    public function membersActive(SessionInterface $session, Club $club)
+    public function membersActive(SessionInterface $session, Club $club): Response
     {
         $members = $this->getDoctrine()->getRepository(Member::class)->getClubActiveMembers($club);
 
@@ -581,7 +581,7 @@ class SecretariatController extends AbstractController
      * @param Club $club
      * @return Response
      */
-    public function membersAncient(Club $club)
+    public function membersAncient(Club $club): Response
     {
         $members = $this->getDoctrine()->getRepository(Member::class)->getClubInactiveMembers($club);
 
@@ -595,7 +595,7 @@ class SecretariatController extends AbstractController
      * @param Request $request
      * @return RedirectResponse|Response
      */
-    public function clubCreate(Request $request)
+    public function clubCreate(Request $request): RedirectResponse|Response
     {
         $form = $this->createForm(ClubType::class, new Club());
 
@@ -630,7 +630,7 @@ class SecretariatController extends AbstractController
      * @param Club $club
      * @return RedirectResponse|Response
      */
-    public function clubDisaffiliate(Request $request, Club $club)
+    public function clubDisaffiliate(Request $request, Club $club): RedirectResponse|Response
     {
         $history = new ClubHistory();
 
@@ -666,7 +666,7 @@ class SecretariatController extends AbstractController
      * @param Club $club
      * @return RedirectResponse|Response
      */
-    public function clubReassign(Request $request, Club $club)
+    public function clubReassign(Request $request, Club $club): RedirectResponse|Response
     {
         $history = new ClubHistory();
 
@@ -704,7 +704,7 @@ class SecretariatController extends AbstractController
      * @return RedirectResponse|Response
      * @throws Exception
      */
-    public function memberCreate(Request $request, PhotoUploader $photoUploader, Club $club)
+    public function memberCreate(Request $request, PhotoUploader $photoUploader, Club $club): RedirectResponse|Response
     {
         $form = $this->createForm(MemberType::class, new Member());
 
@@ -724,9 +724,10 @@ class SecretariatController extends AbstractController
 
             $member->addMemberLicences($licence);
 
-            $member->setMemberFirstLicence($licence);
-            $member->setMemberLastLicence($licence);
             $member->setMemberActualClub($club);
+            $member->setMemberLastLicence($licence);
+            $member->setMemberFirstLicence($licence);
+            $member->setMemberStartPractice($form->get('MemberLicenceMedicalCertificate')->getData());
             $member->setMemberPhoto($form['MemberPhoto']->getData() == null ? 'nophoto.png' : $photoUploader->upload($form['MemberPhoto']->getData()));
 
             $grade = new Grade();
@@ -784,7 +785,7 @@ class SecretariatController extends AbstractController
      * @param Member $member
      * @return Response
      */
-    public function memberLicenceDetail(Club $club, Member $member)
+    public function memberLicenceDetail(Club $club, Member $member): Response
     {
         $licence_history = $this->getDoctrine()->getRepository(MemberLicence::class)->findBy(['member_licence' => $member->getMemberId()], ['member_licence_id' => 'DESC']);
 
@@ -802,7 +803,7 @@ class SecretariatController extends AbstractController
      * @param Member $member
      * @return RedirectResponse|Response
      */
-    public function memberPersonalDetail(Request $request, PhotoUploader $photoUploader, Club $club, Member $member)
+    public function memberPersonalDetail(Request $request, PhotoUploader $photoUploader, Club $club, Member $member): RedirectResponse|Response
     {
         $form = $this->createForm(SecretariatType::class, $member, array('form' => 'member_update', 'data_class' => Member::class));
 
@@ -832,7 +833,7 @@ class SecretariatController extends AbstractController
      * @param Member $member
      * @return RedirectResponse|Response
      */
-    public function memberFormRenew(Club $club, Member $member)
+    public function memberFormRenew(Club $club, Member $member): RedirectResponse|Response
     {
         $listData = new ListData();
 
@@ -901,7 +902,7 @@ class SecretariatController extends AbstractController
      * @return RedirectResponse|Response
      * @throws Exception
      */
-    public function memberLicenceRenew(SessionInterface $session, Request $request, Club $club, Member $member)
+    public function memberLicenceRenew(SessionInterface $session, Request $request, Club $club, Member $member): RedirectResponse|Response
     {
         $licence_old = $member->getMemberLastLicence();
 
@@ -1011,7 +1012,7 @@ class SecretariatController extends AbstractController
      * @param MemberLicence $renew
      * @return RedirectResponse|Response
      */
-    public function memberLicenceRenewUpdate(SessionInterface $session, Request $request, Club $club, Member $member, MemberLicence $renew)
+    public function memberLicenceRenewUpdate(SessionInterface $session, Request $request, Club $club, Member $member, MemberLicence $renew): RedirectResponse|Response
     {
         if ($renew->getMemberLicenceGrade() == null)
         {
@@ -1109,7 +1110,7 @@ class SecretariatController extends AbstractController
     /**
      * @Route("/sessions-examen", name="exam_index")
      */
-    public function examIndex()
+    public function examIndex(): Response
     {
         $sessions = $this->getDoctrine()->getRepository(GradeSession::class)->findBy(['grade_session_type' => 1], ['grade_session_date' => 'DESC', 'grade_session_type' => 'DESC']);
 
@@ -1122,7 +1123,7 @@ class SecretariatController extends AbstractController
      * @param Request $request
      * @return RedirectResponse|Response
      */
-    public function examCreate(Request $request)
+    public function examCreate(Request $request): RedirectResponse|Response
     {
         $form = $this->createForm(GradeType::class, new GradeSession());
 
@@ -1152,7 +1153,7 @@ class SecretariatController extends AbstractController
      * @param GradeSession $session
      * @return RedirectResponse|Response
      */
-    public function examUpdate(Request $request, GradeSession $session)
+    public function examUpdate(Request $request, GradeSession $session): RedirectResponse|Response
     {
         $form = $this->createForm(GradeType::class, $session, array('form' => 'exam_update'));
 
@@ -1173,7 +1174,7 @@ class SecretariatController extends AbstractController
     /**
      * @Route("/liste_stages", name="training_index")
      */
-    public function trainingIndex()
+    public function trainingIndex(): Response
     {
         $trainings = $this->getDoctrine()->getRepository(Training::class)->getActiveTrainings(4);
 
@@ -1186,7 +1187,7 @@ class SecretariatController extends AbstractController
      * @param Request $request
      * @return RedirectResponse|Response
      */
-    public function trainingCreate(Request $request)
+    public function trainingCreate(Request $request): RedirectResponse|Response
     {
         $form = $this->createForm(TrainingType::class, new Training());
 
@@ -1224,7 +1225,7 @@ class SecretariatController extends AbstractController
      * @param Training $training
      * @return Response
      */
-    public function trainingDetail(Training $training)
+    public function trainingDetail(Training $training): Response
     {
         $sessions = $this->getDoctrine()->getRepository(TrainingSession::class)->getTrainingSessions($training->getTrainingId());
 
@@ -1238,7 +1239,7 @@ class SecretariatController extends AbstractController
      * @param Training $training
      * @return RedirectResponse|Response
      */
-    public function trainingUpdate(Request $request, Training $training)
+    public function trainingUpdate(Request $request, Training $training): RedirectResponse|Response
     {
         $form = $this->createForm(TrainingType::class, $training, array('form' => 'training_update'));
 
@@ -1263,7 +1264,7 @@ class SecretariatController extends AbstractController
      * @param Training $training
      * @return RedirectResponse|Response
      */
-    public function traningDelete(Request $request, Training $training)
+    public function traningDelete(Request $request, Training $training): RedirectResponse|Response
     {
         $form = $this->createForm(TrainingType::class, $training, array('form' => 'training_delete'));
 
@@ -1289,7 +1290,7 @@ class SecretariatController extends AbstractController
      * @param Training $training
      * @return RedirectResponse|Response
      */
-    public function trainingSessionAdd(Request $request, Training $training)
+    public function trainingSessionAdd(Request $request, Training $training): RedirectResponse|Response
     {
         $form = $this->createForm(TrainingType::class, new TrainingSession(), array('form' => 'session_add', 'data_class' => TrainingSession::class));
 
@@ -1325,7 +1326,7 @@ class SecretariatController extends AbstractController
      * @param TrainingSession $session
      * @return RedirectResponse|Response
      */
-    public function trainingSessionUpdate(Request $request, Training $training, TrainingSession $session)
+    public function trainingSessionUpdate(Request $request, Training $training, TrainingSession $session): RedirectResponse|Response
     {
         $form = $this->createForm(TrainingType::class, $session, array('form' => 'session_add', 'data_class' => TrainingSession::class));
 
@@ -1357,7 +1358,7 @@ class SecretariatController extends AbstractController
      * @param TrainingSession $session
      * @return RedirectResponse|Response
      */
-    public function trainingSessionDelete(Request $request, Training $training, TrainingSession $session)
+    public function trainingSessionDelete(Request $request, Training $training, TrainingSession $session): RedirectResponse|Response
     {
         $form = $this->createForm(TrainingType::class, $session, array('form' => 'session_delete', 'data_class' => TrainingSession::class));
 
@@ -1401,7 +1402,7 @@ class SecretariatController extends AbstractController
     /**
      * @Route("/liste_validations_modifications_membres", name="member_modification_validation_index")
      */
-    public function memberModificationValidationIndex()
+    public function memberModificationValidationIndex(): Response
     {
         $modifications = $this->getDoctrine()->getRepository(Member::class)->getMemberModification();
 
@@ -1416,7 +1417,7 @@ class SecretariatController extends AbstractController
      * @param PhotoUploader $photoUploader
      * @return RedirectResponse|Response
      */
-    public function memberModificationValidationValidate(Request $request, Member $member, PhotoUploader $photoUploader)
+    public function memberModificationValidationValidate(Request $request, Member $member, PhotoUploader $photoUploader): RedirectResponse|Response
     {
         $modification = $member->getMemberModification();
 
@@ -1462,7 +1463,7 @@ class SecretariatController extends AbstractController
      * @param PhotoUploader $photoUploader
      * @return RedirectResponse|Response
      */
-    public function memberModificationValidationCancel(Request $request, Member $member, PhotoUploader $photoUploader)
+    public function memberModificationValidationCancel(Request $request, Member $member, PhotoUploader $photoUploader): RedirectResponse|Response
     {
         $modification = $member->getMemberModification();
 
@@ -1489,7 +1490,7 @@ class SecretariatController extends AbstractController
     /**
      * @Route("/liste_commission", name="commission_index")
      */
-    public function commissionIndex()
+    public function commissionIndex(): Response
     {
         $commissions = $this->getDoctrine()->getRepository(Commission::class)->findAll();
 
@@ -1502,7 +1503,7 @@ class SecretariatController extends AbstractController
      * @param Request $request
      * @return RedirectResponse|Response
      */
-    public function commissionCreate(Request $request)
+    public function commissionCreate(Request $request): RedirectResponse|Response
     {
         $form = $this->createForm(SecretariatType::class, new Commission(), array('form' => 'commission_create', 'data_class' => Commission::class));
 
@@ -1553,7 +1554,7 @@ class SecretariatController extends AbstractController
      * @param Commission $commission
      * @return Response
      */
-    public function commissionDetail(Commission $commission)
+    public function commissionDetail(Commission $commission): Response
     {
         $members = $this->getDoctrine()->getRepository(CommissionMember::class)->getCommissionMembers($commission->getCommissionId());
 
@@ -1567,7 +1568,7 @@ class SecretariatController extends AbstractController
      * @param Commission $commission
      * @return RedirectResponse|Response
      */
-    public function commissionMemberAdd(Request $request, Commission $commission)
+    public function commissionMemberAdd(Request $request, Commission $commission): RedirectResponse|Response
     {
         $commission_member = new CommissionMember();
 
@@ -1613,7 +1614,7 @@ class SecretariatController extends AbstractController
      * @param Member $member
      * @return RedirectResponse|Response
      */
-    public function commissionMemberDelete(Request $request, Commission $commission, Member $member)
+    public function commissionMemberDelete(Request $request, Commission $commission, Member $member): RedirectResponse|Response
     {
         $commission_member = $this->getDoctrine()->getRepository(CommissionMember::class)->findOneBy(['commission_member' => $member, 'commission' => $commission]);
 
@@ -1643,7 +1644,7 @@ class SecretariatController extends AbstractController
      * @param ClubTools $clubTools
      * @return Response
      */
-    public function clubManagerIndex(Club $club, ClubTools $clubTools)
+    public function clubManagerIndex(Club $club, ClubTools $clubTools): Response
     {
         $clubTools->setClub($club);
 
@@ -1658,7 +1659,7 @@ class SecretariatController extends AbstractController
      * @param UserTools $userTools
      * @return Response
      */
-    public function clubManagerAdd(SessionInterface $session, Request $request, Club $club, UserTools $userTools)
+    public function clubManagerAdd(SessionInterface $session, Request $request, Club $club, UserTools $userTools): Response
     {
         $session->set('duplicate', false);
 
@@ -1693,7 +1694,7 @@ class SecretariatController extends AbstractController
      * @param UserTools $userTools
      * @return Response
      */
-    public function clubManagerDelete(Request $request, Club $club, User $user, UserTools $userTools)
+    public function clubManagerDelete(Request $request, Club $club, User $user, UserTools $userTools): Response
     {
         $form = $this->createForm(UserType::class, $user, array('form' => 'club_manager_delete', 'data_class' => User::class));
 
@@ -1713,7 +1714,7 @@ class SecretariatController extends AbstractController
      * @Route("/liste_acces_interface", name="access_list_index")
      * @return Response
      */
-    public function accessListIndex()
+    public function accessListIndex(): Response
     {
         $access_list = $this->getDoctrine()->getManager()->getRepository(User::class)->getAccessList();
 
@@ -1726,7 +1727,7 @@ class SecretariatController extends AbstractController
      * @param UserTools $userTools
      * @return Response
      */
-    public function accessReactivate(User $user, UserTools $userTools)
+    public function accessReactivate(User $user, UserTools $userTools): Response
     {
         $userTools->reactivate($user, $this->getUser());
 
@@ -1741,7 +1742,7 @@ class SecretariatController extends AbstractController
      * @param UserTools $userTools
      * @return Response
      */
-    public function accessPasswordModify(SessionInterface $session, Request $request, User $user, UserTools $userTools)
+    public function accessPasswordModify(SessionInterface $session, Request $request, User $user, UserTools $userTools): Response
     {
         $session->set('passwordError', false);
 
@@ -1771,7 +1772,7 @@ class SecretariatController extends AbstractController
      * @param Request $request
      * @return Response
      */
-    public function printStamp(Request $request)
+    public function printStamp(Request $request): Response
     {
         $stamps = null;
 
@@ -1796,7 +1797,7 @@ class SecretariatController extends AbstractController
      * @param Request $request
      * @return Response
      */
-    public function printCard(Request $request)
+    public function printCard(Request $request): Response
     {
         $cards = null;
 
@@ -1822,7 +1823,7 @@ class SecretariatController extends AbstractController
      * @param Club $club
      * @return Response
      */
-    public function formRenewCreate(Request $request, Club $club)
+    public function formRenewCreate(Request $request, Club $club): Response
     {
         $period = null;
 
@@ -1913,7 +1914,7 @@ class SecretariatController extends AbstractController
      * @return RedirectResponse|Response
      * @throws Exception
      */
-    public function memberListCleanup(Request $request)
+    public function memberListCleanup(Request $request): RedirectResponse|Response
     {
         $list = $this->getDoctrine()->getRepository(Member::class)->getMemberListCleanup();
 
@@ -1967,7 +1968,7 @@ class SecretariatController extends AbstractController
      * @param ClubModificationLog|null $modification
      * @return Response
      */
-    public function dojoModificationList(?ClubModificationLog $modification = null)
+    public function dojoModificationList(?ClubModificationLog $modification = null): Response
     {
         if (!is_null($modification))
         {

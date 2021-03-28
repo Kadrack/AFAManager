@@ -31,7 +31,7 @@ class ClubTeacherRepository extends ServiceEntityRepository
     {
         $qb = $this->createQueryBuilder('t');
 
-        return $qb->select('m.member_firstname AS Firstname', 'm.member_name AS Name', 'l.member_licence_medical_certificate AS Starting')
+        return $qb->select('m.member_firstname AS Firstname', 'm.member_name AS Name', 'm.member_start_practice AS Starting')
             ->join(Member::class, 'm', 'WITH', $qb->expr()->eq('m.member_id', 't.club_teacher_member'))
             ->join(MemberLicence::class, 'l', 'WITH', $qb->expr()->eq('m.member_first_licence', 'l.member_licence_id'))
             ->join(Club::class, 'c', 'WITH', $qb->expr()->eq('c.club_id', 't.club_teacher'))

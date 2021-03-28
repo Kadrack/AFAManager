@@ -96,6 +96,11 @@ class Member
     private $member_birthday;
 
     /**
+     * @ORM\Column(type="date")
+     */
+    private $member_start_practice;
+
+    /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $member_aikikai_id;
@@ -104,12 +109,6 @@ class Member
      * @ORM\Column(type="text", nullable=true)
      */
     private $member_comment;
-
-    /**
-     * @ORM\OneToOne(targetEntity="App\Entity\MemberLicence")
-     * @ORM\JoinColumn(nullable=true, name="member_join_member_first_licence", referencedColumnName="member_licence_id")
-     */
-    private $member_first_licence;
 
     /**
      * @ORM\OneToOne(targetEntity="App\Entity\MemberLicence")
@@ -319,6 +318,18 @@ class Member
         return $this;
     }
 
+    public function getMemberStartPractice(): ?DateTimeInterface
+    {
+        return $this->member_start_practice;
+    }
+
+    public function setMemberStartPractice(DateTimeInterface $member_start_practice): self
+    {
+        $this->member_start_practice = $member_start_practice;
+
+        return $this;
+    }
+
     public function getMemberAikikaiId(): ?string
     {
         return $this->member_aikikai_id;
@@ -339,18 +350,6 @@ class Member
     public function setMemberComment(string $member_comment): self
     {
         $this->member_comment = $member_comment;
-
-        return $this;
-    }
-
-    public function getMemberFirstLicence(): ?MemberLicence
-    {
-        return $this->member_first_licence;
-    }
-
-    public function setMemberFirstLicence(?MemberLicence $member_first_licence): self
-    {
-        $this->member_first_licence = $member_first_licence;
 
         return $this;
     }

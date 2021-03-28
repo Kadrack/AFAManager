@@ -9,7 +9,7 @@
 
 {% block body %}
     <h1>{{ memberTools.getMember.getMemberFirstname()|title }} {{ memberTools.getMember.getMemberName()|title }}</h1>
-    <h2>Début de pratique : {{ memberTools.getMember.getMemberFirstLicence().getMemberLicenceMedicalCertificate()|date("d/m/Y") }}</h2>
+    <h2>Début de pratique : {{ memberTools.getMember.getMemberStartPractice|date("d/m/Y") }}</h2>
     <h2>Historique des grades</h2>
     {% if memberTools.getGrades().exam.candidate %}<a class="btn btn-primary" href="{{ path('club_member_application', {'member': memberTools.getMember.memberId(), 'type': 1}) }}">Candidature au prochain examen fédéral</a> {% endif %}{% if memberTools.getGrades().kyu %}<a class="btn btn-primary" href="{{ path('club_member_kyu_add', {'member': memberTools.getMember.memberId()}) }}">Ajouter un grade Kyu</a> {% endif %}
     <table class="table table-sm table-hover">

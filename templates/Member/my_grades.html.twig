@@ -9,7 +9,7 @@
 
 {% block body %}
     <h1>{{ memberTools.getMember.getMemberFirstname()|title }} {{ memberTools.getMember.getMemberName()|title }}</h1>
-    <h2>Début de pratique : {{ memberTools.getMember.getMemberFirstLicence().getMemberLicenceMedicalCertificate()|date("d/m/Y") }}</h2>
+    <h2>Début de pratique : {{ memberTools.getMember.getMemberStartPractice|date("d/m/Y") }}</h2>
     <h2>Historique des grades</h2>
     {% if memberTools.getGrades().exam.candidate %}<a href="{{ path('member_my_application', {'type': 1}) }}">Candidature au prochain examen fédéral</a> {% endif %}
     <table class="table table-sm table-hover">

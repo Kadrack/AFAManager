@@ -3,8 +3,6 @@
 namespace App\Repository;
 
 use App\Entity\Club;
-use App\Entity\ClubHistory;
-use App\Entity\ClubTeacher;
 use App\Entity\Grade;
 use App\Entity\GradeTitle;
 use App\Entity\Member;
