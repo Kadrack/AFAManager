@@ -41,9 +41,9 @@
                         <div class="btn-group" role="group">
                             <button id="btnGroupDrop1" type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
                             <div class="dropdown-menu" aria-labelledby="btnGroupDrop1" style="">
-                                <a class="dropdown-item" href="{{ path('secretariat_member_personal_detail', {'club': member.ClubId, 'member': member.Id}) }}">Détail Données personnelles</a>
-                                <a class="dropdown-item" href="{{ path('secretariat_member_form_renew', {'club': member.ClubId, 'member': member.Id}) }}">Formulaire renouvellement</a>
-                                <a class="dropdown-item" href="{{ path('secretariat_member_licence_detail', {'club': member.ClubId, 'member': member.Id}) }}">Détail Licence</a>
+                                <a class="dropdown-item" href="{{ path('secretariat-memberPersonalDetail', {'club': member.ClubId, 'member': member.Id}) }}">Détail Données personnelles</a>
+                                <a class="dropdown-item" href="{{ path('secretariat-memberFormRenew', {'club': member.ClubId, 'member': member.Id}) }}">Formulaire renouvellement</a>
+                                <a class="dropdown-item" href="{{ path('secretariat-memberLicenceDetail', {'club': member.ClubId, 'member': member.Id}) }}">Détail Licence</a>
                             </div>
                         </div>
                     </div>

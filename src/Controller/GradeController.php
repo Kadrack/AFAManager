@@ -15,27 +15,33 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/grade", name="grade_")
+ * Class GradeController
+ * @package App\Controller
  *
  * @IsGranted("ROLE_CT")
  */
+#[Route('/grade', name:'grade-')]
 class GradeController extends AbstractController
 {
     /**
-     * @Route("/", name="index")
+     *
+     * @return Response
      */
-    public function index()
+    #[Route('/', name:'index')]
+    public function index(): Response
     {
         return $this->render('Grade/index.html.twig');
     }
 
     /**
-     * @Route("/session-examen", name="exam_index")
+     * @return Response
      */
-    public function exam_index()
+    #[Route('/session-examen', name:'examIndex')]
+    public function examIndex(): Response
     {
         $sessions = $this->getDoctrine()->getRepository(GradeSession::class)->findBy(['grade_session_type' => 1], ['grade_session_date' => 'DESC', 'grade_session_type' => 'DESC']);
 
@@ -43,12 +49,11 @@ class GradeController extends AbstractController
     }
 
     /**
-     * @Route("/session-examen/{session<\d+>}/detail", name="exam_detail")
-     *
      * @param GradeSession $session
      * @return Response
      */
-    public function exam_detail(GradeSession $session)
+    #[Route('/session-examen/{session<\d+>}/detail', name:'examDetail')]
+    public function examDetail(GradeSession $session): Response
     {
         $applicants = $this->getDoctrine()->getRepository(Grade::class)->findBy(['grade_status' => 1, 'grade_exam' => $session->getGradeSessionId()], ['grade_rank' => 'ASC']);
 
@@ -87,17 +92,16 @@ class GradeController extends AbstractController
     }
 
     /**
-     * @Route("/session-examen/{session<\d+>}/postulant/{member<\d+>}/grade/{grade<\d+>}/detail", name="exam_applicant_detail")
-     *
      * @param Request $request
      * @param GradeSession $session
      * @param Member $member
      * @param Grade $grade
      * @return RedirectResponse|Response
      */
-    public function exam_applicant_detail(Request $request, GradeSession $session, Member $member, Grade $grade)
+    #[Route('/session-examen/{session<\d+>}/postulant/{member<\d+>}/grade/{grade<\d+>}/detail', name:'examApplicantDetail')]
+    public function examApplicantDetail(Request $request, GradeSession $session, Member $member, Grade $grade): RedirectResponse|Response
     {
-        $form = $this->createForm(GradeType::class, $grade, array('form' => 'exam_applicant_validation', 'data_class' => Grade::class));
+        $form = $this->createForm(GradeType::class, $grade, array('form' => 'examApplicantValidation', 'data_class' => Grade::class));
 
         $form->handleRequest($request);
 
@@ -109,24 +113,23 @@ class GradeController extends AbstractController
 
             $entityManager->flush();
 
-            return $this->redirectToRoute('grade_exam_detail', array('session' => $session->getGradeSessionId()));
+            return $this->redirectToRoute('grade-examDetail', array('session' => $session->getGradeSessionId()));
         }
 
         return $this->render('Grade/Exam/applicant_detail.html.twig', array('session' => $session, 'member' => $member, 'form' => $form->createView()));
     }
 
     /**
-     * @Route("/session-examen/{session<\d+>}/candidat/{member<\d+>}/grade/{grade<\d+>}/detail", name="exam_candidate_detail")
-     *
      * @param Request $request
      * @param GradeSession $session
      * @param Member $member
      * @param Grade $grade
      * @return RedirectResponse|Response
      */
-    public function exam_candidate_detail(Request $request, GradeSession $session, Member $member, Grade $grade)
+    #[Route('/session-examen/{session<\d+>}/candidat/{member<\d+>}/grade/{grade<\d+>}/detail', name:'examCandidateDetail')]
+    public function examCandidateDetail(Request $request, GradeSession $session, Member $member, Grade $grade): RedirectResponse|Response
     {
-        $form = $this->createForm(GradeType::class, $grade, array('form' => 'exam_candidate_result', 'data_class' => Grade::class));
+        $form = $this->createForm(GradeType::class, $grade, array('form' => 'examCandidateResult', 'data_class' => Grade::class));
 
         $form->handleRequest($request);
 
@@ -138,24 +141,23 @@ class GradeController extends AbstractController
 
             $entityManager->flush();
 
-            return $this->redirectToRoute('grade_exam_detail', array('session' => $session->getGradeSessionId()));
+            return $this->redirectToRoute('grade-examDetail', array('session' => $session->getGradeSessionId()));
         }
 
         return $this->render('Grade/Exam/candidate_detail.html.twig', array('session' => $session, 'member' => $member, 'form' => $form->createView()));
     }
 
     /**
-     * @Route("/session-examen/{session<\d+>}/candidat/{member<\d+>}/grade/{grade<\d+>}/detail_update", name="exam_candidate_detail_update")
-     *
      * @param Request $request
      * @param GradeSession $session
      * @param Member $member
      * @param Grade $grade
      * @return RedirectResponse|Response
      */
-    public function exam_candidate_detail_update(Request $request, GradeSession $session, Member $member, Grade $grade)
+    #[Route('/session-examen/{session<\d+>}/candidat/{member<\d+>}/grade/{grade<\d+>}/detail-update', name:'examCandidateDetailUpdate')]
+    public function examCandidateDetailUpdate(Request $request, GradeSession $session, Member $member, Grade $grade): RedirectResponse|Response
     {
-        $form = $this->createForm(GradeType::class, $grade, array('form' => 'exam_candidate_result', 'data_class' => Grade::class));
+        $form = $this->createForm(GradeType::class, $grade, array('form' => 'examCandidateResult', 'data_class' => Grade::class));
 
         $form->handleRequest($request);
 
@@ -177,22 +179,21 @@ class GradeController extends AbstractController
 
             $entityManager->flush();
 
-            return $this->redirectToRoute('grade_exam_detail', array('session' => $session->getGradeSessionId()));
+            return $this->redirectToRoute('grade-examDetail', array('session' => $session->getGradeSessionId()));
         }
 
         return $this->render('Grade/Exam/candidate_detail.html.twig', array('session' => $session, 'member' => $member, 'form' => $form->createView()));
     }
 
     /**
-     * @Route("/session-examen/{session<\d+>}/candidat/{member<\d+>}/grade/{grade<\d+>}/ajouter_aikikai", name="exam_candidate_add_aikikai")
-     *
      * @param Request $request
      * @param GradeSession $session
      * @param Member $member
      * @param Grade $grade
      * @return RedirectResponse|Response
      */
-    public function exam_candidate_add_aikikai(Request $request, GradeSession $session, Member $member, Grade $grade)
+    #[Route('/session-examen/{session<\d+>}/candidat/{member<\d+>}/grade/{grade<\d+>}/ajouter-aikikai', name:'examCandidateAddAikikai')]
+    public function examCandidateAddAikikai(Request $request, GradeSession $session, Member $member, Grade $grade): RedirectResponse|Response
     {
         $grade_aikikai = new Grade();
 
@@ -202,7 +203,7 @@ class GradeController extends AbstractController
         $grade_aikikai->setGradeExam($grade->getGradeExam());
         $grade_aikikai->setGradeMember($grade->getGradeMember());
 
-        $form = $this->createForm(GradeType::class, $grade_aikikai, array('form' => 'exam_candidate_aikikai', 'data_class' => Grade::class));
+        $form = $this->createForm(GradeType::class, $grade_aikikai, array('form' => 'examCandidateAikikai', 'data_class' => Grade::class));
 
         $form->handleRequest($request);
 
@@ -215,7 +216,7 @@ class GradeController extends AbstractController
             $entityManager->persist($grade_aikikai);
             $entityManager->flush();
 
-            return $this->redirectToRoute('grade_exam_detail', array('session' => $session->getGradeSessionId()));
+            return $this->redirectToRoute('grade-examDetail', array('session' => $session->getGradeSessionId()));
         }
 
         return $this->render('Grade/Exam/candidate_detail.html.twig', array('session' => $session, 'member' => $member, 'grade' => $grade, 'form' => $form->createView()));
@@ -223,17 +224,16 @@ class GradeController extends AbstractController
     }
 
     /**
-     * @Route("/session-examen/{session<\d+>}/candidat/{member<\d+>}/grade/{grade<\d+>}/detail_aikikai", name="exam_candidate_detail_aikikai")
-     *
      * @param Request $request
      * @param GradeSession $session
      * @param Member $member
      * @param Grade $grade
      * @return RedirectResponse|Response
      */
-    public function exam_candidate_detail_aikikai(Request $request, GradeSession $session, Member $member, Grade $grade)
+    #[Route('/session-examen/{session<\d+>}/candidat/{member<\d+>}/grade/{grade<\d+>}/detail-aikikai', name:'examCandidateDetailAikikai')]
+    public function examCandidateDetailAikikai(Request $request, GradeSession $session, Member $member, Grade $grade): RedirectResponse|Response
     {
-        $form = $this->createForm(GradeType::class, $grade, array('form' => 'exam_candidate_aikikai', 'data_class' => Grade::class));
+        $form = $this->createForm(GradeType::class, $grade, array('form' => 'examCandidateAikikai', 'data_class' => Grade::class));
 
         $form->handleRequest($request);
 
@@ -245,7 +245,7 @@ class GradeController extends AbstractController
 
             $entityManager->flush();
 
-            return $this->redirectToRoute('grade_exam_detail', array('session' => $session->getGradeSessionId()));
+            return $this->redirectToRoute('grade-examDetail', array('session' => $session->getGradeSessionId()));
         }
 
         return $this->render('Grade/Exam/candidate_detail.html.twig', array('session' => $session, 'member' => $member, 'form' => $form->createView()));

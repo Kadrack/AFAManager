@@ -52,7 +52,7 @@
                 <td class="align-middle">{{ province.Total.1 }}</td>
                 <td class="align-middle">{{ province.Total.2 }}</td>
                 <td class="align-middle">{{ province.Total.1 + province.Total.2 }}</td>
-                <td class="align-middle"><a class="btn btn-primary" href="{{ path('administration_statistics_province', {'province': province.Id}) }}">Détails</a></td>
+                <td class="align-middle"><a class="btn btn-primary" href="{{ path('administration-statisticsProvince', {'province': province.Id}) }}">Détails</a></td>
             </tr>
             {% endfor %}
             <tr>
@@ -75,11 +75,11 @@
 {% block javascripts %}
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
     <script>
-        var ctx = document.getElementById('myChart').getContext('2d');
+        let ctx = document.getElementById('myChart').getContext('2d');
 
         Chart.defaults.global.defaultFontColor = 'white';
 
-        var myChart = new Chart
+        let myChart = new Chart
         (ctx,
             {
                 type: 'horizontalBar',

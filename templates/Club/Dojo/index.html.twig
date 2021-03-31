@@ -15,14 +15,14 @@
             <div class="btn-group" role="group">
                 <button id="btnGroupDrop1" type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
                 <div class="dropdown-menu" aria-labelledby="btnGroupDrop1" style="">
-                    <a class="dropdown-item" href="{{ path('club_dojo_address_add') }}">Dojo</a>
-                    <a class="dropdown-item" href="{{ path('club_dojo_training_add') }}">Cour</a>
-                    <a class="dropdown-item" href="{{ path('club_dojo_teacher_afa_add') }}">Professeur AFA</a>
-                    <a class="dropdown-item" href="{{ path('club_dojo_teacher_foreign_add') }}">Professeur Non AFA</a>
+                    <a class="dropdown-item" href="{{ path('club-dojoAdd') }}">Dojo</a>
+                    <a class="dropdown-item" href="{{ path('club-lessonAdd') }}">Cour</a>
+                    <a class="dropdown-item" href="{{ path('club-teacherAFAAdd') }}">Professeur AFA</a>
+                    <a class="dropdown-item" href="{{ path('club-teacherForeignAdd') }}">Professeur Non AFA</a>
                 </div>
             </div>
         </div>
-        {% if nextManagedClub != 0 %}<a class="btn btn-primary" href="{{ path('club_dojo_index') }}?change_actual={{ nextManagedClub }}">Club Suivant</a>{% endif %}
+        {% if nextManagedClub != 0 %}<a class="btn btn-primary" href="{{ path('club-dojoIndex') }}?change_actual={{ nextManagedClub }}">Club Suivant</a>{% endif %}
     </h1>
     <h2>Dojo(s)</h2>
     <table class="table table-sm table-hover">
@@ -54,8 +54,8 @@
                         <div class="btn-group" role="group">
                             <button id="btnGroupDrop1" type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
                             <div class="dropdown-menu" aria-labelledby="btnGroupDrop1" style="">
-                                <a class="dropdown-item" href="{{ path('club_dojo_address_update', {'clubDojo': address.getClubDojoId()}) }}">Modifier</a>
-                                <a class="dropdown-item" href="{{ path('club_dojo_address_delete', {'clubDojo': address.getClubDojoId()}) }}">Supprimer</a>
+                                <a class="dropdown-item" href="{{ path('club-dojoUpdate', {'clubDojo': address.getClubDojoId()}) }}">Modifier</a>
+                                <a class="dropdown-item" href="{{ path('club-dojoDelete', {'clubDojo': address.getClubDojoId()}) }}">Supprimer</a>
                             </div>
                         </div>
                     </div>
@@ -90,8 +90,8 @@
                         <div class="btn-group" role="group">
                             <button id="btnGroupDrop1" type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
                             <div class="dropdown-menu" aria-labelledby="btnGroupDrop1" style="">
-                                <a class="dropdown-item" href="{{ path('club_dojo_training_update', {'clubLesson': lesson.getClubLessonId()}) }}">Modifier</a>
-                                <a class="dropdown-item" href="{{ path('club_dojo_training_delete', {'clubLesson': lesson.getClubLessonId()}) }}">Supprimer</a>
+                                <a class="dropdown-item" href="{{ path('club-lessonUpdate', {'clubLesson': lesson.getClubLessonId()}) }}">Modifier</a>
+                                <a class="dropdown-item" href="{{ path('club-lessonDelete', {'clubLesson': lesson.getClubLessonId()}) }}">Supprimer</a>
                             </div>
                         </div>
                     </div>
@@ -130,8 +130,8 @@
                         <div class="btn-group" role="group">
                             <button id="btnGroupDrop1" type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
                             <div class="dropdown-menu" aria-labelledby="btnGroupDrop1" style="">
-                                <a class="dropdown-item" href="{{ path('club_dojo_teacher_afa_update', {'teacher': teacher.Id}) }}">Modifier</a>
-                                <a class="dropdown-item" href="{{ path('club_dojo_teacher_afa_delete', {'teacher': teacher.Id}) }}">Supprimer</a>
+                                <a class="dropdown-item" href="{{ path('club-teacherAFAUpdate', {'teacher': teacher.Id}) }}">Modifier</a>
+                                <a class="dropdown-item" href="{{ path('club-teacherAFADelete', {'teacher': teacher.Id}) }}">Supprimer</a>
                             </div>
                         </div>
                     </div>
@@ -170,8 +170,8 @@
                         <div class="btn-group" role="group">
                             <button id="btnGroupDrop1" type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
                             <div class="dropdown-menu" aria-labelledby="btnGroupDrop1" style="">
-                                <a class="dropdown-item" href="{{ path('club_dojo_teacher_foreign_update', {'teacher': teacher.Id}) }}">Modifier</a>
-                                <a class="dropdown-item" href="{{ path('club_dojo_teacher_foreign_delete', {'teacher': teacher.Id}) }}">Supprimer</a>
+                                <a class="dropdown-item" href="{{ path('club-teacherForeignUpdate', {'teacher': teacher.Id}) }}">Modifier</a>
+                                <a class="dropdown-item" href="{{ path('club-teacherForeignDelete', {'teacher': teacher.Id}) }}">Supprimer</a>
                             </div>
                         </div>
                     </div>

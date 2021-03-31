@@ -22,11 +22,18 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class ClubRepository extends ServiceEntityRepository
 {
+    /**
+     * ClubRepository constructor.
+     * @param ManagerRegistry $registry
+     */
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Club::class);
     }
 
+    /**
+     * @return array|null
+     */
     public function getCreationDateList(): ?array
     {
         $qb = $this->createQueryBuilder('c');
@@ -39,6 +46,9 @@ class ClubRepository extends ServiceEntityRepository
             ->getArrayResult();
     }
 
+    /**
+     * @return array|null
+     */
     public function getActiveClubs(): ?array
     {
         $qb = $this->createQueryBuilder('c');
@@ -52,6 +62,9 @@ class ClubRepository extends ServiceEntityRepository
             ->getArrayResult();
     }
 
+    /**
+     * @return array|null
+     */
     public function getInactiveClubs(): ?array
     {
         $qb = $this->createQueryBuilder('c');
@@ -64,6 +77,10 @@ class ClubRepository extends ServiceEntityRepository
             ->getArrayResult();
     }
 
+    /**
+     * @param DateTime $referenceDate
+     * @return array|null
+     */
     public function getProvinceTeachersTotal(DateTime $referenceDate): ?array
     {
         $deadline = date('Y-m-d', $referenceDate->getTimestamp());
@@ -87,6 +104,10 @@ class ClubRepository extends ServiceEntityRepository
             ->getArrayResult();
     }
 
+    /**
+     * @param DateTime $referenceDate
+     * @return array|null
+     */
     public function getProvinceMembersTotal(DateTime $referenceDate): ?array
     {
         $deadline = date('Y-m-d', $referenceDate->getTimestamp());
@@ -112,6 +133,10 @@ class ClubRepository extends ServiceEntityRepository
             ->getArrayResult();
     }
 
+    /**
+     * @param DateTime|null $referenceDate
+     * @return array|null
+     */
     public function getProvinceMembersCount(?DateTime $referenceDate = null): ?array
     {
         $result = array();
@@ -169,6 +194,11 @@ class ClubRepository extends ServiceEntityRepository
         return $result;
     }
 
+    /**
+     * @param int $province
+     * @param DateTime $referenceDate
+     * @return array|null
+     */
     public function getClubMembersCount(int $province, DateTime $referenceDate): ?array
     {
         $result = array();

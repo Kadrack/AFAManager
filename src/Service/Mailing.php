@@ -29,7 +29,7 @@ class Mailing
      * @return bool
      * @throws TransportExceptionInterface
      */
-    public function sendEmail()
+    public function sendEmail(): bool
     {
         $email = (new Email())
             ->from('afa-manager@aikido.be')

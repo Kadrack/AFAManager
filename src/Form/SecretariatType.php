@@ -20,52 +20,59 @@ use Symfony\Component\Form\FormBuilderInterface;
 
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+/**
+ * Class SecretariatType
+ * @package App\Form
+ */
 class SecretariatType extends AbstractType
 {
+    /**
+     * {@inheritdoc}
+     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         switch ($options['form'])
         {
-            case 'supporter_create':
+            case 'supporterCreate':
                 $this->supporterCreate($builder);
                 break;
-            case 'supporter_delete':
+            case 'supporterDelete':
                 $this->supporterDelete($builder);
                 break;
-            case 'supporter_update':
+            case 'supporterUpdate':
                 $this->supporterUpdate($builder);
                 break;
-            case 'modification_validate':
+            case 'modificationValidate':
                 $this->modificationValidate($builder);
                 break;
-            case 'modification_cancel':
+            case 'modificationCancel':
                 $this->modificationCancel($builder);
                 break;
-            case 'member_update':
+            case 'memberUpdate':
                 $this->memberUpdate($builder);
                 break;
-            case 'commission_create':
+            case 'commissionCreate':
                 $this->commissionCreate($builder);
                 break;
-            case 'commission_member_add':
+            case 'commissionMemberAdd':
                 $this->commissionMemberAdd($builder);
                 break;
-            case 'commission_member_delete':
+            case 'commissionMemberDelete':
                 $this->commissionMemberDelete($builder);
                 break;
-            case 'print_stamp':
+            case 'printStamp':
                 $this->printStamp($builder);
                 break;
-            case 'print_card':
+            case 'printCard':
                 $this->printCard($builder);
                 break;
-            case 'form_renew_create':
+            case 'formRenewCreate':
                 $this->formRenewCreate($builder);
                 break;
-            case 'search_members':
+            case 'searchMembers':
                 $this->searchMembers($builder);
                 break;
-            case 'cleanup_member':
+            case 'cleanupMember':
                 $this->cleanupMember($builder);
                 break;
             default:
@@ -73,11 +80,17 @@ class SecretariatType extends AbstractType
         }
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array('data_class' => '', 'form' => ''));
     }
 
+    /**
+     * @param FormBuilderInterface $builder
+     */
     private function supporterCreate(FormBuilderInterface $builder)
     {
         $builder
@@ -90,6 +103,9 @@ class SecretariatType extends AbstractType
         ;
     }
 
+    /**
+     * @param FormBuilderInterface $builder
+     */
     private function supporterUpdate(FormBuilderInterface $builder)
     {
         $builder
@@ -102,6 +118,9 @@ class SecretariatType extends AbstractType
         ;
     }
 
+    /**
+     * @param FormBuilderInterface $builder
+     */
     private function supporterDelete(FormBuilderInterface $builder)
     {
         $builder
@@ -114,6 +133,9 @@ class SecretariatType extends AbstractType
         ;
     }
 
+    /**
+     * @param FormBuilderInterface $builder
+     */
     private function modificationValidate(FormBuilderInterface $builder)
     {
         $list = new ListData();
@@ -135,6 +157,9 @@ class SecretariatType extends AbstractType
         ;
     }
 
+    /**
+     * @param FormBuilderInterface $builder
+     */
     private function modificationCancel(FormBuilderInterface $builder)
     {
         $list = new ListData();
@@ -156,6 +181,9 @@ class SecretariatType extends AbstractType
         ;
     }
 
+    /**
+     * @param FormBuilderInterface $builder
+     */
     private function memberUpdate(FormBuilderInterface $builder)
     {
         $list = new ListData();
@@ -177,6 +205,9 @@ class SecretariatType extends AbstractType
         ;
     }
 
+    /**
+     * @param FormBuilderInterface $builder
+     */
     private function commissionCreate(FormBuilderInterface $builder)
     {
         $list = new ListData();
@@ -188,6 +219,9 @@ class SecretariatType extends AbstractType
         ;
     }
 
+    /**
+     * @param FormBuilderInterface $builder
+     */
     private function commissionMemberAdd(FormBuilderInterface $builder)
     {
         $builder
@@ -196,6 +230,9 @@ class SecretariatType extends AbstractType
         ;
     }
 
+    /**
+     * @param FormBuilderInterface $builder
+     */
     private function commissionMemberDelete(FormBuilderInterface $builder)
     {
         $builder
@@ -204,6 +241,9 @@ class SecretariatType extends AbstractType
         ;
     }
 
+    /**
+     * @param FormBuilderInterface $builder
+     */
     private function printStamp(FormBuilderInterface $builder)
     {
         $builder
@@ -212,6 +252,9 @@ class SecretariatType extends AbstractType
         ;
     }
 
+    /**
+     * @param FormBuilderInterface $builder
+     */
     private function printCard(FormBuilderInterface $builder)
     {
         $builder
@@ -220,6 +263,9 @@ class SecretariatType extends AbstractType
         ;
     }
 
+    /**
+     * @param FormBuilderInterface $builder
+     */
     private function formRenewCreate(FormBuilderInterface $builder)
     {
         $builder
@@ -229,6 +275,9 @@ class SecretariatType extends AbstractType
         ;
     }
 
+    /**
+     * @param FormBuilderInterface $builder
+     */
     private function searchMembers(FormBuilderInterface $builder)
     {
         $builder
@@ -237,6 +286,9 @@ class SecretariatType extends AbstractType
         ;
     }
 
+    /**
+     * @param FormBuilderInterface $builder
+     */
     private function cleanupMember(FormBuilderInterface $builder)
     {
         $builder

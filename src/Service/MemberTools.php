@@ -21,18 +21,39 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
  */
 class MemberTools
 {
+    /**
+     * @var EntityManagerInterface
+     */
     private EntityManagerInterface $em;
 
+    /**
+     * @var array|null
+     */
     private ?array $grades;
 
+    /**
+     * @var array|null
+     */
     private ?array $licences;
 
+    /**
+     * @var Member
+     */
     private Member $member;
 
+    /**
+     * @var PhotoUploader
+     */
     private PhotoUploader $photoUploader;
 
+    /**
+     * @var array|null
+     */
     private ?array $stages;
 
+    /**
+     * @var array|null
+     */
     private ?array $titles;
 
     /**

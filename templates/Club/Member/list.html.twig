@@ -8,7 +8,7 @@
 {% endblock %}
 
 {% block body %}
-    <h1>{{ club.getClubName()|title }}{% if nextManagedClub != 0 %}<a class="btn btn-primary" href="{{ path('club_members_list') }}?change_actual={{ nextManagedClub }}">Club Suivant</a>{% endif %}</h1>
+    <h1>{{ club.getClubName()|title }}{% if nextManagedClub != 0 %}<a class="btn btn-primary" href="{{ path('club-membersList') }}?change_actual={{ nextManagedClub }}">Club Suivant</a>{% endif %}</h1>
     <h2>Liste des Membres</h2>
     <table class="table table-sm table-hover unselectable">
         <thead>
@@ -36,12 +36,12 @@
                         <div class="btn-group" role="group">
                             <button id="btnGroupDrop1" type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
                             <div class="dropdown-menu" aria-labelledby="btnGroupDrop1" style="">
-                                <a class="dropdown-item" href="{{ path('club_member_grades_detail', {'member': member.Id}) }}">Grades</a>
-                                <a class="dropdown-item" href="{{ path('club_member_stages_detail', {'member': member.Id}) }}">Stages</a>
-                                <a class="dropdown-item" href="{{ path('club_member_licence_detail', {'member': member.Id}) }}">Licence</a>
-                                <a class="dropdown-item" href="{{ path('club_member_titles_detail', {'member': member.Id}) }}">Titres</a>
-                                <a class="dropdown-item" href="{{ path('club_member_personal_data', {'member': member.Id}) }}">Données personnelles</a>
-                                {% if member.User == null %}<a class="dropdown-item" href="{{ path('club_member_login_create', {'member': member.Id}) }}">Créer accès</a>{% endif %}
+                                <a class="dropdown-item" href="{{ path('club-memberGradesDetail', {'member': member.Id}) }}">Grades</a>
+                                <a class="dropdown-item" href="{{ path('club-memberStagesDetail', {'member': member.Id}) }}">Stages</a>
+                                <a class="dropdown-item" href="{{ path('club-memberLicenceDetail', {'member': member.Id}) }}">Licence</a>
+                                <a class="dropdown-item" href="{{ path('club-memberTitlesDetail', {'member': member.Id}) }}">Titres</a>
+                                <a class="dropdown-item" href="{{ path('club-memberPersonalData', {'member': member.Id}) }}">Données personnelles</a>
+                                {% if member.User == null %}<a class="dropdown-item" href="{{ path('club-memberLoginCreate', {'member': member.Id}) }}">Créer accès</a>{% endif %}
                             </div>
                         </div>
                     </div>

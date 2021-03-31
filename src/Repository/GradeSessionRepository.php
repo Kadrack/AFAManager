@@ -16,11 +16,19 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class GradeSessionRepository extends ServiceEntityRepository
 {
+    /**
+     * GradeSessionRepository constructor.
+     * @param ManagerRegistry $registry
+     */
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, GradeSession::class);
     }
 
+    /**
+     * @param string $today
+     * @return array|null
+     */
     public function getOpenSession(string $today): ?array
     {
         $qb = $this->createQueryBuilder('e');

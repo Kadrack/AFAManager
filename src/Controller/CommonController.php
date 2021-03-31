@@ -12,6 +12,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -20,32 +21,35 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("", name="common_")
+ * Class CommonController
+ * @package App\Controller
  *
  * @IsGranted("ROLE_USER")
  */
+#[Route('', name:'common-')]
 class CommonController extends AbstractController
 {
     /**
-     * @Route("/", name="index")
+     * @return Response
      */
-    public function index()
+    #[Route('/', name:'index')]
+    public function index(): Response
     {
         return $this->render('Common/index.html.twig');
     }
 
     /**
-     * @Route("/changement_login", name="change_login")
      * @param SessionInterface $session
      * @param Request $request
      * @param UserTools $userTools
-     * @return Response
+     * @return RedirectResponse|Response
      */
-    public function changeLogin(SessionInterface $session, Request $request, UserTools $userTools)
+    #[Route('/changement-login', name:'changeLogin')]
+    public function changeLogin(SessionInterface $session, Request $request, UserTools $userTools): RedirectResponse|Response
     {
         $session->set('duplicate', false);
 
-        $form = $this->createForm(UserType::class, $this->getUser(), array('form' => 'change_login', 'data_class' => User::class));
+        $form = $this->createForm(UserType::class, $this->getUser(), array('form' => 'changeLogin', 'data_class' => User::class));
 
         $form->handleRequest($request);
 
@@ -53,7 +57,7 @@ class CommonController extends AbstractController
         {
             if ($userTools->changeLogin($form->getData(), $form['Login']->getData()))
             {
-                return $this->redirectToRoute('common_index');
+                return $this->redirectToRoute('common-index');
             }
             else
             {
@@ -68,17 +72,17 @@ class CommonController extends AbstractController
     }
 
     /**
-     * @Route("/changement_mot_de_passe", name="change_password")
      * @param SessionInterface $session
      * @param Request $request
      * @param UserTools $userTools
-     * @return Response
+     * @return RedirectResponse|Response
      */
-    public function changePassword(SessionInterface $session, Request $request, UserTools $userTools)
+    #[Route('/changement-mot-de-passe', name:'changePassword')]
+    public function changePassword(SessionInterface $session, Request $request, UserTools $userTools): RedirectResponse|Response
     {
         $session->set('passwordError', false);
 
-        $form = $this->createForm(UserType::class, $this->getUser(), array('form' => 'change_password', 'data_class' => User::class));
+        $form = $this->createForm(UserType::class, $this->getUser(), array('form' => 'changePassword', 'data_class' => User::class));
 
         $form->handleRequest($request);
 
@@ -86,7 +90,7 @@ class CommonController extends AbstractController
         {
             if ($userTools->changePassword($form->getData(), $form['Password1']->getData(), $form['Password2']->getData()))
             {
-                return $this->redirectToRoute('common_index');
+                return $this->redirectToRoute('common-index');
             }
             else
             {

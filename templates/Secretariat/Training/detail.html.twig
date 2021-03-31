@@ -21,12 +21,12 @@
             <tr>
                 <td class="align-middle">{{ training.getTrainingName() }}</td>
                 <td class="align-middle">{{ listData.getTrainingType(training.getTrainingType()) }}</td>
-                <td class="align-middle"><a class="btn btn-primary" href="{{ path('secretariat_training_update', {'training': training.getTrainingId()}) }}">Modifier</a><a class="btn btn-primary" href="{{ path('secretariat_training_delete', {'training': training.getTrainingId()}) }}">Supprimer</a></td>
+                <td class="align-middle"><a class="btn btn-primary" href="{{ path('secretariat-trainingUpdate', {'training': training.getTrainingId()}) }}">Modifier</a><a class="btn btn-primary" href="{{ path('secretariat-trainingSessionDelete', {'training': training.getTrainingId()}) }}">Supprimer</a></td>
             </tr>
         </tbody>
     </table>
     <h2>Cours</h2>
-    <a class="btn btn-primary" href="{{ path('secretariat_training_session_add', {'training': training.getTrainingId()}) }}">Ajouter</a>
+    <a class="btn btn-primary" href="{{ path('secretariat-trainingSessionAdd', {'training': training.getTrainingId()}) }}">Ajouter</a>
     <table class="table table-sm table-hover">
         <thead>
             <tr>
@@ -44,7 +44,7 @@
                 <td class="align-middle">{% if session.training_session_starting_hour != null %}{{ session.training_session_starting_hour|date('H:i') }}{% endif %}</td>
                 <td class="align-middle">{% if session.training_session_ending_hour != null %}{{ session.training_session_ending_hour|date('H:i') }}{% endif %}</td>
                 <td class="align-middle">{{ session.training_session_duration/60 }}</td>
-                <td class="align-middle"><a class="btn btn-primary" href="{{ path('secretariat_training_session_update', {'training': training.getTrainingId(), 'session': session.training_session_id}) }}">Modifier</a><a class="btn btn-primary" href="{{ path('secretariat_training_session_delete', {'training': training.getTrainingId(), 'session': session.training_session_id}) }}">Supprimer</a></td>
+                <td class="align-middle"><a class="btn btn-primary" href="{{ path('secretariat-trainingSessionUpdate', {'training': training.getTrainingId(), 'session': session.training_session_id}) }}">Modifier</a><a class="btn btn-primary" href="{{ path('secretariat-trainingSessionDelete', {'training': training.getTrainingId(), 'session': session.training_session_id}) }}">Supprimer</a></td>
             </tr>
         {% endfor %}
     </table>

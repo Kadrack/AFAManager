@@ -16,6 +16,10 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class CommissionRepository extends ServiceEntityRepository
 {
+    /**
+     * CommissionRepository constructor.
+     * @param ManagerRegistry $registry
+     */
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Commission::class);

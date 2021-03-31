@@ -17,11 +17,19 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class CommissionMemberRepository extends ServiceEntityRepository
 {
+    /**
+     * CommissionMemberRepository constructor.
+     * @param ManagerRegistry $registry
+     */
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, CommissionMember::class);
     }
 
+    /**
+     * @param int $commission
+     * @return array|null
+     */
     public function getCommissionMembers(int $commission): ?array
     {
         $qb = $this->createQueryBuilder('c');

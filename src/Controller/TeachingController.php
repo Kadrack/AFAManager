@@ -17,16 +17,18 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/enseignement", name="teaching_")
+ * Class TeachingController
+ * @package App\Controller
  *
  * @IsGranted("ROLE_CP")
  */
+#[Route('/enseignement', name:'teaching-')]
 class TeachingController extends AbstractController
 {
     /**
-     * @Route("/index_statistique", name="statistics_index")
      * @return Response
      */
+    #[Route('/index-statistique', name:'statisticsIndex')]
     public function statisticsIndex(): Response
     {
         $statistics = array();

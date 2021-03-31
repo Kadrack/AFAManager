@@ -15,10 +15,10 @@
             <div class="btn-group" role="group">
                 <button id="btnGroupDrop1" type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
                 <div class="dropdown-menu" aria-labelledby="btnGroupDrop1" style="">
-                    <a class="dropdown-item" href="{{ path('secretariat_dojo_address_add', {'club': clubTools.getClub.getClubId()}) }}">Dojo</a>
-                    <a class="dropdown-item" href="{{ path('secretariat_dojo_training_add', {'club': clubTools.getClub.getClubId()}) }}">Cour</a>
-                    <a class="dropdown-item" href="{{ path('secretariat_dojo_teacher_afa_add', {'club': clubTools.getClub.getClubId()}) }}">Professeur AFA</a>
-                    <a class="dropdown-item" href="{{ path('secretariat_dojo_teacher_foreign_add', {'club': clubTools.getClub.getClubId()}) }}">Professeur Non AFA</a>
+                    <a class="dropdown-item" href="{{ path('secretariat-dojoAdd', {'club': clubTools.getClub.getClubId()}) }}">Dojo</a>
+                    <a class="dropdown-item" href="{{ path('secretariat-lessonAdd', {'club': clubTools.getClub.getClubId()}) }}">Cour</a>
+                    <a class="dropdown-item" href="{{ path('secretariat-teacherAFAAdd', {'club': clubTools.getClub.getClubId()}) }}">Professeur AFA</a>
+                    <a class="dropdown-item" href="{{ path('secretariat-teacherForeignAdd', {'club': clubTools.getClub.getClubId()}) }}">Professeur Non AFA</a>
                 </div>
             </div>
         </div>
@@ -53,8 +53,8 @@
                         <div class="btn-group" role="group">
                             <button id="btnGroupDrop1" type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
                             <div class="dropdown-menu" aria-labelledby="btnGroupDrop1" style="">
-                                <a class="dropdown-item" href="{{ path('secretariat_dojo_address_update', {'clubDojo': address.getClubDojoId(), 'club': clubTools.getClub.getClubId()}) }}">Modifier</a>
-                                <a class="dropdown-item" href="{{ path('secretariat_dojo_address_delete', {'clubDojo': address.getClubDojoId(), 'club': clubTools.getClub.getClubId()}) }}">Supprimer</a>
+                                <a class="dropdown-item" href="{{ path('secretariat-dojoUpdate', {'clubDojo': address.getClubDojoId(), 'club': clubTools.getClub.getClubId()}) }}">Modifier</a>
+                                <a class="dropdown-item" href="{{ path('secretariat-dojoDelete', {'clubDojo': address.getClubDojoId(), 'club': clubTools.getClub.getClubId()}) }}">Supprimer</a>
                             </div>
                         </div>
                     </div>
@@ -89,8 +89,8 @@
                         <div class="btn-group" role="group">
                             <button id="btnGroupDrop1" type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
                             <div class="dropdown-menu" aria-labelledby="btnGroupDrop1" style="">
-                                <a class="dropdown-item" href="{{ path('secretariat_dojo_training_update', {'clubLesson': lesson.getClubLessonId(), 'club': clubTools.getClub.getClubId()}) }}">Modifier</a>
-                                <a class="dropdown-item" href="{{ path('secretariat_dojo_training_delete', {'clubLesson': lesson.getClubLessonId(), 'club': clubTools.getClub.getClubId()}) }}">Supprimer</a>
+                                <a class="dropdown-item" href="{{ path('secretariat-lessonUpdate', {'clubLesson': lesson.getClubLessonId(), 'club': clubTools.getClub.getClubId()}) }}">Modifier</a>
+                                <a class="dropdown-item" href="{{ path('secretariat-lessonDelete', {'clubLesson': lesson.getClubLessonId(), 'club': clubTools.getClub.getClubId()}) }}">Supprimer</a>
                             </div>
                         </div>
                     </div>
@@ -129,8 +129,8 @@
                         <div class="btn-group" role="group">
                             <button id="btnGroupDrop1" type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
                             <div class="dropdown-menu" aria-labelledby="btnGroupDrop1" style="">
-                                <a class="dropdown-item" href="{{ path('secretariat_dojo_teacher_afa_update', {'teacher': teacher.Id, 'club': clubTools.getClub.getClubId()}) }}">Modifier</a>
-                                <a class="dropdown-item" href="{{ path('secretariat_dojo_teacher_afa_delete', {'teacher': teacher.Id, 'club': clubTools.getClub.getClubId()}) }}">Supprimer</a>
+                                <a class="dropdown-item" href="{{ path('secretariat-teacherAFAUpdate', {'teacher': teacher.Id, 'club': clubTools.getClub.getClubId()}) }}">Modifier</a>
+                                <a class="dropdown-item" href="{{ path('secretariat-teacherAFADelete', {'teacher': teacher.Id, 'club': clubTools.getClub.getClubId()}) }}">Supprimer</a>
                             </div>
                         </div>
                     </div>
@@ -169,8 +169,8 @@
                         <div class="btn-group" role="group">
                             <button id="btnGroupDrop1" type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
                             <div class="dropdown-menu" aria-labelledby="btnGroupDrop1" style="">
-                                <a class="dropdown-item" href="{{ path('secretariat_dojo_teacher_foreign_update', {'teacher': teacher.Id, 'club': clubTools.getClub.getClubId()}) }}">Modifier</a>
-                                <a class="dropdown-item" href="{{ path('secretariat_dojo_teacher_foreign_delete', {'teacher': teacher.Id, 'club': clubTools.getClub.getClubId()}) }}">Supprimer</a>
+                                <a class="dropdown-item" href="{{ path('secretariat-teacherForeignUpdate', {'teacher': teacher.Id, 'club': clubTools.getClub.getClubId()}) }}">Modifier</a>
+                                <a class="dropdown-item" href="{{ path('secretariat-teacherForeignDelete', {'teacher': teacher.Id, 'club': clubTools.getClub.getClubId()}) }}">Supprimer</a>
                             </div>
                         </div>
                     </div>

@@ -27,11 +27,19 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class MemberRepository extends ServiceEntityRepository
 {
+    /**
+     * MemberRepository constructor.
+     * @param ManagerRegistry $registry
+     */
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Member::class);
     }
 
+    /**
+     * @param int $member_id
+     * @return array|null
+     */
     public function getMemberAttendances(int $member_id): ?array
     {
         $qb = $this->createQueryBuilder('m');
@@ -48,6 +56,10 @@ class MemberRepository extends ServiceEntityRepository
 
     }
 
+    /**
+     * @param Club $club
+     * @return array|null
+     */
     public function getClubActiveMembers(Club $club): ?array
     {
         $today = new DateTime('today');
@@ -67,6 +79,10 @@ class MemberRepository extends ServiceEntityRepository
             ->getArrayResult();
     }
 
+    /**
+     * @param Club $club
+     * @return array|null
+     */
     public function getClubInactiveMembers(Club $club): ?array
     {
         $today = new DateTime('today');
@@ -85,6 +101,10 @@ class MemberRepository extends ServiceEntityRepository
             ->getArrayResult();
     }
 
+    /**
+     * @param Club $club
+     * @return array|null
+     */
     public function getClubRecentInactiveMembers(Club $club): ?array
     {
         $today = new DateTime('today');
@@ -106,6 +126,9 @@ class MemberRepository extends ServiceEntityRepository
             ->getArrayResult();
     }
 
+    /**
+     * @return array|null
+     */
     public function getMemberModification(): ?array
     {
         $qb = $this->createQueryBuilder('m');
@@ -117,6 +140,12 @@ class MemberRepository extends ServiceEntityRepository
             ->getArrayResult();
     }
 
+    /**
+     * @param Club $club
+     * @param string $start
+     * @param string $end
+     * @return array|null
+     */
     public function getClubRenewForms(Club $club, string $start, string $end): ?array
     {
         $qb = $this->createQueryBuilder('m');
@@ -136,6 +165,10 @@ class MemberRepository extends ServiceEntityRepository
             ->getArrayResult();
     }
 
+    /**
+     * @param string $search
+     * @return array|null
+     */
     public function getFullSearchMembers(string $search): ?array
     {
         $qb = $this->createQueryBuilder('m');
@@ -160,6 +193,11 @@ class MemberRepository extends ServiceEntityRepository
             ->getArrayResult();
     }
 
+    /**
+     * @param string $search
+     * @param int $club
+     * @return array|null
+     */
     public function getFullSearchClubMembers(string $search, int $club): ?array
     {
         $qb = $this->createQueryBuilder('m');
@@ -182,6 +220,10 @@ class MemberRepository extends ServiceEntityRepository
             ->getArrayResult();
     }
 
+    /**
+     * @param int $member_id
+     * @return array|null
+     */
     public function getMemberTitles(int $member_id): ?array
     {
         $qb = $this->createQueryBuilder('m');
@@ -195,6 +237,9 @@ class MemberRepository extends ServiceEntityRepository
 
     }
 
+    /**
+     * @return array|null
+     */
     public function getMemberListCleanup(): ?array
     {
         $limit = new DateTime('-5 year today');

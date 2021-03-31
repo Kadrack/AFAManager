@@ -16,20 +16,22 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/comptabilite", name="accounting_")
+ * Class AccountingController
+ * @package App\Controller
  *
  * @IsGranted("ROLE_BANK")
  */
+#[Route('/comptabilite', name:'accounting-')]
 class AccountingController extends AbstractController
 {
     /**
-     * @Route("/rechercher_membres", name="search_members")
      * @param Request $request
      * @return Response
      */
-    public function searchMembers(Request $request)
+    #[Route('/rechercher-membres', name:'searchMembers')]
+    public function searchMembers(Request $request): Response
     {
-        $form = $this->createForm(AccountingType::class, null, array('form' => 'search_members', 'data_class' => null));
+        $form = $this->createForm(AccountingType::class, null, array('form' => 'searchMembers', 'data_class' => null));
 
         $form->handleRequest($request);
 
@@ -44,11 +46,11 @@ class AccountingController extends AbstractController
     }
 
     /**
-     * @Route("/donnees_contact/{member<\d+>}", name="member_contact_data")
      * @param Member $member
      * @return Response
      */
-    public function memberContactData(Member $member)
+    #[Route('/donnees-contact/{member<\d+>}', name:'memberContactData')]
+    public function memberContactData(Member $member): Response
     {
         return $this->render('Accounting/Member/contact_data.html.twig', array('member' => $member));
     }

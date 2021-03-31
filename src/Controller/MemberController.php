@@ -22,40 +22,43 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/membre", name="member_")
+ * Class MemberController
+ * @package App\Controller
  *
  * @IsGranted("ROLE_MEMBER")
  */
+#[Route('/membre', name:'member-')]
 class MemberController extends AbstractController
 {
     /**
-     * @Route("/", name="index")
+     * @return Response
      */
-    public function index()
+    #[Route('/', name:'index')]
+    public function index(): Response
     {
         return $this->render('Member/index.html.twig');
     }
 
     /**
-     * @Route("/mes_donnees", name="my_data")
      * @return Response
      */
-    public function myData()
+    #[Route('/mes-donnees', name:'myData')]
+    public function myData(): Response
     {
         return $this->render('Member/my_data.html.twig', array('member' => $this->getUser()->getUserMember()));
     }
 
     /**
-     * @Route("/mes_donnees/modifier", name="my_data_update")
      * @param Request $request
      * @param MemberTools $memberTools
      * @return Response
      */
-    public function myDataUpdate(Request $request, MemberTools $memberTools)
+    #[Route('/mes-donnees/modifier', name:'myDataUpdate')]
+    public function myDataUpdate(Request $request, MemberTools $memberTools): Response
     {
         $memberTools->setMember($this->getUser()->getUserMember());
 
-        $form = $this->createForm(MemberType::class, $memberTools->getModification(), array('form' => 'my_data_update', 'data_class' => MemberModification::class));
+        $form = $this->createForm(MemberType::class, $memberTools->getModification(), array('form' => 'myDataUpdate', 'data_class' => MemberModification::class));
 
         $form->handleRequest($request);
 
@@ -70,11 +73,11 @@ class MemberController extends AbstractController
     }
 
     /**
-     * @Route("/mes_grades", name="my_grades")
      * @param MemberTools $memberTools
      * @return Response
      */
-    public function myGrades(MemberTools $memberTools)
+    #[Route('/mes-grades', name:'myGrades')]
+    public function myGrades(MemberTools $memberTools): Response
     {
         $memberTools->setMember($this->getUser()->getUserMember());
 
@@ -82,11 +85,11 @@ class MemberController extends AbstractController
     }
 
     /**
-     * @Route("/ma_licence", name="my_licence")
      * @param MemberTools $memberTools
      * @return Response
      */
-    public function myLicence(MemberTools $memberTools)
+    #[Route('/ma-licence', name:'myLicence')]
+    public function myLicence(MemberTools $memberTools): Response
     {
         $memberTools->setMember($this->getUser()->getUserMember());
 
@@ -94,11 +97,11 @@ class MemberController extends AbstractController
     }
 
     /**
-     * @Route("/mes_stages", name="my_stages")
      * @param MemberTools $memberTools
      * @return Response
      */
-    public function myStages(MemberTools $memberTools)
+    #[Route('/mes-stages', name:'myStages')]
+    public function myStages(MemberTools $memberTools): Response
     {
         $memberTools->setMember($this->getUser()->getUserMember());
 
@@ -106,11 +109,11 @@ class MemberController extends AbstractController
     }
 
     /**
-     * @Route("/mes_titres", name="my_titles")
      * @param MemberTools $memberTools
      * @return Response
      */
-    public function myTitles(MemberTools $memberTools)
+    #[Route('/mes-titres', name:'myTitles')]
+    public function myTitles(MemberTools $memberTools): Response
     {
         $memberTools->setMember($this->getUser()->getUserMember());
 
@@ -118,16 +121,16 @@ class MemberController extends AbstractController
     }
 
     /**
-     * @Route("/ma_candidature/{type<\d+>}", name="my_application")
      * @param Request $request
      * @param MemberTools $memberTools
      * @return RedirectResponse|Response
      */
-    public function myApplication(Request $request, MemberTools $memberTools)
+    #[Route('/ma-candidature/{type<\d+>}', name:'myApplication')]
+    public function myApplication(Request $request, MemberTools $memberTools): RedirectResponse|Response
     {
         $memberTools->setMember($this->getUser()->getUserMember());
 
-        $form = $this->createForm(GradeType::class, $memberTools->getGrades()['exam']['grade'], array('form' => 'exam_application', 'data_class' => Grade::class));
+        $form = $this->createForm(GradeType::class, $memberTools->getGrades()['exam']['grade'], array('form' => 'examApplication', 'data_class' => Grade::class));
 
         $form->handleRequest($request);
 
@@ -135,18 +138,18 @@ class MemberController extends AbstractController
         {
             $memberTools->application($form->getData());
 
-            return $this->redirectToRoute('member_my_data');
+            return $this->redirectToRoute('member-myData');
         }
 
         return $this->render('Member/my_application.html.twig', array('form' => $form->createView(), 'exam' => $grade->getGradeExam()));
     }
 
     /**
-     * @Route("/mon_club", name="my_club")
      * @param ClubTools $clubTools
      * @return Response
      */
-    public function myClub(ClubTools $clubTools)
+    #[Route('/mon-club', name:'myClub')]
+    public function myClub(ClubTools $clubTools): Response
     {
         $clubTools->setClub($this->getUser()->getUserMember()->getMemberActualClub());
 

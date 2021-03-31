@@ -18,12 +18,24 @@ use Doctrine\ORM\EntityManagerInterface;
  */
 class ClubTools
 {
+    /**
+     * @var Club
+     */
     private Club $club;
 
+    /**
+     * @var array|null
+     */
     private ?array $lessons;
 
+    /**
+     * @var array|null
+     */
     private ?array $managers;
 
+    /**
+     * @var EntityManagerInterface
+     */
     private EntityManagerInterface $em;
 
     /**

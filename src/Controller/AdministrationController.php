@@ -17,16 +17,18 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/administration", name="administration_")
+ * Class AdministrationController
+ * @package App\Controller
  *
  * @IsGranted("ROLE_CA")
  */
+#[Route('/administration', name:'administration-')]
 class AdministrationController extends AbstractController
 {
     /**
-     * @Route("/index_statistique", name="statistics_index")
      * @return Response
      */
+    #[Route('/index-statistique', name:'statisticsIndex')]
     public function statisticsIndex(): Response
     {
         $statistics = array();
@@ -101,10 +103,10 @@ class AdministrationController extends AbstractController
     }
 
     /**
-     * @Route("/statistique_province/{province<\d+>}", name="statistics_province")
      * @param int $province
      * @return Response
      */
+    #[Route('/statistique-province/{province<\d+>}', name:'statisticsProvince')]
     public function statisticsProvince(int $province): Response
     {
         $statistics = array();
@@ -155,9 +157,9 @@ class AdministrationController extends AbstractController
     }
 
     /**
-     * @Route("/liste-date-creation-club", name="creation_club_list")
      * @return Response
      */
+    #[Route('/liste-date-creation-club', name:'creationClubList')]
     public function creationClubList(): Response
     {
         $list = $this->getDoctrine()->getRepository(Club::class)->getCreationDateList();
@@ -166,12 +168,12 @@ class AdministrationController extends AbstractController
     }
 
     /**
-     * @Route("/liste-anniversaire-pratique-dojo-cho", name="dojo_cho_starting_practice")
      * @return Response
      */
-    public function dojoChoStartingPractice(): Response
+    #[Route('/liste-anniversaire-pratique-dojo-cho', name:'dojoChoStartPractice')]
+    public function dojoChoStartPractice(): Response
     {
-        $list = $this->getDoctrine()->getRepository(ClubTeacher::class)->getDojoChoStartingPractice();
+        $list = $this->getDoctrine()->getRepository(ClubTeacher::class)->getDojoChoStartPractice();
 
         return $this->render('Administration/Liste/dojo_cho_starting_practice.html.twig', array('list' => $list));
     }

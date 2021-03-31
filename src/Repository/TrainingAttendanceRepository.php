@@ -19,11 +19,19 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class TrainingAttendanceRepository extends ServiceEntityRepository
 {
+    /**
+     * TrainingAttendanceRepository constructor.
+     * @param ManagerRegistry $registry
+     */
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, TrainingAttendance::class);
     }
 
+    /**
+     * @param int $training_id
+     * @return array|null
+     */
     public function getPractitioners(int $training_id): ?array
     {
         $qb = $this->createQueryBuilder('a');
@@ -40,6 +48,10 @@ class TrainingAttendanceRepository extends ServiceEntityRepository
             ->getArrayResult();
     }
 
+    /**
+     * @param int $training_id
+     * @return array|null
+     */
     public function getPractitionersSessions(int $training_id): ?array
     {
         $qb = $this->createQueryBuilder('a');
@@ -55,6 +67,10 @@ class TrainingAttendanceRepository extends ServiceEntityRepository
             ->getArrayResult();
     }
 
+    /**
+     * @param int $training_id
+     * @return array|null
+     */
     public function getForeignPractitioners(int $training_id): ?array
     {
         $qb = $this->createQueryBuilder('a');
@@ -67,6 +83,10 @@ class TrainingAttendanceRepository extends ServiceEntityRepository
             ->getArrayResult();
     }
 
+    /**
+     * @param int $training_id
+     * @return array|null
+     */
     public function getForeignPractitionersSessions(int $training_id): ?array
     {
         $qb = $this->createQueryBuilder('a');
@@ -82,6 +102,10 @@ class TrainingAttendanceRepository extends ServiceEntityRepository
             ->getArrayResult();
     }
 
+    /**
+     * @param int $training_id
+     * @return array|null
+     */
     public function getPayments(int $training_id): ?array
     {
         $qb = $this->createQueryBuilder('a');

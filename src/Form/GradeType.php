@@ -17,53 +17,57 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
+/**
+ * Class GradeType
+ * @package App\Form
+ */
 class GradeType extends AbstractType
 {
+    /**
+     * {@inheritdoc}
+     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         switch ($options['form'])
         {
-            case 'exam_update':
-                $this->exam_update($builder);
+            case 'examUpdate':
+                $this->examUpdate($builder);
                 break;
-            case 'exam_application':
-                $this->exam_application($builder);
+            case 'examApplication':
+                $this->examApplication($builder);
                 break;
-            case 'exam_applicant_validation':
-                $this->exam_applicant_validation($builder);
+            case 'examApplicantValidation':
+                $this->examApplicantValidation($builder);
                 break;
-            case 'exam_candidate_result':
-                $this->exam_candidate_result($builder);
+            case 'examCandidateResult':
+                $this->examCandidateResult($builder);
                 break;
-            case 'exam_candidate_aikikai':
-                $this->exam_candidate_aikikai($builder);
+            case 'examCandidateAikikai':
+                $this->examCandidateAikikai($builder);
                 break;
-            case 'kagami_create':
-                $this->kagami_create($builder);
-                break;
-            case 'kagami_update':
-                $this->kagami_update($builder);
-                break;
-            case 'kagami_candidate_result':
-                $this->kagami_candidate_result($builder);
-                break;
-            case 'kyu_add':
+            case 'kyuAdd':
                 $this->kyuAdd($builder);
                 break;
-            case 'kyu_modify':
+            case 'kyuModify':
                 $this->kyuModify($builder);
                 break;
             default:
-                $this->exam_create($builder);
+                $this->examCreate($builder);
         }
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array('data_class' => GradeSession::class, 'form' => ''));
     }
 
-    private function exam_create(FormBuilderInterface $builder)
+    /**
+     * @param FormBuilderInterface $builder
+     */
+    private function examCreate(FormBuilderInterface $builder)
     {
         $builder
             ->add('GradeSessionDate', DateType::class, array('label' => 'Date de session : ', 'widget' => 'single_text'))
@@ -78,7 +82,10 @@ class GradeType extends AbstractType
         ;
     }
 
-    private function exam_application(FormBuilderInterface $builder)
+    /**
+     * @param FormBuilderInterface $builder
+     */
+    private function examApplication(FormBuilderInterface $builder)
     {
         $builder
             ->add('GradeComment', TextareaType::class, array('label' => 'Commentaire : ', 'required' => false))
@@ -86,7 +93,10 @@ class GradeType extends AbstractType
         ;
     }
 
-    private function exam_applicant_validation(FormBuilderInterface $builder)
+    /**
+     * @param FormBuilderInterface $builder
+     */
+    private function examApplicantValidation(FormBuilderInterface $builder)
     {
         $builder
             ->add('GradeComment', TextareaType::class, array('label' => 'Commentaire : ', 'required' => false))
@@ -94,7 +104,10 @@ class GradeType extends AbstractType
         ;
     }
 
-    private function exam_update(FormBuilderInterface $builder)
+    /**
+     * @param FormBuilderInterface $builder
+     */
+    private function examUpdate(FormBuilderInterface $builder)
     {
         $builder
             ->add('GradeSessionDate', DateType::class, array('label' => 'Date de session : ', 'widget' => 'single_text'))
@@ -109,7 +122,10 @@ class GradeType extends AbstractType
         ;
     }
 
-    private function exam_candidate_result(FormBuilderInterface $builder)
+    /**
+     * @param FormBuilderInterface $builder
+     */
+    private function examCandidateResult(FormBuilderInterface $builder)
     {
         $builder
             ->add('GradeStatus', ChoiceType::class, array('label' => 'Résultat : ', 'multiple' => false, 'expanded' => true, 'choices' => array('Refusé' => 3, 'Promu' => 4)))
@@ -119,7 +135,10 @@ class GradeType extends AbstractType
         ;
     }
 
-    private function exam_candidate_aikikai(FormBuilderInterface $builder)
+    /**
+     * @param FormBuilderInterface $builder
+     */
+    private function examCandidateAikikai(FormBuilderInterface $builder)
     {
         $builder
             ->add('GradeCertificate', TextType::class, array('label' => 'N° certificat : '))
@@ -128,37 +147,9 @@ class GradeType extends AbstractType
         ;
     }
 
-    private function kagami_create(FormBuilderInterface $builder)
-    {
-        $builder
-            ->add('GradeSessionDate', DateType::class, array('label' => 'Date de session : ', 'widget' => 'single_text'))
-            ->add('GradeSessionCandidateOpen', DateType::class, array('label' => 'Ouverture inscription : ', 'widget' => 'single_text'))
-            ->add('GradeSessionComment', TextareaType::class, array('label' => 'Commentaire : ', 'required' => false))
-            ->add('Submit', SubmitType::class, array('label' => 'Ajouter'))
-        ;
-    }
-
-    private function kagami_update(FormBuilderInterface $builder)
-    {
-        $builder
-            ->add('GradeSessionDate', DateType::class, array('label' => 'Date de session : ', 'widget' => 'single_text'))
-            ->add('GradeSessionCandidateOpen', DateType::class, array('label' => 'Ouverture inscription : ', 'widget' => 'single_text'))
-            ->add('GradeSessionCandidateClose', DateType::class, array('label' => 'Fermeture inscription : ', 'widget' => 'single_text'))
-            ->add('GradeSessionComment', TextareaType::class, array('label' => 'Commentaire : ', 'required' => false))
-            ->add('Submit', SubmitType::class, array('label' => 'Modifier'))
-        ;
-    }
-
-    private function kagami_candidate_result(FormBuilderInterface $builder)
-    {
-        $builder
-            ->add('GradeStatus', ChoiceType::class, array('label' => 'Résultat : ', 'multiple' => false, 'expanded' => true, 'choices' => array('Refusé' => 3, 'Promu' => 4)))
-            ->add('GradeCertificate', TextType::class, array('label' => 'N° Diplôme : ', 'required' => false))
-            ->add('GradeComment', TextareaType::class, array('label' => 'Commentaire : ', 'required' => false))
-            ->add('Submit', SubmitType::class, array('label' => 'Valider'))
-        ;
-    }
-
+    /**
+     * @param FormBuilderInterface $builder
+     */
     private function kyuAdd(FormBuilderInterface $builder)
     {
         $list = new ListData();
@@ -171,6 +162,9 @@ class GradeType extends AbstractType
         ;
     }
 
+    /**
+     * @param FormBuilderInterface $builder
+     */
     private function kyuModify(FormBuilderInterface $builder)
     {
         $builder

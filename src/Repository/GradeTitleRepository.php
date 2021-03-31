@@ -16,6 +16,10 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class GradeTitleRepository extends ServiceEntityRepository
 {
+    /**
+     * GradeTitleRepository constructor.
+     * @param ManagerRegistry $registry
+     */
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, GradeTitle::class);

@@ -18,12 +18,24 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
  */
 class UserTools
 {
+    /**
+     * @var array|null
+     */
     private ?array $listManagedClub = null;
 
+    /**
+     * @var EntityManagerInterface
+     */
     private EntityManagerInterface $entityManager;
 
+    /**
+     * @var bool
+     */
     private bool $isDuplicate = false;
 
+    /**
+     * @var UserPasswordEncoderInterface
+     */
     private UserPasswordEncoderInterface $passwordEncoder;
 
     /**
@@ -216,7 +228,7 @@ class UserTools
      * @param User $user
      * @param Club $club
      * @param User $who
-     * @param string|null $password
+     * @param string $password
      * @param int|null $member_id
      * @return bool
      */
@@ -288,6 +300,10 @@ class UserTools
         return true;
     }
 
+    /**
+     * @param User $user
+     * @return array|null
+     */
     public function listManagedClub(User $user): ?array
     {
         if ($this->listManagedClub !== null)

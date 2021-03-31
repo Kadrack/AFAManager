@@ -9,7 +9,6 @@ use App\Entity\Grade;
 use App\Entity\GradeTitle;
 use App\Entity\Member;
 
-use App\Entity\MemberLicence;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 use Doctrine\Persistence\ManagerRegistry;
@@ -22,12 +21,19 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class ClubTeacherRepository extends ServiceEntityRepository
 {
+    /**
+     * ClubTeacherRepository constructor.
+     * @param ManagerRegistry $registry
+     */
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, ClubTeacher::class);
     }
 
-    public function getDojoChoStartingPractice(): ?array
+    /**
+     * @return array|null
+     */
+    public function getDojoChoStartPractice(): ?array
     {
         $qb = $this->createQueryBuilder('t');
 
@@ -42,6 +48,10 @@ class ClubTeacherRepository extends ServiceEntityRepository
             ->getArrayResult();
     }
 
+    /**
+     * @param Club $club
+     * @return array|null
+     */
     public function getAFATeachers(Club $club): ?array
     {
         $qb = $this->createQueryBuilder('t');
@@ -60,6 +70,10 @@ class ClubTeacherRepository extends ServiceEntityRepository
             ->getArrayResult();
     }
 
+    /**
+     * @param Club $club
+     * @return array|null
+     */
     public function getForeignTeachers(Club $club): ?array
     {
         $qb = $this->createQueryBuilder('t');

@@ -24,70 +24,83 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TimeType;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
 
+/**
+ * Class ClubType
+ * @package App\Form
+ */
 class ClubType extends AbstractType
 {
+    /**
+     * {@inheritdoc}
+     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         switch ($options['form'])
         {
-            case 'detail_association':
+            case 'detailAssociation':
                 $this->detailAssociation($builder);
                 break;
-            case 'dojo_create':
+            case 'dojoCreate':
                 $this->dojoCreate($builder);
                 break;
-            case 'dojo_delete':
+            case 'dojoDelete':
                 $this->dojoDelete($builder);
                 break;
-            case 'dojo_update':
+            case 'dojoUpdate':
                 $this->dojoUpdate($builder);
                 break;
-            case 'history_entry':
+            case 'historyEntry':
                 $this->historyEntry($builder);
                 break;
-            case 'teacher_afa_create':
+            case 'teacherAFACreate':
                 $this->teacherAFACreate($builder);
                 break;
-            case 'teacher_afa_delete':
+            case 'teacherAFADelete':
                 $this->teacherAFADelete($builder);
                 break;
-            case 'teacher_afa_update':
+            case 'teacherAFAUpdate':
                 $this->teacherAFAUpdate($builder);
                 break;
-            case 'teacher_foreign_create':
+            case 'teacherForeignCreate':
                 $this->teacherForeignCreate($builder);
                 break;
-            case 'teacher_foreign_delete':
+            case 'teacherForeignDelete':
                 $this->teacherForeignDelete($builder);
                 break;
-            case 'teacher_foreign_update':
+            case 'teacherForeignUpdate':
                 $this->teacherForeignUpdate($builder);
                 break;
-            case 'training_create':
+            case 'trainingCreate':
                 $choices = $options['choices'];
                 $this->trainingCreate($builder, $choices);
                 break;
-            case 'training_delete':
+            case 'trainingDelete':
                 $choices = $options['choices'];
                 $this->trainingDelete($builder, $choices);
                 break;
-            case 'training_update':
+            case 'trainingUpdate':
                 $choices = $options['choices'];
                 $this->trainingUpdate($builder, $choices);
                 break;
-            case 'search_members':
+            case 'searchMembers':
                 $this->searchMembers($builder);
                 break;
             default:
                 $this->clubCreate($builder);
         }
     }
-    
+
+    /**
+     * {@inheritdoc}
+     */
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array('data_class' => Club::class, 'form' => '', 'choices' => null));
     }
 
+    /**
+     * @param FormBuilderInterface $builder
+     */
     private function clubCreate(FormBuilderInterface $builder)
     {
         $list = new ListData();
@@ -112,6 +125,9 @@ class ClubType extends AbstractType
         ;
     }
 
+    /**
+     * @param FormBuilderInterface $builder
+     */
     private function detailAssociation(FormBuilderInterface $builder)
     {
         $list = new ListData();
@@ -136,6 +152,9 @@ class ClubType extends AbstractType
         ;
     }
 
+    /**
+     * @param FormBuilderInterface $builder
+     */
     private function dojoCreate(FormBuilderInterface $builder)
     {
         $builder
@@ -151,6 +170,9 @@ class ClubType extends AbstractType
         ;
     }
 
+    /**
+     * @param FormBuilderInterface $builder
+     */
     private function dojoUpdate(FormBuilderInterface $builder)
     {
         $builder
@@ -166,6 +188,9 @@ class ClubType extends AbstractType
         ;
     }
 
+    /**
+     * @param FormBuilderInterface $builder
+     */
     private function dojoDelete(FormBuilderInterface $builder)
     {
         $builder
@@ -181,6 +206,9 @@ class ClubType extends AbstractType
         ;
     }
 
+    /**
+     * @param FormBuilderInterface $builder
+     */
     private function historyEntry(FormBuilderInterface $builder)
     {
         $builder
@@ -190,6 +218,9 @@ class ClubType extends AbstractType
         ;
     }
 
+    /**
+     * @param FormBuilderInterface $builder
+     */
     private function teacherAFACreate(FormBuilderInterface $builder)
     {
         $list = new ListData();
@@ -202,6 +233,9 @@ class ClubType extends AbstractType
         ;
     }
 
+    /**
+     * @param FormBuilderInterface $builder
+     */
     private function teacherAFAUpdate(FormBuilderInterface $builder)
     {
         $list = new ListData();
@@ -216,6 +250,9 @@ class ClubType extends AbstractType
         ;
     }
 
+    /**
+     * @param FormBuilderInterface $builder
+     */
     private function teacherAFADelete(FormBuilderInterface $builder)
     {
         $list = new ListData();
@@ -230,6 +267,9 @@ class ClubType extends AbstractType
         ;
     }
 
+    /**
+     * @param FormBuilderInterface $builder
+     */
     private function teacherForeignCreate(FormBuilderInterface $builder)
     {
         $list = new ListData();
@@ -239,13 +279,16 @@ class ClubType extends AbstractType
             ->add('ClubTeacherType', ChoiceType::class, array('label' => 'Type : ', 'placeholder' => 'Choississez un type', 'choices' => $list->getTeacherType(0)))
             ->add('ClubTeacherFirstname', TextType::class, array('label' => 'Prénom : '))
             ->add('ClubTeacherName', TextType::class, array('label' => 'Nom : '))
-            ->add('ClubTeacherGrade', ChoiceType::class, array('label' => 'Grade : ', 'placeholder' => 'Choississez un grade', 'choices' => $list->getGrade(0)))
+            ->add('ClubTeacherGrade', ChoiceType::class, array('label' => 'Grade : ', 'placeholder' => 'Choississez un grade', 'choices' => $list->getGrade()))
             ->add('ClubTeacherGradeTitleAikikai', ChoiceType::class, array('label' => 'Grade enseignement Aïkikaï: ', 'placeholder' => 'Choississez un grade', 'choices' => $list->getGradeTitle(0), 'required' => false))
             ->add('ClubTeacherGradeTitleAdeps', ChoiceType::class, array('label' => 'Grade enseignement ADEPS : ', 'placeholder' => 'Choississez un grade', 'choices' => $list->getGradeTitle(0), 'required' => false))
             ->add('Submit', SubmitType::class, array('label' => 'Ajouter'))
         ;
     }
 
+    /**
+     * @param FormBuilderInterface $builder
+     */
     private function teacherForeignUpdate(FormBuilderInterface $builder)
     {
         $list = new ListData();
@@ -255,13 +298,16 @@ class ClubType extends AbstractType
             ->add('ClubTeacherType', ChoiceType::class, array('label' => 'Type : ', 'placeholder' => 'Choississez un type', 'choices' => $list->getTeacherType(0)))
             ->add('ClubTeacherFirstname', TextType::class, array('label' => 'Prénom : '))
             ->add('ClubTeacherName', TextType::class, array('label' => 'Nom : '))
-            ->add('ClubTeacherGrade', ChoiceType::class, array('label' => 'Grade : ', 'placeholder' => 'Choississez un grade', 'choices' => $list->getGrade(0)))
+            ->add('ClubTeacherGrade', ChoiceType::class, array('label' => 'Grade : ', 'placeholder' => 'Choississez un grade', 'choices' => $list->getGrade()))
             ->add('ClubTeacherGradeTitleAikikai', ChoiceType::class, array('label' => 'Grade enseignement Aïkikaï: ', 'placeholder' => 'Choississez un grade', 'choices' => $list->getGradeTitle(0), 'required' => false))
             ->add('ClubTeacherGradeTitleAdeps', ChoiceType::class, array('label' => 'Grade enseignement ADEPS : ', 'placeholder' => 'Choississez un grade', 'choices' => $list->getGradeTitle(0), 'required' => false))
             ->add('Submit', SubmitType::class, array('label' => 'Modifier'))
         ;
     }
 
+    /**
+     * @param FormBuilderInterface $builder
+     */
     private function teacherForeignDelete(FormBuilderInterface $builder)
     {
         $list = new ListData();
@@ -277,6 +323,10 @@ class ClubType extends AbstractType
         ;
     }
 
+    /**
+     * @param FormBuilderInterface $builder
+     * @param $choices
+     */
     private function trainingCreate(FormBuilderInterface $builder, $choices)
     {
         $list = new ListData();
@@ -292,6 +342,10 @@ class ClubType extends AbstractType
         ;
     }
 
+    /**
+     * @param FormBuilderInterface $builder
+     * @param $choices
+     */
     private function trainingDelete(FormBuilderInterface $builder, $choices)
     {
         $list = new ListData();
@@ -307,6 +361,10 @@ class ClubType extends AbstractType
         ;
     }
 
+    /**
+     * @param FormBuilderInterface $builder
+     * @param $choices
+     */
     private function trainingUpdate(FormBuilderInterface $builder, $choices)
     {
         $list = new ListData();
@@ -322,6 +380,9 @@ class ClubType extends AbstractType
         ;
     }
 
+    /**
+     * @param FormBuilderInterface $builder
+     */
     private function searchMembers(FormBuilderInterface $builder)
     {
         $builder

@@ -17,11 +17,19 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class TrainingRepository extends ServiceEntityRepository
 {
+    /**
+     * TrainingRepository constructor.
+     * @param ManagerRegistry $registry
+     */
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Training::class);
     }
 
+    /**
+     * @param int $type
+     * @return array|null
+     */
     public function getActiveTrainings(int $type): ?array
     {
         $qb = $this->createQueryBuilder('t');

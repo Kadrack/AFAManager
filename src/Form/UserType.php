@@ -21,23 +21,22 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 class UserType extends AbstractType
 {
     /**
-     * @param FormBuilderInterface $builder
-     * @param array $options
+     * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         switch ($options['form'])
         {
-            case 'club_manager_add':
+            case 'clubManagerAdd':
                 $this->clubManagerAdd($builder);
                 break;
-            case 'club_manager_delete':
+            case 'clubManagerDelete':
                 $this->clubManagerDelete($builder);
                 break;
-            case 'change_login':
+            case 'changeLogin':
                 $this->changeLogin($builder);
                 break;
-            case 'change_password':
+            case 'changePassword':
                 $this->changePassword($builder);
                 break;
             case 'create':
@@ -98,11 +97,11 @@ class UserType extends AbstractType
     {
         $builder
 
-            ->add('Login', TextType::class, array('label' => 'Login : '))
+            ->add('Login', TextType::class, array('label' => 'Login : ', 'required' => false))
             ->add('UserMember', IntegerType::class, array('label' => 'N° de licence : ', 'mapped' => false, 'required' => false))
             ->add('UserFirstname', TextType::class, array('label' => 'Prénom : ', 'required' => false))
             ->add('UserRealName', TextType::class, array('label' => 'Nom : ', 'required' => false))
-            ->add('Password', PasswordType::class, array('label' => 'Mot de passe : ', 'mapped' => false))
+            ->add('Password', PasswordType::class, array('label' => 'Mot de passe : ', 'mapped' => false, 'required' => false))
             ->add('Submit', SubmitType::class, array('label' => 'Créer'))
         ;
     }

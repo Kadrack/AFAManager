@@ -10,7 +10,7 @@
 {% block body %}
     <h1>Passages de grade Dan</h1>
     <h2>Liste sessions</h2>
-    <a class="btn btn-primary" href="{{ path('secretariat_exam_create') }}">Nouvelle session</a>
+    <a class="btn btn-primary" href="{{ path('secretariat-examCreate') }}">Nouvelle session</a>
     <table class="table table-sm table-hover">
         <thead>
             <tr>
@@ -26,7 +26,7 @@
                 <td class="align-middle">{{ session.getGradeSessionDate()|date("d/m/Y") }}</td>
                 <td class="align-middle">{{ session.getGradeSessionCandidateOpen()|date("d/m/Y") }}</td>
                 <td class="align-middle">{{ session.getGradeSessionCandidateClose()|date("d/m/Y") }}</td>
-                <td class="align-middle"><a class="btn btn-primary" href="{{ path('secretariat_exam_update', {'session': session.getGradeSessionId()}) }}">Modifier</a></td>
+                <td class="align-middle"><a class="btn btn-primary" href="{{ path('secretariat-examUpdate', {'session': session.getGradeSessionId()}) }}">Modifier</a></td>
             </tr>
             {% endfor %}
         </tbody>

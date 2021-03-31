@@ -36,8 +36,8 @@
                         <div class="btn-group" role="group">
                             <button id="btnGroupDrop1" type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
                             <div class="dropdown-menu" aria-labelledby="btnGroupDrop1" style="">
-                                {% if manager.Status == 0 or manager.Status > 4 %}<a class="dropdown-item" href="{{ path('secretariat_access_reactivate', {'user': manager.UserId}) }}">Réactiver</a>{% endif %}
-                                <a class="dropdown-item" href="{{ path('secretariat_access_password_modify', {'user': manager.UserId}) }}">Modifier Mot de Passe</a>
+                                {% if manager.Status == 0 or manager.Status > 4 %}<a class="dropdown-item" href="{{ path('secretariat-accessReactivate', {'user': manager.UserId}) }}">Réactiver</a>{% endif %}
+                                <a class="dropdown-item" href="{{ path('secretariat-accessPasswordModify', {'user': manager.UserId}) }}">Modifier Mot de Passe</a>
                             </div>
                         </div>
                     </div>

@@ -17,11 +17,19 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class GradeRepository extends ServiceEntityRepository
 {
+    /**
+     * GradeRepository constructor.
+     * @param ManagerRegistry $registry
+     */
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Grade::class);
     }
 
+    /**
+     * @param int $member_id
+     * @return array|null
+     */
     public function getGradeHistory(int $member_id): ?array
     {
         $qb = $this->createQueryBuilder('r');
