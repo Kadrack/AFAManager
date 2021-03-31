@@ -1649,17 +1649,15 @@ class SecretariatController extends AbstractController
     {
         $session->set('duplicate', false);
 
-        $user = new User();
-
-        $form = $this->createForm(UserType::class, $user, array('form' => 'clubManagerAdd', 'data_class' => User::class));
+        $form = $this->createForm(UserType::class, null, array('form' => 'clubManagerAdd', 'data_class' => null));
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid())
         {
-            $userTools->clubManagerAdd($form->getData(), $club, $this->getUser(), $form['Password']->getData(), $form->get('UserMember')->getData());
+            $isCreated = $userTools->clubManagerAdd($form->get('Login')->getData(), $club, $this->getUser());
 
-            if ($userTools->isDuplicate())
+            if (!$isCreated)
             {
                 $session->set('duplicate', true);
 
@@ -1702,9 +1700,45 @@ class SecretariatController extends AbstractController
     #[Route('/liste-acces-interface', name:'accessListIndex')]
     public function accessListIndex(): Response
     {
-        $access_list = $this->getDoctrine()->getManager()->getRepository(User::class)->getAccessList();
+        $clubManagerList = $this->getDoctrine()->getManager()->getRepository(User::class)->getClubManagerList();
 
-        return $this->render('Secretariat/Interface/index.html.twig', array('access_list' => $access_list));
+        $secretariatAccessList = $this->getDoctrine()->getManager()->getRepository(User::class)->getSecretariatAccessList();
+
+        $lockedAccessList = $this->getDoctrine()->getManager()->getRepository(User::class)->getLockedAccessList();
+
+        $countActiveAccess = $this->getDoctrine()->getManager()->getRepository(User::class)->getCountActiveAccess();
+
+        return $this->render('Secretariat/Interface/index.html.twig', array('clubManagerList' => $clubManagerList, 'secretariatAccessList' => $secretariatAccessList, 'lockedAccessList' => $lockedAccessList, 'countActiveAccess' => $countActiveAccess[0][1]));
+    }
+
+    /**
+     * @param UserTools $userTools
+     * @param SessionInterface $session
+     * @param Request $request
+     * @return RedirectResponse|Response
+     */
+    #[Route('/creer-acces/', name:'accessCreate')]
+    public function accessCreate(UserTools $userTools, SessionInterface $session, Request $request): RedirectResponse|Response
+    {
+        $form = $this->createForm(UserType::class, new User(), array('form' => 'createAccess', 'data_class' => User::class));
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid())
+        {
+            $userTools->newUser($form->getData(), $this->getUser(), $form['Password']->getData(), $form->get('UserMember')->getData());
+
+            $session->set('duplicate', $userTools->isDuplicate());
+
+            if ($session->get('duplicate'))
+            {
+                return $this->render('Secretariat/Interface/access_create.html.twig', array('form' => $form->createView()));
+            }
+
+            return $this->redirectToRoute('secretariat-accessListIndex');
+        }
+
+        return $this->render('Secretariat/Interface/access_create.html.twig', array('form' => $form->createView()));
     }
 
     /**

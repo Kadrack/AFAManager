@@ -39,6 +39,9 @@ class UserType extends AbstractType
             case 'changePassword':
                 $this->changePassword($builder);
                 break;
+            case 'createAccess':
+                $this->createAccess($builder);
+                break;
             case 'create':
                 $this->loginCreate($builder);
                 break;
@@ -97,12 +100,8 @@ class UserType extends AbstractType
     {
         $builder
 
-            ->add('Login', TextType::class, array('label' => 'Login : ', 'required' => false))
-            ->add('UserMember', IntegerType::class, array('label' => 'N° de licence : ', 'mapped' => false, 'required' => false))
-            ->add('UserFirstname', TextType::class, array('label' => 'Prénom : ', 'required' => false))
-            ->add('UserRealName', TextType::class, array('label' => 'Nom : ', 'required' => false))
-            ->add('Password', PasswordType::class, array('label' => 'Mot de passe : ', 'mapped' => false, 'required' => false))
-            ->add('Submit', SubmitType::class, array('label' => 'Créer'))
+            ->add('Login', TextType::class, array('label' => 'Login : ', 'mapped' => false))
+            ->add('Submit', SubmitType::class, array('label' => 'Ajouter'))
         ;
     }
 
@@ -117,4 +116,20 @@ class UserType extends AbstractType
             ->add('Submit', SubmitType::class, array('label' => 'Supprimer'))
         ;
     }
+
+    /**
+     * @param FormBuilderInterface $builder
+     */
+    private function createAccess(FormBuilderInterface $builder)
+    {
+        $builder
+            ->add('Login', TextType::class, array('label' => 'Login : '))
+            ->add('Password', PasswordType::class, array('label' => 'Mot de passe : ', 'mapped' => false))
+            ->add('UserMember', IntegerType::class, array('label' => 'N° de Licence : ', 'required' => false, 'mapped' => false))
+            ->add('UserFirstname', TextType::class, array('label' => 'Prénom : ', 'required' => false))
+            ->add('UserRealName', TextType::class, array('label' => 'Nom : ', 'required' => false))
+            ->add('Submit', SubmitType::class, array('label' => 'Créer'))
+        ;
+    }
+
 }

@@ -8,36 +8,117 @@
 {% endblock %}
 
 {% block body %}
-    <h1>Liste des gestionnaire de club</h1>
+    <h1>Nombre de compte actif : {{ countActiveAccess }} <a class="btn btn-primary" href="{{ path('secretariat-accessCreate') }}">Ajouter</a></h1>
+    <h1>Liste des accès secrétariat</h1>
     <table class="table table-sm table-hover unselectable">
         <thead>
-            <tr>
-                <th scope="col">Login</th>
-                <th scope="col">Prénom</th>
-                <th scope="col">Nom</th>
-                <th scope="col">N° de licence</th>
-                <th scope="col">Dernière connexion</th>
-                <th scope="col">Status accès</th>
-                <th scope="col"></th>
-            </tr>
+        <tr>
+            <th scope="col">Login</th>
+            <th scope="col">Prénom</th>
+            <th scope="col">Nom</th>
+            <th scope="col">N° de licence</th>
+            <th scope="col">Dernière connexion</th>
+            <th scope="col">Status accès</th>
+            <th scope="col"></th>
+        </tr>
         </thead>
         <tbody>
-        {% for manager in access_list %}
+        {% for access in secretariatAccessList %}
             <tr>
-                <td class="align-middle">{{ manager.Login }}</td>
-                <td class="align-middle">{% if manager.LicenceId != null %}{{ manager.MemberFirstname|title }}{% else %}{{ manager.UserFirstname }}{% endif %}</td>
-                <td class="align-middle">{% if manager.LicenceId != null %}{{ manager.MemberName|title }}{% else %}{{ manager.UserRealName|title }}{% endif %}</td>
-                <td class="align-middle">{% if manager.LicenceId != null %}{{ manager.LicenceId }}{% else %}Aucun{% endif %}</td>
-                <td class="align-middle">{% if manager.Activity != null %}{{ manager.Activity|date("d/m/Y") }}{% else %}Aucune{% endif %}</td>
-                <td class="align-middle">{% if manager.Status == 0 or manager.Status > 4 %}Verrouillé{% else %}Actif{% endif %}</td>
+                <td class="align-middle">{{ access.Login }}</td>
+                <td class="align-middle">{% if access.LicenceId != null %}{{ access.MemberFirstname|title }}{% else %}{{ access.UserFirstname }}{% endif %}</td>
+                <td class="align-middle">{% if access.LicenceId != null %}{{ access.MemberName|title }}{% else %}{{ access.UserRealName|title }}{% endif %}</td>
+                <td class="align-middle">{% if access.LicenceId != null %}{{ access.LicenceId }}{% else %}Aucun{% endif %}</td>
+                <td class="align-middle">{% if access.Activity != null %}{{ access.Activity|date("d/m/Y") }}{% else %}Aucune{% endif %}</td>
+                <td class="align-middle">{% if access.Status == 0 or access.Status > 4 %}Verrouillé{% else %}Actif{% endif %}</td>
                 <td class="align-middle">
                     <div class="btn-group" role="group" aria-label="Commandes">
                         <button type="button" class="btn btn-primary">Commandes</button>
                         <div class="btn-group" role="group">
                             <button id="btnGroupDrop1" type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
                             <div class="dropdown-menu" aria-labelledby="btnGroupDrop1" style="">
-                                {% if manager.Status == 0 or manager.Status > 4 %}<a class="dropdown-item" href="{{ path('secretariat-accessReactivate', {'user': manager.UserId}) }}">Réactiver</a>{% endif %}
-                                <a class="dropdown-item" href="{{ path('secretariat-accessPasswordModify', {'user': manager.UserId}) }}">Modifier Mot de Passe</a>
+                                {% if access.Status == 0 or access.Status > 4 %}<a class="dropdown-item" href="{{ path('secretariat-accessReactivate', {'user': access.UserId}) }}">Réactiver</a>{% endif %}
+                                <a class="dropdown-item" href="{{ path('secretariat-accessPasswordModify', {'user': access.UserId}) }}">Modifier Mot de Passe</a>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <h1>Liste des gestionnaires de club</h1>
+    <table class="table table-sm table-hover unselectable">
+        <thead>
+        <tr>
+            <th scope="col">Login</th>
+            <th scope="col">Prénom</th>
+            <th scope="col">Nom</th>
+            <th scope="col">N° de licence</th>
+            <th scope="col">Club</th>
+            <th scope="col">Dernière connexion</th>
+            <th scope="col">Status accès</th>
+            <th scope="col"></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for access in clubManagerList %}
+            <tr>
+                <td class="align-middle">{{ access.Login }}</td>
+                <td class="align-middle">{% if access.LicenceId != null %}{{ access.MemberFirstname|title }}{% else %}{{ access.UserFirstname }}{% endif %}</td>
+                <td class="align-middle">{% if access.LicenceId != null %}{{ access.MemberName|title }}{% else %}{{ access.UserRealName|title }}{% endif %}</td>
+                <td class="align-middle">{% if access.LicenceId != null %}{{ access.LicenceId }}{% else %}Aucun{% endif %}</td>
+                <td class="align-middle">{{ access.ClubName|title }}</td>
+                <td class="align-middle">{% if access.Activity != null %}{{ access.Activity|date("d/m/Y") }}{% else %}Aucune{% endif %}</td>
+                <td class="align-middle">{% if access.Status == 0 or access.Status > 4 %}Verrouillé{% else %}Actif{% endif %}</td>
+                <td class="align-middle">
+                    <div class="btn-group" role="group" aria-label="Commandes">
+                        <button type="button" class="btn btn-primary">Commandes</button>
+                        <div class="btn-group" role="group">
+                            <button id="btnGroupDrop1" type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
+                            <div class="dropdown-menu" aria-labelledby="btnGroupDrop1" style="">
+                                {% if access.Status == 0 or access.Status > 4 %}<a class="dropdown-item" href="{{ path('secretariat-accessReactivate', {'user': access.UserId}) }}">Réactiver</a>{% endif %}
+                                <a class="dropdown-item" href="{{ path('secretariat-accessPasswordModify', {'user': access.UserId}) }}">Modifier Mot de Passe</a>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <h1>Liste des accès verrouillé ou inutilisé</h1>
+    <table class="table table-sm table-hover unselectable">
+        <thead>
+        <tr>
+            <th scope="col">Login</th>
+            <th scope="col">Prénom</th>
+            <th scope="col">Nom</th>
+            <th scope="col">N° de licence</th>
+            <th scope="col">Club</th>
+            <th scope="col">Dernière connexion</th>
+            <th scope="col">Status accès</th>
+            <th scope="col"></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for access in lockedAccessList %}
+            <tr>
+                <td class="align-middle">{{ access.Login }}</td>
+                <td class="align-middle">{% if access.LicenceId != null %}{{ access.MemberFirstname|title }}{% else %}{{ access.UserFirstname }}{% endif %}</td>
+                <td class="align-middle">{% if access.LicenceId != null %}{{ access.MemberName|title }}{% else %}{{ access.UserRealName|title }}{% endif %}</td>
+                <td class="align-middle">{% if access.LicenceId != null %}{{ access.LicenceId }}{% else %}Aucun{% endif %}</td>
+                <td class="align-middle">{{ access.ClubName|title }}</td>
+                <td class="align-middle">{% if access.Activity != null %}{{ access.Activity|date("d/m/Y") }}{% else %}Aucune{% endif %}</td>
+                <td class="align-middle">{% if access.Status == 0 or access.Status > 4 %}Verrouillé{% else %}Actif{% endif %}</td>
+                <td class="align-middle">
+                    <div class="btn-group" role="group" aria-label="Commandes">
+                        <button type="button" class="btn btn-primary">Commandes</button>
+                        <div class="btn-group" role="group">
+                            <button id="btnGroupDrop1" type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
+                            <div class="dropdown-menu" aria-labelledby="btnGroupDrop1" style="">
+                                {% if access.Status == 0 or access.Status > 4 %}<a class="dropdown-item" href="{{ path('secretariat-accessReactivate', {'user': access.UserId}) }}">Réactiver</a>{% endif %}
+                                <a class="dropdown-item" href="{{ path('secretariat-accessPasswordModify', {'user': access.UserId}) }}">Modifier Mot de Passe</a>
                             </div>
                         </div>
                     </div>

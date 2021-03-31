@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Club;
 use App\Entity\Member;
 use App\Entity\User;
 use App\Entity\UserAccess;
@@ -37,18 +38,67 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
     /**
      * @return array|null
      */
-    public function getAccessList(): ?array
+    public function getClubManagerList(): ?array
+    {
+        $qb = $this->createQueryBuilder('u');
+
+        return $qb->select('u.id AS UserId', 'u.login AS Login', 'u.user_firstname AS UserFirstname', 'u.user_real_name AS UserRealName', 'm.member_id AS LicenceId', 'm.member_firstname AS MemberFirstname', 'm.member_name AS MemberName', 'c.club_name AS ClubName', 'u.user_last_activity AS Activity', 'u.user_status AS Status')
+            ->leftJoin(Member::class, 'm', 'WITH', $qb->expr()->eq('u.user_member', 'm.member_id'))
+            ->leftJoin(UserAccess::class, 'a', 'WITH', $qb->expr()->eq('u.id', 'a.user_access_user'))
+            ->leftJoin(Club::class, 'c', 'WITH', $qb->expr()->eq('a.user_access_club', 'c.club_id'))
+            ->where($qb->expr()->isNotNull('a.user_access_club'))
+            ->orderBy('u.roles', 'DESC')
+            ->addOrderBy('u.login', 'ASC')
+            ->addOrderBy('a.user_access_club', 'ASC')
+            ->getQuery()
+            ->getArrayResult();
+    }
+
+    /**
+     * @return array|null
+     */
+    public function getSecretariatAccessList(): ?array
     {
         $qb = $this->createQueryBuilder('u');
 
         return $qb->select('u.id AS UserId', 'u.login AS Login', 'u.user_firstname AS UserFirstname', 'u.user_real_name AS UserRealName', 'm.member_id AS LicenceId', 'm.member_firstname AS MemberFirstname', 'm.member_name AS MemberName', 'u.user_last_activity AS Activity', 'u.user_status AS Status')
             ->leftJoin(Member::class, 'm', 'WITH', $qb->expr()->eq('u.user_member', 'm.member_id'))
             ->leftJoin(UserAccess::class, 'a', 'WITH', $qb->expr()->eq('u.id', 'a.user_access_user'))
-            ->where($qb->expr()->isNotNull('a.user_access_club'))
+            ->where($qb->expr()->eq('a.user_access_role', $qb->expr()->literal('ROLE_SECRETARIAT')))
             ->orderBy('u.roles', 'DESC')
-            ->addOrderBy('a.user_access_club', 'ASC')
             ->addOrderBy('u.login', 'ASC')
-            ->groupBy('u.id')
+            ->addOrderBy('a.user_access_club', 'ASC')
+            ->getQuery()
+            ->getArrayResult();
+    }
+
+    /**
+     * @return array|null
+     */
+    public function getLockedAccessList(): ?array
+    {
+        $qb = $this->createQueryBuilder('u');
+
+        return $qb->select('u.id AS UserId', 'u.login AS Login', 'u.user_firstname AS UserFirstname', 'u.user_real_name AS UserRealName', 'm.member_id AS LicenceId', 'm.member_firstname AS MemberFirstname', 'm.member_name AS MemberName', 'c.club_name AS ClubName', 'u.user_last_activity AS Activity', 'u.user_status AS Status')
+            ->leftJoin(Member::class, 'm', 'WITH', $qb->expr()->eq('u.user_member', 'm.member_id'))
+            ->leftJoin(UserAccess::class, 'a', 'WITH', $qb->expr()->eq('u.id', 'a.user_access_user'))
+            ->leftJoin(Club::class, 'c', 'WITH', $qb->expr()->eq('a.user_access_club', 'c.club_id'))
+            ->where($qb->expr()->isNull('a.user_access_user'))
+            ->orderBy('u.login', 'ASC')
+            ->addOrderBy('a.user_access_club', 'ASC')
+            ->getQuery()
+            ->getArrayResult();
+    }
+
+    /**
+     * @return array|null
+     */
+    public function getCountActiveAccess(): ?array
+    {
+        $qb = $this->createQueryBuilder('u');
+
+        return $qb->select($qb->expr()->count('u.id'))
+            ->where($qb->expr()->lte('u.user_status', 4))
             ->getQuery()
             ->getArrayResult();
     }
