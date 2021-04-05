@@ -29,6 +29,7 @@ use App\Form\TrainingType;
 use App\Form\UserType;
 
 use App\Service\ClubTools;
+use App\Service\FileGenerator;
 use App\Service\ListData;
 use App\Service\PhotoUploader;
 use App\Service\UserTools;
@@ -182,6 +183,33 @@ class SecretariatController extends AbstractController
         $inactive_list = $this->getDoctrine()->getRepository(Club::class)->getInactiveClubs();
 
         return $this->render('Secretariat/Club/list.html.twig', array('active_clubs' => $active_clubs, 'inactive_clubs' => $inactive_list));
+    }
+
+    /**
+     * @return Response
+     */
+    #[Route('/liste-adresse-clubs', name:'clubAddressList')]
+    public function clubAddressList(): Response
+    {
+        $provinces = new ListData();
+
+        $active_clubs = array();
+
+        $active_list = $this->getDoctrine()->getRepository(Club::class)->getActiveClubsInformations();
+
+        foreach ($active_list as $club)
+        {
+            $club['Province'] = $provinces->getProvince($club['Province']);
+
+            $active_clubs[$club['Province']]['Clubs'][$club['Id']] = $club;
+
+            if (!isset($active_clubs[$club['Province']]['name']))
+            {
+                $active_clubs[$club['Province']]['province'] = $club['Province'];
+            }
+        }
+
+        return $this->render('Secretariat/Club/address_list.html.twig', array('active_clubs' => $active_clubs));
     }
 
     /**

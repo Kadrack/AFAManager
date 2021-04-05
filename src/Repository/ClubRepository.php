@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Club;
+use App\Entity\ClubDojo;
 use App\Entity\ClubHistory;
 use App\Entity\ClubTeacher;
 use App\Entity\Member;
@@ -73,6 +74,23 @@ class ClubRepository extends ServiceEntityRepository
             ->join(ClubHistory::class, 'h', 'WITH', $qb->expr()->eq('h.club_history_id', 'c.club_last_history'))
             ->where($qb->expr()->neq('h.club_history_status', 1))
             ->orderBy('c.club_id', 'ASC')
+            ->getQuery()
+            ->getArrayResult();
+    }
+
+    /**
+     * @return array|null
+     */
+    public function getActiveClubsInformations(): ?array
+    {
+        $qb = $this->createQueryBuilder('c');
+
+        return $qb->select('c.club_id AS Id', 'c.club_name AS Name','c.club_province AS Province', 'c.club_zip AS Zip', 'c.club_city AS City', 'c.club_address AS Address', 'd.club_dojo_zip AS ZipDojo', 'd.club_dojo_city AS CityDojo', 'd.club_dojo_street AS AddressDojo')
+            ->join(ClubDojo::class, 'd', 'WITH', $qb->expr()->eq('d.club_dojo_club', 'c.club_id'))
+            ->join(ClubHistory::class, 'h', 'WITH', $qb->expr()->eq('h.club_history_id', 'c.club_last_history'))
+            ->where($qb->expr()->eq('h.club_history_status', 1))
+            ->orderBy('c.club_province', 'ASC')
+            ->addOrderBy('c.club_id', 'ASC')
             ->getQuery()
             ->getArrayResult();
     }
