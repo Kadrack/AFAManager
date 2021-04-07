@@ -29,7 +29,6 @@ use App\Form\TrainingType;
 use App\Form\UserType;
 
 use App\Service\ClubTools;
-use App\Service\FileGenerator;
 use App\Service\ListData;
 use App\Service\PhotoUploader;
 use App\Service\UserTools;
@@ -210,6 +209,43 @@ class SecretariatController extends AbstractController
         }
 
         return $this->render('Secretariat/Club/address_list.html.twig', array('active_clubs' => $active_clubs));
+    }
+
+    /**
+     * @param int|null $list
+     * @return Response
+     */
+    #[Route('/liste-mails-clubs/{list<\d+>}', name:'clubMailsList', defaults: ['list' => null])]
+    public function clubMailsList(?int $list): Response
+    {
+        if (is_null($list))
+        {
+            return $this->render('Secretariat/Club/mails_list.html.twig');
+        }
+
+        if ($list == 3)
+        {
+            $mailing_list = array_merge($this->getDoctrine()->getRepository(Club::class)->getClubsMailsList(1), $this->getDoctrine()->getRepository(Club::class)->getClubsMailsList(2));
+
+        }
+        else
+        {
+            $mailing_list = $this->getDoctrine()->getRepository(Club::class)->getClubsMailsList($list);
+        }
+
+        $list = array();
+
+        foreach ($mailing_list as $mail)
+        {
+            $list[] = $mail['Mail'];
+        }
+
+        file_put_contents('./mails.csv', array_unique($list));
+
+        $response = new BinaryFileResponse('./mails.csv');
+        $response->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT);
+
+        return $response->deleteFileAfterSend();
     }
 
     /**
@@ -913,7 +949,7 @@ class SecretariatController extends AbstractController
         fclose($fh);
 
         $response = new BinaryFileResponse($output_file);
-        $response->setContentDisposition(ResponseHeaderBag::DISPOSITION_INLINE);
+        $response->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT);
 
         return $response->deleteFileAfterSend();
     }
@@ -1947,7 +1983,7 @@ class SecretariatController extends AbstractController
             fclose($fh);
 
             $response = new BinaryFileResponse($output_file);
-            $response->setContentDisposition(ResponseHeaderBag::DISPOSITION_INLINE);
+            $response->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT);
 
             return $response->deleteFileAfterSend();
         }

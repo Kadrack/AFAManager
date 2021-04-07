@@ -96,6 +96,33 @@ class ClubRepository extends ServiceEntityRepository
     }
 
     /**
+     * @param int $list
+     * @return array|null
+     */
+    public function getClubsMailsList(int $list): ?array
+    {
+        $qb = $this->createQueryBuilder('c');
+
+        return match ($list)
+        {
+            1 => $qb->select('c.club_email_contact AS Mail')->distinct(true)
+                ->join(ClubHistory::class, 'h', 'WITH', $qb->expr()->eq('h.club_history_id', 'c.club_last_history'))
+                ->where($qb->expr()->eq('h.club_history_status', 1))
+                ->getQuery()
+                ->getArrayResult(),
+            2 => $qb->select('m.member_email AS Mail')->distinct(true)
+                ->join(ClubTeacher::class, 't', 'WITH', $qb->expr()->eq('t.club_teacher', 'c.club_id'))
+                ->join(Member::class, 'm', 'WITH', $qb->expr()->eq('m.member_id', 't.club_teacher_member'))
+                ->join(ClubHistory::class, 'h', 'WITH', $qb->expr()->eq('h.club_history_id', 'c.club_last_history'))
+                ->where($qb->expr()->eq('h.club_history_status', 1))
+                ->andWhere($qb->expr()->eq('t.club_teacher_title', 1))
+                ->getQuery()
+                ->getArrayResult(),
+            default => array(),
+        };
+    }
+
+    /**
      * @param DateTime $referenceDate
      * @return array|null
      */
