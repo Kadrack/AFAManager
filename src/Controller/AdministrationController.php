@@ -13,7 +13,10 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
+
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -177,4 +180,42 @@ class AdministrationController extends AbstractController
 
         return $this->render('Administration/Liste/dojo_cho_starting_practice.html.twig', array('list' => $list));
     }
+
+    /**
+     * @param int|null $list
+     * @return Response
+     */
+    #[Route('/liste-mails-clubs/{list<\d+>}', name:'clubMailsList', defaults: ['list' => null])]
+    public function clubMailsList(?int $list): Response
+    {
+        if (is_null($list))
+        {
+            return $this->render('Secretariat/Club/mails_list.html.twig');
+        }
+
+        if ($list == 3)
+        {
+            $mailing_list = array_merge($this->getDoctrine()->getRepository(Club::class)->getClubsMailsList(1), $this->getDoctrine()->getRepository(Club::class)->getClubsMailsList(2));
+
+        }
+        else
+        {
+            $mailing_list = $this->getDoctrine()->getRepository(Club::class)->getClubsMailsList($list);
+        }
+
+        $list = array();
+
+        foreach ($mailing_list as $mail)
+        {
+            $list[] = $mail['Mail'];
+        }
+
+        file_put_contents('./mails.csv', implode(';', array_unique($list)));
+
+        $response = new BinaryFileResponse('./mails.csv');
+        $response->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT);
+
+        return $response->deleteFileAfterSend();
+    }
+
 }

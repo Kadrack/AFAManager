@@ -93,6 +93,7 @@
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Administration</a>
                                 <div class="dropdown-menu">
+                                    {% if is_granted('ROLE_COMMUNICATION_LEADER') %}<a class="dropdown-item" href="{{ path('administration-clubMailsList') }}">Mailing List</a>{% endif %}
                                     <a class="dropdown-item" href="{{ path('administration-statisticsIndex') }}">Statistiques</a>
                                     <a class="dropdown-item" href="{{ path('administration-creationClubList') }}">Liste Création Club</a>
                                     <a class="dropdown-item" href="{{ path('administration-dojoChoStartPractice') }}">Liste Année de pratique Dojo-Cho</a>
