@@ -240,7 +240,7 @@ class SecretariatController extends AbstractController
             $list[] = $mail['Mail'];
         }
 
-        file_put_contents('./mails.csv', implode('', array_unique($list)));
+        file_put_contents('./mails.csv', implode(';', array_unique($list)));
 
         $response = new BinaryFileResponse('./mails.csv');
         $response->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT);
