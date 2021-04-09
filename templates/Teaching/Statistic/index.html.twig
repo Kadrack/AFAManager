@@ -8,8 +8,6 @@
 {% endblock %}
 
 {% block body %}
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
-
     <h1>Statistique en temps réel (Page en cours de développement)</h1>
     <table class="table table-sm table-hover">
         <thead class="text-center">
@@ -37,53 +35,12 @@
                             <tr>
                                 <th class="align-middle" scope="col">Homme</th>
                                 <th class="align-middle" scope="col">Femme</th>
-                                <th class="align-middle" scope="col">Graphique</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
                                 <td class="align-middle">{{ province.Total.1 }}</td>
                                 <td class="align-middle">{{ province.Total.2 }}</td>
-                                <td class="align-middle"><canvas id="ChartCollapseSex{{ province.Id }}"></canvas></td>
-                                <script>
-                                    let ctxChartCollapseSex{{ province.Id }} = document.getElementById('ChartCollapseSex{{ province.Id }}').getContext('2d');
-
-                                    Chart.defaults.global.defaultFontColor = 'white';
-
-                                    let ChartCollapseSex{{ province.Id }} = new Chart
-                                    (ctxChartCollapseSex{{ province.Id }},
-                                        {
-                                            type: 'horizontalBar',
-                                            options:
-                                                {
-                                                    title: { display: false },
-                                                    legend: { display: false },
-                                                    scales: { xAxes: [{ stacked: true }], yAxes: [{ stacked: true }] }
-                                                },
-                                            data:
-                                                {
-                                                    labels: [' '],
-                                                    datasets:
-                                                        [
-                                                            {
-                                                                data: [{{ ((province.Total.1 * 100) / (province.Total.1 + province.Total.2))|round(1, 'common') }}],
-                                                                backgroundColor: ['rgba(0, 0, 255, 0.2)'],
-                                                                borderColor: ['rgba(0, 0, 255, 1)'],
-                                                                borderWidth: 1,
-                                                                fontColor: ['rgba(255, 255, 255)'],
-                                                            },
-                                                            {
-                                                                data: [{{ ((province.Total.2 * 100) / (province.Total.1 + province.Total.2))|round(1, 'common') }}],
-                                                                backgroundColor: ['rgba(0, 255, 0, 0.2)'],
-                                                                borderColor: ['rgba(0, 255, 0, 1)'],
-                                                                borderWidth: 1,
-                                                                fontColor: ['rgba(255, 255, 255)'],
-                                                            }
-                                                        ]
-                                                },
-                                        }
-                                    );
-                                </script>
                             </tr>
                         </tbody>
                     </table>

@@ -3,12 +3,12 @@
 namespace App\Repository;
 
 use App\Entity\Club;
+use App\Entity\ClubDojo;
 use App\Entity\ClubHistory;
 use App\Entity\ClubTeacher;
 use App\Entity\Member;
 use App\Entity\MemberLicence;
 
-use DateInterval;
 use DateTime;
 
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -23,16 +23,23 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class ClubRepository extends ServiceEntityRepository
 {
+    /**
+     * ClubRepository constructor.
+     * @param ManagerRegistry $registry
+     */
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Club::class);
     }
 
+    /**
+     * @return array|null
+     */
     public function getCreationDateList(): ?array
     {
         $qb = $this->createQueryBuilder('c');
 
-        return $qb->select('c.club_id AS Id', 'c.club_name AS Name', 'c.club_creation AS Creation')
+        return $qb->select('c.club_id AS Id', 'c.club_name AS Name', 'c.club_creation AS Creation', 'h.club_history_update AS Affiliation')
             ->join(ClubHistory::class, 'h', 'WITH', $qb->expr()->eq('h.club_history_id', 'c.club_last_history'))
             ->where($qb->expr()->eq('h.club_history_status', 1))
             ->orderBy('c.club_name', 'ASC')
@@ -40,6 +47,9 @@ class ClubRepository extends ServiceEntityRepository
             ->getArrayResult();
     }
 
+    /**
+     * @return array|null
+     */
     public function getActiveClubs(): ?array
     {
         $qb = $this->createQueryBuilder('c');
@@ -53,6 +63,9 @@ class ClubRepository extends ServiceEntityRepository
             ->getArrayResult();
     }
 
+    /**
+     * @return array|null
+     */
     public function getInactiveClubs(): ?array
     {
         $qb = $this->createQueryBuilder('c');
@@ -65,16 +78,59 @@ class ClubRepository extends ServiceEntityRepository
             ->getArrayResult();
     }
 
-    public function getProvinceTeachersTotal(?DateTime $referenceDate = null): ?array
+    /**
+     * @return array|null
+     */
+    public function getActiveClubsInformations(): ?array
     {
-        if (is_null($referenceDate))
+        $qb = $this->createQueryBuilder('c');
+
+        return $qb->select('c.club_id AS Id', 'c.club_name AS Name','c.club_province AS Province', 'c.club_zip AS Zip', 'c.club_city AS City', 'c.club_address AS Address', 'd.club_dojo_zip AS ZipDojo', 'd.club_dojo_city AS CityDojo', 'd.club_dojo_street AS AddressDojo')
+            ->join(ClubDojo::class, 'd', 'WITH', $qb->expr()->eq('d.club_dojo_club', 'c.club_id'))
+            ->join(ClubHistory::class, 'h', 'WITH', $qb->expr()->eq('h.club_history_id', 'c.club_last_history'))
+            ->where($qb->expr()->eq('h.club_history_status', 1))
+            ->orderBy('c.club_province', 'ASC')
+            ->addOrderBy('c.club_id', 'ASC')
+            ->getQuery()
+            ->getArrayResult();
+    }
+
+    /**
+     * @param int $list
+     * @return array|null
+     */
+    public function getClubsMailsList(int $list): ?array
+    {
+        $qb = $this->createQueryBuilder('c');
+
+        return match ($list)
         {
-            $referenceDate = new DateTime('today');
-        }
+            1 => $qb->select('c.club_email_contact AS Mail')->distinct(true)
+                ->join(ClubHistory::class, 'h', 'WITH', $qb->expr()->eq('h.club_history_id', 'c.club_last_history'))
+                ->where($qb->expr()->eq('h.club_history_status', 1))
+                ->getQuery()
+                ->getArrayResult(),
+            2 => $qb->select('m.member_email AS Mail')->distinct(true)
+                ->join(ClubTeacher::class, 't', 'WITH', $qb->expr()->eq('t.club_teacher', 'c.club_id'))
+                ->join(Member::class, 'm', 'WITH', $qb->expr()->eq('m.member_id', 't.club_teacher_member'))
+                ->join(ClubHistory::class, 'h', 'WITH', $qb->expr()->eq('h.club_history_id', 'c.club_last_history'))
+                ->where($qb->expr()->eq('h.club_history_status', 1))
+                ->andWhere($qb->expr()->eq('t.club_teacher_title', 1))
+                ->getQuery()
+                ->getArrayResult(),
+            default => array(),
+        };
+    }
 
-        $deadline = $referenceDate->format('Y-m-d');
+    /**
+     * @param DateTime $referenceDate
+     * @return array|null
+     */
+    public function getProvinceTeachersTotal(DateTime $referenceDate): ?array
+    {
+        $deadline = date('Y-m-d', $referenceDate->getTimestamp());
 
-        $deadline_high = $referenceDate->add(new DateInterval('P1Y'))->format('Y-m-d');
+        $deadline_high = date('Y-m-d', strtotime('+1 year', $referenceDate->getTimestamp()));
 
         $qb = $this->createQueryBuilder('c');
 
@@ -93,16 +149,15 @@ class ClubRepository extends ServiceEntityRepository
             ->getArrayResult();
     }
 
-    public function getProvinceMembersTotal(?DateTime $referenceDate = null): ?array
+    /**
+     * @param DateTime $referenceDate
+     * @return array|null
+     */
+    public function getProvinceMembersTotal(DateTime $referenceDate): ?array
     {
-        if (is_null($referenceDate))
-        {
-            $referenceDate = new DateTime('today');
-        }
+        $deadline = date('Y-m-d', $referenceDate->getTimestamp());
 
-        $deadline = $referenceDate->format('Y-m-d');
-
-        $deadline_high = $referenceDate->add(new DateInterval('P1Y'))->format('Y-m-d');
+        $deadline_high = date('Y-m-d', strtotime('+1 year', $referenceDate->getTimestamp()));
 
         $qb = $this->createQueryBuilder('c');
 
@@ -123,25 +178,24 @@ class ClubRepository extends ServiceEntityRepository
             ->getArrayResult();
     }
 
+    /**
+     * @param DateTime|null $referenceDate
+     * @return array|null
+     */
     public function getProvinceMembersCount(?DateTime $referenceDate = null): ?array
     {
         $result = array();
 
-        if (is_null($referenceDate))
-        {
-            $referenceDate = new DateTime('today');
-        }
+        $deadline = date('Y-m-d', $referenceDate->getTimestamp());
 
-        $deadline = $referenceDate->format('Y-m-d');
+        $deadline_high = date('Y-m-d', strtotime('+1 year', $referenceDate->getTimestamp()));
 
-        $deadline_high = $referenceDate->add(new DateInterval('P1Y'))->format('Y-m-d');
-
-        $limit[0] = $referenceDate->sub(new DateInterval('P0Y'))->format('Y-m-d');
-        $limit[1] = $referenceDate->sub(new DateInterval('P6Y'))->format('Y-m-d');
-        $limit[2] = $referenceDate->sub(new DateInterval('P6Y'))->format('Y-m-d');
-        $limit[3] = $referenceDate->sub(new DateInterval('P6Y'))->format('Y-m-d');
-        $limit[4] = $referenceDate->sub(new DateInterval('P7Y'))->format('Y-m-d');
-        $limit[5] = $referenceDate->sub(new DateInterval('P10Y'))->format('Y-m-d');
+        $limit[0] = date('Y-m-d', strtotime('-0 years', $referenceDate->getTimestamp()));
+        $limit[1] = date('Y-m-d', strtotime('-6 years', $referenceDate->getTimestamp()));
+        $limit[2] = date('Y-m-d', strtotime('-12 years', $referenceDate->getTimestamp()));
+        $limit[3] = date('Y-m-d', strtotime('-18 years', $referenceDate->getTimestamp()));
+        $limit[4] = date('Y-m-d', strtotime('-25 years', $referenceDate->getTimestamp()));
+        $limit[5] = date('Y-m-d', strtotime('-35 years', $referenceDate->getTimestamp()));
 
         $qb = $this->createQueryBuilder('c');
 
@@ -185,25 +239,25 @@ class ClubRepository extends ServiceEntityRepository
         return $result;
     }
 
-    public function getClubMembersCount(int $province, ?DateTime $referenceDate = null): ?array
+    /**
+     * @param int $province
+     * @param DateTime $referenceDate
+     * @return array|null
+     */
+    public function getClubMembersCount(int $province, DateTime $referenceDate): ?array
     {
         $result = array();
 
-        if (is_null($referenceDate))
-        {
-            $referenceDate = new DateTime('today');
-        }
+        $deadline = date('Y-m-d', $referenceDate->getTimestamp());
 
-        $deadline = $referenceDate->format('Y-m-d');
+        $deadline_high = date('Y-m-d', strtotime('+1 year', $referenceDate->getTimestamp()));
 
-        $deadline_high = $referenceDate->add(new DateInterval('P1Y'))->format('Y-m-d');
-
-        $limit[0] = $referenceDate->sub(new DateInterval('P0Y'))->format('Y-m-d');
-        $limit[1] = $referenceDate->sub(new DateInterval('P6Y'))->format('Y-m-d');
-        $limit[2] = $referenceDate->sub(new DateInterval('P6Y'))->format('Y-m-d');
-        $limit[3] = $referenceDate->sub(new DateInterval('P6Y'))->format('Y-m-d');
-        $limit[4] = $referenceDate->sub(new DateInterval('P7Y'))->format('Y-m-d');
-        $limit[5] = $referenceDate->sub(new DateInterval('P10Y'))->format('Y-m-d');
+        $limit[0] = date('Y-m-d', strtotime('-0 years', $referenceDate->getTimestamp()));
+        $limit[1] = date('Y-m-d', strtotime('-6 years', $referenceDate->getTimestamp()));
+        $limit[2] = date('Y-m-d', strtotime('-12 years', $referenceDate->getTimestamp()));
+        $limit[3] = date('Y-m-d', strtotime('-18 years', $referenceDate->getTimestamp()));
+        $limit[4] = date('Y-m-d', strtotime('-25 years', $referenceDate->getTimestamp()));
+        $limit[5] = date('Y-m-d', strtotime('-35 years', $referenceDate->getTimestamp()));
 
         $qb = $this->createQueryBuilder('c');
 

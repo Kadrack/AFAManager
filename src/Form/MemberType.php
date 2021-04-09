@@ -32,20 +32,19 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 class MemberType extends AbstractType
 {
     /**
-     * @param FormBuilderInterface $builder
-     * @param array $options
+     * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         switch ($options['form'])
         {
-            case 'my_data_update':
+            case 'myDataUpdate':
                 $this->myDataUpdate($builder);
                 break;
-            case 'licence_renew':
+            case 'licenceRenew':
                 $this->licenceRenew($builder);
                 break;
-            case 'licence_renew_kyu':
+            case 'licenceRenewKyu':
                 $this->licenceRenewKyu($builder);
                 break;
             default:
@@ -54,7 +53,7 @@ class MemberType extends AbstractType
     }
 
     /**
-     * @param OptionsResolver $resolver
+     * {@inheritdoc}
      */
     public function configureOptions(OptionsResolver $resolver)
     {
@@ -82,6 +81,9 @@ class MemberType extends AbstractType
         ;
     }
 
+    /**
+     * @param FormBuilderInterface $builder
+     */
     private function create(FormBuilderInterface $builder)
     {
         $list = new ListData();
@@ -105,6 +107,9 @@ class MemberType extends AbstractType
         ;
     }
 
+    /**
+     * @param FormBuilderInterface $builder
+     */
     private function licenceRenew(FormBuilderInterface $builder)
     {
         $builder
@@ -115,6 +120,9 @@ class MemberType extends AbstractType
         ;
     }
 
+    /**
+     * @param FormBuilderInterface $builder
+     */
     private function licenceRenewKyu(FormBuilderInterface $builder)
     {
         $list = new ListData();

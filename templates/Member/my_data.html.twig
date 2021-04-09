@@ -9,9 +9,9 @@
 
 {% block body %}
     <h1>{{ member.getMemberFirstname()|title }} {{ member.getMemberName()|title }}</h1>
-    <h2>Données personnelles <a class="btn btn-primary" href="{{ path('member_my_data_update') }}">Modifier</a></h2>
+    <h2>Données personnelles <a class="btn btn-primary" href="{{ path('member-myDataUpdate') }}">Modifier</a></h2>
     <img alt="" src="{{ asset('uploads/photos/'~member.getMemberPhoto()) }}" /><br />
-    <table class="table table-sm table-hover">
+    <table class="table table-sm table-hover unselectable">
         <thead>
             <tr>
                 <th scope="col">Date de naissance</th>
@@ -38,7 +38,7 @@
     {% if member.getMemberModification() != null %}
     <h2>Modification en attente de validation</h2>
     <img alt="" src=" {{ asset('uploads/photos/'~member.getMemberModification().getMemberModificationPhoto()) }}" /><br />
-    <table class="table table-sm table-hover">
+    <table class="table table-sm table-hover unselectable">
         <thead>
             <tr>
                 <th scope="col">Prénom</th>

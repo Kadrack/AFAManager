@@ -12,9 +12,9 @@ class ListData
 {
     /**
      * @param int $type
-     * @return false|int|int[]|string|void
+     * @return array|bool|int|string
      */
-    public function getAccessType(int $type = 0)
+    public function getAccessType(int $type = 0): array|bool|int|string
     {
         $access = array('Aucun' => 1, 'CT' => 2, 'Stage' => 3, 'CA' => 4, 'CP' => 5, 'Comptabilité' => 6);
 
@@ -34,9 +34,9 @@ class ListData
 
     /**
      * @param int $type
-     * @return false|int|int[]|string|void
+     * @return array|bool|int|string
      */
-    public function getClubType(int $type)
+    public function getClubType(int $type): array|bool|int|string
     {
         $types = array('ASBL' => 1, 'Association de fait' => 2, 'Autres' => 3);
 
@@ -58,7 +58,7 @@ class ListData
      * @param string $country
      * @return string
      */
-    public function getCountryName(string $country)
+    public function getCountryName(string $country): string
     {
         $countries = Countries::getNames('fr');
 
@@ -67,9 +67,9 @@ class ListData
 
     /**
      * @param int $day
-     * @return false|int|int[]|string|void
+     * @return array|bool|int|string
      */
-    public function getDay(int $day)
+    public function getDay(int $day): array|bool|int|string
     {
         $days = array('Lundi' => 1, 'Mardi' => 2, 'Mercredi' => 3, 'Jeudi' => 4, 'Vendredi' => 5, 'Samedi' => 6, 'Dimanche' => 7);
 
@@ -89,9 +89,9 @@ class ListData
 
     /**
      * @param int $result
-     * @return false|int|int[]|string|void
+     * @return array|bool|int|string
      */
-    public function getExamResult(int $result)
+    public function getExamResult(int $result): array|bool|int|string
     {
         $results = array('Postulant' => 1, 'Candidat' => 2, 'Refusé' => 3, 'Réussi' => 4, 'Promu' => 5, 'En Attente' => 6, 'Reconnu' => 7);
 
@@ -111,9 +111,9 @@ class ListData
 
     /**
      * @param int $type
-     * @return false|int|int[]|string|void
+     * @return array|bool|int|string
      */
-    public function getExamType(int $type)
+    public function getExamType(int $type): array|bool|int|string
     {
         $types = array('Examen' => 1, 'Kagami Biraki' => 2, 'Enseignant Adeps' => 3, 'Enseignant Aïkikaï' => 4, 'Reconnaissance' => 5, 'Autre' => 6);
 
@@ -133,9 +133,9 @@ class ListData
 
     /**
      * @param int $grade
-     * @return array|false|int|string|void
+     * @return bool|int|array|string
      */
-    public function getGrade(int $grade = 0)
+    public function getGrade(int $grade = 0): bool|int|array|string
     {
         if ($grade == 0)
         {
@@ -158,7 +158,7 @@ class ListData
     /**
      * @return int[]
      */
-    public function getGradeDan()
+    public function getGradeDan(): array
     {
         return array('Shodan National' => 7, 'Shodan Aïkikaï' => 8, 'Nidan National' => 9, 'Nidan Aïkikaï' => 10, 'Sandan National' => 11, 'Sandan Aïkikaï' => 12, 'Yondan National' => 13, 'Yondan Aïkikaï' => 14, 'Godan National' => 15, 'Godan Aïkikaï' => 16, 'Rokudan National' => 17, 'Rokudan Aïkikaï' => 18, 'Nanadan National' => 19, 'Nanadan Aïkikaï' => 20, 'Hachidan National' => 21, 'Hachidan Aïkikaï' => 22, 'Kudan National' => 23, 'Kudan Aïkikaï' => 24);
     }
@@ -166,16 +166,16 @@ class ListData
     /**
      * @return int[]
      */
-    public function getGradeKyu()
+    public function getGradeKyu(): array
     {
         return array('6ème kyu' => 1, '5ème kyu' => 2, '4ème kyu' => 3, '3ème kyu' => 4, '2ème kyu' => 5, '1er kyu'  => 6);
     }
 
     /**
      * @param int $title
-     * @return false|int|int[]|string|void
+     * @return array|bool|int|string
      */
-    public function getGradeTitle(int $title)
+    public function getGradeTitle(int $title): array|bool|int|string
     {
         $titles = array('Fuku Shidoïn' => 1, 'Shidoïn' => 2, 'Shihan' => 3, 'Initiateur' => 4, 'Aide-Moniteur' => 5, 'Moniteur' => 6, 'Moniteur Animateur' => 7, 'Moniteur Initiateur' => 8, 'Moniteur Educateur' => 9, 'Autre' => 10);
 
@@ -195,9 +195,9 @@ class ListData
 
     /**
      * @param int $type
-     * @return false|int|int[]|string|void
+     * @return array|bool|int|string
      */
-    public function getPaymentType(int $type)
+    public function getPaymentType(int $type): array|bool|int|string
     {
         $types = array('Cash' => 1, 'Carte' => 2);
 
@@ -217,9 +217,9 @@ class ListData
 
     /**
      * @param int $province
-     * @return false|int|int[]|string|void
+     * @return array|bool|int|string
      */
-    public function getProvince(int $province)
+    public function getProvince(int $province): array|bool|int|string
     {
         $provinces = array('Bruxelles' => 1, 'Brabant Wallon' => 2, 'Hainaut' => 3, 'Liège' => 4, 'Luxembourg' => 5, 'Namur' => 6, 'Brabant Flamand' => 7, 'Frigo' => 20);
 
@@ -239,9 +239,9 @@ class ListData
 
     /**
      * @param int $sex
-     * @return false|int|int[]|string|void
+     * @return array|bool|int|string
      */
-    public function getSex(int $sex)
+    public function getSex(int $sex): array|bool|int|string
     {
         $sexes = array('Masculin' => 1, 'Féminin' => 2);
 
@@ -261,9 +261,9 @@ class ListData
 
     /**
      * @param int $title
-     * @return false|int|int[]|string|void
+     * @return array|bool|int|string
      */
-    public function getTeacherTitle(int $title)
+    public function getTeacherTitle(int $title): array|bool|int|string
     {
         $titles = array('Dojo Cho' => 1, 'Professeur' => 2, 'Assistant' => 3);
 
@@ -283,9 +283,9 @@ class ListData
 
     /**
      * @param int $type
-     * @return false|int|int[]|string|void
+     * @return array|bool|int|string
      */
-    public function getTeacherType(int $type)
+    public function getTeacherType(int $type): array|bool|int|string
     {
         $types = array('Adultes' => 1, 'Enfants' => 2, 'Adultes/Enfants' => 3);
 
@@ -305,11 +305,33 @@ class ListData
 
     /**
      * @param int $type
-     * @return false|int|int[]|string|void
+     * @return array|bool|int|string
      */
-    public function getLessonType(int $type)
+    public function getLessonType(int $type): array|bool|int|string
     {
         $types = array('Cours Adultes' => 1, 'Cours Enfants' => 2, 'Cours Adultes/Enfants' => 3);
+
+        if ($type == 0)
+        {
+            return $types;
+        }
+        else if ($type > sizeof($types))
+        {
+            return "Autre";
+        }
+        else
+        {
+            return array_search($type, $types);
+        }
+    }
+
+    /**
+     * @param int $type
+     * @return array|bool|int|string
+     */
+    public function getTrainingType(int $type): array|bool|int|string
+    {
+        $types = array('Fédéral' => 1, 'Privé' => 2);
 
         if ($type == 0)
         {

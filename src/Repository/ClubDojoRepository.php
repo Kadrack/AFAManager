@@ -16,6 +16,10 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class ClubDojoRepository extends ServiceEntityRepository
 {
+    /**
+     * ClubDojoRepository constructor.
+     * @param ManagerRegistry $registry
+     */
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, ClubDojo::class);

@@ -11,7 +11,7 @@
     <h1>{{ memberTools.getMember.getMemberFirstname()|title }} {{ memberTools.getMember.getMemberName()|title }}</h1>
     <h2>Données personnelles</h2>
     <img alt="" src=" {{ asset('uploads/photos/'~memberTools.getMember.getMemberPhoto()) }}" /><br />
-    <table class="table table-sm table-hover">
+    <table class="table table-sm table-hover unselectable">
         <thead>
             <tr>
                 <th scope="col">Adresse</th>
@@ -32,7 +32,7 @@
     {% if memberTools.getMember.getMemberModification() != null %}
     <h2>Modification en attente de validation</h2>
     <img alt="" src=" {{ asset('uploads/photos/'~memberTools.getMember.getMemberModification().getMemberModificationPhoto()) }}" /><br />
-        <table class="table table-sm table-hover">
+        <table class="table table-sm table-hover unselectable">
         <thead>
             <tr>
                 <th scope="col">Adresse</th>

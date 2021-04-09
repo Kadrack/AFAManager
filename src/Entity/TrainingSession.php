@@ -4,7 +4,7 @@ namespace App\Entity;
 
 use App\Service\ListData;
 
-use DateTimeInterface;
+use DateTime;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -12,117 +12,176 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
+ * Class TrainingSession
+ * @package App\Entity
+ *
  * @ORM\Table(name="afamanager_training_session")
  * @ORM\Entity(repositoryClass="App\Repository\TrainingSessionRepository")
  */
 class TrainingSession
 {
     /**
+     * @var int
+     *
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      * @ORM\Column(type="integer")
      */
-    private $training_session_id;
+    private int $training_session_id;
 
     /**
+     * @var DateTime|null
+     *
      * @ORM\Column(type="date", nullable=true)
      */
-    private $training_session_date;
+    private ?DateTime $training_session_date;
 
     /**
+     * @var DateTime|null
+     *
      * @ORM\Column(type="time", nullable=true)
      */
-    private $training_session_starting_hour;
+    private ?DateTime $training_session_starting_hour;
 
     /**
+     * @var DateTime|null
+     *
      * @ORM\Column(type="time", nullable=true)
      */
-    private $training_session_ending_hour;
+    private ?DateTime $training_session_ending_hour;
 
     /**
+     * @var int|null
+     *
      * @ORM\Column(type="integer", nullable=true)
      */
-    private $training_session_duration;
+    private ?int $training_session_duration;
 
     /**
+     * @var int|null
+     *
      * @ORM\Column(type="integer", nullable=true)
      */
-    private $training_session_old_id;
+    private ?int $training_session_old_id;
 
     /**
+     * @var string|null
+     *
      * @ORM\Column(type="text", nullable=true)
      */
-    private $training_session_comment;
+    private ?string $training_session_comment;
 
     /**
+     * @var Training|null
+     *
      * @ORM\ManyToOne(targetEntity="App\Entity\Training", inversedBy="training_sessions", cascade={"persist"})
-     * @ORM\JoinColumn(name="training_join_training_session", referencedColumnName="training_id")
+     * @ORM\JoinColumn(nullable=true, name="training_join_training_session", referencedColumnName="training_id")
      */
-    private $training;
+    private ?Training $training;
 
     /**
+     * @var ArrayCollection|Collection|null
+     *
      * @ORM\OneToMany(targetEntity="App\Entity\TrainingAttendance", mappedBy="training_attendance_session", orphanRemoval=true, cascade={"persist"})
      */
-    private $training_session_attendances;
+    private ArrayCollection|Collection|null $training_session_attendances;
 
+    /**
+     * TrainingSession constructor.
+     */
     public function __construct()
     {
         $this->training_session_attendances = new ArrayCollection();
     }
 
-    public function getTrainingSessionId(): ?int
+    /**
+     * @return int
+     */
+    public function getTrainingSessionId(): int
     {
         return $this->training_session_id;
     }
 
-    public function setTrainingSessionId(?int $training_session_id): self
+    /**
+     * @param int $training_session_id
+     * @return $this
+     */
+    public function setTrainingSessionId(int $training_session_id): self
     {
         $this->training_session_id = $training_session_id;
 
         return $this;
     }
 
-    public function getTrainingSessionDate(): ?DateTimeInterface
+    /**
+     * @return DateTime|null
+     */
+    public function getTrainingSessionDate(): ?DateTime
     {
         return $this->training_session_date;
     }
 
-    public function setTrainingSessionDate(?DateTimeInterface $training_session_date): self
+    /**
+     * @param DateTime|null $training_session_date
+     * @return $this
+     */
+    public function setTrainingSessionDate(?DateTime $training_session_date): self
     {
         $this->training_session_date = $training_session_date;
 
         return $this;
     }
 
-    public function getTrainingSessionStartingHour(): ?DateTimeInterface
+    /**
+     * @return DateTime|null
+     */
+    public function getTrainingSessionStartingHour(): ?DateTime
     {
         return $this->training_session_starting_hour;
     }
 
-    public function setTrainingSessionStartingHour(?DateTimeInterface $training_session_starting_hour): self
+    /**
+     * @param DateTime|null $training_session_starting_hour
+     * @return $this
+     */
+    public function setTrainingSessionStartingHour(?DateTime $training_session_starting_hour): self
     {
         $this->training_session_starting_hour = $training_session_starting_hour;
 
         return $this;
     }
 
-    public function getTrainingSessionEndingHour(): ?DateTimeInterface
+    /**
+     * @return DateTime|null
+     */
+    public function getTrainingSessionEndingHour(): ?DateTime
     {
         return $this->training_session_ending_hour;
     }
 
-    public function setTrainingSessionEndingHour(?DateTimeInterface $training_session_ending_hour): self
+    /**
+     * @param DateTime|null $training_session_ending_hour
+     * @return $this
+     */
+    public function setTrainingSessionEndingHour(?DateTime $training_session_ending_hour): self
     {
         $this->training_session_ending_hour = $training_session_ending_hour;
 
         return $this;
     }
 
+    /**
+     * @return int|null
+     */
     public function getTrainingSessionDuration(): ?int
     {
         return $this->training_session_duration;
     }
 
+    /**
+     * @param int|null $training_session_duration
+     * @return $this
+     */
     public function setTrainingSessionDuration(?int $training_session_duration): self
     {
         $this->training_session_duration = $training_session_duration;
@@ -130,11 +189,18 @@ class TrainingSession
         return $this;
     }
 
+    /**
+     * @return int|null
+     */
     public function getTrainingSessionOldId(): ?int
     {
         return $this->training_session_old_id;
     }
 
+    /**
+     * @param int|null $training_session_old_id
+     * @return $this
+     */
     public function setTrainingSessionOldId(?int $training_session_old_id): self
     {
         $this->training_session_old_id = $training_session_old_id;
@@ -142,11 +208,18 @@ class TrainingSession
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getTrainingSessionComment(): ?string
     {
         return $this->training_session_comment;
     }
 
+    /**
+     * @param string|null $training_session_comment
+     * @return $this
+     */
     public function setTrainingSessionComment(?string $training_session_comment): self
     {
         $this->training_session_comment = $training_session_comment;
@@ -154,11 +227,18 @@ class TrainingSession
         return $this;
     }
 
+    /**
+     * @return Training|null
+     */
     public function getTraining(): ?Training
     {
         return $this->training;
     }
 
+    /**
+     * @param Training|null $training
+     * @return $this
+     */
     public function setTraining(?Training $training): self
     {
         $this->training = $training;
@@ -166,7 +246,7 @@ class TrainingSession
         return $this;
     }
 
-    public function getTrainingSessionChoiceName()
+    public function getTrainingSessionChoiceName(): int|string|null
     {
         $list_data = new ListData();
 
@@ -188,13 +268,17 @@ class TrainingSession
     }
 
     /**
-     * @return Collection|TrainingAttendance[]
+     * @return Collection
      */
     public function getTrainingSessionAttendances(): Collection
     {
         return $this->training_session_attendances;
     }
 
+    /**
+     * @param TrainingAttendance $trainingAttendance
+     * @return $this
+     */
     public function addTrainingSessionAttendances(TrainingAttendance $trainingAttendance): self
     {
         if (!$this->training_session_attendances->contains($trainingAttendance)) {
@@ -205,6 +289,10 @@ class TrainingSession
         return $this;
     }
 
+    /**
+     * @param TrainingAttendance $trainingAttendance
+     * @return $this
+     */
     public function removeTrainingSessionAttendances(TrainingAttendance $trainingAttendance): self
     {
         if ($this->training_session_attendances->contains($trainingAttendance)) {

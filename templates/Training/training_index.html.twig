@@ -24,7 +24,7 @@
                 <td class="align-middle">{{ training.training_session_date|date("d/m/Y") }}</td>
                 <td class="align-middle">{{ training.training_name }}</td>
                 <td class="align-middle">{{ training.training_total_sessions }}</td>
-                <td class="align-middle"><a class="btn btn-primary" href="{{ path('training_attendance_add', {'training': training.training_id}) }}">Membres</a><a class="btn btn-primary" href="{{ path('training_attendance_foreign_add', {'training': training.training_id}) }}" target="_blank">Non AFA</a></td>
+                <td class="align-middle"><a class="btn btn-primary" href="{{ path('training-attendanceAdd', {'training': training.training_id}) }}">Membres</a><a class="btn btn-primary" href="{{ path('training-attendanceForeignAdd', {'training': training.training_id}) }}" target="_blank">Non AFA</a></td>
             </tr>
         {% endfor %}
         </tbody>

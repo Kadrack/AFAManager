@@ -22,42 +22,49 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TimeType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
+/**
+ * Class TrainingType
+ * @package App\Form
+ */
 class TrainingType extends AbstractType
 {
+    /**
+     * {@inheritdoc}
+     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         switch ($options['form'])
         {
-            case 'address_create':
+            case 'addressCreate':
                 $this->addressCreate($builder);
                 break;
-            case 'attendance_add':
+            case 'attendanceAdd':
                 $choices = $options['choices'];
                 $this->attendanceAdd($builder, $choices);
                 break;
-            case 'attendance_foreign_add':
+            case 'attendanceForeignAdd':
                 $choices = $options['choices'];
                 $this->attendanceForeignAdd($builder, $choices);
                 break;
-            case 'session_add':
+            case 'sessionAdd':
                 $this->sessionAdd($builder);
                 break;
-            case 'session_create':
+            case 'sessionCreate':
                 $this->sessionCreate($builder);
                 break;
-            case 'session_delete':
+            case 'sessionDelete':
                 $this->sessionDelete($builder);
                 break;
-            case 'session_update':
+            case 'sessionUpdate':
                 $this->sessionUpdate($builder);
                 break;
-            case 'training_create':
+            case 'trainingCreate':
                 $this->trainingCreate($builder);
                 break;
-            case 'training_delete':
+            case 'trainingDelete':
                 $this->trainingDelete($builder);
                 break;
-            case 'training_update':
+            case 'trainingUpdate':
                 $this->trainingUpdate($builder);
                 break;
             default:
@@ -65,11 +72,17 @@ class TrainingType extends AbstractType
         }
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array('data_class' => Training::class, 'form' => '', 'choices' => null));
     }
 
+    /**
+     * @param FormBuilderInterface $builder
+     */
     private function addressCreate(FormBuilderInterface $builder)
     {
         $builder
@@ -82,6 +95,10 @@ class TrainingType extends AbstractType
         ;
     }
 
+    /**
+     * @param FormBuilderInterface $builder
+     * @param $choices
+     */
     private function attendanceAdd(FormBuilderInterface $builder, $choices)
     {
         $list = new ListData();
@@ -95,6 +112,10 @@ class TrainingType extends AbstractType
         ;
     }
 
+    /**
+     * @param FormBuilderInterface $builder
+     * @param $choices
+     */
     private function attendanceForeignAdd(FormBuilderInterface $builder, $choices)
     {
         $list = new ListData();
@@ -110,6 +131,9 @@ class TrainingType extends AbstractType
         ;
     }
 
+    /**
+     * @param FormBuilderInterface $builder
+     */
     private function sessionAdd(FormBuilderInterface $builder)
     {
         $builder
@@ -120,6 +144,9 @@ class TrainingType extends AbstractType
         ;
     }
 
+    /**
+     * @param FormBuilderInterface $builder
+     */
     private function sessionCreate(FormBuilderInterface $builder)
     {
         $builder
@@ -129,6 +156,9 @@ class TrainingType extends AbstractType
         ;
     }
 
+    /**
+     * @param FormBuilderInterface $builder
+     */
     private function sessionUpdate(FormBuilderInterface $builder)
     {
         $builder
@@ -139,6 +169,9 @@ class TrainingType extends AbstractType
         ;
     }
 
+    /**
+     * @param FormBuilderInterface $builder
+     */
     private function sessionDelete(FormBuilderInterface $builder)
     {
         $builder
@@ -149,6 +182,9 @@ class TrainingType extends AbstractType
         ;
     }
 
+    /**
+     * @param FormBuilderInterface $builder
+     */
     private function trainingCreate(FormBuilderInterface $builder)
     {
         $builder
@@ -163,6 +199,9 @@ class TrainingType extends AbstractType
         ;
     }
 
+    /**
+     * @param FormBuilderInterface $builder
+     */
     private function trainingUpdate(FormBuilderInterface $builder)
     {
         $list = new ListData();
@@ -175,6 +214,9 @@ class TrainingType extends AbstractType
         ;
     }
 
+    /**
+     * @param FormBuilderInterface $builder
+     */
     private function trainingDelete(FormBuilderInterface $builder)
     {
         $list = new ListData();

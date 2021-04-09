@@ -10,7 +10,7 @@
 {% block body %}
     <h1>{{ club.getClubName()|title }}</h1>
     <h2>Membres inactifs</h2>
-    <table class="table table-sm table-hover">
+    <table class="table table-sm table-hover unselectable">
         <thead>
             <tr>
                 <th>#</th>
@@ -36,9 +36,9 @@
                         <div class="btn-group" role="group">
                             <button id="btnGroupDrop1" type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
                             <div class="dropdown-menu" aria-labelledby="btnGroupDrop1" style="">
-                                <a class="dropdown-item" href="{{ path('secretariat_member_licence_renew_update', {'club': club.getClubId(), 'member': member.Id, 'renew': member.Licence}) }}">Modifier</a>
-                                <a class="dropdown-item" href="{{ path('secretariat_member_licence_renew', {'club': club.getClubId(), 'member': member.Id}) }}">Renouveller</a>
-                                {% if member.Deadline < limit %}<a class="dropdown-item" href="{{ path('secretariat_member_form_renew', {'club': club.getClubId(), 'member': member.Id}) }}">Formulaire renouvellement</a>{% endif %}
+                                <a class="dropdown-item" href="{{ path('secretariat-memberLicenceRenewUpdate', {'club': club.getClubId(), 'member': member.Id, 'renew': member.Licence}) }}">Modifier</a>
+                                <a class="dropdown-item" href="{{ path('secretariat-memberLicenceRenew', {'club': club.getClubId(), 'member': member.Id}) }}">Renouveller</a>
+                                {% if member.Deadline < limit %}<a class="dropdown-item" href="{{ path('secretariat-memberFormRenew', {'club': club.getClubId(), 'member': member.Id}) }}">Formulaire renouvellement</a>{% endif %}
                             </div>
                         </div>
                     </div>

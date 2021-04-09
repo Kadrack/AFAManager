@@ -24,7 +24,7 @@ class AccountingType extends AbstractType
     {
         switch ($options['form'])
         {
-            case 'search_members':
+            case 'searchMembers':
                 $this->searchMembers($builder);
                 break;
             default:

@@ -8,26 +8,25 @@
 {% endblock %}
 
 {% block body %}
-    <h1>Fiche candidat</h1>
+    <h1>Liste années de pratique Dojo-Cho</h1>
     <table class="table table-sm table-hover unselectable">
         <thead>
             <tr>
-                <th scope="col">Photo</th>
                 <th scope="col">Prénom</th>
                 <th scope="col">Nom</th>
+                <th scope="col">Année de pratique</th>
             </tr>
         </thead>
         <tbody>
+        {% for dojoCho in list %}
             <tr>
-                <td><img alt="" src=" {{ asset('uploads/photos/'~member.getMemberPhoto()) }}" /></td>
-                <td>{{ member.getMemberFirstname() }}</td>
-                <td>{{ member.getMemberName() }}</td>
+                <td class="align-middle">{{ dojoCho.Firstname|title }}</td>
+                <td class="align-middle">{{ dojoCho.Name|title }}</td>
+                <td class="align-middle">{{ date()|date("Y") - dojoCho.Starting|date("Y") }} ans</td>
             </tr>
+        {% endfor %}
         </tbody>
     </table>
-    {{ form_start(form) }}
-    {{ form_widget(form) }}
-    {{ form_end(form) }}
 {% endblock %}
 
 {% block javascripts %}

@@ -16,6 +16,10 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class UserAccessRepository extends ServiceEntityRepository
 {
+    /**
+     * UserAccessRepository constructor.
+     * @param ManagerRegistry $registry
+     */
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, UserAccess::class);

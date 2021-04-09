@@ -10,15 +10,30 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
  */
 class PhotoUploader
 {
+    /**
+     * @var
+     */
     private $image;
 
-    private $salt;
+    /**
+     * @var string
+     */
+    private string $salt;
 
-    private $targetDirectory;
+    /**
+     * @var string
+     */
+    private string $targetDirectory;
 
-    private $height;
+    /**
+     * @var int
+     */
+    private int $height;
 
-    private $width;
+    /**
+     * @var int
+     */
+    private int $width;
 
     /**
      * PhotoUploader constructor.
@@ -42,7 +57,7 @@ class PhotoUploader
      * @param int $compression
      * @return string
      */
-    public function upload(UploadedFile $file, string $old = "", int $compression = 75)
+    public function upload(UploadedFile $file, string $old = "", int $compression = 75): string
     {
         $extension = $file->guessExtension();
 
@@ -102,9 +117,9 @@ class PhotoUploader
 
     /**
      * @param string|null $photo
-     * @return string
+     * @return bool|string
      */
-    public function delete(?string $photo)
+    public function delete(?string $photo): bool|string
     {
         if ((file_exists($this->targetDirectory.'/'.$photo)) && ($photo != null))
         {

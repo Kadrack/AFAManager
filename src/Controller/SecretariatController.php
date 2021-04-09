@@ -52,24 +52,28 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/secretariat", name="secretariat_")
+ * Class SecretariatController
+ * @package App\Controller
  *
  * @IsGranted("ROLE_SECRETARIAT")
  */
+#[Route('/secretariat', name:'secretariat-')]
 class SecretariatController extends AbstractController
 {
     /**
-     * @Route("/", name="index")
+     * @return Response
      */
-    public function index()
+    #[Route('/', name:'index')]
+    public function index(): Response
     {
         return $this->render('Secretariat/index.html.twig');
     }
 
     /**
-     * @Route("/liste_sympathisant", name="supporter_index")
+     * @return Response
      */
-    public function supporterIndex()
+    #[Route('/liste-sympathisant', name:'supporterIndex')]
+    public function supporterIndex(): Response
     {
         $supporters = $this->getDoctrine()->getRepository(SecretariatSupporter::class)->findAll();
 
@@ -77,14 +81,13 @@ class SecretariatController extends AbstractController
     }
 
     /**
-     * @Route("/ajouter_sympathisant", name="supporter_create")
-     *
      * @param Request $request
      * @return RedirectResponse|Response
      */
-    public function supporterAdd(Request $request)
+    #[Route('/ajouter-sympathisant', name:'supporterCreate')]
+    public function supporterAdd(Request $request): RedirectResponse|Response
     {
-        $form = $this->createForm(SecretariatType::class, new SecretariatSupporter(), array('form' => 'supporter_create', 'data_class' => SecretariatSupporter::class));
+        $form = $this->createForm(SecretariatType::class, new SecretariatSupporter(), array('form' => 'supporterCreate', 'data_class' => SecretariatSupporter::class));
 
         $form->handleRequest($request);
 
@@ -97,22 +100,21 @@ class SecretariatController extends AbstractController
             $entityManager->persist($address);
             $entityManager->flush();
 
-            return $this->redirectToRoute('secretariat_supporter_index');
+            return $this->redirectToRoute('secretariat-supporterIndex');
         }
 
         return $this->render('Secretariat/Supporter/add.html.twig', array('form' => $form->createView()));
     }
 
     /**
-     * @Route("/modifier_sympathisant/{supporter<\d+>}", name="supporter_update")
-     *
      * @param Request $request
      * @param SecretariatSupporter $supporter
      * @return RedirectResponse|Response
      */
-    public function supporterUpdate(Request $request, SecretariatSupporter $supporter)
+    #[Route('/modifier-sympathisant/{supporter<\d+>}', name:'supporterUpdate')]
+    public function supporterUpdate(Request $request, SecretariatSupporter $supporter): RedirectResponse|Response
     {
-        $form = $this->createForm(SecretariatType::class, $supporter, array('form' => 'supporter_update', 'data_class' => SecretariatSupporter::class));
+        $form = $this->createForm(SecretariatType::class, $supporter, array('form' => 'supporterUpdate', 'data_class' => SecretariatSupporter::class));
 
         $form->handleRequest($request);
 
@@ -122,22 +124,21 @@ class SecretariatController extends AbstractController
 
             $entityManager->flush();
 
-            return $this->redirectToRoute('secretariat_supporter_index');
+            return $this->redirectToRoute('secretariat-supporterIndex');
         }
 
         return $this->render('Secretariat/Supporter/update.html.twig', array('form' => $form->createView()));
     }
 
     /**
-     * @Route("/supprimer_sympathisant/{supporter<\d+>}", name="supporter_delete")
-     *
      * @param Request $request
      * @param SecretariatSupporter $supporter
      * @return RedirectResponse|Response
      */
-    public function supporterDelete(Request $request, SecretariatSupporter $supporter)
+    #[Route('/supprimer-sympathisant/{supporter<\d+>}', name:'supporterDelete')]
+    public function supporterDelete(Request $request, SecretariatSupporter $supporter): RedirectResponse|Response
     {
-        $form = $this->createForm(SecretariatType::class, $supporter, array('form' => 'supporter_delete', 'data_class' => SecretariatSupporter::class));
+        $form = $this->createForm(SecretariatType::class, $supporter, array('form' => 'supporterDelete', 'data_class' => SecretariatSupporter::class));
 
         $form->handleRequest($request);
 
@@ -148,16 +149,17 @@ class SecretariatController extends AbstractController
             $entityManager->remove($supporter);
             $entityManager->flush();
 
-            return $this->redirectToRoute('secretariat_supporter_index');
+            return $this->redirectToRoute('secretariat-supporterIndex');
         }
 
         return $this->render('Secretariat/Supporter/delete.html.twig', array('form' => $form->createView()));
     }
 
     /**
-     * @Route("/liste_clubs", name="club_list")
+     * @return Response
      */
-    public function clubList()
+    #[Route('/liste-clubs', name:'clubList')]
+    public function clubList(): Response
     {
         $provinces = new ListData();
 
@@ -183,12 +185,76 @@ class SecretariatController extends AbstractController
     }
 
     /**
-     * @Route("/index_dojo/{club<\d+>}", name="dojo_index")
+     * @return Response
+     */
+    #[Route('/liste-adresse-clubs', name:'clubAddressList')]
+    public function clubAddressList(): Response
+    {
+        $provinces = new ListData();
+
+        $active_clubs = array();
+
+        $active_list = $this->getDoctrine()->getRepository(Club::class)->getActiveClubsInformations();
+
+        foreach ($active_list as $club)
+        {
+            $club['Province'] = $provinces->getProvince($club['Province']);
+
+            $active_clubs[$club['Province']]['Clubs'][$club['Id']] = $club;
+
+            if (!isset($active_clubs[$club['Province']]['name']))
+            {
+                $active_clubs[$club['Province']]['province'] = $club['Province'];
+            }
+        }
+
+        return $this->render('Secretariat/Club/address_list.html.twig', array('active_clubs' => $active_clubs));
+    }
+
+    /**
+     * @param int|null $list
+     * @return Response
+     */
+    #[Route('/liste-mails-clubs/{list<\d+>}', name:'clubMailsList', defaults: ['list' => null])]
+    public function clubMailsList(?int $list): Response
+    {
+        if (is_null($list))
+        {
+            return $this->render('Secretariat/Club/mails_list.html.twig');
+        }
+
+        if ($list == 3)
+        {
+            $mailing_list = array_merge($this->getDoctrine()->getRepository(Club::class)->getClubsMailsList(1), $this->getDoctrine()->getRepository(Club::class)->getClubsMailsList(2));
+
+        }
+        else
+        {
+            $mailing_list = $this->getDoctrine()->getRepository(Club::class)->getClubsMailsList($list);
+        }
+
+        $list = array();
+
+        foreach ($mailing_list as $mail)
+        {
+            $list[] = $mail['Mail'];
+        }
+
+        file_put_contents('./mails.csv', implode(';', array_unique($list)));
+
+        $response = new BinaryFileResponse('./mails.csv');
+        $response->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT);
+
+        return $response->deleteFileAfterSend();
+    }
+
+    /**
      * @param Club $club
      * @param ClubTools $clubTools
      * @return Response
      */
-    public function dojoIndex(Club $club, ClubTools $clubTools)
+    #[Route('/index-dojo/{club<\d+>}', name:'dojoIndex')]
+    public function dojoIndex(Club $club, ClubTools $clubTools): Response
     {
         $clubTools->setClub($club);
 
@@ -196,17 +262,17 @@ class SecretariatController extends AbstractController
     }
 
     /**
-     * @Route("/ajouter_dojo/{club<\d+>}", name="dojo_address_add")
      * @param Request $request
      * @param Club $club
      * @param ClubTools $clubTools
      * @return RedirectResponse|Response
      */
-    public function dojoAddressAdd(Request $request, Club $club, ClubTools $clubTools)
+    #[Route('/ajouter-dojo/{club<\d+>}', name:'dojoAdd')]
+    public function dojoAdd(Request $request, Club $club, ClubTools $clubTools): RedirectResponse|Response
     {
         $clubTools->setClub($club);
 
-        $form = $this->createForm(ClubType::class, new ClubDojo(), array('form' => 'dojo_create', 'data_class' => ClubDojo::class));
+        $form = $this->createForm(ClubType::class, new ClubDojo(), array('form' => 'dojoCreate', 'data_class' => ClubDojo::class));
 
         $form->handleRequest($request);
 
@@ -214,25 +280,25 @@ class SecretariatController extends AbstractController
         {
             $clubTools->dojoAddress($form->getData(), 'Add');
 
-            return $this->redirectToRoute('secretariat_dojo_index', array('club' => $club->getClubId()));
+            return $this->redirectToRoute('secretariat-dojoIndex', array('club' => $club->getClubId()));
         }
 
         return $this->render('Secretariat/Dojo/address_add.html.twig', array('form' => $form->createView(), 'clubTools' => $clubTools->getClub()));
     }
 
     /**
-     * @Route("/modifier_dojo/{clubDojo<\d+>}/{club<\d+>}", name="dojo_address_update")
      * @param Request $request
      * @param ClubDojo $clubDojo
      * @param Club $club
      * @param ClubTools $clubTools
      * @return RedirectResponse|Response
      */
-    public function dojoAddressUpdate(Request $request, ClubDojo $clubDojo, Club $club, ClubTools $clubTools)
+    #[Route('/modifier-dojo/{clubDojo<\d+>}/{club<\d+>}', name:'dojoUpdate')]
+    public function dojoUpdate(Request $request, ClubDojo $clubDojo, Club $club, ClubTools $clubTools): RedirectResponse|Response
     {
         $clubTools->setClub($club);
 
-        $form = $this->createForm(ClubType::class, $clubDojo, array('form' => 'dojo_update', 'data_class' => ClubDojo::class));
+        $form = $this->createForm(ClubType::class, $clubDojo, array('form' => 'dojoUpdate', 'data_class' => ClubDojo::class));
 
         $form->handleRequest($request);
 
@@ -240,25 +306,25 @@ class SecretariatController extends AbstractController
         {
             $clubTools->dojoAddress($form->getData());
 
-            return $this->redirectToRoute('secretariat_dojo_index', array('club' => $club->getClubId()));
+            return $this->redirectToRoute('secretariat-dojoIndex', array('club' => $club->getClubId()));
         }
 
         return $this->render('Secretariat/Dojo/address_update.html.twig', array('form' => $form->createView(), 'clubTools' => $clubTools->getClub()));
     }
 
     /**
-     * @Route("/supprimer_dojo/{clubDojo<\d+>}/{club<\d+>}", name="dojo_address_delete")
      * @param Request $request
      * @param ClubDojo $clubDojo
      * @param Club $club
      * @param ClubTools $clubTools
      * @return RedirectResponse|Response
      */
-    public function dojoAddressDelete(Request $request, ClubDojo $clubDojo, Club $club, ClubTools $clubTools)
+    #[Route('/supprimer-dojo/{clubDojo<\d+>}/{club<\d+>}', name:'dojoDelete')]
+    public function dojoDelete(Request $request, ClubDojo $clubDojo, Club $club, ClubTools $clubTools): RedirectResponse|Response
     {
         $clubTools->setClub($club);
 
-        $form = $this->createForm(ClubType::class, $clubDojo, array('form' => 'dojo_delete', 'data_class' => ClubDojo::class));
+        $form = $this->createForm(ClubType::class, $clubDojo, array('form' => 'dojoDelete', 'data_class' => ClubDojo::class));
 
         $form->handleRequest($request);
 
@@ -266,24 +332,24 @@ class SecretariatController extends AbstractController
         {
             $clubTools->dojoAddress($form->getData(), 'Delete');
 
-            return $this->redirectToRoute('secretariat_dojo_index', array('club' => $club->getClubId()));
+            return $this->redirectToRoute('secretariat-dojoIndex', array('club' => $club->getClubId()));
         }
 
         return $this->render('Secretariat/Dojo/address_delete.html.twig', array('form' => $form->createView(), 'clubTools' => $clubTools->getClub()));
     }
 
     /**
-     * @Route("/ajouter_horaire/{club<\d+>}", name="dojo_training_add")
      * @param Request $request
      * @param Club $club
      * @param ClubTools $clubTools
      * @return RedirectResponse|Response
      */
-    public function dojoTrainingAdd(Request $request, Club $club, ClubTools $clubTools)
+    #[Route('/ajouter-horaire/{club<\d+>}', name:'lessonAdd')]
+    public function lessonAdd(Request $request, Club $club, ClubTools $clubTools): RedirectResponse|Response
     {
         $clubTools->setClub($club);
 
-        $form = $this->createForm(ClubType::class, new ClubLesson(), array('form' => 'training_create', 'data_class' => ClubLesson::class, 'choices' => $club->getClubDojos()));
+        $form = $this->createForm(ClubType::class, new ClubLesson(), array('form' => 'trainingCreate', 'data_class' => ClubLesson::class, 'choices' => $club->getClubDojos()));
 
         $form->handleRequest($request);
 
@@ -291,25 +357,25 @@ class SecretariatController extends AbstractController
         {
             $clubTools->dojoTraining($form->getData(), 'Add');
 
-            return $this->redirectToRoute('secretariat_dojo_index', array('club' => $club->getClubId()));
+            return $this->redirectToRoute('secretariat-dojoIndex', array('club' => $club->getClubId()));
         }
 
         return $this->render('Secretariat/Dojo/training_add.html.twig', array('form' => $form->createView(), 'clubTools' => $clubTools->getClub()));
     }
 
     /**
-     * @Route("/modifier_horaire/{clubLesson<\d+>}/{club<\d+>}", name="dojo_training_update")
      * @param Request $request
      * @param ClubLesson $clubLesson
      * @param Club $club
      * @param ClubTools $clubTools
      * @return RedirectResponse|Response
      */
-    public function dojoTrainingUpdate(Request $request, ClubLesson $clubLesson, Club $club, ClubTools $clubTools)
+    #[Route('/modifier-horaire/{clubLesson<\d+>}/{club<\d+>}', name:'lessonUpdate')]
+    public function lessonUpdate(Request $request, ClubLesson $clubLesson, Club $club, ClubTools $clubTools): RedirectResponse|Response
     {
         $clubTools->setClub($club);
 
-        $form = $this->createForm(ClubType::class, $clubLesson, array('form' => 'training_update', 'data_class' => ClubLesson::class));
+        $form = $this->createForm(ClubType::class, $clubLesson, array('form' => 'trainingUpdate', 'data_class' => ClubLesson::class));
 
         $form->handleRequest($request);
 
@@ -317,25 +383,25 @@ class SecretariatController extends AbstractController
         {
             $clubTools->dojoTraining($form->getData());
 
-            return $this->redirectToRoute('secretariat_dojo_index', array('club' => $club->getClubId()));
+            return $this->redirectToRoute('secretariat-dojoIndex', array('club' => $club->getClubId()));
         }
 
         return $this->render('Secretariat/Dojo/training_update.html.twig', array('form' => $form->createView(), 'clubTools' => $clubTools->getClub()));
     }
 
     /**
-     * @Route("/supprimer_horaire/{clubLesson<\d+>}/{club<\d+>}", name="dojo_training_delete")
      * @param Request $request
      * @param ClubLesson $clubLesson
      * @param Club $club
      * @param ClubTools $clubTools
      * @return RedirectResponse|Response
      */
-    public function dojoTrainingDelete(Request $request, ClubLesson $clubLesson, Club $club, ClubTools $clubTools)
+    #[Route('/supprimer-horaire/{clubLesson<\d+>}/{club<\d+>}', name:'lessonDelete')]
+    public function lessonDelete(Request $request, ClubLesson $clubLesson, Club $club, ClubTools $clubTools): RedirectResponse|Response
     {
         $clubTools->setClub($club);
 
-        $form = $this->createForm(ClubType::class, $clubLesson, array('form' => 'training_delete', 'data_class' => ClubLesson::class));
+        $form = $this->createForm(ClubType::class, $clubLesson, array('form' => 'trainingDelete', 'data_class' => ClubLesson::class));
 
         $form->handleRequest($request);
 
@@ -343,24 +409,24 @@ class SecretariatController extends AbstractController
         {
             $clubTools->dojoTraining($form->getData(), 'Delete');
 
-            return $this->redirectToRoute('secretariat_dojo_index', array('club' => $club->getClubId()));
+            return $this->redirectToRoute('secretariat-dojoIndex', array('club' => $club->getClubId()));
         }
 
         return $this->render('Secretariat/Dojo/training_delete.html.twig', array('form' => $form->createView(), 'clubTools' => $clubTools->getClub()));
     }
 
     /**
-     * @Route("/ajouter_professeur_afa/{club<\d+>}", name="dojo_teacher_afa_add")
      * @param Request $request
      * @param Club $club
      * @param ClubTools $clubTools
      * @return RedirectResponse|Response
      */
-    public function dojoTeacherAFAAdd(Request $request, Club $club, ClubTools $clubTools)
+    #[Route('/ajouter-professeur-afa/{club<\d+>}', name:'teacherAFAAdd')]
+    public function teacherAFAAdd(Request $request, Club $club, ClubTools $clubTools): RedirectResponse|Response
     {
         $clubTools->setClub($club);
 
-        $form = $this->createForm(ClubType::class, new ClubTeacher(), array('form' => 'teacher_afa_create', 'data_class' => ClubTeacher::class));
+        $form = $this->createForm(ClubType::class, new ClubTeacher(), array('form' => 'teacherAFACreate', 'data_class' => ClubTeacher::class));
 
         $form->handleRequest($request);
 
@@ -368,25 +434,25 @@ class SecretariatController extends AbstractController
         {
             $clubTools->dojoTeacher($form->getData(), 'Add', $form->get('ClubTeacherMember')->getData());
 
-            return $this->redirectToRoute('secretariat_dojo_index', array('club' => $club->getClubId()));
+            return $this->redirectToRoute('secretariat-dojoIndex', array('club' => $club->getClubId()));
         }
 
         return $this->render('Secretariat/Dojo/teacher_afa_add.html.twig', array('form' => $form->createView(), 'clubTools' => $clubTools->getClub()));
     }
 
     /**
-     * @Route("/modifier_professeur_afa/{teacher<\d+>}/{club<\d+>}", name="dojo_teacher_afa_update")
      * @param Request $request
      * @param ClubTeacher $teacher
      * @param Club $club
      * @param ClubTools $clubTools
      * @return RedirectResponse|Response
      */
-    public function dojoTeacherAFAUpdate(Request $request, ClubTeacher $teacher, Club $club, ClubTools $clubTools)
+    #[Route('/modifier-professeur-afa/{teacher<\d+>}/{club<\d+>}', name:'teacherAFAUpdate')]
+    public function teacherAFAUpdate(Request $request, ClubTeacher $teacher, Club $club, ClubTools $clubTools): RedirectResponse|Response
     {
         $clubTools->setClub($club);
 
-        $form = $this->createForm(ClubType::class, $teacher, array('form' => 'teacher_afa_update', 'data_class' => ClubTeacher::class));
+        $form = $this->createForm(ClubType::class, $teacher, array('form' => 'teacherAFAUpdate', 'data_class' => ClubTeacher::class));
 
         $form->get('ClubTeacherMember')->setData($teacher->getClubTeacherMember()->getMemberId());
         $form->get('ClubTeacherFirstname')->setData($teacher->getClubTeacherMember()->getMemberFirstname());
@@ -398,25 +464,25 @@ class SecretariatController extends AbstractController
         {
             $clubTools->dojoTeacher($form->getData());
 
-            return $this->redirectToRoute('secretariat_dojo_index', array('club' => $club->getClubId()));
+            return $this->redirectToRoute('secretariat-dojoIndex', array('club' => $club->getClubId()));
         }
 
         return $this->render('Secretariat/Dojo/teacher_afa_update.html.twig', array('form' => $form->createView(), 'clubTools' => $clubTools->getClub()));
     }
 
     /**
-     * @Route("/supprimer_professeur_afa/{teacher<\d+>}/{club<\d+>}", name="dojo_teacher_afa_delete")
      * @param Request $request
      * @param ClubTeacher $teacher
      * @param Club $club
      * @param ClubTools $clubTools
      * @return RedirectResponse|Response
      */
-    public function dojoTeacherAFADelete(Request $request, ClubTeacher $teacher, Club $club, ClubTools $clubTools)
+    #[Route('/supprimer-professeur-afa/{teacher<\d+>}/{club<\d+>}', name:'teacherAFADelete')]
+    public function teacherAFADelete(Request $request, ClubTeacher $teacher, Club $club, ClubTools $clubTools): RedirectResponse|Response
     {
         $clubTools->setClub($club);
 
-        $form = $this->createForm(ClubType::class, $teacher, array('form' => 'teacher_afa_delete', 'data_class' => ClubTeacher::class));
+        $form = $this->createForm(ClubType::class, $teacher, array('form' => 'teacherAFADelete', 'data_class' => ClubTeacher::class));
 
         $form->get('ClubTeacherMember')->setData($teacher->getClubTeacherMember()->getMemberId());
         $form->get('ClubTeacherFirstname')->setData($teacher->getClubTeacherMember()->getMemberFirstname());
@@ -428,24 +494,24 @@ class SecretariatController extends AbstractController
         {
             $clubTools->dojoTeacher($form->getData(), 'Delete');
 
-            return $this->redirectToRoute('secretariat_dojo_index', array('club' => $club->getClubId()));
+            return $this->redirectToRoute('secretariat-dojoIndex', array('club' => $club->getClubId()));
         }
 
         return $this->render('Secretariat/Dojo/teacher_afa_delete.html.twig', array('form' => $form->createView(), 'clubTools' => $clubTools->getClub()));
     }
 
     /**
-     * @Route("/ajouter_professeur_etranger/{club<\d+>}", name="dojo_teacher_foreign_add")
      * @param Request $request
      * @param Club $club
      * @param ClubTools $clubTools
      * @return RedirectResponse|Response
      */
-    public function dojoTeacherForeignAdd(Request $request, Club $club, ClubTools $clubTools)
+    #[Route('/ajouter-professeur-etranger/{club<\d+>}', name:'teacherForeignAdd')]
+    public function teacherForeignAdd(Request $request, Club $club, ClubTools $clubTools): RedirectResponse|Response
     {
         $clubTools->setClub($club);
 
-        $form = $this->createForm(ClubType::class, new ClubTeacher(), array('form' => 'teacher_foreign_create', 'data_class' => ClubTeacher::class));
+        $form = $this->createForm(ClubType::class, new ClubTeacher(), array('form' => 'teacherForeignCreate', 'data_class' => ClubTeacher::class));
 
         $form->handleRequest($request);
 
@@ -453,25 +519,25 @@ class SecretariatController extends AbstractController
         {
             $clubTools->dojoTeacher($form->getData(), 'Add', $form->get('ClubTeacherMember')->getData());
 
-            return $this->redirectToRoute('secretariat_dojo_index', array('club' => $club->getClubId()));
+            return $this->redirectToRoute('secretariat-dojoIndex', array('club' => $club->getClubId()));
         }
 
         return $this->render('Secretariat/Dojo/teacher_foreign_add.html.twig', array('form' => $form->createView(), 'clubTools' => $clubTools->getClub()));
     }
 
     /**
-     * @Route("/modifier_professeur_etranger/{teacher<\d+>}/{club<\d+>}", name="dojo_teacher_foreign_update")
      * @param Request $request
      * @param ClubTeacher $teacher
      * @param Club $club
      * @param ClubTools $clubTools
      * @return RedirectResponse|Response
      */
-    public function dojoTeacherForeignUpdate(Request $request, ClubTeacher $teacher, Club $club, ClubTools $clubTools)
+    #[Route('/modifier-professeur-etranger/{teacher<\d+>}/{club<\d+>}', name:'teacherForeignUpdate')]
+    public function teacherForeignUpdate(Request $request, ClubTeacher $teacher, Club $club, ClubTools $clubTools): RedirectResponse|Response
     {
         $clubTools->setClub($club);
 
-        $form = $this->createForm(ClubType::class, $teacher, array('form' => 'teacher_foreign_update', 'data_class' => ClubTeacher::class));
+        $form = $this->createForm(ClubType::class, $teacher, array('form' => 'teacherForeignUpdate', 'data_class' => ClubTeacher::class));
 
         $form->handleRequest($request);
 
@@ -479,25 +545,25 @@ class SecretariatController extends AbstractController
         {
             $clubTools->dojoTeacher($form->getData());
 
-            return $this->redirectToRoute('secretariat_dojo_index', array('club' => $club->getClubId()));
+            return $this->redirectToRoute('secretariat-dojoIndex', array('club' => $club->getClubId()));
         }
 
         return $this->render('Secretariat/Dojo/teacher_foreign_update.html.twig', array('form' => $form->createView(), 'clubTools' => $clubTools->getClub()));
     }
 
     /**
-     * @Route("/supprimer_professeur_etranger/{teacher<\d+>}/{club<\d+>}", name="dojo_teacher_foreign_delete")
      * @param Request $request
      * @param ClubTeacher $teacher
      * @param Club $club
      * @param ClubTools $clubTools
      * @return RedirectResponse|Response
      */
-    public function dojoTeacherForeignDelete(Request $request, ClubTeacher $teacher, Club $club, ClubTools $clubTools)
+    #[Route('/supprimer-professeur-etranger/{teacher<\d+>}/{club<\d+>}', name:'teacherForeignDelete')]
+    public function teacherForeignDelete(Request $request, ClubTeacher $teacher, Club $club, ClubTools $clubTools): RedirectResponse|Response
     {
         $clubTools->setClub($club);
 
-        $form = $this->createForm(ClubType::class, $teacher, array('form' => 'teacher_foreign_delete', 'data_class' => ClubTeacher::class));
+        $form = $this->createForm(ClubType::class, $teacher, array('form' => 'teacherForeignDelete', 'data_class' => ClubTeacher::class));
 
         $form->handleRequest($request);
 
@@ -505,24 +571,24 @@ class SecretariatController extends AbstractController
         {
             $clubTools->dojoTeacher($form->getData(), 'Delete');
 
-            return $this->redirectToRoute('secretariat_dojo_index', array('club' => $club->getClubId()));
+            return $this->redirectToRoute('secretariat-dojoIndex', array('club' => $club->getClubId()));
         }
 
         return $this->render('Secretariat/Dojo/teacher_foreign_delete.html.twig', array('form' => $form->createView(), 'clubTools' => $clubTools->getClub()));
     }
 
     /**
-     * @Route("/detail_association/{club<\d+>}", name="association_details")
      * @param Request $request
      * @param Club $club
      * @param ClubTools $clubTools
      * @return RedirectResponse|Response
      */
-    public function associationDetails(Request $request, Club $club, ClubTools $clubTools)
+    #[Route('/detail-association/{club<\d+>}', name:'associationDetails')]
+    public function associationDetails(Request $request, Club $club, ClubTools $clubTools): RedirectResponse|Response
     {
         $clubTools->setClub($club);
 
-        $form = $this->createForm(ClubType::class, $club, array('form' => 'detail_association'));
+        $form = $this->createForm(ClubType::class, $club, array('form' => 'detailAssociation'));
 
         $form->handleRequest($request);
 
@@ -530,22 +596,39 @@ class SecretariatController extends AbstractController
         {
             $clubTools->associationDetails($form->getData());
 
-            return $this->redirectToRoute('secretariat_club_list');
+            return $this->redirectToRoute('secretariat-clubList');
         }
 
         return $this->render('Secretariat/Club/Association/details.html.twig', array('form' => $form->createView(), 'club' => $club));
     }
 
     /**
-     * @Route("/rechercher_membres", name="search_members")
+     * @param SessionInterface $session
+     * @param Club $club
+     * @return Response
+     */
+    #[Route('/liste-membres/{club<\d+>}', name:'membersActive')]
+    public function membersActive(SessionInterface $session, Club $club): Response
+    {
+        $members = $this->getDoctrine()->getRepository(Member::class)->getClubActiveMembers($club);
+
+        $limit = new DateTime('+3 month today');
+
+        $session->set('origin', 'active');
+
+        return $this->render('Secretariat/Club/Member/list_active.html.twig', array('members' => $members, 'club' => $club, 'limit' => $limit));
+    }
+
+    /**
      * @param Request $request
      * @return Response
      */
-    public function searchMembers(Request $request)
+    #[Route('/rechercher-membres', name:'searchMembers')]
+    public function searchMembers(Request $request): Response
     {
         $search = null; $results = null;
 
-        $form = $this->createForm(SecretariatType::class, $search, array('form' => 'search_members', 'data_class' => null));
+        $form = $this->createForm(SecretariatType::class, $search, array('form' => 'searchMembers', 'data_class' => null));
 
         $form->handleRequest($request);
 
@@ -560,28 +643,11 @@ class SecretariatController extends AbstractController
     }
 
     /**
-     * @Route("/liste_membres/{club<\d+>}", name="members_active")
-     * @param SessionInterface $session
      * @param Club $club
      * @return Response
      */
-    public function membersActive(SessionInterface $session, Club $club)
-    {
-        $members = $this->getDoctrine()->getRepository(Member::class)->getClubActiveMembers($club);
-
-        $limit = new DateTime('+3 month today');
-
-        $session->set('origin', 'active');
-
-        return $this->render('Secretariat/Club/Member/list_active.html.twig', array('members' => $members, 'club' => $club, 'limit' => $limit));
-    }
-
-    /**
-     * @Route("/liste_anciens_membres/{club<\d+>}", name="members_ancient")
-     * @param Club $club
-     * @return Response
-     */
-    public function membersAncient(Club $club)
+    #[Route('/liste-anciens-membres/{club<\d+>}', name:'membersAncient')]
+    public function membersAncient(Club $club): Response
     {
         $members = $this->getDoctrine()->getRepository(Member::class)->getClubInactiveMembers($club);
 
@@ -591,11 +657,11 @@ class SecretariatController extends AbstractController
     }
 
     /**
-     * @Route("/creer_club", name="club_create")
      * @param Request $request
      * @return RedirectResponse|Response
      */
-    public function clubCreate(Request $request)
+    #[Route('/creer-club', name:'clubCreate')]
+    public function clubCreate(Request $request): RedirectResponse|Response
     {
         $form = $this->createForm(ClubType::class, new Club());
 
@@ -618,23 +684,23 @@ class SecretariatController extends AbstractController
             $entityManager->persist($club);
             $entityManager->flush();
 
-            return $this->redirectToRoute('secretariat_club_list');
+            return $this->redirectToRoute('secretariat-clubList');
         }
 
         return $this->render('Secretariat/Club/create.html.twig', array('form' => $form->createView()));
     }
 
     /**
-     * @Route("/desaffilier_club/{club<\d+>}", name="club_disaffiliate")
      * @param Request $request
      * @param Club $club
      * @return RedirectResponse|Response
      */
-    public function clubDisaffiliate(Request $request, Club $club)
+    #[Route('/desaffilier-club/{club<\d+>}', name:'clubDisaffiliate')]
+    public function clubDisaffiliate(Request $request, Club $club): RedirectResponse|Response
     {
         $history = new ClubHistory();
 
-        $form = $this->createForm(ClubType::class, $history, array('form' => 'history_entry', 'data_class' => ClubHistory::class));
+        $form = $this->createForm(ClubType::class, $history, array('form' => 'historyEntry', 'data_class' => ClubHistory::class));
 
         $form->get('ClubHistoryUpdate')->setData(new DateTime('today'));
 
@@ -654,23 +720,23 @@ class SecretariatController extends AbstractController
             $entityManager->persist($history);
             $entityManager->flush();
 
-            return $this->redirectToRoute('secretariat_club_list');
+            return $this->redirectToRoute('secretariat-clubList');
         }
 
         return $this->render('Secretariat/Club/disaffiliate.html.twig', array('form' => $form->createView(), 'club' => $club));
     }
 
     /**
-     * @Route("/reaffilier_club/{club<\d+>}", name="club_reassign")
      * @param Request $request
      * @param Club $club
      * @return RedirectResponse|Response
      */
-    public function clubReassign(Request $request, Club $club)
+    #[Route('/reaffilier-club/{club<\d+>}', name:'clubReassign')]
+    public function clubReassign(Request $request, Club $club): RedirectResponse|Response
     {
         $history = new ClubHistory();
 
-        $form = $this->createForm(ClubType::class, $history, array('form' => 'history_entry', 'data_class' => ClubHistory::class));
+        $form = $this->createForm(ClubType::class, $history, array('form' => 'historyEntry', 'data_class' => ClubHistory::class));
 
         $form->get('ClubHistoryUpdate')->setData(new DateTime('today'));
 
@@ -690,21 +756,21 @@ class SecretariatController extends AbstractController
             $entityManager->persist($history);
             $entityManager->flush();
 
-            return $this->redirectToRoute('secretariat_club_list');
+            return $this->redirectToRoute('secretariat-clubList');
         }
 
         return $this->render('Secretariat/Club/reassign.html.twig', array('form' => $form->createView(), 'club' => $club));
     }
 
     /**
-     * @Route("/creer_membre/club/{club<\d+>}", name="member_create")
      * @param Request $request
      * @param PhotoUploader $photoUploader
      * @param Club $club
      * @return RedirectResponse|Response
      * @throws Exception
      */
-    public function memberCreate(Request $request, PhotoUploader $photoUploader, Club $club)
+    #[Route('/creer-membre/club/{club<\d+>}', name:'memberCreate')]
+    public function memberCreate(Request $request, PhotoUploader $photoUploader, Club $club): RedirectResponse|Response
     {
         $form = $this->createForm(MemberType::class, new Member());
 
@@ -724,9 +790,9 @@ class SecretariatController extends AbstractController
 
             $member->addMemberLicences($licence);
 
-            $member->setMemberFirstLicence($licence);
-            $member->setMemberLastLicence($licence);
             $member->setMemberActualClub($club);
+            $member->setMemberLastLicence($licence);
+            $member->setMemberStartPractice($form->get('MemberLicenceMedicalCertificate')->getData());
             $member->setMemberPhoto($form['MemberPhoto']->getData() == null ? 'nophoto.png' : $photoUploader->upload($form['MemberPhoto']->getData()));
 
             $grade = new Grade();
@@ -771,20 +837,19 @@ class SecretariatController extends AbstractController
             $entityManager->persist($card);
             $entityManager->flush();
 
-            return $this->redirectToRoute('secretariat_members_active', array('club' => $club->getClubId()));
+            return $this->redirectToRoute('secretariat-membersActive', array('club' => $club->getClubId()));
         }
 
         return $this->render('Secretariat/Club/Member/create.html.twig', array('form' => $form->createView()));
     }
 
     /**
-     * @Route("/detail_licence/{member<\d+>}/club/{club<\d+>}", name="member_licence_detail")
-     *
      * @param Club $club
      * @param Member $member
      * @return Response
      */
-    public function memberLicenceDetail(Club $club, Member $member)
+    #[Route('/detail-licence/{member<\d+>}/club/{club<\d+>}', name:'memberLicenceDetail')]
+    public function memberLicenceDetail(Club $club, Member $member): Response
     {
         $licence_history = $this->getDoctrine()->getRepository(MemberLicence::class)->findBy(['member_licence' => $member->getMemberId()], ['member_licence_id' => 'DESC']);
 
@@ -794,17 +859,16 @@ class SecretariatController extends AbstractController
     }
 
     /**
-     * @Route("/detail_personnel/{member<\d+>}/club/{club<\d+>}", name="member_personal_detail")
-     *
      * @param Request $request
      * @param PhotoUploader $photoUploader
      * @param Club $club
      * @param Member $member
      * @return RedirectResponse|Response
      */
-    public function memberPersonalDetail(Request $request, PhotoUploader $photoUploader, Club $club, Member $member)
+    #[Route('/detail-personnel/{member<\d+>}/club/{club<\d+>}', name:'memberPersonalDetail')]
+    public function memberPersonalDetail(Request $request, PhotoUploader $photoUploader, Club $club, Member $member): RedirectResponse|Response
     {
-        $form = $this->createForm(SecretariatType::class, $member, array('form' => 'member_update', 'data_class' => Member::class));
+        $form = $this->createForm(SecretariatType::class, $member, array('form' => 'memberUpdate', 'data_class' => Member::class));
 
         $form->handleRequest($request);
 
@@ -819,26 +883,25 @@ class SecretariatController extends AbstractController
 
             $entityManager->flush();
 
-            return $this->redirectToRoute('secretariat_members_active', array('club' => $club->getClubId(), 'member' => $member->getMemberId()));
+            return $this->redirectToRoute('secretariat-membersActive', array('club' => $club->getClubId(), 'member' => $member->getMemberId()));
         }
 
         return $this->render('Secretariat/Club/Member/personal_detail.html.twig', array('form' => $form->createView(), 'member' => $member));
     }
 
     /**
-     * @Route("/formulaire_renouvellement/{member<\d+>}/club/{club<\d+>}", name="member_form_renew")
-     *
      * @param Club $club
      * @param Member $member
-     * @return RedirectResponse|Response
+     * @return BinaryFileResponse
      */
-    public function memberFormRenew(Club $club, Member $member)
+    #[Route('/formulaire-renouvellement/{member<\d+>}/club/{club<\d+>}', name:'memberFormRenew')]
+    public function memberFormRenew(Club $club, Member $member): BinaryFileResponse
     {
         $listData = new ListData();
 
         $output_file = "./licence_out.rtf";
 
-        $fh = fopen($output_file, 'a') or die("can't open file");
+        $fh = fopen($output_file, 'a') or die('can\'t open file');
 
         $file = file_get_contents('../private/licence.rtf', true);
 
@@ -886,14 +949,12 @@ class SecretariatController extends AbstractController
         fclose($fh);
 
         $response = new BinaryFileResponse($output_file);
-        $response->setContentDisposition(ResponseHeaderBag::DISPOSITION_INLINE);
+        $response->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT);
 
         return $response->deleteFileAfterSend();
     }
 
     /**
-     * @Route("/renouvellement_licence/{member<\d+>}/club/{club<\d+>}", name="member_licence_renew")
-     *
      * @param SessionInterface $session
      * @param Request $request
      * @param Club $club
@@ -901,7 +962,8 @@ class SecretariatController extends AbstractController
      * @return RedirectResponse|Response
      * @throws Exception
      */
-    public function memberLicenceRenew(SessionInterface $session, Request $request, Club $club, Member $member)
+    #[Route('/renouvellement-licence/{member<\d+>}/club/{club<\d+>}', name:'memberLicenceRenew')]
+    public function memberLicenceRenew(SessionInterface $session, Request $request, Club $club, Member $member): RedirectResponse|Response
     {
         $licence_old = $member->getMemberLastLicence();
 
@@ -930,13 +992,13 @@ class SecretariatController extends AbstractController
 
         if ($kyu)
         {
-            $form = $this->createForm(MemberType::class, $licence_new, array('form' => 'licence_renew_kyu', 'data_class' => MemberLicence::class));
+            $form = $this->createForm(MemberType::class, $licence_new, array('form' => 'licenceRenewKyu', 'data_class' => MemberLicence::class));
 
             $form->get('GradeKyuRank')->setData($licence_old->getMemberLicenceGrade() == null ? null : $licence_old->getMemberLicenceGrade()->getGradeRank());
         }
         else
         {
-            $form = $this->createForm(MemberType::class, $licence_new, array('form' => 'licence_renew', 'data_class' => MemberLicence::class));
+            $form = $this->createForm(MemberType::class, $licence_new, array('form' => 'licenceRenew', 'data_class' => MemberLicence::class));
         }
 
         $form->handleRequest($request);
@@ -990,11 +1052,11 @@ class SecretariatController extends AbstractController
 
             if ($session->get('origin') == 'active')
             {
-                return $this->redirectToRoute('secretariat_members_active', array('club' => $club->getClubId(), 'member' => $member->getMemberId()));
+                return $this->redirectToRoute('secretariat-membersActive', array('club' => $club->getClubId(), 'member' => $member->getMemberId()));
             }
             else
             {
-                return $this->redirectToRoute('secretariat_members_ancient', array('club' => $club->getClubId()));
+                return $this->redirectToRoute('secretariat-membersAncient', array('club' => $club->getClubId()));
             }
         }
 
@@ -1002,8 +1064,6 @@ class SecretariatController extends AbstractController
     }
 
     /**
-     * @Route("/modification_renouvellement/{renew<\d+>}/licence/{member<\d+>}/club/{club<\d+>}", name="member_licence_renew_update")
-     *
      * @param SessionInterface $session
      * @param Request $request
      * @param Club $club
@@ -1011,7 +1071,8 @@ class SecretariatController extends AbstractController
      * @param MemberLicence $renew
      * @return RedirectResponse|Response
      */
-    public function memberLicenceRenewUpdate(SessionInterface $session, Request $request, Club $club, Member $member, MemberLicence $renew)
+    #[Route('/modification-renouvellement/{renew<\d+>}/licence/{member<\d+>}/club/{club<\d+>}', name:'memberLicenceRenewUpdate')]
+    public function memberLicenceRenewUpdate(SessionInterface $session, Request $request, Club $club, Member $member, MemberLicence $renew): RedirectResponse|Response
     {
         if ($renew->getMemberLicenceGrade() == null)
         {
@@ -1020,6 +1081,7 @@ class SecretariatController extends AbstractController
             $grade->setGradeClub($club);
             $grade->setGradeMember($member);
             $grade->setGradeStatus(4);
+            $grade->setGradeRank(1);
         }
         else
         {
@@ -1043,13 +1105,13 @@ class SecretariatController extends AbstractController
 
         if ($kyu)
         {
-            $form = $this->createForm(MemberType::class, $renew, array('form' => 'licence_renew_kyu', 'data_class' => MemberLicence::class));
+            $form = $this->createForm(MemberType::class, $renew, array('form' => 'licenceRenewKyu', 'data_class' => MemberLicence::class));
 
             $form->get('GradeKyuRank')->setData($member->getMemberLastGrade() == null ? null : $member->getMemberLastGrade()->getGradeRank());
         }
         else
         {
-            $form = $this->createForm(MemberType::class, $renew, array('form' => 'licence_renew', 'data_class' => MemberLicence::class));
+            $form = $this->createForm(MemberType::class, $renew, array('form' => 'licenceRenew', 'data_class' => MemberLicence::class));
         }
 
         $form->handleRequest($request);
@@ -1095,11 +1157,11 @@ class SecretariatController extends AbstractController
 
             if ($session->get('origin') == 'active')
             {
-                return $this->redirectToRoute('secretariat_members_active', array('club' => $club->getClubId()));
+                return $this->redirectToRoute('secretariat-membersActive', array('club' => $club->getClubId()));
             }
             else
             {
-                return $this->redirectToRoute('secretariat_members_ancient', array('club' => $club->getClubId()));
+                return $this->redirectToRoute('secretariat-membersAncient', array('club' => $club->getClubId()));
             }
         }
 
@@ -1107,9 +1169,10 @@ class SecretariatController extends AbstractController
     }
 
     /**
-     * @Route("/sessions-examen", name="exam_index")
+     * @return Response
      */
-    public function examIndex()
+    #[Route('/sessions-examen', name:'examIndex')]
+    public function examIndex(): Response
     {
         $sessions = $this->getDoctrine()->getRepository(GradeSession::class)->findBy(['grade_session_type' => 1], ['grade_session_date' => 'DESC', 'grade_session_type' => 'DESC']);
 
@@ -1117,12 +1180,11 @@ class SecretariatController extends AbstractController
     }
 
     /**
-     * @Route("/session-examen/creer", name="exam_create")
-     *
      * @param Request $request
      * @return RedirectResponse|Response
      */
-    public function examCreate(Request $request)
+    #[Route('/session-examen/creer', name:'examCreate')]
+    public function examCreate(Request $request): RedirectResponse|Response
     {
         $form = $this->createForm(GradeType::class, new GradeSession());
 
@@ -1139,22 +1201,21 @@ class SecretariatController extends AbstractController
             $entityManager->persist($session);
             $entityManager->flush();
 
-            return $this->redirectToRoute('secretariat_exam_index');
+            return $this->redirectToRoute('secretariat-examIndex');
         }
 
         return $this->render('Secretariat/Exam/create.html.twig', array('form' => $form->createView()));
     }
 
     /**
-     * @Route("/session-examen/{session<\d+>}/modifier", name="exam_update")
-     *
      * @param Request $request
      * @param GradeSession $session
      * @return RedirectResponse|Response
      */
-    public function examUpdate(Request $request, GradeSession $session)
+    #[Route('/session-examen/{session<\d+>}/modifier', name:'examUpdate')]
+    public function examUpdate(Request $request, GradeSession $session): RedirectResponse|Response
     {
-        $form = $this->createForm(GradeType::class, $session, array('form' => 'exam_update'));
+        $form = $this->createForm(GradeType::class, $session, array('form' => 'examUpdate'));
 
         $form->handleRequest($request);
 
@@ -1164,16 +1225,17 @@ class SecretariatController extends AbstractController
 
             $entityManager->flush();
 
-            return $this->redirectToRoute('secretariat_exam_index', array('session' => $session->getGradeSessionId()));
+            return $this->redirectToRoute('secretariat-examIndex', array('session' => $session->getGradeSessionId()));
         }
 
         return $this->render('Secretariat/Exam/update.html.twig', array('form' => $form->createView()));
     }
 
     /**
-     * @Route("/liste_stages", name="training_index")
+     * @return Response
      */
-    public function trainingIndex()
+    #[Route('/liste-stages', name:'trainingIndex')]
+    public function trainingIndex(): Response
     {
         $trainings = $this->getDoctrine()->getRepository(Training::class)->getActiveTrainings(4);
 
@@ -1181,12 +1243,11 @@ class SecretariatController extends AbstractController
     }
 
     /**
-     * @Route("/stage_creer", name="training_create")
-     *
      * @param Request $request
      * @return RedirectResponse|Response
      */
-    public function trainingCreate(Request $request)
+    #[Route('/stage-creer', name:'trainingCreate')]
+    public function trainingCreate(Request $request): RedirectResponse|Response
     {
         $form = $this->createForm(TrainingType::class, new Training());
 
@@ -1212,19 +1273,18 @@ class SecretariatController extends AbstractController
             $entityManager->persist($training);
             $entityManager->flush();
 
-            return $this->redirectToRoute('secretariat_training_index');
+            return $this->redirectToRoute('secretariat-trainingIndex');
         }
 
         return $this->render('Secretariat/Training/create.html.twig', array('form' => $form->createView()));
     }
 
     /**
-     * @Route("/stage/{training<\d+>}/detail", name="training_detail")
-     *
      * @param Training $training
      * @return Response
      */
-    public function trainingDetail(Training $training)
+    #[Route('/stage/{training<\d+>}/detail', name:'trainingDetail')]
+    public function trainingDetail(Training $training): Response
     {
         $sessions = $this->getDoctrine()->getRepository(TrainingSession::class)->getTrainingSessions($training->getTrainingId());
 
@@ -1232,15 +1292,14 @@ class SecretariatController extends AbstractController
     }
 
     /**
-     * @Route("/stage/{training<\d+>}/modifier", name="training_update")
-     *
      * @param Request $request
      * @param Training $training
      * @return RedirectResponse|Response
      */
-    public function trainingUpdate(Request $request, Training $training)
+    #[Route('/stage/{training<\d+>}/modifier', name:'trainingUpdate')]
+    public function trainingUpdate(Request $request, Training $training): RedirectResponse|Response
     {
-        $form = $this->createForm(TrainingType::class, $training, array('form' => 'training_update'));
+        $form = $this->createForm(TrainingType::class, $training, array('form' => 'trainingUpdate'));
 
         $form->handleRequest($request);
 
@@ -1250,22 +1309,21 @@ class SecretariatController extends AbstractController
 
             $entityManager->flush();
 
-            return $this->redirectToRoute('secretariat_training_index');
+            return $this->redirectToRoute('secretariat-trainingIndex');
         }
 
         return $this->render('Secretariat/Training/update.html.twig', array('form' => $form->createView()));
     }
 
     /**
-     * @Route("/stage/{training<\d+>}/supprimer", name="training_delete")
-     *
      * @param Request $request
      * @param Training $training
      * @return RedirectResponse|Response
      */
-    public function traningDelete(Request $request, Training $training)
+    #[Route('/stage/{training<\d+>}/supprimer', name:'trainingDelete')]
+    public function traningDelete(Request $request, Training $training): RedirectResponse|Response
     {
-        $form = $this->createForm(TrainingType::class, $training, array('form' => 'training_delete'));
+        $form = $this->createForm(TrainingType::class, $training, array('form' => 'trainingDelete'));
 
         $form->handleRequest($request);
 
@@ -1276,22 +1334,21 @@ class SecretariatController extends AbstractController
             $entityManager->remove($training);
             $entityManager->flush();
 
-            return $this->redirectToRoute('secretariat_training_index');
+            return $this->redirectToRoute('secretariat-trainingIndex');
         }
 
         return $this->render('Secretariat/Training/update.html.twig', array('form' => $form->createView()));
     }
 
     /**
-     * @Route("/stage/{training<\d+>}/ajouter-session", name="training_session_add")
-     *
      * @param Request $request
      * @param Training $training
      * @return RedirectResponse|Response
      */
-    public function trainingSessionAdd(Request $request, Training $training)
+    #[Route('/stage/{training<\d+>}/ajouter-session', name:'trainingSessionAdd')]
+    public function trainingSessionAdd(Request $request, Training $training): RedirectResponse|Response
     {
-        $form = $this->createForm(TrainingType::class, new TrainingSession(), array('form' => 'session_add', 'data_class' => TrainingSession::class));
+        $form = $this->createForm(TrainingType::class, new TrainingSession(), array('form' => 'sessionAdd', 'data_class' => TrainingSession::class));
 
         $form->handleRequest($request);
 
@@ -1311,23 +1368,22 @@ class SecretariatController extends AbstractController
             $entityManager->persist($session);
             $entityManager->flush();
 
-            return $this->redirectToRoute('secretariat_training_detail', array('training' => $training->getTrainingId()));
+            return $this->redirectToRoute('secretariat-trainingDetail', array('training' => $training->getTrainingId()));
         }
 
         return $this->render('Secretariat/Training/session_add.html.twig', array('form' => $form->createView()));
     }
 
     /**
-     * @Route("/stage/{training<\d+>}/modifier-session/{session<\d+>}", name="training_session_update")
-     *
      * @param Request $request
      * @param Training $training
      * @param TrainingSession $session
      * @return RedirectResponse|Response
      */
-    public function trainingSessionUpdate(Request $request, Training $training, TrainingSession $session)
+    #[Route('/stage/{training<\d+>}/modifier-session/{session<\d+>}', name:'trainingSessionUpdate')]
+    public function trainingSessionUpdate(Request $request, Training $training, TrainingSession $session): RedirectResponse|Response
     {
-        $form = $this->createForm(TrainingType::class, $session, array('form' => 'session_add', 'data_class' => TrainingSession::class));
+        $form = $this->createForm(TrainingType::class, $session, array('form' => 'sessionAdd', 'data_class' => TrainingSession::class));
 
         $form->handleRequest($request);
 
@@ -1343,23 +1399,22 @@ class SecretariatController extends AbstractController
 
             $entityManager->flush();
 
-            return $this->redirectToRoute('secretariat_training_detail', array('training' => $training->getTrainingId()));
+            return $this->redirectToRoute('secretariat-trainingDetail', array('training' => $training->getTrainingId()));
         }
 
         return $this->render('Secretariat/Training/session_update.html.twig', array('form' => $form->createView()));
     }
 
     /**
-     * @Route("/stage/{training<\d+>}/supprimer-session/{session<\d+>}", name="training_session_delete")
-     *
      * @param Request $request
      * @param Training $training
      * @param TrainingSession $session
      * @return RedirectResponse|Response
      */
-    public function trainingSessionDelete(Request $request, Training $training, TrainingSession $session)
+    #[Route('/stage/{training<\d+>}/supprimer-session/{session<\d+>}', name:'trainingSessionDelete')]
+    public function trainingSessionDelete(Request $request, Training $training, TrainingSession $session): RedirectResponse|Response
     {
-        $form = $this->createForm(TrainingType::class, $session, array('form' => 'session_delete', 'data_class' => TrainingSession::class));
+        $form = $this->createForm(TrainingType::class, $session, array('form' => 'sessionDelete', 'data_class' => TrainingSession::class));
 
         $form->handleRequest($request);
 
@@ -1386,11 +1441,11 @@ class SecretariatController extends AbstractController
 
             if ($index)
             {
-                return $this->redirectToRoute('secretariat_training_index');
+                return $this->redirectToRoute('secretariat-trainingIndex');
             }
             else
             {
-                return $this->redirectToRoute('secretariat_training_detail', array('training' => $training->getTrainingId()));
+                return $this->redirectToRoute('secretariat-trainingDetail', array('training' => $training->getTrainingId()));
             }
 
         }
@@ -1399,9 +1454,10 @@ class SecretariatController extends AbstractController
     }
 
     /**
-     * @Route("/liste_validations_modifications_membres", name="member_modification_validation_index")
+     * @return Response
      */
-    public function memberModificationValidationIndex()
+    #[Route('/liste-validations-modifications-membres', name:'memberModificationValidationIndex')]
+    public function memberModificationValidationIndex(): Response
     {
         $modifications = $this->getDoctrine()->getRepository(Member::class)->getMemberModification();
 
@@ -1409,18 +1465,17 @@ class SecretariatController extends AbstractController
     }
 
     /**
-     * @Route("/validation_modifications_membre/{member<\d+>}", name="member_modification_validation_validate")
-     *
      * @param Request $request
      * @param Member $member
      * @param PhotoUploader $photoUploader
      * @return RedirectResponse|Response
      */
-    public function memberModificationValidationValidate(Request $request, Member $member, PhotoUploader $photoUploader)
+    #[Route('/validation-modifications-membre/{member<\d+>}', name:'memberModificationValidationValidate')]
+    public function memberModificationValidationValidate(Request $request, Member $member, PhotoUploader $photoUploader): RedirectResponse|Response
     {
         $modification = $member->getMemberModification();
 
-        $form = $this->createForm(SecretariatType::class, $modification, array('form' => 'modification_validate', 'data_class' => MemberModification::class));
+        $form = $this->createForm(SecretariatType::class, $modification, array('form' => 'modificationValidate', 'data_class' => MemberModification::class));
 
         $form->handleRequest($request);
 
@@ -1448,25 +1503,24 @@ class SecretariatController extends AbstractController
 
             $entityManager->flush();
 
-            return $this->redirectToRoute('secretariat_member_modification_validation_index');
+            return $this->redirectToRoute('secretariat-memberModificationValidationIndex');
         }
 
         return $this->render('Secretariat/Member/Modification/validate.html.twig', array('form' => $form->createView()));
     }
 
     /**
-     * @Route("/annulation_modifications_membre/{member<\d+>}", name="member_modification_validation_cancel")
-     *
      * @param Request $request
      * @param Member $member
      * @param PhotoUploader $photoUploader
      * @return RedirectResponse|Response
      */
-    public function memberModificationValidationCancel(Request $request, Member $member, PhotoUploader $photoUploader)
+    #[Route('/annulation-modifications-membre/{member<\d+>}', name:'memberModificationValidationCancel')]
+    public function memberModificationValidationCancel(Request $request, Member $member, PhotoUploader $photoUploader): RedirectResponse|Response
     {
         $modification = $member->getMemberModification();
 
-        $form = $this->createForm(SecretariatType::class, $modification, array('form' => 'modification_validate', 'data_class' => MemberModification::class));
+        $form = $this->createForm(SecretariatType::class, $modification, array('form' => 'modificationValidate', 'data_class' => MemberModification::class));
 
         $form->handleRequest($request);
 
@@ -1480,16 +1534,17 @@ class SecretariatController extends AbstractController
 
             $entityManager->flush();
 
-            return $this->redirectToRoute('secretariat_member_modification_validation_index');
+            return $this->redirectToRoute('secretariat-memberModificationValidationIndex');
         }
 
         return $this->render('Secretariat/Member/Modification/cancel.html.twig', array('form' => $form->createView()));
     }
 
     /**
-     * @Route("/liste_commission", name="commission_index")
+     * @return Response
      */
-    public function commissionIndex()
+    #[Route('/liste-commission', name:'commissionIndex')]
+    public function commissionIndex(): Response
     {
         $commissions = $this->getDoctrine()->getRepository(Commission::class)->findAll();
 
@@ -1497,14 +1552,13 @@ class SecretariatController extends AbstractController
     }
 
     /**
-     * @Route("/ajouter_commission", name="commission_create")
-     *
      * @param Request $request
      * @return RedirectResponse|Response
      */
-    public function commissionCreate(Request $request)
+    #[Route('/ajouter-commission', name:'commissionCreate')]
+    public function commissionCreate(Request $request): RedirectResponse|Response
     {
-        $form = $this->createForm(SecretariatType::class, new Commission(), array('form' => 'commission_create', 'data_class' => Commission::class));
+        $form = $this->createForm(SecretariatType::class, new Commission(), array('form' => 'commissionCreate', 'data_class' => Commission::class));
 
         $form->handleRequest($request);
 
@@ -1541,19 +1595,18 @@ class SecretariatController extends AbstractController
             $entityManager->persist($commission);
             $entityManager->flush();
 
-            return $this->redirectToRoute('secretariat_commission_index');
+            return $this->redirectToRoute('secretariat-commissionIndex');
         }
 
         return $this->render('Secretariat/Commission/create.html.twig', array('form' => $form->createView()));
     }
 
     /**
-     * @Route("/detail_commission/{commission<\d+>}", name="commission_detail")
-     *
      * @param Commission $commission
      * @return Response
      */
-    public function commissionDetail(Commission $commission)
+    #[Route('/detail-commission/{commission<\d+>}', name:'commissionDetail')]
+    public function commissionDetail(Commission $commission): Response
     {
         $members = $this->getDoctrine()->getRepository(CommissionMember::class)->getCommissionMembers($commission->getCommissionId());
 
@@ -1561,17 +1614,16 @@ class SecretariatController extends AbstractController
     }
 
     /**
-     * @Route("/commission/{commission<\d+>}/ajouter_membre", name="commission_member_add")
-     *
      * @param Request $request
      * @param Commission $commission
      * @return RedirectResponse|Response
      */
-    public function commissionMemberAdd(Request $request, Commission $commission)
+    #[Route('/commission/{commission<\d+>}/ajouter-membre', name:'commissionMemberAdd')]
+    public function commissionMemberAdd(Request $request, Commission $commission): RedirectResponse|Response
     {
         $commission_member = new CommissionMember();
 
-        $form = $this->createForm(SecretariatType::class, $commission_member, array('form' => 'commission_member_add', 'data_class' => CommissionMember::class));
+        $form = $this->createForm(SecretariatType::class, $commission_member, array('form' => 'commissionMemberAdd', 'data_class' => CommissionMember::class));
 
         $form->handleRequest($request);
 
@@ -1583,11 +1635,11 @@ class SecretariatController extends AbstractController
 
             if (is_null($member))
             {
-                return $this->redirectToRoute('secretariat_commission_detail', array('commission' => $commission->getCommissionId()));
+                return $this->redirectToRoute('secretariat-commissionDetail', array('commission' => $commission->getCommissionId()));
             }
             elseif (!is_null($this->getDoctrine()->getRepository(CommissionMember::class)->findOneBy(['commission_member' => $form->get('MemberLicence')->getData(), 'commission' => $commission])))
             {
-                return $this->redirectToRoute('secretariat_commission_detail', array('commission' => $commission->getCommissionId()));
+                return $this->redirectToRoute('secretariat-commissionDetail', array('commission' => $commission->getCommissionId()));
             }
 
             $commission_member->setCommission($commission);
@@ -1599,25 +1651,24 @@ class SecretariatController extends AbstractController
             $entityManager->persist($commission_member);
             $entityManager->flush();
 
-            return $this->redirectToRoute('secretariat_commission_detail', array('commission' => $commission->getCommissionId()));
+            return $this->redirectToRoute('secretariat-commissionDetail', array('commission' => $commission->getCommissionId()));
         }
 
         return $this->render('Secretariat/Commission/add_member.html.twig', array('form' => $form->createView()));
     }
 
     /**
-     * @Route("/commission/{commission<\d+>}/supprimer_membre/{member<\d+>}", name="commission_member_delete")
-     *
      * @param Request $request
      * @param Commission $commission
      * @param Member $member
      * @return RedirectResponse|Response
      */
-    public function commissionMemberDelete(Request $request, Commission $commission, Member $member)
+    #[Route('/commission/{commission<\d+>}/supprimer-membre/{member<\d+>}', name:'commissionMemberDelete')]
+    public function commissionMemberDelete(Request $request, Commission $commission, Member $member): RedirectResponse|Response
     {
         $commission_member = $this->getDoctrine()->getRepository(CommissionMember::class)->findOneBy(['commission_member' => $member, 'commission' => $commission]);
 
-        $form = $this->createForm(SecretariatType::class, $member, array('form' => 'commission_member_delete', 'data_class' => Member::class));
+        $form = $this->createForm(SecretariatType::class, $member, array('form' => 'commissionMemberDelete', 'data_class' => Member::class));
 
         $form->handleRequest($request);
 
@@ -1631,19 +1682,19 @@ class SecretariatController extends AbstractController
 
             $entityManager->flush();
 
-            return $this->redirectToRoute('secretariat_commission_detail', array('commission' => $commission->getCommissionId()));
+            return $this->redirectToRoute('secretariat-commissionDetail', array('commission' => $commission->getCommissionId()));
         }
 
         return $this->render('Secretariat/Commission/delete_member.html.twig', array('form' => $form->createView()));
     }
 
     /**
-     * @Route("/liste_gestionnaire_club/{club<\d+>}", name="club_manager_index")
      * @param Club $club
      * @param ClubTools $clubTools
      * @return Response
      */
-    public function clubManagerIndex(Club $club, ClubTools $clubTools)
+    #[Route('/liste-gestionnaire-club/{club<\d+>}', name:'clubManagerIndex')]
+    public function clubManagerIndex(Club $club, ClubTools $clubTools): Response
     {
         $clubTools->setClub($club);
 
@@ -1651,51 +1702,49 @@ class SecretariatController extends AbstractController
     }
 
     /**
-     * @Route("/creer_gestionnaire_club/{club<\d+>}", name="club_manager_add")
      * @param SessionInterface $session
      * @param Request $request
      * @param Club $club
      * @param UserTools $userTools
-     * @return Response
+     * @return RedirectResponse|Response
      */
-    public function clubManagerAdd(SessionInterface $session, Request $request, Club $club, UserTools $userTools)
+    #[Route('/creer-gestionnaire-club/{club<\d+>}', name:'clubManagerAdd')]
+    public function clubManagerAdd(SessionInterface $session, Request $request, Club $club, UserTools $userTools): RedirectResponse|Response
     {
         $session->set('duplicate', false);
 
-        $user = new User();
-
-        $form = $this->createForm(UserType::class, $user, array('form' => 'club_manager_add', 'data_class' => User::class));
+        $form = $this->createForm(UserType::class, null, array('form' => 'clubManagerAdd', 'data_class' => null));
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid())
         {
-            $userTools->clubManagerAdd($form->getData(), $club, $this->getUser(), $form['Password']->getData(), $form->get('UserMember')->getData());
+            $isCreated = $userTools->clubManagerAdd($form->get('Login')->getData(), $club, $this->getUser());
 
-            if ($userTools->isDuplicate())
+            if (!$isCreated)
             {
                 $session->set('duplicate', true);
 
                 return $this->render('Secretariat/Club/Manager/add.html.twig', array('form' => $form->createView()));
             }
 
-            return $this->redirectToRoute('secretariat_club_manager_index', array('club' => $club->getClubId()));
+            return $this->redirectToRoute('secretariat-clubManagerIndex', array('club' => $club->getClubId()));
         }
 
         return $this->render('Secretariat/Club/Manager/add.html.twig', array('form' => $form->createView()));
     }
 
     /**
-     * @Route("/supprimer_gestionnaire_club/{club<\d+>}/{user<\d+>}", name="club_manager_delete")
      * @param Request $request
      * @param Club $club
      * @param User $user
      * @param UserTools $userTools
-     * @return Response
+     * @return RedirectResponse|Response
      */
-    public function clubManagerDelete(Request $request, Club $club, User $user, UserTools $userTools)
+    #[Route('/supprimer-gestionnaire-club/{club<\d+>}/{user<\d+>}', name:'clubManagerDelete')]
+    public function clubManagerDelete(Request $request, Club $club, User $user, UserTools $userTools): RedirectResponse|Response
     {
-        $form = $this->createForm(UserType::class, $user, array('form' => 'club_manager_delete', 'data_class' => User::class));
+        $form = $this->createForm(UserType::class, $user, array('form' => 'clubManagerDelete', 'data_class' => User::class));
 
         $form->handleRequest($request);
 
@@ -1703,49 +1752,85 @@ class SecretariatController extends AbstractController
         {
             $userTools->clubManagerDelete($user, $club, $this->getUser());
 
-            return $this->redirectToRoute('secretariat_club_manager_index', array('club' => $club->getClubId()));
+            return $this->redirectToRoute('secretariat-clubManagerIndex', array('club' => $club->getClubId()));
         }
 
         return $this->render('Secretariat/Club/Manager/delete.html.twig', array('form' => $form->createView(), 'club' => $club, 'user' => $user));
     }
 
     /**
-     * @Route("/liste_acces_interface", name="access_list_index")
      * @return Response
      */
-    public function accessListIndex()
+    #[Route('/liste-acces-interface', name:'accessListIndex')]
+    public function accessListIndex(): Response
     {
-        $access_list = $this->getDoctrine()->getManager()->getRepository(User::class)->getAccessList();
+        $clubManagerList = $this->getDoctrine()->getManager()->getRepository(User::class)->getClubManagerList();
 
-        return $this->render('Secretariat/Interface/index.html.twig', array('access_list' => $access_list));
+        $secretariatAccessList = $this->getDoctrine()->getManager()->getRepository(User::class)->getSecretariatAccessList();
+
+        $lockedAccessList = $this->getDoctrine()->getManager()->getRepository(User::class)->getLockedAccessList();
+
+        $countActiveAccess = $this->getDoctrine()->getManager()->getRepository(User::class)->getCountActiveAccess();
+
+        return $this->render('Secretariat/Interface/index.html.twig', array('clubManagerList' => $clubManagerList, 'secretariatAccessList' => $secretariatAccessList, 'lockedAccessList' => $lockedAccessList, 'countActiveAccess' => $countActiveAccess[0][1]));
     }
 
     /**
-     * @Route("/reactivation_acces/{user<\d+>}", name="access_reactivate")
+     * @param UserTools $userTools
+     * @param SessionInterface $session
+     * @param Request $request
+     * @return RedirectResponse|Response
+     */
+    #[Route('/creer-acces/', name:'accessCreate')]
+    public function accessCreate(UserTools $userTools, SessionInterface $session, Request $request): RedirectResponse|Response
+    {
+        $form = $this->createForm(UserType::class, new User(), array('form' => 'createAccess', 'data_class' => User::class));
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid())
+        {
+            $userTools->newUser($form->getData(), $this->getUser(), $form['Password']->getData(), $form->get('UserMember')->getData());
+
+            $session->set('duplicate', $userTools->isDuplicate());
+
+            if ($session->get('duplicate'))
+            {
+                return $this->render('Secretariat/Interface/access_create.html.twig', array('form' => $form->createView()));
+            }
+
+            return $this->redirectToRoute('secretariat-accessListIndex');
+        }
+
+        return $this->render('Secretariat/Interface/access_create.html.twig', array('form' => $form->createView()));
+    }
+
+    /**
      * @param User $user
      * @param UserTools $userTools
-     * @return Response
+     * @return RedirectResponse
      */
-    public function accessReactivate(User $user, UserTools $userTools)
+    #[Route('/reactivation-acces/{user<\d+>}', name:'accessReactivate')]
+    public function accessReactivate(User $user, UserTools $userTools): RedirectResponse
     {
         $userTools->reactivate($user, $this->getUser());
 
-        return $this->redirectToRoute('secretariat_access_list_index');
+        return $this->redirectToRoute('secretariat-accessListIndex');
     }
 
     /**
-     * @Route("/modification_mot_de_passe_acces/{user<\d+>}", name="access_password_modify")
      * @param SessionInterface $session
      * @param Request $request
      * @param User $user
      * @param UserTools $userTools
-     * @return Response
+     * @return RedirectResponse|Response
      */
-    public function accessPasswordModify(SessionInterface $session, Request $request, User $user, UserTools $userTools)
+    #[Route('/modification-mot-de-passe-acces/{user<\d+>}', name:'accessPasswordModify')]
+    public function accessPasswordModify(SessionInterface $session, Request $request, User $user, UserTools $userTools): RedirectResponse|Response
     {
         $session->set('passwordError', false);
 
-        $form = $this->createForm(UserType::class, $user, array('form' => 'change_password', 'data_class' => User::class));
+        $form = $this->createForm(UserType::class, $user, array('form' => 'changePassword', 'data_class' => User::class));
 
         $form->handleRequest($request);
 
@@ -1753,7 +1838,7 @@ class SecretariatController extends AbstractController
         {
             if ($userTools->changePassword($form->getData(), $form['Password1']->getData(), $form['Password2']->getData()))
             {
-                return $this->redirectToRoute('secretariat_access_list_index');
+                return $this->redirectToRoute('secretariat-accessListIndex');
             }
             else
             {
@@ -1767,15 +1852,15 @@ class SecretariatController extends AbstractController
     }
 
     /**
-     * @Route("/imprimer_timbres", name="print_stamp")
      * @param Request $request
      * @return Response
      */
-    public function printStamp(Request $request)
+    #[Route('/imprimer-timbres', name:'printStamp')]
+    public function printStamp(Request $request): Response
     {
         $stamps = null;
 
-        $form = $this->createForm(SecretariatType::class, $stamps, array('form' => 'print_stamp', 'data_class' => null));
+        $form = $this->createForm(SecretariatType::class, $stamps, array('form' => 'printStamp', 'data_class' => null));
 
         $form->handleRequest($request);
 
@@ -1792,15 +1877,15 @@ class SecretariatController extends AbstractController
     }
 
     /**
-     * @Route("/imprimer_cartes", name="print_card")
      * @param Request $request
      * @return Response
      */
-    public function printCard(Request $request)
+    #[Route('/imprimer-cartes', name:'printCard')]
+    public function printCard(Request $request): Response
     {
         $cards = null;
 
-        $form = $this->createForm(SecretariatType::class, $cards, array('form' => 'print_card', 'data_class' => null));
+        $form = $this->createForm(SecretariatType::class, $cards, array('form' => 'printCard', 'data_class' => null));
 
         $form->handleRequest($request);
 
@@ -1817,16 +1902,16 @@ class SecretariatController extends AbstractController
     }
 
     /**
-     * @Route("/generer_formulaires_renouvellement/{club<\d+>}", name="form_renew_create")
      * @param Request $request
      * @param Club $club
-     * @return Response
+     * @return BinaryFileResponse|Response
      */
-    public function formRenewCreate(Request $request, Club $club)
+    #[Route('/generer-formulaires-renouvellement/{club<\d+>}', name:'formRenewCreate')]
+    public function formRenewCreate(Request $request, Club $club): BinaryFileResponse|Response
     {
         $period = null;
 
-        $form = $this->createForm(SecretariatType::class, $period, array('form' => 'form_renew_create', 'data_class' => null));
+        $form = $this->createForm(SecretariatType::class, $period, array('form' => 'formRenewCreate', 'data_class' => null));
 
         $form->handleRequest($request);
 
@@ -1836,7 +1921,7 @@ class SecretariatController extends AbstractController
 
             $output_file = "./licence_out.rtf";
 
-            $fh = fopen($output_file, 'a') or die("can't open file");
+            $fh = fopen($output_file, 'a') or die('can\'t open file');
 
             $file = file_get_contents('../private/licence.rtf', true);
 
@@ -1898,7 +1983,7 @@ class SecretariatController extends AbstractController
             fclose($fh);
 
             $response = new BinaryFileResponse($output_file);
-            $response->setContentDisposition(ResponseHeaderBag::DISPOSITION_INLINE);
+            $response->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT);
 
             return $response->deleteFileAfterSend();
         }
@@ -1907,17 +1992,16 @@ class SecretariatController extends AbstractController
     }
 
     /**
-     * @Route("/nettoyage_liste_membres", name="member_list_cleanup")
-     *
      * @param Request $request
      * @return RedirectResponse|Response
      * @throws Exception
      */
-    public function memberListCleanup(Request $request)
+    #[Route('/nettoyage-liste-membres', name:'memberListCleanup')]
+    public function memberListCleanup(Request $request): RedirectResponse|Response
     {
         $list = $this->getDoctrine()->getRepository(Member::class)->getMemberListCleanup();
 
-        $form = $this->createForm(SecretariatType::class,null, array('form' => 'cleanup_member', 'data_class' => null));
+        $form = $this->createForm(SecretariatType::class,null, array('form' => 'cleanupMember', 'data_class' => null));
 
         $form->handleRequest($request);
 
@@ -1956,18 +2040,18 @@ class SecretariatController extends AbstractController
                 $entityManager->flush();
             }
 
-            return $this->redirectToRoute('secretariat_member_list_cleanup');
+            return $this->redirectToRoute('secretariat-memberListCleanup');
         }
 
         return $this->render('Secretariat/Member/cleanup.html.twig', array('form' => $form->createView(), 'list' => $list));
     }
 
     /**
-     * @Route("/liste_modification_dojo/{modification<\d+>}", name="dojo_modification_list")
      * @param ClubModificationLog|null $modification
      * @return Response
      */
-    public function dojoModificationList(?ClubModificationLog $modification = null)
+    #[Route('/liste-modification-dojo/{modification<\d+>}', name:'dojoModificationList')]
+    public function dojoModificationList(?ClubModificationLog $modification = null): Response
     {
         if (!is_null($modification))
         {

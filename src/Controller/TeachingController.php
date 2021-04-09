@@ -1,10 +1,12 @@
 <?php
-// src/Controller/AdministrationController.php
+// src/Controller/TeachingController.php
 namespace App\Controller;
 
 use App\Entity\Club;
 
 use App\Service\ListData;
+
+use DateTime;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
@@ -15,17 +17,19 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/enseignement", name="teaching_")
+ * Class TeachingController
+ * @package App\Controller
  *
  * @IsGranted("ROLE_CP")
  */
+#[Route('/enseignement', name:'teaching-')]
 class TeachingController extends AbstractController
 {
     /**
-     * @Route("/index_statistique", name="statistics_index")
      * @return Response
      */
-    public function statisticsIndex()
+    #[Route('/index-statistique', name:'statisticsIndex')]
+    public function statisticsIndex(): Response
     {
         $statistics = array();
 
@@ -40,7 +44,9 @@ class TeachingController extends AbstractController
             $statistics[$province]['Total'][3] = 0;
         }
 
-        $query = $this->getDoctrine()->getRepository(Club::class)->getProvinceMembersTotal();
+        $date = new DateTime('today');
+
+        $query = $this->getDoctrine()->getRepository(Club::class)->getProvinceMembersTotal($date);
 
         foreach ($query as $province)
         {
@@ -54,7 +60,9 @@ class TeachingController extends AbstractController
             }
         }
 
-        $query = $this->getDoctrine()->getRepository(Club::class)->getProvinceTeachersTotal();
+        $date = new DateTime('today');
+
+        $query = $this->getDoctrine()->getRepository(Club::class)->getProvinceTeachersTotal($date);
 
         foreach ($query as $province)
         {
