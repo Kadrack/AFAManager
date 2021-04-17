@@ -36,7 +36,7 @@ class TrainingController extends AbstractController
     #[Route('/', name:'index')]
     public function stageIndex(): Response
     {
-        $trainings = $this->getDoctrine()->getRepository(Training::class)->getActiveTrainings(4);
+        $trainings = $this->getDoctrine()->getRepository(Training::class)->getActiveTrainings(1);
 
         return $this->render('Training/training_index.html.twig', array('trainings' => count($trainings) == 0 ? null : $trainings));
     }
