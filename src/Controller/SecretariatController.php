@@ -653,7 +653,7 @@ class SecretariatController extends AbstractController
 
         $limit = new DateTime('+3 month today');
 
-        return $this->render('Secretariat/Club/Member/list_ancient.html.twig', array('members' => $members == null ? null : $members, 'club' => $club, 'limit' => $limit));
+        return $this->render('Secretariat/Club/Member/list_ancient.html.twig', array('members' => $members ?? null, 'club' => $club, 'limit' => $limit));
     }
 
     /**
@@ -793,11 +793,11 @@ class SecretariatController extends AbstractController
             $member->setMemberActualClub($club);
             $member->setMemberLastLicence($licence);
             $member->setMemberStartPractice($form->get('MemberLicenceMedicalCertificate')->getData());
-            $member->setMemberPhoto($form['MemberPhoto']->getData() == null ? 'nophoto.png' : $photoUploader->upload($form['MemberPhoto']->getData()));
+            $member->setMemberPhoto(is_null($form['MemberPhoto']->getData()) ? 'nophoto.png' : $photoUploader->upload($form['MemberPhoto']->getData()));
 
             $grade = new Grade();
 
-            $rank = $form->get('GradeRank')->getData() == null ? 1 : $form->get('GradeRank')->getData();
+            $rank = is_null($form->get('GradeRank')->getData()) ? 1 : $form->get('GradeRank')->getData();
 
             $grade->setGradeRank($rank);
             $grade->setGradeMember($member);
@@ -994,7 +994,7 @@ class SecretariatController extends AbstractController
         {
             $form = $this->createForm(MemberType::class, $licence_new, array('form' => 'licenceRenewKyu', 'data_class' => MemberLicence::class));
 
-            $form->get('GradeKyuRank')->setData($licence_old->getMemberLicenceGrade() == null ? null : $licence_old->getMemberLicenceGrade()->getGradeRank());
+            $form->get('GradeKyuRank')->setData(is_null($licence_old->getMemberLicenceGrade()) ? null : $licence_old->getMemberLicenceGrade()->getGradeRank());
         }
         else
         {
@@ -1107,7 +1107,7 @@ class SecretariatController extends AbstractController
         {
             $form = $this->createForm(MemberType::class, $renew, array('form' => 'licenceRenewKyu', 'data_class' => MemberLicence::class));
 
-            $form->get('GradeKyuRank')->setData($member->getMemberLastGrade() == null ? null : $member->getMemberLastGrade()->getGradeRank());
+            is_null($form->get('GradeKyuRank')->setData($member->getMemberLastGrade()) ? null : $member->getMemberLastGrade()->getGradeRank());
         }
         else
         {
@@ -1485,17 +1485,17 @@ class SecretariatController extends AbstractController
 
             $photoUploader->delete($member->getMemberPhoto());
 
-            $modification->getMemberModificationPhoto()     != null ? $member->setMemberPhoto($modification->getMemberModificationPhoto()) : null;
-            $modification->getMemberModificationFirstname() != null ? $member->setMemberFirstname($modification->getMemberModificationFirstname()) : null;
-            $modification->getMemberModificationName()      != null ? $member->setMemberName($modification->getMemberModificationName()) : null;
-            $modification->getMemberModificationBirthday()  != null ? $member->setMemberBirthday($modification->getMemberModificationBirthday()) : null;
-            $modification->getMemberModificationAddress()   != null ? $member->setMemberAddress($modification->getMemberModificationAddress()) : null;
-            $modification->getMemberModificationZip()       != null ? $member->setMemberZip($modification->getMemberModificationZip()) : null;
-            $modification->getMemberModificationCity()      != null ? $member->setMemberCity($modification->getMemberModificationCity()) : null;
-            $modification->getMemberModificationCountry()   != null ? $member->setMemberCountry($modification->getMemberModificationCountry()) : null;
-            $modification->getMemberModificationEmail()     != null ? $member->setMemberEmail($modification->getMemberModificationEmail()) : null;
-            $modification->getMemberModificationPhone()     != null ? $member->setMemberPhone($modification->getMemberModificationPhone()) : null;
-            $modification->getMemberModificationAikikaiId() != null ? $member->setMemberAikikaiId($modification->getMemberModificationAikikaiId()) : null;
+            is_null($modification->getMemberModificationPhoto())     ?: $member->setMemberPhoto($modification->getMemberModificationPhoto());
+            is_null($modification->getMemberModificationFirstname()) ?: $member->setMemberFirstname($modification->getMemberModificationFirstname());
+            is_null($modification->getMemberModificationName())      ?: $member->setMemberName($modification->getMemberModificationName());
+            is_null($modification->getMemberModificationBirthday())  ?: $member->setMemberBirthday($modification->getMemberModificationBirthday());
+            is_null($modification->getMemberModificationAddress())   ?: $member->setMemberAddress($modification->getMemberModificationAddress());
+            is_null($modification->getMemberModificationZip())       ?: $member->setMemberZip($modification->getMemberModificationZip());
+            is_null($modification->getMemberModificationCity())      ?: $member->setMemberCity($modification->getMemberModificationCity());
+            is_null($modification->getMemberModificationCountry())   ?: $member->setMemberCountry($modification->getMemberModificationCountry());
+            is_null($modification->getMemberModificationEmail())     ?: $member->setMemberEmail($modification->getMemberModificationEmail());
+            is_null($modification->getMemberModificationPhone())     ?: $member->setMemberPhone($modification->getMemberModificationPhone());
+            is_null($modification->getMemberModificationAikikaiId()) ?: $member->setMemberAikikaiId($modification->getMemberModificationAikikaiId());
 
             $member->setMemberModification(null);
 

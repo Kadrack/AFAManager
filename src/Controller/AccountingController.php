@@ -42,7 +42,7 @@ class AccountingController extends AbstractController
             return $this->render('Accounting/Member/search.html.twig', array('form' => $form->createView(), 'results' => $results));
         }
 
-        return $this->render('Accounting/Member/search.html.twig', array('form' => $form->createView(), 'results' => isset($results) ? $results : null));
+        return $this->render('Accounting/Member/search.html.twig', array('form' => $form->createView(), 'results' => $results ?? null));
     }
 
     /**
