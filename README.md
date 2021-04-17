@@ -18,4 +18,9 @@ php bin/console doctrine:migrations:migrate
 ```
 # Create User
 ```bash
+mysql --host=localhost -uroot -p symfony < first_user.sql
 ```
+
+# Errors
+## Group By ONLY_FULL_GROUP_BY
+SET GLOBAL sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''));
