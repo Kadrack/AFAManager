@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Club;
+use App\Entity\ClubHistory;
 use App\Entity\ClubTeacher;
 use App\Entity\Grade;
 use App\Entity\GradeTitle;
@@ -20,11 +21,37 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class ClubTeacherRepository extends ServiceEntityRepository
 {
+    /**
+     * ClubTeacherRepository constructor.
+     * @param ManagerRegistry $registry
+     */
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, ClubTeacher::class);
     }
 
+    /**
+     * @return array|null
+     */
+    public function getDojoChoStartPractice(): ?array
+    {
+        $qb = $this->createQueryBuilder('t');
+
+        return $qb->select('m.member_firstname AS Firstname', 'm.member_name AS Name', 'm.member_start_practice AS Starting')
+            ->join(Member::class, 'm', 'WITH', $qb->expr()->eq('m.member_id', 't.club_teacher_member'))
+            ->join(Club::class, 'c', 'WITH', $qb->expr()->eq('c.club_id', 't.club_teacher'))
+            ->join(ClubHistory::class, 'h', 'WITH', $qb->expr()->eq('h.club_history_id', 'c.club_last_history'))
+            ->where($qb->expr()->eq('t.club_teacher_title', 1))
+            ->andWhere($qb->expr()->eq('h.club_history_status', 1))
+            ->orderBy('Firstname', 'ASC')
+            ->getQuery()
+            ->getArrayResult();
+    }
+
+    /**
+     * @param Club $club
+     * @return array|null
+     */
     public function getAFATeachers(Club $club): ?array
     {
         $qb = $this->createQueryBuilder('t');
@@ -43,6 +70,10 @@ class ClubTeacherRepository extends ServiceEntityRepository
             ->getArrayResult();
     }
 
+    /**
+     * @param Club $club
+     * @return array|null
+     */
     public function getForeignTeachers(Club $club): ?array
     {
         $qb = $this->createQueryBuilder('t');

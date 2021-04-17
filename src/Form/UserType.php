@@ -21,24 +21,26 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 class UserType extends AbstractType
 {
     /**
-     * @param FormBuilderInterface $builder
-     * @param array $options
+     * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         switch ($options['form'])
         {
-            case 'club_manager_add':
+            case 'clubManagerAdd':
                 $this->clubManagerAdd($builder);
                 break;
-            case 'club_manager_delete':
+            case 'clubManagerDelete':
                 $this->clubManagerDelete($builder);
                 break;
-            case 'change_login':
+            case 'changeLogin':
                 $this->changeLogin($builder);
                 break;
-            case 'change_password':
+            case 'changePassword':
                 $this->changePassword($builder);
+                break;
+            case 'createAccess':
+                $this->createAccess($builder);
                 break;
             case 'create':
                 $this->loginCreate($builder);
@@ -98,12 +100,8 @@ class UserType extends AbstractType
     {
         $builder
 
-            ->add('Login', TextType::class, array('label' => 'Login : '))
-            ->add('UserMember', IntegerType::class, array('label' => 'N° de licence : ', 'mapped' => false, 'required' => false))
-            ->add('UserFirstname', TextType::class, array('label' => 'Prénom : ', 'required' => false))
-            ->add('UserRealName', TextType::class, array('label' => 'Nom : ', 'required' => false))
-            ->add('Password', PasswordType::class, array('label' => 'Mot de passe : ', 'mapped' => false))
-            ->add('Submit', SubmitType::class, array('label' => 'Créer'))
+            ->add('Login', TextType::class, array('label' => 'Login : ', 'mapped' => false))
+            ->add('Submit', SubmitType::class, array('label' => 'Ajouter'))
         ;
     }
 
@@ -118,4 +116,20 @@ class UserType extends AbstractType
             ->add('Submit', SubmitType::class, array('label' => 'Supprimer'))
         ;
     }
+
+    /**
+     * @param FormBuilderInterface $builder
+     */
+    private function createAccess(FormBuilderInterface $builder)
+    {
+        $builder
+            ->add('Login', TextType::class, array('label' => 'Login : '))
+            ->add('Password', PasswordType::class, array('label' => 'Mot de passe : ', 'mapped' => false))
+            ->add('UserMember', IntegerType::class, array('label' => 'N° de Licence : ', 'required' => false, 'mapped' => false))
+            ->add('UserFirstname', TextType::class, array('label' => 'Prénom : ', 'required' => false))
+            ->add('UserRealName', TextType::class, array('label' => 'Nom : ', 'required' => false))
+            ->add('Submit', SubmitType::class, array('label' => 'Créer'))
+        ;
+    }
+
 }

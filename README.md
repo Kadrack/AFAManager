@@ -13,6 +13,7 @@ php composer.phar install
 
 # Create Database
 ```bash
+php bin/console make:migration
 php bin/console doctrine:migrations:migrate
 ```
 # Create User

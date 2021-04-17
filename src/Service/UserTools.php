@@ -18,12 +18,24 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
  */
 class UserTools
 {
+    /**
+     * @var array|null
+     */
     private ?array $listManagedClub = null;
 
+    /**
+     * @var EntityManagerInterface
+     */
     private EntityManagerInterface $entityManager;
 
+    /**
+     * @var bool
+     */
     private bool $isDuplicate = false;
 
+    /**
+     * @var UserPasswordEncoderInterface
+     */
     private UserPasswordEncoderInterface $passwordEncoder;
 
     /**
@@ -213,30 +225,23 @@ class UserTools
     }
 
     /**
-     * @param User $user
+     * @param string $login
      * @param Club $club
      * @param User $who
-     * @param string|null $password
-     * @param int|null $member_id
      * @return bool
      */
-    public function clubManagerAdd(User $user, Club $club, User $who, string $password, ?int $member_id): bool
+    public function clubManagerAdd(string $login, Club $club, User $who): bool
     {
-        if ($this->checkDuplicate($user))
+        if (is_null($this->entityManager->getRepository(User::class)->findOneBy(['login' => $login])))
         {
             return false;
         }
-
-        if (is_null($this->entityManager->getRepository(User::class)->findOneBy(['user_member' => $member_id == null ? 0 : $member_id])))
-        {
-            $this->newUser($user, $who, $password, $member_id);
-        }
         else
         {
-            $user = $this->entityManager->getRepository(User::class)->findOneBy(['user_member' => $member_id]);
+            $user = $this->entityManager->getRepository(User::class)->findOneBy(['login' => $login]);
         }
 
-        if (is_null($this->entityManager->getRepository(UserAccess::class)->findOneBy(['user_access_user' => $user, 'user_access_role' => 'ROLE_CLUB'])))
+        if (is_null($this->entityManager->getRepository(UserAccess::class)->findOneBy(['user_access_user' => $user, 'user_access_role' => 'ROLE_CLUB', 'user_access_club' => $club])))
         {
             $userAccess = new UserAccess();
 
@@ -288,6 +293,10 @@ class UserTools
         return true;
     }
 
+    /**
+     * @param User $user
+     * @return array|null
+     */
     public function listManagedClub(User $user): ?array
     {
         if ($this->listManagedClub !== null)

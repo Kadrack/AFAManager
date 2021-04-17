@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    AFA-Manager
+{% endblock %}
+
+{% block stylesheets %}
+{% endblock %}
+
+{% block body %}
+    <h1>Avertissement</h1>
+    <p>Ces listes ne sont pas destinées à être diffusée ni stockée, après l'envoie du mail aux destinataires en CCI, cette liste doit être immédiatement effacée.</p>
+    <p>L'utilisation des adresses à d'autres fin que l'envoie de communication approuvée par la fédération est une infraction à la protection des données et peux être dommageable pour l'AFA et l'utilisateur des données.</p>
+    <a class="btn btn-primary" href="{{ path('secretariat-clubMailsList', {'list': 1}) }}">Liste mails contact club</a><a class="btn btn-primary" href="{{ path('secretariat-clubMailsList', {'list': 2}) }}">Liste mails Dojo-Cho</a><a class="btn btn-primary" href="{{ path('secretariat-clubMailsList', {'list': 3}) }}">Liste mails contact club & Dojo-Cho</a><br />
+{% endblock %}
+
+{% block javascripts %}
+{% endblock %}

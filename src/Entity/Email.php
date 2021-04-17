@@ -3,78 +3,112 @@
 namespace App\Entity;
 
 use DateTime;
-use DateTimeInterface;
+
 use Doctrine\ORM\Mapping as ORM;
 
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
+ * Class Email
+ * @package App\Entity
+ *
  * @ORM\Table(name="afamanager_email")
  * @ORM\Entity(repositoryClass="App\Repository\EmailRepository")
  */
 class Email
 {
     /**
+     * @var int
+     *
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      * @ORM\Column(type="integer")
      */
-    private $email_id;
+    private int $email_id;
 
     /**
+     * @var DateTime
+     *
      * @ORM\Column(type="date")
      */
-    private $email_creation_date;
-    
+    private DateTime $email_creation_date;
+
     /**
-     * @ORM\Column(type="string", length=255)
-     * 
-     * @Assert\NotBlank()
-     */
-    private $email_title;
-    
-    /**
+     * @var string
+     *
      * @ORM\Column(type="string", length=255)
      */
-    private $email_from;
-    
+    #[Assert\NotBlank]
+    private string $email_title;
+
     /**
+     * @var string
+     *
      * @ORM\Column(type="string", length=255)
      */
-    private $email_to;
-    
+    private string $email_from;
+
     /**
+     * @var string
+     *
+     * @ORM\Column(type="string", length=255)
+     */
+    private string $email_to;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(type="text")
      */
-    private $email_body;
-    
+    private string $email_body;
+
+    /**
+     * Email constructor.
+     */
     public function __construct()
     {
         $this->email_creation_date = new DateTime('today');
     }
 
-    public function getEmailId()
+    /**
+     * @return int
+     */
+    public function getEmailId(): int
     {
         return $this->email_id;
     }
 
-    public function getEmailCreationDate(): ?DateTimeInterface
+    /**
+     * @return DateTime
+     */
+    public function getEmailCreationDate(): DateTime
     {
         return $this->email_creation_date;
     }
 
-    public function setEmailCreationDate(DateTimeInterface $email_creation_date): self
+    /**
+     * @param DateTime $email_creation_date
+     * @return $this
+     */
+    public function setEmailCreationDate(DateTime $email_creation_date): self
     {
         $this->email_creation_date = $email_creation_date;
 
         return $this;
     }
-    
-    public function getEmailTitle(): ?string
+
+    /**
+     * @return string
+     */
+    public function getEmailTitle(): string
     {
         return $this->email_title;
     }
 
+    /**
+     * @param string $email_title
+     * @return $this
+     */
     public function setEmailTitle(string $email_title): self
     {
         $this->email_title = $email_title;
@@ -82,11 +116,18 @@ class Email
         return $this;
     }
 
-    public function getEmailFrom(): ?string
+    /**
+     * @return string
+     */
+    public function getEmailFrom(): string
     {
         return $this->email_from;
     }
 
+    /**
+     * @param string $email_from
+     * @return $this
+     */
     public function setEmailFrom(string $email_from): self
     {
         $this->email_from = $email_from;
@@ -94,11 +135,18 @@ class Email
         return $this;
     }
 
-    public function getEmailTo(): ?string
+    /**
+     * @return string
+     */
+    public function getEmailTo(): string
     {
         return $this->email_to;
     }
 
+    /**
+     * @param string $email_to
+     * @return $this
+     */
     public function setEmailTo(string $email_to): self
     {
         $this->email_to = $email_to;
@@ -106,11 +154,18 @@ class Email
         return $this;
     }
 
-    public function getEmailBody(): ?string
+    /**
+     * @return string
+     */
+    public function getEmailBody(): string
     {
         return $this->email_body;
     }
 
+    /**
+     * @param string $email_body
+     * @return $this
+     */
     public function setEmailBody(string $email_body): self
     {
         $this->email_body = $email_body;

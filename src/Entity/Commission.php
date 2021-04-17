@@ -10,69 +10,103 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
+ * Class Commission
+ * @package App\Entity
+ *
  * @ORM\Table(name="afamanager_commission")
  * @ORM\Entity(repositoryClass="App\Repository\CommissionRepository")
  */
 class Commission
 {
     /**
+     * @var int
+     *
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      * @ORM\Column(type="integer")
      */
-    private $commission_id;
+    private int $commission_id;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @var string
      *
-     * @Assert\NotBlank()
+     * @ORM\Column(type="string", length=255)
      */
-    private $commission_name;
+    #[Assert\NotBlank]
+    private string $commission_name;
 
     /**
+     * @var string|null
+     *
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $commission_role;
+    private ?string $commission_role;
 
     /**
+     * @var ArrayCollection|Collection|null
+     *
      * @ORM\OneToMany(targetEntity="App\Entity\CommissionMember", mappedBy="commission", orphanRemoval=true, cascade={"persist"})
      */
-    private $commission_members;
+    private ArrayCollection|Collection|null $commission_members;
 
+    /**
+     * Commission constructor.
+     */
     public function __construct()
     {
         $this->commission_members = new ArrayCollection();
     }
 
-    public function getCommissionId(): ?int
+    /**
+     * @return int
+     */
+    public function getCommissionId(): int
     {
         return $this->commission_id;
     }
 
-    public function setCommissionId(?int $commission_id): self
+    /**
+     * @param int $commission_id
+     * @return $this
+     */
+    public function setCommissionId(int $commission_id): self
     {
         $this->commission_id = $commission_id;
 
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getCommissionName(): ?string
     {
         return $this->commission_name;
     }
 
-    public function setCommissionName(?string $commission_name): self
+    /**
+     * @param string $commission_name
+     * @return $this
+     */
+    public function setCommissionName(string $commission_name): self
     {
         $this->commission_name = $commission_name;
 
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getCommissionRole(): ?string
     {
         return $this->commission_role;
     }
 
+    /**
+     * @param string|null $commission_role
+     * @return $this
+     */
     public function setCommissionRole(?string $commission_role): self
     {
         $this->commission_role = $commission_role;
@@ -81,13 +115,17 @@ class Commission
     }
 
     /**
-     * @return Collection|CommissionMember[]
+     * @return Collection
      */
     public function getCommissionMembers(): Collection
     {
         return $this->commission_members;
     }
 
+    /**
+     * @param CommissionMember $commissionMember
+     * @return $this
+     */
     public function addCommissionMembers(CommissionMember $commissionMember): self
     {
         if (!$this->commission_members->contains($commissionMember)) {
@@ -98,6 +136,10 @@ class Commission
         return $this;
     }
 
+    /**
+     * @param CommissionMember $commissionMember
+     * @return $this
+     */
     public function removeMemberGrades(CommissionMember $commissionMember): self
     {
         if ($this->commission_members->contains($commissionMember)) {

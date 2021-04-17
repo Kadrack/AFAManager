@@ -5,9 +5,9 @@ namespace App\Service;
 use App\Entity\Club;
 use App\Entity\ClubDojo;
 use App\Entity\ClubLesson;
+use App\Entity\ClubModificationLog;
 use App\Entity\ClubTeacher;
 use App\Entity\Member;
-use App\Entity\Training;
 use App\Entity\UserAccess;
 
 use Doctrine\ORM\EntityManagerInterface;
@@ -18,12 +18,24 @@ use Doctrine\ORM\EntityManagerInterface;
  */
 class ClubTools
 {
+    /**
+     * @var Club
+     */
     private Club $club;
 
+    /**
+     * @var array|null
+     */
     private ?array $lessons;
 
+    /**
+     * @var array|null
+     */
     private ?array $managers;
 
+    /**
+     * @var EntityManagerInterface
+     */
     private EntityManagerInterface $em;
 
     /**
@@ -73,51 +85,30 @@ class ClubTools
 
         $afa_teachers = $this->em->getRepository(ClubTeacher::class)->getAFATeachers($this->club);
 
-        if (count($afa_teachers) > 1)
+        foreach ($afa_teachers as $teacher)
         {
-            for ($i = 0; $i <= count($afa_teachers); $i++)
+            if (!isset($teachers[$teacher['Licence']]))
             {
-                if ($afa_teachers[$i]['Licence'] == $afa_teachers[$i+1]['Licence'])
-                {
-                    if ($afa_teachers[$i+1]['GradeTitleAikikai'] > 3)
-                    {
-                        $afa_teachers[$i+1]['GradeTitleAikikai'] = null;
-                    }
+                $teachers[$teacher['Licence']] = $teacher;
 
-                    if (($afa_teachers[$i+1]['GradeTitleAikikai'] == null) && ($afa_teachers[$i]['GradeTitleAikikai'] <= 3))
-                    {
-                        $afa_teachers[$i+1]['GradeTitleAikikai'] = $afa_teachers[$i]['GradeTitleAikikai'];
-                    }
+                $teachers[$teacher['Licence']]['GradeTitleAdeps']   = null;
+                $teachers[$teacher['Licence']]['GradeTitleAikikai'] = null;
+            }
 
-                    if (($afa_teachers[$i+1]['GradeTitleAdeps'] < 4 ) || ($afa_teachers[$i+1]['GradeTitleAdeps'] > 9 ))
-                    {
-                        $afa_teachers[$i+1]['GradeTitleAdeps'] = null;
-                    }
+            if (($teacher['GradeTitleAikikai'] <= 3) && ($teachers[$teacher['Licence']]['GradeTitleAikikai'] < $teacher['GradeTitleAikikai']))
+            {
+                $teachers[$teacher['Licence']]['GradeTitleAikikai'] = $teacher['GradeTitleAikikai'];
+            }
 
-                    if (($afa_teachers[$i+1]['GradeTitleAdeps'] == null) && (($afa_teachers[$i+1]['GradeTitleAdeps'] >= 4 ) && ($afa_teachers[$i+1]['GradeTitleAdeps'] <= 9 )))
-                    {
-                        $afa_teachers[$i+1]['GradeTitleAdeps'] = $afa_teachers[$i]['GradeTitleAdeps'];
-                    }
-
-                    unset($afa_teachers[$i]);
-                }
-                else
-                {
-                    if (($afa_teachers[$i]['GradeTitleAdeps'] < 4 ) || ($afa_teachers[$i]['GradeTitleAdeps'] > 9 ))
-                    {
-                        $afa_teachers[$i]['GradeTitleAdeps'] = null;
-                    }
-                    elseif ($afa_teachers[$i]['GradeTitleAikikai'] > 3)
-                    {
-                        $afa_teachers[$i]['GradeTitleAikikai'] = null;
-                    }
-                }
+            if ((($teacher['GradeTitleAdeps'] >= 4 ) && ($teacher['GradeTitleAdeps'] <= 9 )) && ($teachers[$teacher['Licence']]['GradeTitleAdeps'] < $teacher['GradeTitleAdeps']))
+            {
+                $teachers[$teacher['Licence']]['GradeTitleAdeps'] = $teacher['GradeTitleAdeps'];
             }
         }
 
         $foreign_teachers = $this->em->getRepository(ClubTeacher::class)->getForeignTeachers($this->club);
 
-        $this->lessons = array('Dojos' => $dojos, 'Lessons' => $lessons, 'AFA_teachers' => $afa_teachers, 'Foreign_teachers' => $foreign_teachers);
+        $this->lessons = array('Dojos' => $dojos, 'Lessons' => $lessons, 'AFA_teachers' => $teachers, 'Foreign_teachers' => $foreign_teachers);
 
         return $this->lessons;
     }
@@ -166,6 +157,13 @@ class ClubTools
             $this->em->remove($clubDojo);
         }
 
+        $log = new ClubModificationLog();
+
+        $log->setClubModificationLogClub($this->getClub());
+        $log->setClubModificationLogAction("Modification adresse dojo");
+
+        $this->em->persist($log);
+
         $this->em->flush();
 
         return true;
@@ -189,6 +187,13 @@ class ClubTools
         {
             $this->em->remove($clubLesson);
         }
+
+        $log = new ClubModificationLog();
+
+        $log->setClubModificationLogClub($this->getClub());
+        $log->setClubModificationLogAction("Modification horaire");
+
+        $this->em->persist($log);
 
         $this->em->flush();
 
@@ -238,6 +243,13 @@ class ClubTools
         {
             $this->club->setClubMainTeacher($clubTeacher);
         }
+
+        $log = new ClubModificationLog();
+
+        $log->setClubModificationLogClub($this->getClub());
+        $log->setClubModificationLogAction("Modification liste professeur");
+
+        $this->em->persist($log);
 
         $this->em->flush();
 

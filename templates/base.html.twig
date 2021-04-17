@@ -18,12 +18,31 @@
             <link rel="stylesheet" type="text/css" href="{{ asset('css/bootstrap.min.css') }}" />
         {% endif %}
 
+        <style>
+            @media print
+            {
+                body
+                {
+                    display: none;
+                }
+            }
+
+            .unselectable
+            {
+                -webkit-user-select: none;
+                -webkit-touch-callout: none;
+                -moz-user-select: none;
+                -ms-user-select: none;
+                user-select: none;
+            }
+        </style>
+
         {% block stylesheets %}{% endblock %}
     </head>
     <body class="container">
         {% if app.request.pathinfo != '/login' %}
             <nav class="navbar navbar-expand-lg navbar-dark {% if app.user != null %}{% if app.user.login == "Carine" %}bg-dark{% else %}bg-primary{% endif %}{% else %}bg-primary{% endif %}">
-                <a class="navbar-brand" href="{{ path('common_index') }}">AFA-Manager</a>
+                <a class="navbar-brand" href="{{ path('common-index') }}">AFA-Manager</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -33,12 +52,12 @@
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Membre</a>
                                 <div class="dropdown-menu">
-                                    <a class="dropdown-item" href="{{ path('member_my_data') }}">Mes Données</a>
-                                    <a class="dropdown-item" href="{{ path('member_my_grades') }}">Mes Grades</a>
-                                    <a class="dropdown-item" href="{{ path('member_my_stages') }}">Mes Stages</a>
-                                    <a class="dropdown-item" href="{{ path('member_my_titles') }}">Mes Titres</a>
-                                    <a class="dropdown-item" href="{{ path('member_my_licence') }}">Ma Licence</a>
-                                    <a class="dropdown-item" href="{{ path('member_my_club') }}">Mon Club</a>
+                                    <a class="dropdown-item" href="{{ path('member-myData') }}">Mes Données</a>
+                                    <a class="dropdown-item" href="{{ path('member-myGrades') }}">Mes Grades</a>
+                                    <a class="dropdown-item" href="{{ path('member-myStages') }}">Mes Stages</a>
+                                    <a class="dropdown-item" href="{{ path('member-myTitles') }}">Mes Titres</a>
+                                    <a class="dropdown-item" href="{{ path('member-myLicence') }}">Ma Licence</a>
+                                    <a class="dropdown-item" href="{{ path('member-myClub') }}">Mon Club</a>
                                 </div>
                             </li>
                         {% endif %}
@@ -46,11 +65,11 @@
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Club</a>
                                 <div class="dropdown-menu">
-                                    <a class="dropdown-item" href="{{ path('club_dojo_index') }}">Dojo(s), horaires & professeurs</a>
-                                    <a class="dropdown-item" href="{{ path('club_members_list') }}">Liste des membres</a>
-                                    <a class="dropdown-item" href="{{ path('club_association_details') }}">Détails Association</a>
-                                    <a class="dropdown-item" href="{{ path('club_manager_index') }}">Liste des gestionnaires</a>
-                                    <a class="dropdown-item" href="{{ path('club_search_members') }}" target="_blank">Recherche membres</a>
+                                    <a class="dropdown-item" href="{{ path('club-dojoIndex') }}">Dojo(s), horaires & professeurs</a>
+                                    <a class="dropdown-item" href="{{ path('club-membersList') }}">Liste des membres</a>
+                                    <a class="dropdown-item" href="{{ path('club-associationDetails') }}">Détails Association</a>
+                                    <a class="dropdown-item" href="{{ path('club-managerIndex') }}">Liste des gestionnaires</a>
+                                    <a class="dropdown-item" href="{{ path('club-searchMembers') }}" target="_blank">Recherche membres</a>
                                 </div>
                             </li>
                         {% endif %}
@@ -58,7 +77,7 @@
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Comptabilité</a>
                                 <div class="dropdown-menu">
-                                    <a class="dropdown-item" href="{{ path('accounting_search_members') }}" target="_blank">Recherche membres</a>
+                                    <a class="dropdown-item" href="{{ path('accounting-searchMembers') }}" target="_blank">Recherche membres</a>
                                 </div>
                             </li>
                         {% endif %}
@@ -66,7 +85,7 @@
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Enseignement</a>
                                 <div class="dropdown-menu">
-                                    <a class="dropdown-item" href="{{ path('teaching_statistics_index') }}">Statistiques</a>
+                                    <a class="dropdown-item" href="{{ path('teaching-statisticsIndex') }}">Statistiques</a>
                                 </div>
                             </li>
                         {% endif %}
@@ -74,7 +93,10 @@
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Administration</a>
                                 <div class="dropdown-menu">
-                                    <a class="dropdown-item" href="{{ path('administration_statistics_index') }}">Statistiques</a>
+                                    {% if is_granted('ROLE_COMMUNICATION_LEADER') %}<a class="dropdown-item" href="{{ path('administration-clubMailsList') }}">Mailing List</a>{% endif %}
+                                    <a class="dropdown-item" href="{{ path('administration-statisticsIndex') }}">Statistiques</a>
+                                    <a class="dropdown-item" href="{{ path('administration-creationClubList') }}">Liste Création Club</a>
+                                    <a class="dropdown-item" href="{{ path('administration-dojoChoStartPractice') }}">Liste Année de pratique Dojo-Cho</a>
                                 </div>
                             </li>
                         {% endif %}
@@ -82,30 +104,33 @@
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Grades</a>
                                 <div class="dropdown-menu">
-                                    <a class="dropdown-item" href="{{ path('grade_exam_index') }}">Examens Fédéraux</a>
+                                    <a class="dropdown-item" href="{{ path('grade-examIndex') }}">Examens Fédéraux</a>
                                 </div>
                             </li>
                         {% endif %}
                         {% if is_granted('ROLE_STAGES') %}
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ path('training_index') }}">Stages</a>
+                                <a class="nav-link" href="{{ path('training-index') }}">Stages</a>
                             </li>
                         {% endif %}
                         {% if is_granted('ROLE_SECRETARIAT') %}
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Secrétariat</a>
                                 <div class="dropdown-menu">
-                                    <a class="dropdown-item" href="{{ path('secretariat_supporter_index') }}">Sympathisants</a>
-                                    <a class="dropdown-item" href="{{ path('secretariat_search_members') }}" target="_blank">Recherche membres</a>
-                                    <a class="dropdown-item" href="{{ path('secretariat_club_list') }}">Les Clubs</a>
-                                    <a class="dropdown-item" href="{{ path('secretariat_access_list_index') }}">Liste accès interface</a>
-                                    <a class="dropdown-item" href="{{ path('secretariat_exam_index') }}">Examens Fédéraux</a>
-                                    <a class="dropdown-item" href="{{ path('secretariat_training_index') }}">Stages</a>
-                                    <a class="dropdown-item" href="{{ path('secretariat_member_modification_validation_index') }}">Modifications en attente</a>
-                                    <a class="dropdown-item" href="{{ path('secretariat_commission_index') }}">Commissions</a>
-                                    <a class="dropdown-item" href="{{ path('secretariat_print_stamp') }}" target="_blank">Impression timbres</a>
-                                    <a class="dropdown-item" href="{{ path('secretariat_print_card') }}" target="_blank">Impression carte</a>
-                                    <a class="dropdown-item" href="{{ path('secretariat_member_list_cleanup') }}">Nettoyage ancien membres</a>
+                                    <a class="dropdown-item" href="{{ path('secretariat-supporterIndex') }}">Sympathisants</a>
+                                    <a class="dropdown-item" href="{{ path('secretariat-searchMembers') }}" target="_blank">Recherche membres</a>
+                                    <a class="dropdown-item" href="{{ path('secretariat-clubList') }}">Les Clubs</a>
+                                    <a class="dropdown-item" href="{{ path('secretariat-clubMailsList') }}">Mailing list</a>
+                                    <a class="dropdown-item" href="{{ path('secretariat-clubAddressList') }}">Liste Adresses des Clubs</a>
+                                    <a class="dropdown-item" href="{{ path('secretariat-accessListIndex') }}">Liste accès interface</a>
+                                    <a class="dropdown-item" href="{{ path('secretariat-examIndex') }}">Examens Fédéraux</a>
+                                    <a class="dropdown-item" href="{{ path('secretariat-trainingIndex') }}">Stages</a>
+                                    <a class="dropdown-item" href="{{ path('secretariat-memberModificationValidationIndex') }}">Modifications en attente</a>
+                                    <a class="dropdown-item" href="{{ path('secretariat-dojoModificationList') }}">Modifications dojo</a>
+                                    <a class="dropdown-item" href="{{ path('secretariat-commissionIndex') }}">Commissions</a>
+                                    <a class="dropdown-item" href="{{ path('secretariat-printStamp') }}" target="_blank">Impression timbres</a>
+                                    <a class="dropdown-item" href="{{ path('secretariat-printCard') }}" target="_blank">Impression carte</a>
+                                    <a class="dropdown-item" href="{{ path('secretariat-memberListCleanup') }}">Nettoyage ancien membres</a>
                                 </div>
                             </li>
                         {% endif %}
@@ -113,8 +138,8 @@
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Mon Compte</a>
                                 <div class="dropdown-menu">
-                                    <a class="dropdown-item" href="{{ path('common_change_login') }}">Modification Login</a>
-                                    <a class="dropdown-item" href="{{ path('common_change_password') }}">Modification Mot de Passe</a>
+                                    <a class="dropdown-item" href="{{ path('common-changeLogin') }}">Modification Login</a>
+                                    <a class="dropdown-item" href="{{ path('common-changePassword') }}">Modification Mot de Passe</a>
                                     <div class="dropdown-divider"></div>
                                     <a class="dropdown-item" href="{{ path('app_logout') }}">Déconnexion</a>
                                 </div>

@@ -16,6 +16,10 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class MemberPrintoutRepository extends ServiceEntityRepository
 {
+    /**
+     * MemberPrintoutRepository constructor.
+     * @param ManagerRegistry $registry
+     */
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, MemberPrintout::class);

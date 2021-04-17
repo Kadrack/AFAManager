@@ -8,8 +8,8 @@
 {% endblock %}
 
 {% block body %}
-    <h1>Liste des gestionnaires du club <a class="btn btn-primary" href="{{ path('secretariat_club_manager_add', {'club': clubTools.getClub.getClubId()}) }}">Ajouter</a></h1>
-    <table class="table table-sm table-hover">
+    <h1>Liste des gestionnaires du club <a class="btn btn-primary" href="{{ path('secretariat-clubManagerAdd', {'club': clubTools.getClub.getClubId()}) }}">Ajouter</a></h1>
+    <table class="table table-sm table-hover unselectable">
         <thead>
             <tr>
                 <th scope="col">Login</th>
@@ -36,9 +36,9 @@
                         <div class="btn-group" role="group">
                             <button id="btnGroupDrop1" type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
                             <div class="dropdown-menu" aria-labelledby="btnGroupDrop1" style="">
-                                <a class="dropdown-item" href="{{ path('secretariat_club_manager_delete', {'club': clubTools.getClub.getClubId(), 'user': manager.id}) }}">Supprimer</a>
-                                {% if manager.userStatus == 0 or manager.userStatus > 4 %}<a class="dropdown-item" href="{{ path('secretariat_access_reactivate', {'user': manager.id}) }}">Réactiver</a>{% endif %}
-                                <a class="dropdown-item" href="{{ path('secretariat_access_password_modify', {'user': manager.id}) }}">Modifier Mot de Passe</a>
+                                <a class="dropdown-item" href="{{ path('secretariat-clubManagerDelete', {'club': clubTools.getClub.getClubId(), 'user': manager.id}) }}">Supprimer</a>
+                                {% if manager.userStatus == 0 or manager.userStatus > 4 %}<a class="dropdown-item" href="{{ path('secretariat-accessReactivate', {'user': manager.id}) }}">Réactiver</a>{% endif %}
+                                <a class="dropdown-item" href="{{ path('secretariat-accessPasswordModify', {'user': manager.id}) }}">Modifier Mot de Passe</a>
                             </div>
                         </div>
                     </div>

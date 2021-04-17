@@ -16,6 +16,10 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class EmailRepository extends ServiceEntityRepository
 {
+    /**
+     * EmailRepository constructor.
+     * @param ManagerRegistry $registry
+     */
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Email::class);

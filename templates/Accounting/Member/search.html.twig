@@ -14,7 +14,7 @@
 
     {% if results != null %}
     <h2>Résultats de la recherche</h2>
-    <table class="table table-sm table-hover">
+    <table class="table table-sm table-hover unselectable">
         <thead>
             <tr>
                 <th scope="col">#</th>
@@ -35,7 +35,7 @@
                 <td class="align-middle">{{ member.Name|title }}</td>
                 <td class="align-middle">{{ member.ClubId }} - {{ member.Club|title }}</td>
                 <td class="align-middle">{{ member.Deadline|date("d/m/Y") }}</td>
-                <td class="align-middle"><a class="btn btn-primary" href="{{ path('accounting_member_contact_data', {'member': member.Id}) }}">Données de Contact</a></td>
+                <td class="align-middle"><a class="btn btn-primary" href="{{ path('accounting-memberContactData', {'member': member.Id}) }}">Données de Contact</a></td>
             </tr>
         {% endfor %}
         </tbody>

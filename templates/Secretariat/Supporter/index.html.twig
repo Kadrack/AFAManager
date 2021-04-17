@@ -8,8 +8,8 @@
 {% endblock %}
 
 {% block body %}
-    <h1>Liste des sympathisants <a class="btn btn-primary" href="{{ path('secretariat_supporter_create') }}">Ajouter</a></h1>
-    <table class="table table-sm table-hover">
+    <h1>Liste des sympathisants <a class="btn btn-primary" href="{{ path('secretariat-supporterCreate') }}">Ajouter</a></h1>
+    <table class="table table-sm table-hover unselectable">
         <thead>
             <tr>
                 <th scope="col">Nom</th>
@@ -32,8 +32,8 @@
                         <div class="btn-group" role="group">
                             <button id="btnGroupDrop1" type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
                             <div class="dropdown-menu" aria-labelledby="btnGroupDrop1" style="">
-                                <a class="dropdown-item" href="{{ path('secretariat_supporter_update', {'supporter': supporter.getSecretariatSupporterId()}) }}">Modifier</a>
-                                <a class="dropdown-item" href="{{ path('secretariat_supporter_delete', {'supporter': supporter.getSecretariatSupporterId()}) }}">Supprimer</a>
+                                <a class="dropdown-item" href="{{ path('secretariat-supporterUpdate', {'supporter': supporter.getSecretariatSupporterId()}) }}">Modifier</a>
+                                <a class="dropdown-item" href="{{ path('secretariat-supporterDelete', {'supporter': supporter.getSecretariatSupporterId()}) }}">Supprimer</a>
                             </div>
                         </div>
                     </div>

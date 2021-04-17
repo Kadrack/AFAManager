@@ -22,16 +22,19 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/stage", name="training_")
+ * Class TrainingController
+ * @package App\Controller
  *
  * @IsGranted("ROLE_STAGES")
  */
+#[Route('/stage', name:'training-')]
 class TrainingController extends AbstractController
 {
     /**
-     * @Route("/", name="index")
+     * @return Response
      */
-    public function stageIndex()
+    #[Route('/', name:'index')]
+    public function stageIndex(): Response
     {
         $trainings = $this->getDoctrine()->getRepository(Training::class)->getActiveTrainings(4);
 
@@ -39,17 +42,16 @@ class TrainingController extends AbstractController
     }
 
     /**
-     * @Route("/{training<\d+>}/ajouter-pratiquant", name="attendance_add")
-     *
      * @param Request $request
      * @param Training $training
      * @return RedirectResponse|Response
      */
-    public function attendanceAdd(Request $request, Training $training)
+    #[Route('/{training<\d+>}/ajouter-pratiquant', name:'attendanceAdd')]
+    public function attendanceAdd(Request $request, Training $training): RedirectResponse|Response
     {
         $choices = $this->getDoctrine()->getRepository(TrainingSession::class)->findBy(['training' => $training->getTrainingId()], ['training_session_date' => 'ASC', 'training_session_starting_hour' => 'ASC', 'training_session_duration' => 'ASC']);
 
-        $form = $this->createForm(TrainingType::class, null, array('form' => 'attendance_add', 'data_class' => null, 'choices' => $choices));
+        $form = $this->createForm(TrainingType::class, null, array('form' => 'attendanceAdd', 'data_class' => null, 'choices' => $choices));
 
         $form->handleRequest($request);
 
@@ -70,7 +72,6 @@ class TrainingController extends AbstractController
                 $attendance[$i] = new TrainingAttendance();
 
                 $attendance[$i]->setTraining($training);
-                /** @var Member $member */
                 $attendance[$i]->setTrainingAttendanceMember($member);
                 $attendance[$i]->setTrainingAttendanceUnique($unique);
                 $attendance[$i]->setTrainingAttendanceSession($session);
@@ -88,7 +89,7 @@ class TrainingController extends AbstractController
 
             $entityManager->flush();
 
-            return $this->redirectToRoute('training_attendance_add', array('training' => $training->getTrainingId()));
+            return $this->redirectToRoute('training-attendanceAdd', array('training' => $training->getTrainingId()));
         }
 
         $payments = $this->getDoctrine()->getRepository(TrainingAttendance::class)->getPayments($training->getTrainingId());
@@ -121,11 +122,12 @@ class TrainingController extends AbstractController
      * @param Training $training
      * @return RedirectResponse|Response
      */
-    public function attendanceForeignAdd(Request $request, Training $training)
+    #[Route('/{training<\d+>}/ajouter-pratiquant-non-afa', name:'attendanceForeignAdd')]
+    public function attendanceForeignAdd(Request $request, Training $training): RedirectResponse|Response
     {
         $choices = $this->getDoctrine()->getRepository(TrainingSession::class)->findBy(['training' => $training->getTrainingId()], ['training_session_date' => 'ASC', 'training_session_starting_hour' => 'ASC']);
 
-        $form = $this->createForm(TrainingType::class, null, array('form' => 'attendance_foreign_add', 'data_class' => null, 'choices' => $choices));
+        $form = $this->createForm(TrainingType::class, null, array('form' => 'attendanceForeignAdd', 'data_class' => null, 'choices' => $choices));
 
         $form->handleRequest($request);
 
@@ -163,7 +165,7 @@ class TrainingController extends AbstractController
 
             $entityManager->flush();
 
-            return $this->redirectToRoute('training_attendance_foreign_add', array('training' => $training->getTrainingId()));
+            return $this->redirectToRoute('training-attendanceForeignAdd', array('training' => $training->getTrainingId()));
         }
 
         $payments = $this->getDoctrine()->getRepository(TrainingAttendance::class)->getPayments($training->getTrainingId());
