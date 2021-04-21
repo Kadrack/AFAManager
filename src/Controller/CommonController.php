@@ -2,8 +2,10 @@
 // src/Controller/CommonController.php
 namespace App\Controller;
 
+use App\Entity\Mail;
 use App\Entity\User;
 
+use App\Form\MailType;
 use App\Form\UserType;
 
 use App\Service\UserTools;
@@ -17,6 +19,10 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
+
+use Symfony\Component\Mailer\MailerInterface;
+
+use Symfony\Component\Mime\Email;
 
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -101,5 +107,45 @@ class CommonController extends AbstractController
         }
 
         return $this->render('Common/change_password.html.twig', array('form' => $form->createView()));
+    }
+
+    /**
+     * @param \Symfony\Component\Mailer\MailerInterface $mailer
+     * @param Request $request
+     * @return Response
+     * @throws \Symfony\Component\Mailer\Exception\TransportExceptionInterface
+     */
+    #[Route('/creer-email', name:'createMail')]
+    public function createMail(MailerInterface $mailer, Request $request): Response
+    {
+        $email = new Mail();
+
+        $form = $this->createForm(MailType::class, $email);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid())
+        {
+            $mail = new Email();
+
+            !$email->getMailPriority() ?: $mail->priority(Email::PRIORITY_HIGH);
+
+            $mail->from('webmaster@aikido.be');
+            $mail->replyTo('webmaster@aikido.be');
+            $mail->to($email->getMailTo());
+
+            is_null($email->getMailCc()) ?: $mail->cc($email->getMailCc());
+            is_null($email->getMailBcc()) ?: $mail->bcc($email->getMailBcc());
+
+            $mail->subject($email->getMailTitle());
+            $mail->html($email->getMailBody());
+            $mail->text($email->getMailBody());
+
+            $mailer->send($mail);
+
+            return $this->render('Common/Mail/create.html.twig', array('form' => $form->createView()));
+        }
+
+        return $this->render('Common/Mail/create.html.twig', array('form' => $form->createView()));
     }
 }
