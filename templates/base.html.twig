@@ -18,6 +18,7 @@
             <link rel="stylesheet" type="text/css" href="{{ asset('css/bootstrap.min.css') }}" />
         {% endif %}
 
+        <link rel="stylesheet" type="text/css" href="{{ asset('css/fabian.css?<?php echo time(); ?>') }}" />
         <style>
             @media print
             {
@@ -52,6 +53,7 @@
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Membre</a>
                                 <div class="dropdown-menu">
+                                    <a class="dropdown-item" href="{{ path('member-allData') }}">Tout</a>
                                     <a class="dropdown-item" href="{{ path('member-myData') }}">Mes Données</a>
                                     <a class="dropdown-item" href="{{ path('member-myGrades') }}">Mes Grades</a>
                                     <a class="dropdown-item" href="{{ path('member-myStages') }}">Mes Stages</a>

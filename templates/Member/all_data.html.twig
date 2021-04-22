@@ -1,0 +1,284 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+{% endblock %}
+
+{% block body %}
+
+    <h1>{{ member.getMemberFirstname()|title }} {{ member.getMemberName()|title }}</h1>
+    <br />
+    <div class="data-frame data-small">
+        <div class="data-title">Données personnelles &nbsp;<a class="btn btn-primary" href="{{ path('member-myDataUpdate') }}">Modifier</a></div>
+        <div class="data-content">
+            <span class="memberPhoto"><img alt="" src="{{ asset('uploads/photos/'~member.getMemberPhoto()) }}" height="200px"/></span>
+            <span class="memberLabel">Nom:</span>         <span class="memberField">{{ member.getMemberName() }}</span></br>
+            <span class="memberLabel">Prénom:</span>      <span class="memberField">{{ member.getMemberFirstname() }}</span></br>
+            <span class="memberLabel">Naissance:</span>   <span class="memberField">{{ member.getMemberBirthday()|date("d/m/Y") }}</span></br>
+            <span class="memberLabel">Adresse:</span>     <span class="memberField">{{ member.getMemberAddress() }}</span></br>
+            <span class="memberLabel">Localité:</span>    <span class="memberField">{{ member.getMemberZip() }} {{ member.getMemberCity() }}</span></br>
+            <span class="memberLabel">Pays:</span>        <span class="memberField">{{ listData.getCountryName(member.getMemberCountry()) }}</span></br>
+            <span class="memberLabel">Email:</span>       <span class="memberField">{{ member.getMemberEmail() }}</span></br>
+            <span class="memberLabel">Téléphone:</span>   <span class="memberField">{{ member.getMemberPhoneFormated() }}</span></br>
+            <span class="memberLabel">Aïkikaï Id:</span>  <span class="memberField">{{ member.getMemberAikikaiId() }}</span></br>
+        </div>
+    </div>
+
+    <div class="data-frame data-large">
+        <div class="data-title collapseChar collapsed" data-toggle="collapse" data-target="#Titles">Historique des titres</div>
+        <div id="Titles" class="data-content collapse">
+            <table class="table table-sm table-hover">
+                <thead>
+                <tr>
+                    <th scope="col">Titre</th>
+                    <th scope="col">Date</th>
+                    <th scope="col">N° Diplôme</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for title in memberTools.getTitles() %}
+                    <tr>
+                        <td>{{ listData.gradeTitle(title.Rank) }}</td>
+                        <td>{{ title.Date|date("d/m/Y") }}</td>
+                        <td>{{ title.Certificate }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="data-frame data-large">
+        <div class="data-title collapseChar collapsed" data-toggle="collapse" data-target="#Licence">Historique Licence n° {{ memberTools.getMember.getMemberId() }}</div>
+        <div id="Licence" class="data-content collapse">
+            <table class="table table-sm table-hover">
+                <thead>
+                <tr>
+                    <th scope="col">Echéance</th>
+                    <th scope="col">Club</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for licence in memberTools.getLicences().history %}
+                    <tr>
+                        <td>{{ licence.getMemberLicenceDeadline()|date("d/m/Y") }}</td>
+                        <td>{{ licence.getMemberLicenceClub().getClubId() }} - {{ licence.getMemberLicenceClub().getClubName() }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="data-frame data-large">
+        <div class="data-title collapseChar collapsed" data-toggle="collapse" data-target="#Grades">Historique des grades</div>
+        <div id="Grades" class="data-content collapse">
+            <span>Début de pratique : {{ memberTools.getMember.getMemberStartPractice|date("d/m/Y") }}</span><br/><br/>
+            {% if memberTools.getGrades().exam.candidate %}<a href="{{ path('member-myApplication', {'type': 1}) }}">Candidature au prochain examen fédéral</a> {% endif %}
+            <table class="table table-sm table-hover">
+                <thead>
+                <tr>
+                    <th scope="col">Grade</th>
+                    <th scope="col">Date</th>
+                    <th scope="col">N° Diplôme</th>
+                    <th scope="col">Résultat</th>
+                    <th scope="col">Type</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for grade in memberTools.getGrades().history %}
+                    <tr>
+                        <td>{{ listData.getGrade(grade.Rank) }}</td>
+                        <td>{{ grade.Date|date("d/m/Y") }}</td>
+                        <td>{{ grade.Certificate }}</td>
+                        <td>{{ listData.getExamResult(grade.Result) }}</td>
+                        <td>{{ listData.getExamType(grade.Type) }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="data-frame data-large">
+        <div class="data-title collapseChar collapsed" data-toggle="collapse" data-target="#Dojo">Dojo(s)</div>
+        <div id="Dojo" class="data-content collapse">
+            {% if clubTools.getLessonsDetails().Dojos != null %}
+                <h4>Localité</h4>
+                <table class="table table-sm table-hover">
+                    <thead>
+                    <tr>
+                        <th scope="col">Salle</th>
+                        <th scope="col">Adresse</th>
+                        <th scope="col">Code postal</th>
+                        <th scope="col">Localité</th>
+                        <th scope="col">Tatamis (m²)</th>
+                        <th scope="col">DEA</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for dojo in clubTools.getLessonsDetails().Dojos %}
+                        <tr>
+                            <td>{{ dojo.getClubDojoName() }}</td>
+                            <td>{{ dojo.getClubDojoStreet() }}</td>
+                            <td>{{ dojo.getClubDojoZip() }}</td>
+                            <td>{{ dojo.getClubDojoCity() }}</td>
+                            <td>{{ dojo.getClubDojoTatamis() }}</td>
+                            <td>{% if dojo.getClubDojoDEA() %}Oui{% else %}Non{% endif %}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            {% endif %}
+            {% if clubTools.getLessonsDetails().Lessons != null %}
+                <h4>Horaire cours</h4>
+                <table class="table table-sm table-hover">
+                    <thead>
+                    <tr>
+                        <th scope="col">Jour</th>
+                        <th scope="col">Début</th>
+                        <th scope="col">Fin</th>
+                        <th scope="col">Type</th>
+                        <th scope="col">Salle</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for lesson in clubTools.getLessonsDetails().Lessons %}
+                        <tr>
+                            <td>{{ listData.getDay(lesson.getClubLessonDay()) }}</td>
+                            <td>{{ lesson.getClubLessonStartingHour()|date('H:i') }}</td>
+                            <td>{{ lesson.getClubLessonEndingHour()|date('H:i') }}</td>
+                            <td>{{ listData.getLessonType(lesson.getClubLessonType()) }}</td>
+                            <td>{{ lesson.getClubLessonDojo().getClubDojoName() }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            {% endif %}
+            {% if clubTools.getLessonsDetails().AFA_teachers != null %}
+                <h4>Professeur(s) & Assistant(s) AFA</h4>
+                <table class="table table-sm table-hover">
+                    <thead>
+                    <tr>
+                        <th scope="col">Titre</th>
+                        <th scope="col">Type</th>
+                        <th scope="col">Prénom</th>
+                        <th scope="col">Nom</th>
+                        <th scope="col">Grade</th>
+                        <th scope="col">Enseignement Aïkikaï</th>
+                        <th scope="col">Enseignement ADEPS</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for teacher in clubTools.getLessonsDetails().AFA_teachers %}
+                        <tr>
+                            <td>{{ listData.getTeacherTitle(teacher.Title) }}</td>
+                            <td>{{ listData.getTeacherType(teacher.Type) }}</td>
+                            <td>{{ teacher.Firstname|title }}</td>
+                            <td>{{ teacher.Name|title }}</td>
+                            <td>{{ listData.getGrade(teacher.Grade) }}</td>
+                            <td>{% if teacher.GradeTitleAikikai != null %}{{ listData.getGradeTitle(teacher.GradeTitleAikikai) }}{% else %}Aucun{% endif %}</td>
+                            <td>{% if teacher.GradeTitleAdeps != null %}{{ listData.getGradeTitle(teacher.GradeTitleAdeps) }}{% else %}Aucun{% endif %}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            {% endif %}
+            {% if clubTools.getLessonsDetails().Foreign_teachers != null %}
+                <h4>Professeur(s) & Assistant(s) Autre</h4>
+                <table class="table table-sm table-hover">
+                    <thead>
+                    <tr>
+                        <th scope="col">Titre</th>
+                        <th scope="col">Type</th>
+                        <th scope="col">Prénom</th>
+                        <th scope="col">Nom</th>
+                        <th scope="col">Grade</th>
+                        <th scope="col">Enseignement Aïkikaï</th>
+                        <th scope="col">Enseignement ADEPS</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for teacher in clubTools.getLessonsDetails().Foreign_teachers %}
+                    <tr>
+                        <td>{{ listData.getTeacherTitle(teacher.Title) }}</td>
+                        <td>{{ listData.getTeacherType(teacher.Type) }}</td>
+                        <td>{{ teacher.Firstname|title }}</td>
+                        <td>{{ teacher.Name|title }}</td>
+                        <td>{{ listData.getGrade(teacher.Grade) }}</td>
+                        <td>{% if teacher.GradeTitleAikikai != null %}{{ listData.getGradeTitle(teacher.GradeTitleAikikai) }}{% else %}Aucun{% endif %}</td>
+                        <td>{% if teacher.GradeTitleAdeps != null %}{{ listData.getGradeTitle(teacher.GradeTitleAdeps) }}{% else %}Aucun{% endif %}</td>
+                    </tr>
+                    </tbody>
+                    {% endfor %}
+                </table>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="data-frame data-large">
+        <div class="data-title collapseChar collapsed" data-toggle="collapse" data-target="#Stages">Historique des stages ({{ memberTools.getStages.total }} h)</div>
+        <div id="Stages" class="data-content collapse">
+            {% for grade in memberTools.getStages().history %}
+                <h4>{{ listData.grade(grade.Rank) }} ({{ grade.Total }} h)</h4>
+                {% if grade.Stage is defined %}
+                    <table class="table table-sm table-hover">
+                        <thead>
+                        <tr>
+                            <th scope="col">Nom</th>
+                            <th scope="col">Date</th>
+                            <th scope="col">Durée (h)</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for stage in grade.Stage %}
+                            <tr>
+                                <td>{{ stage.Name }}</td>
+                                <td>{{ stage.Date|date("d/m/Y") }}</td>
+                                <td>{{ stage.Duration }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+
+
+
+{% if member.getMemberModification() != null %}
+    <h2>Modification en attente de validation</h2>
+    <img alt="" src=" {{ asset('uploads/photos/'~member.getMemberModification().getMemberModificationPhoto()) }}" /><br />
+    <table class="table table-sm table-hover unselectable">
+        <thead>
+            <tr>
+                <th scope="col">Prénom</th>
+                <th scope="col">Nom</th>
+                <th scope="col">Date de naissance</th>
+                <th scope="col">Adresse</th>
+                <th scope="col">Localité</th>
+                <th scope="col">Pays</th>
+                <th scope="col">Email</th>
+                <th scope="col">Téléphone</th>
+                <th scope="col">Aïkikaï Id</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{ member.getMemberModification().getMemberModificationFirstname() }}</td>
+                <td>{{ member.getMemberModification().getMemberModificationName() }}</td>
+                <td>{% if member.getMemberModification().getMemberModificationBirthday() != null %}{{ member.getMemberModification().getMemberModificationBirthday()|date("d/m/Y") }}{% endif %}</td>
+                <td>{{ member.getMemberModification().getMemberModificationAddress() }}</td>
+                <td>{{ member.getMemberModification().getMemberModificationZip() }} {{ member.getMemberModification().getMemberModificationCity() }}</td>
+                <td>{% if member.getMemberModification().getMemberModificationCountry() != null %}{{ listData.getCountryName(member.getMemberModification().getMemberModificationCountry()) }}{% endif %}</td>
+                <td>{{ member.getMemberModification().getMemberModificationEmail() }}</td>
+                <td>{{ member.getMemberModification().getMemberModificationPhone() }}</td>
+                <td>{{ member.getMemberModification().getMemberModificationAikikaiId() }}</td>
+            </tr>
+        </tbody>
+    </table>
+    {% endif %}
+{% endblock %}
+
+{% block javascripts %}
+{% endblock %}

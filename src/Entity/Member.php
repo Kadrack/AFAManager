@@ -416,6 +416,36 @@ class Member
         return $this->member_phone;
     }
 
+    public function getMemberPhoneFormated(): ?string
+    {
+        $phoneNumber = preg_replace('/[^0-9]/', '', $this->member_phone);
+
+        if (strlen($phoneNumber) > 10) {
+            $countryCode = substr($phoneNumber, 0, strlen($phoneNumber) - 10);
+            $areaCode = substr($phoneNumber, -10, 3);
+            $nextThree = substr($phoneNumber, -7, 3);
+            $lastFour = substr($phoneNumber, -4, 4);
+
+            $phoneNumber = '+' . $countryCode . ' (' . $areaCode . ') ' . $nextThree . '-' . $lastFour;
+        } else if (strlen($phoneNumber) == 10) {
+            $areaCode = substr($phoneNumber, 0, 4);
+            $firstTwo = substr($phoneNumber, 4, 2);
+            $secondTwo = substr($phoneNumber, 6, 2);
+            $thirdTwo = substr($phoneNumber, 8, 2);
+
+            $phoneNumber = $areaCode . '/' . $firstTwo . ' ' . $secondTwo . ' ' . $thirdTwo;
+        } else if (strlen($phoneNumber) == 9) {
+            $twoFirst = substr($phoneNumber, 0, 2);
+            $nextThree = substr($phoneNumber, 2, 3);
+            $firstTwo = substr($phoneNumber, 5, 2);
+            $secondTwo = substr($phoneNumber, 7, 2);
+
+            $phoneNumber = $twoFirst . '/' . $nextThree . ' ' . $firstTwo . ' ' . $secondTwo;
+        }
+
+        return $phoneNumber;
+    }
+
     /**
      * @param string|null $member_phone
      * @return $this

@@ -11,6 +11,11 @@ php -r "unlink('composer-setup.php');"
 php composer.phar install
 ```
 
+# Composer update
+```bash
+php composer.phar update
+```
+
 # Create Database
 ```bash
 php bin/console make:migration
@@ -23,4 +28,6 @@ mysql --host=localhost -uroot -p symfony < first_user.sql
 
 # Errors
 ## Group By ONLY_FULL_GROUP_BY
+```sql
 SET GLOBAL sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''));
+```

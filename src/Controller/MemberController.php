@@ -42,6 +42,18 @@ class MemberController extends AbstractController
     /**
      * @return Response
      */
+    #[Route('/tout', name:'allData')]
+    public function allData(MemberTools $memberTools, ClubTools $clubTools): Response
+    {
+        $memberTools->setMember($this->getUser()->getUserMember());
+        $clubTools->setClub($this->getUser()->getUserMember()->getMemberActualClub());
+
+        return $this->render('Member/all_data.html.twig', array('member' => $this->getUser()->getUserMember(), 'memberTools' => $memberTools, 'clubTools' => $clubTools));
+    }
+
+    /**
+     * @return Response
+     */
     #[Route('/mes-donnees', name:'myData')]
     public function myData(): Response
     {
