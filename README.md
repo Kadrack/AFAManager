@@ -26,6 +26,13 @@ php bin/console doctrine:migrations:migrate
 mysql --host=localhost -uroot -p symfony < first_user.sql
 ```
 
+# Give access to a User
+```sql
+UPDATE symfony.afamanager_user t SET t.user_join_member = `` WHERE t.id = 1;
+INSERT INTO symfony.afamanager_user_access (user_access_join_user, user_access_join_club, user_access_role) VALUES (1, ``, 'ROLE_CLUB');
+INSERT INTO symfony.afamanager_user_access (user_access_join_user, user_access_role) VALUES (1, 'ROLE_SECRETARIAT');
+```
+
 # Errors
 ## Group By ONLY_FULL_GROUP_BY
 ```sql
