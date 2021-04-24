@@ -8,18 +8,72 @@
     <h1>{{ member.getMemberFirstname()|title }} {{ member.getMemberName()|title }}</h1>
     <br />
     <div class="data-frame data-small">
-        <div class="data-title">Données personnelles &nbsp;<a class="btn btn-primary" href="{{ path('member-myDataUpdate') }}">Modifier</a></div>
+        <div class="data-title">Données personnelles &nbsp;<a class="btn btn-primary" data-toggle="modal" data-target="#edit">Modifier</a></div>
         <div class="data-content">
             <span class="memberPhoto"><img alt="" src="{{ asset('uploads/photos/'~member.getMemberPhoto()) }}" height="200px"/></span>
-            <span class="memberLabel">Nom:</span>         <span class="memberField">{{ member.getMemberName() }}</span></br>
-            <span class="memberLabel">Prénom:</span>      <span class="memberField">{{ member.getMemberFirstname() }}</span></br>
-            <span class="memberLabel">Naissance:</span>   <span class="memberField">{{ member.getMemberBirthday()|date("d/m/Y") }}</span></br>
-            <span class="memberLabel">Adresse:</span>     <span class="memberField">{{ member.getMemberAddress() }}</span></br>
-            <span class="memberLabel">Localité:</span>    <span class="memberField">{{ member.getMemberZip() }} {{ member.getMemberCity() }}</span></br>
-            <span class="memberLabel">Pays:</span>        <span class="memberField">{{ listData.getCountryName(member.getMemberCountry()) }}</span></br>
-            <span class="memberLabel">Email:</span>       <span class="memberField">{{ member.getMemberEmail() }}</span></br>
-            <span class="memberLabel">Téléphone:</span>   <span class="memberField">{{ member.getMemberPhoneFormated() }}</span></br>
-            <span class="memberLabel">Aïkikaï Id:</span>  <span class="memberField">{{ member.getMemberAikikaiId() }}</span></br>
+
+            <span class="memberLabel">Nom:</span>
+            <span class="memberField">{{ member.getMemberName() }}</span>&nbsp;
+            {% if member.getMemberModification() != null and member.getMemberModification().getMemberModificationFirstname() != null %}
+            <button type="button" class="btn btn-sm btn-outline-warning" title="Modification en attente" data-container="body" data-toggle="popover" data-placement="right" data-content="{{ member.getMemberModification().getMemberModificationFirstname() }}" data-original-title="Popover Title"><i class="bi bi-exclamation-triangle-fill"></i></button>
+            {% endif %}
+            </br>
+
+            <span class="memberLabel">Prénom:</span>
+            <span class="memberField">{{ member.getMemberFirstname() }}</span>&nbsp;
+            {% if member.getMemberModification() != null and member.getMemberModification().getMemberModificationName() != null %}
+                <button type="button" class="btn btn-sm btn-outline-warning" title="Modification en attente" data-container="body" data-toggle="popover" data-placement="right" data-content="{{ member.getMemberModification().getMemberModificationName() }}" data-original-title="Popover Title"><i class="bi bi-exclamation-triangle-fill"></i></button>
+            {% endif %}
+            </br>
+
+            <span class="memberLabel">Naissance:</span>
+            <span class="memberField">{{ member.getMemberBirthday()|date("d/m/Y") }}</span>&nbsp;
+            {% if member.getMemberModification() != null and member.getMemberModification().getMemberModificationBirthday() != null %}
+                <button type="button" class="btn btn-sm btn-outline-warning" title="Modification en attente" data-container="body" data-toggle="popover" data-placement="right" data-content="{{ member.getMemberModification().getMemberModificationBirthday()|date("d/m/Y") }}" data-original-title="Popover Title"><i class="bi bi-exclamation-triangle-fill"></i></button>
+            {% endif %}
+            </br>
+
+            <span class="memberLabel">Adresse:</span>
+            <span class="memberField">{{ member.getMemberAddress() }}</span>&nbsp;
+            {% if member.getMemberModification() != null and member.getMemberModification().getMemberModificationAddress() != null %}
+            <button type="button" class="btn btn-sm btn-outline-warning" title="Modification en attente" data-container="body" data-toggle="popover" data-placement="right" data-content="{{ member.getMemberModification().getMemberModificationAddress() }}" data-original-title="Popover Title"><i class="bi bi-exclamation-triangle-fill"></i></button>
+            {% endif %}
+            </br>
+
+            <span class="memberLabel">Localité:</span>
+            <span class="memberField">{{ member.getMemberZip() }} {{ member.getMemberCity() }}</span>&nbsp;
+            {% if member.getMemberModification() != null and (member.getMemberModification().getMemberModificationZip() != null or member.getMemberModification().getMemberModificationCity() != null) %}
+            <button type="button" class="btn btn-sm btn-outline-warning" title="Modification en attente" data-container="body" data-toggle="popover" data-placement="right" data-content="{{ member.getMemberModification().getMemberModificationZip() }} {{ member.getMemberModification().getMemberModificationCity() }}" data-original-title="Popover Title"><i class="bi bi-exclamation-triangle-fill"></i></button>
+            {% endif %}
+            </br>
+
+            <span class="memberLabel">Pays:</span>
+            <span class="memberField">{{ listData.getCountryName(member.getMemberCountry()) }}</span>&nbsp;
+            {% if member.getMemberModification() != null and member.getMemberModification().getMemberModificationCountry() != null %}
+            <button type="button" class="btn btn-sm btn-outline-warning" title="Modification en attente" data-container="body" data-toggle="popover" data-placement="right" data-content="{{ listData.getCountryName(member.getMemberModification().getMemberModificationCountry()) }}" data-original-title="Popover Title"><i class="bi bi-exclamation-triangle-fill"></i></button>
+            {% endif %}
+            </br>
+
+            <span class="memberLabel">Email:</span>
+            <span class="memberField">{{ member.getMemberEmail() }}</span>&nbsp;
+            {% if member.getMemberModification() != null and member.getMemberModification().getMemberModificationEmail() != null %}
+            <button type="button" class="btn btn-sm btn-outline-warning" title="Modification en attente" data-container="body" data-toggle="popover" data-placement="right" data-content="{{ member.getMemberModification().getMemberModificationEmail() }}" data-original-title="Popover Title"><i class="bi bi-exclamation-triangle-fill"></i></button>
+            {% endif %}
+            </br>
+
+            <span class="memberLabel">Téléphone:</span>
+            <span class="memberField">{{ member.getMemberPhoneFormated() }}</span>&nbsp;
+            {% if member.getMemberModification() != null and member.getMemberModification().getMemberModificationPhone() != null %}
+            <button type="button" class="btn btn-sm btn-outline-warning" title="Modification en attente" data-container="body" data-toggle="popover" data-placement="right" data-content="{{ member.getMemberModification().getMemberModificationPhone() }}" data-original-title="Popover Title"><i class="bi bi-exclamation-triangle-fill"></i></button>
+            {% endif %}
+            </br>
+
+            <span class="memberLabel">Aïkikaï Id:</span>
+            <span class="memberField">{{ member.getMemberAikikaiId() }}</span>&nbsp;
+            {% if member.getMemberModification() != null and member.getMemberModification().getMemberModificationAikikaiId() != null %}
+            <button type="button" class="btn btn-sm btn-outline-warning" title="Modification en attente" data-container="body" data-toggle="popover" data-placement="right" data-content="{{ member.getMemberModification().getMemberModificationAikikaiId() }}" data-original-title="Popover Title"><i class="bi bi-exclamation-triangle-fill"></i></button>
+            {% endif %}
+            </br>
         </div>
     </div>
 
@@ -244,41 +298,31 @@
         </div>
     </div>
 
-
-
-{% if member.getMemberModification() != null %}
-    <h2>Modification en attente de validation</h2>
-    <img alt="" src=" {{ asset('uploads/photos/'~member.getMemberModification().getMemberModificationPhoto()) }}" /><br />
-    <table class="table table-sm table-hover unselectable">
-        <thead>
-            <tr>
-                <th scope="col">Prénom</th>
-                <th scope="col">Nom</th>
-                <th scope="col">Date de naissance</th>
-                <th scope="col">Adresse</th>
-                <th scope="col">Localité</th>
-                <th scope="col">Pays</th>
-                <th scope="col">Email</th>
-                <th scope="col">Téléphone</th>
-                <th scope="col">Aïkikaï Id</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>{{ member.getMemberModification().getMemberModificationFirstname() }}</td>
-                <td>{{ member.getMemberModification().getMemberModificationName() }}</td>
-                <td>{% if member.getMemberModification().getMemberModificationBirthday() != null %}{{ member.getMemberModification().getMemberModificationBirthday()|date("d/m/Y") }}{% endif %}</td>
-                <td>{{ member.getMemberModification().getMemberModificationAddress() }}</td>
-                <td>{{ member.getMemberModification().getMemberModificationZip() }} {{ member.getMemberModification().getMemberModificationCity() }}</td>
-                <td>{% if member.getMemberModification().getMemberModificationCountry() != null %}{{ listData.getCountryName(member.getMemberModification().getMemberModificationCountry()) }}{% endif %}</td>
-                <td>{{ member.getMemberModification().getMemberModificationEmail() }}</td>
-                <td>{{ member.getMemberModification().getMemberModificationPhone() }}</td>
-                <td>{{ member.getMemberModification().getMemberModificationAikikaiId() }}</td>
-            </tr>
-        </tbody>
-    </table>
-    {% endif %}
+    <div class="modal" id="edit">
+        <div class="modal-dialog dialog-large" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    {% include 'Member/all_data_update.html.twig' %}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" onclick="$('#member').submit();">Enregistrer</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}
 
 {% block javascripts %}
+    <script>
+    $(function () {
+    $('[data-toggle="popover"]').popover()
+    })
+    </script>
 {% endblock %}

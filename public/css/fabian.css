@@ -60,6 +60,11 @@ div.data-content
     padding: 10px;
 }
 
+div.data-content .btn-sm
+{
+    padding: .03rem .5rem;
+}
+
 .collapseChar
 {
     cursor: pointer;
@@ -85,4 +90,9 @@ div.data-title .btn
     line-height: 0.51;
     width: 80px;
     height: 30px;
+}
+
+
+.dialog-large {
+    max-width: 800px;
 }

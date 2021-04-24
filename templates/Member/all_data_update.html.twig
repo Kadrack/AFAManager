@@ -1,0 +1,67 @@
+{% block body %}
+    {{ form_start(form, {'attr': {'id': 'member'}}) }}
+    {% if memberTools.getMember.getMemberModification() != null %}
+    {% if memberTools.getMember.getMemberModification().getMemberModificationPhoto() != null %}
+    <img alt="" src=" {{ asset('uploads/photos/'~memberTools.getMember.getMemberModification().getMemberModificationPhoto()) }}" /><br />
+    {% endif %}
+    {% endif %}
+    {{ form_widget(form.MemberModificationPhoto) }}
+    <table class="table table-sm table-hover unselectable">
+        <thead>
+            <tr>
+                <th scope="col">Prénom</th>
+                <th scope="col">Nom</th>
+                <th scope="col">Date de naissance</th>
+                <th scope="col">Email</th>
+                <th scope="col">N° téléphone</th>
+                <th scope="col">Aïkikaï Id</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{ memberTools.getMember.getMemberFirstname() }}</td>
+                <td>{{ memberTools.getMember.getMemberName() }}</td>
+                <td>{{ memberTools.getMember.getMemberBirthday()|date("d/m/Y") }}</td>
+                <td>{{ memberTools.getMember.getMemberEmail() }}</td>
+                <td>{{ memberTools.getMember.getMemberPhone() }}</td>
+                <td>{{ memberTools.getMember.getMemberAikikaiId() }}</td>
+            </tr>
+            <tr>
+                <td>{{ form_widget(form.MemberModificationFirstname) }}</td>
+                <td>{{ form_widget(form.MemberModificationName) }}</td>
+                <td>{{ form_widget(form.MemberModificationBirthday) }}</td>
+                <td>{{ form_widget(form.MemberModificationEmail) }}</td>
+                <td>{{ form_widget(form.MemberModificationPhone) }}</td>
+                <td>{{ form_widget(form.MemberModificationAikikaiId) }}</td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-hover unselectable">
+        <thead>
+            <tr>
+                <th scope="col">Adresse</th>
+                <th scope="col">Code postal</th>
+                <th scope="col">Localité</th>
+                <th scope="col">Pays</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{ memberTools.getMember.getMemberAddress() }}</td>
+                <td>{{ memberTools.getMember.getMemberZip() }}</td>
+                <td>{{ memberTools.getMember.getMemberCity() }}</td>
+                <td>{{ listData.countryName(memberTools.getMember.getMemberCountry()) }}</td>
+            </tr>
+            <tr>
+                <td>{{ form_widget(form.MemberModificationAddress) }}</td>
+                <td>{{ form_widget(form.MemberModificationZip) }}</td>
+                <td>{{ form_widget(form.MemberModificationCity) }}</td>
+                <td>{{ form_widget(form.MemberModificationCountry) }}</td>
+            </tr>
+        </tbody>
+    </table>
+    {{ form_end(form) }}
+{% endblock %}
+
+{% block javascripts %}
+{% endblock %}

@@ -1,5 +1,8 @@
 # AFAManager
 
+# Bootstrap
+https://bootswatch.com/slate/
+
 
 # Download dependencies
 ```bash

@@ -43,12 +43,24 @@ class MemberController extends AbstractController
      * @return Response
      */
     #[Route('/tout', name:'allData')]
-    public function allData(MemberTools $memberTools, ClubTools $clubTools): Response
+    public function allData(MemberTools $memberTools, ClubTools $clubTools, Request $request): Response
     {
         $memberTools->setMember($this->getUser()->getUserMember());
         $clubTools->setClub($this->getUser()->getUserMember()->getMemberActualClub());
+        $nowTime = time();
 
-        return $this->render('Member/all_data.html.twig', array('member' => $this->getUser()->getUserMember(), 'memberTools' => $memberTools, 'clubTools' => $clubTools));
+        $form = $this->createForm(MemberType::class, $memberTools->getModification(), array('form' => 'myDataUpdate', 'data_class' => MemberModification::class));
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid())
+        {
+            $memberTools->setModification($form->getData(), $form['MemberModificationPhoto']->getData(), $form['MemberModificationCountry']->getData());
+
+            return $this->render('Member/all_data.html.twig', array('member' => $this->getUser()->getUserMember(), 'memberTools' => $memberTools, 'clubTools' => $clubTools, 'form' => $form->createView(), 'time2' => $nowTime));
+        }
+
+        return $this->render('Member/all_data.html.twig', array('member' => $this->getUser()->getUserMember(), 'memberTools' => $memberTools, 'clubTools' => $clubTools, 'form' => $form->createView(), 'time2' => $nowTime));
     }
 
     /**
