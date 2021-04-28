@@ -42,6 +42,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\HttpFoundation\File\Stream;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -240,10 +241,12 @@ class SecretariatController extends AbstractController
             $list[] = $mail['Mail'];
         }
 
-        file_put_contents('./mails.csv', implode(';', array_unique($list)));
+        file_put_contents('mails.csv', implode(';', array_unique($list)));
 
-        $response = new BinaryFileResponse('./mails.csv');
-        $response->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT);
+        $stream = new Stream('mails.csv');
+
+        $response = new BinaryFileResponse($stream);
+        $response->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT, 'mails.csv');
 
         return $response->deleteFileAfterSend();
     }

@@ -109,7 +109,9 @@ class MemberRepository extends ServiceEntityRepository
     {
         $today = new DateTime('today');
 
-        $limit = new DateTime('-3 month today');
+        //todo Change duration to 3 months after complete covid measure
+
+        $limit = new DateTime('-24 month today');
 
         $qb = $this->createQueryBuilder('m');
 
