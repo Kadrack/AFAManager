@@ -1110,7 +1110,7 @@ class SecretariatController extends AbstractController
         {
             $form = $this->createForm(MemberType::class, $renew, array('form' => 'licenceRenewKyu', 'data_class' => MemberLicence::class));
 
-            is_null($form->get('GradeKyuRank')->setData($member->getMemberLastGrade()) ? null : $member->getMemberLastGrade()->getGradeRank());
+            $form->get('GradeKyuRank')->setData($member->getMemberLastGrade()?->getGradeRank());
         }
         else
         {
