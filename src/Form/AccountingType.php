@@ -4,6 +4,8 @@ namespace App\Form;
 
 use Symfony\Component\Form\AbstractType;
 
+use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\MoneyType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
@@ -27,8 +29,10 @@ class AccountingType extends AbstractType
             case 'searchMembers':
                 $this->searchMembers($builder);
                 break;
+            case 'paymentLicenceValidation':
+                $this->paymentLicenceValidation($builder);
+                break;
             default:
-                null;
         }
     }
 
@@ -48,6 +52,19 @@ class AccountingType extends AbstractType
         $builder
             ->add('Search', TextType::class, array('label' => 'N° licence, Nom', 'mapped' => false))
             ->add('Submit', SubmitType::class, array('label' => 'Rechercher'))
+        ;
+    }
+
+    /**
+     * @param FormBuilderInterface $builder
+     */
+    private function paymentLicenceValidation(FormBuilderInterface $builder)
+    {
+        $builder
+            ->add('LicenceNumber', TextType::class, array('label' => 'Liste n° licence (séparé par une virgule)', 'mapped' => false))
+            ->add('MemberLicencePaymentDate', DateType::class, array('label' => 'Date du Paiement', 'widget' => 'single_text'))
+            ->add('MemberLicencePaymentValue', MoneyType::class, array('label' => 'Paiement', 'divisor' => 100))
+            ->add('Submit', SubmitType::class, array('label' => 'Valider'))
         ;
     }
 }

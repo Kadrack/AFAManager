@@ -11,7 +11,6 @@
     <h1>{{ member.getMemberFirstname() }} {{ member.getMemberName() }}</h1>
     <h2>Début de pratique : {{ member.getMemberStartPractice|date("d/m/Y") }}</h2>
     <h3>Historique Licence n° {{ member.getMemberId() }}</h3>
-    {% if next_renew %}<a class="btn btn-primary" href="{{ path('secretariat-memberLicenceRenew', {'club': club.getClubId(), 'member': member.getMemberId()}) }}">Renouveller</a>{% endif %}
     <table class="table table-sm table-hover">
         <thead>
             <tr>

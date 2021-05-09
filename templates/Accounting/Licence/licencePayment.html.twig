@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    AFA-Manager
+{% endblock %}
+
+{% block stylesheets %}
+{% endblock %}
+
+{% block body %}
+    {{ form_start(form) }}
+    {{ form_widget(form) }}
+    {{ form_end(form) }}
+
+    {% if list != null %}
+    <h2>Liste renouvellement payé et en attente du formulaire de renouvellement</h2>
+    <table class="table table-sm table-hover unselectable">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Licence n°</th>
+                <th scope="col">Prénom</th>
+                <th scope="col">Nom</th>
+                <th scope="col">Echéance</th>
+                <th scope="col">Paiement</th>
+                <th scope="col">Somme</th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for member in list %}
+            <tr>
+                <td class="align-middle">{{ loop.index }}</td>
+                <td class="align-middle">{{ member.Id }}</td>
+                <td class="align-middle">{{ member.FirstName|title }}</td>
+                <td class="align-middle">{{ member.Name|title }}</td>
+                <td class="align-middle">{{ member.Deadline|date("d/m/Y") }}{% if member.Status == 2 %}<img alt="" src=" {{ asset('images/pass.png') }}" />{% else %}<img alt="" src=" {{ asset('images/fail.png') }}" />{% endif %}</td>
+                <td class="align-middle">{{ member.Date|date("d/m/Y") }}</td>
+                <td class="align-middle">{{ (member.Payment / 100)|number_format(2, ',', '.') }} €</td>
+                <td class="align-middle"><a class="btn btn-primary" href="{{ path('accounting-paymentLicenceValidationUpdate', {'memberLicence': member.RenewId}) }}">Modifier</a></td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% endif %}
+
+{% endblock %}
+
+{% block javascripts %}
+{% endblock %}

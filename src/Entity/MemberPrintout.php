@@ -32,13 +32,6 @@ class MemberPrintout
     private DateTime $member_printout_creation;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(type="integer")
-     */
-    private int $member_printout_action;
-
-    /**
      * @var DateTime|null
      *
      * @ORM\Column(type="date", nullable=true)
@@ -54,11 +47,30 @@ class MemberPrintout
     private ?MemberLicence $member_printout_licence;
 
     /**
+     * @var Member|null
+     *
+     * @ORM\ManyToOne(targetEntity="App\Entity\Member", cascade={"persist"})
+     * @ORM\JoinColumn(nullable=true, name="member_printout_join_member", referencedColumnName="member_id")
+     */
+    private ?Member $member_printout_member;
+
+    /**
      * @return int
      */
     public function getMemberPrintoutId(): int
     {
         return $this->member_printout_id;
+    }
+
+    /**
+     * @param int $member_printout_id
+     * @return $this
+     */
+    public function setMemberPrintoutId(int $member_printout_id): self
+    {
+        $this->member_printout_id = $member_printout_id;
+
+        return $this;
     }
 
     /**
@@ -76,25 +88,6 @@ class MemberPrintout
     public function setMemberPrintoutCreation(DateTime $member_printout_creation): self
     {
         $this->member_printout_creation = $member_printout_creation;
-
-        return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getMemberPrintoutAction(): int
-    {
-        return $this->member_printout_action;
-    }
-
-    /**
-     * @param int $member_printout_action
-     * @return $this
-     */
-    public function setMemberPrintoutAction(int $member_printout_action): self
-    {
-        $this->member_printout_action = $member_printout_action;
 
         return $this;
     }
@@ -133,6 +126,25 @@ class MemberPrintout
     public function setMemberPrintoutLicence(?MemberLicence $member_printout_licence): self
     {
         $this->member_printout_licence = $member_printout_licence;
+
+        return $this;
+    }
+
+    /**
+     * @return Member|null
+     */
+    public function getMemberPrintoutMember(): ?MemberLicence
+    {
+        return $this->member_printout_member;
+    }
+
+    /**
+     * @param Member|null $member_printout_member
+     * @return $this
+     */
+    public function setMemberPrintoutMember(?Member $member_printout_member): self
+    {
+        $this->member_printout_member = $member_printout_member;
 
         return $this;
     }

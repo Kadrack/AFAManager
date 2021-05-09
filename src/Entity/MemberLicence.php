@@ -34,16 +34,30 @@ class MemberLicence
     /**
      * @var DateTime
      *
-     * @ORM\Column(type="date")
+     * @ORM\Column(type="date", nullable=true)
      */
     private DateTime $member_licence_deadline;
 
     /**
      * @var DateTime
      *
-     * @ORM\Column(type="date")
+     * @ORM\Column(type="date", nullable=true)
      */
     private DateTime $member_licence_medical_certificate;
+
+    /**
+     * @var DateTime
+     *
+     * @ORM\Column(type="date", nullable=true)
+     */
+    private DateTime $member_licence_payment_date;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private int $member_licence_payment_value;
 
     /**
      * @var int
@@ -82,6 +96,17 @@ class MemberLicence
     public function getMemberLicenceId(): int
     {
         return $this->member_licence_id;
+    }
+
+    /**
+     * @param int $member_licence_id
+     * @return $this
+     */
+    public function setMemberLicenceId(int $member_licence_id): self
+    {
+        $this->member_licence_id = $member_licence_id;
+
+        return $this;
     }
 
     /**
@@ -137,6 +162,44 @@ class MemberLicence
     public function setMemberLicenceMedicalCertificate(DateTime $member_licence_medical_certificate): self
     {
         $this->member_licence_medical_certificate = $member_licence_medical_certificate;
+
+        return $this;
+    }
+
+    /**
+     * @return DateTime
+     */
+    public function getMemberLicencePaymentDate(): DateTime
+    {
+        return $this->member_licence_payment_date;
+    }
+
+    /**
+     * @param DateTime $member_licence_payment_date
+     * @return $this
+     */
+    public function setMemberLicencePaymentDate(DateTime $member_licence_payment_date): self
+    {
+        $this->member_licence_payment_date = $member_licence_payment_date;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getMemberLicencePaymentValue(): int
+    {
+        return $this->member_licence_payment_value;
+    }
+
+    /**
+     * @param int $member_licence_payment_value
+     * @return $this
+     */
+    public function setMemberLicencePaymentValue(int $member_licence_payment_value): self
+    {
+        $this->member_licence_payment_value = $member_licence_payment_value;
 
         return $this;
     }

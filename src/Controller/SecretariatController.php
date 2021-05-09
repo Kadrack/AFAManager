@@ -821,23 +821,9 @@ class SecretariatController extends AbstractController
 
             $licence->setMemberLicenceGrade($grade);
 
-            $stamp = new MemberPrintout();
-
-            $stamp->setMemberPrintoutAction(1);
-            $stamp->setMemberPrintoutLicence($licence);
-            $stamp->setMemberPrintoutCreation(new DateTime('today'));
-
-            $card = new MemberPrintout();
-
-            $card->setMemberPrintoutAction(2);
-            $card->setMemberPrintoutLicence($licence);
-            $card->setMemberPrintoutCreation(new DateTime('today'));
-
             $entityManager = $this->getDoctrine()->getManager();
 
             $entityManager->persist($member);
-            $entityManager->persist($stamp);
-            $entityManager->persist($card);
             $entityManager->flush();
 
             return $this->redirectToRoute('secretariat-membersActive', array('club' => $club->getClubId()));
@@ -968,17 +954,27 @@ class SecretariatController extends AbstractController
     #[Route('/renouvellement-licence/{member<\d+>}/club/{club<\d+>}', name:'memberLicenceRenew')]
     public function memberLicenceRenew(SessionInterface $session, Request $request, Club $club, Member $member): RedirectResponse|Response
     {
-        $licence_old = $member->getMemberLastLicence();
+        $oldLicence = $member->getMemberLastLicence();
 
-        $licence_old->setMemberLicenceStatus(0);
+        $oldLicence->setMemberLicenceStatus(0);
 
-        $licence_new = new MemberLicence();
+        $licence = $this->getDoctrine()->getRepository(MemberLicence::class)->findOneBy(['member_licence' => $member->getMemberId(), 'member_licence_status' => 2]);
 
-        $licence_new->setMemberLicence($member);
-        $licence_new->setMemberLicenceClub($club);
-        $licence_new->setMemberLicenceUpdate(new DateTime('today'));
-        $licence_new->setMemberLicenceDeadline(new DateTime('+1 year '.$licence_old->getMemberLicenceDeadline()->format('Y-m-d')));
-        $licence_new->setMemberLicenceStatus(1);
+        $isNew = false;
+
+        if (is_null($licence))
+        {
+            $isNew = true;
+
+            $licence = new MemberLicence();
+
+            $licence->setMemberLicence($member);
+            $licence->setMemberLicenceClub($club);
+            $licence->setMemberLicenceDeadline(new DateTime('+1 year '.$oldLicence->getMemberLicenceDeadline()->format('Y-m-d')));
+        }
+
+        $licence->setMemberLicenceUpdate(new DateTime('today'));
+        $licence->setMemberLicenceStatus($isNew ? 2 : 1);
 
         if ($member->getMemberLastGrade() == null)
         {
@@ -995,13 +991,13 @@ class SecretariatController extends AbstractController
 
         if ($kyu)
         {
-            $form = $this->createForm(MemberType::class, $licence_new, array('form' => 'licenceRenewKyu', 'data_class' => MemberLicence::class));
+            $form = $this->createForm(MemberType::class, $licence, array('form' => 'licenceRenewKyu', 'data_class' => MemberLicence::class));
 
-            $form->get('GradeKyuRank')->setData(is_null($licence_old->getMemberLicenceGrade()) ? null : $licence_old->getMemberLicenceGrade()->getGradeRank());
+            $form->get('GradeKyuRank')->setData(is_null($oldLicence->getMemberLicenceGrade()) ?: $oldLicence->getMemberLicenceGrade()->getGradeRank());
         }
         else
         {
-            $form = $this->createForm(MemberType::class, $licence_new, array('form' => 'licenceRenew', 'data_class' => MemberLicence::class));
+            $form = $this->createForm(MemberType::class, $licence, array('form' => 'licenceRenew', 'data_class' => MemberLicence::class));
         }
 
         $form->handleRequest($request);
@@ -1010,30 +1006,13 @@ class SecretariatController extends AbstractController
         {
             $entityManager = $this->getDoctrine()->getManager();
 
-            $licence_new = $form->getData();
-
-            $stamp = new MemberPrintout();
-
-            $stamp->setMemberPrintoutAction(1);
-            $stamp->setMemberPrintoutLicence($licence_new);
-            $stamp->setMemberPrintoutCreation(new DateTime('today'));
-
-            if ($licence_new->getMemberLicenceClub() != $licence_old->getMemberLicenceClub())
-            {
-                $card = new MemberPrintout();
-
-                $card->setMemberPrintoutAction(2);
-                $card->setMemberPrintoutLicence($licence_new);
-                $card->setMemberPrintoutCreation(new DateTime('today'));
-
-                $entityManager->persist($card);
-            }
+            $licence = $form->getData();
 
             if ($kyu && ($member->getMemberLastGrade()->getGradeRank() < $form->get('GradeKyuRank')->getData()))
             {
                 $grade = new Grade();
     
-                $grade->setGradeDate($licence_new->getMemberLicenceUpdate());
+                $grade->setGradeDate($licence->getMemberLicenceUpdate());
                 $grade->setGradeRank($form->get('GradeKyuRank')->getData());
                 $grade->setGradeMember($member);
                 $grade->setGradeStatus(4);
@@ -1041,16 +1020,28 @@ class SecretariatController extends AbstractController
     
                 $member->setMemberLastGrade($grade);
     
-                $licence_new->setMemberLicenceGrade($grade);
+                $licence->setMemberLicenceGrade($grade);
     
                 $entityManager->persist($grade);
             }
 
-            $member->setMemberLastLicence($licence_new);
-            $member->setMemberActualClub($licence_new->getMemberLicenceClub());
+            if ($isNew)
+            {
+                $entityManager->persist($licence);
+            }
+            else
+            {
+                $member->setMemberLastLicence($licence);
+                $member->setMemberActualClub($licence->getMemberLicenceClub());
 
-            $entityManager->persist($licence_new);
-            $entityManager->persist($stamp);
+                $stamp = new MemberPrintout();
+
+                $stamp->setMemberPrintoutLicence($licence);
+                $stamp->setMemberPrintoutCreation(new DateTime(('today')));
+
+                $entityManager->persist($stamp);
+            }
+
             $entityManager->flush();
 
             if ($session->get('origin') == 'active')
@@ -1156,6 +1147,25 @@ class SecretariatController extends AbstractController
 
             $renew->setMemberLicenceUpdate(new DateTime('today'));
 
+            if ($renew->getMemberLicenceStatus() == 2)
+            {
+                $renew->setMemberLicenceStatus(1);
+
+                $oldLicence = $member->getMemberLastLicence();
+
+                $oldLicence->setMemberLicenceStatus(0);
+
+                $member->setMemberLastLicence($renew);
+                $member->setMemberActualClub($renew->getMemberLicenceClub());
+
+                $stamp = new MemberPrintout();
+
+                $stamp->setMemberPrintoutLicence($renew);
+                $stamp->setMemberPrintoutCreation(new DateTime('today'));
+
+                $entityManager->persist($stamp);
+            }
+
             $entityManager->flush();
 
             if ($session->get('origin') == 'active')
@@ -1169,6 +1179,58 @@ class SecretariatController extends AbstractController
         }
 
         return $this->render('Secretariat/Club/Member/licence_renew.html.twig', array('form' => $form->createView()));
+    }
+
+    /**
+     * @return RedirectResponse|Response
+     */
+    #[Route('/liste-timbre-a-imprimer/', name:'stampForPrinting')]
+    public function stampForPrinting(): RedirectResponse|Response
+    {
+        $stamps = $this->getDoctrine()->getRepository(MemberPrintout::class)->getStampForPrinting();
+
+        $list = array();
+
+        foreach ($stamps as $stamp)
+        {
+            $list[$stamp['ClubId']]['Id'] = $stamp['ClubId'];
+            $list[$stamp['ClubId']]['Name'] = $stamp['ClubName'];
+            $list[$stamp['ClubId']]['Members'][] = $stamp;
+        }
+
+        ksort($list);
+
+        return $this->render('Secretariat/Licence/stampForPrintingList.html.twig', array('list' => $list));
+    }
+
+    /**
+     * @param Club|null $club
+     * @return RedirectResponse|Response
+     */
+    #[Route('/liste-timbre-a-imprimer/valider/{club<\d+>}', name:'stampForPrintingValidate')]
+    public function stampForPrintingValidate(?Club $club=null): RedirectResponse|Response
+    {
+        $stamps = $this->getDoctrine()->getRepository(MemberPrintout::class)->getStampForPrinting($club);
+
+        $list = array();
+
+        foreach ($stamps as $stamp)
+        {
+            $list[] = $stamp['StampId'];
+        }
+
+        $printouts = $this->getDoctrine()->getRepository(MemberPrintout::class)->findBy(['member_printout_id' => $list]);
+
+        $entityManager = $this->getDoctrine()->getManager();
+
+        foreach ($printouts as $printout)
+        {
+            $printout->setMemberPrintoutDone(new DateTime('today'));
+
+            $entityManager->flush();
+        }
+
+        return $this->redirectToRoute('secretariat-stampForPrinting');
     }
 
     /**
@@ -1855,28 +1917,24 @@ class SecretariatController extends AbstractController
     }
 
     /**
-     * @param Request $request
+     * @param Club $club
      * @return Response
      */
-    #[Route('/imprimer-timbres', name:'printStamp')]
-    public function printStamp(Request $request): Response
+    #[Route('/imprimer-timbres/{club<\d+>}', name:'printStamp')]
+    public function printStamp(Club $club): Response
     {
-        $stamps = null;
+        $stamps = $this->getDoctrine()->getRepository(MemberPrintout::class)->getStampForPrinting($club);
 
-        $form = $this->createForm(SecretariatType::class, $stamps, array('form' => 'printStamp', 'data_class' => null));
+        $list = array();
 
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid())
+        foreach ($stamps as $member)
         {
-            $stamps = explode(",", $form->get('MemberList')->getData());
-
-            $members = $this->getDoctrine()->getRepository(Member::class)->findBy(['member_id' => $stamps]);
-
-            return $this->render('Secretariat/stamps.html.twig', array('members' => $members));
+            $list[] = $member['Id'];
         }
 
-        return $this->render('Secretariat/stamp_form.html.twig', array('form' => $form->createView()));
+        $members = $this->getDoctrine()->getRepository(Member::class)->findBy(['member_id' => $list]);
+
+        return $this->render('Secretariat/stamps.html.twig', array('members' => $members));
     }
 
     /**
