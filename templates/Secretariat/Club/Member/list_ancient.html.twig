@@ -36,8 +36,8 @@
                         <div class="btn-group" role="group">
                             <button id="btnGroupDrop1" type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
                             <div class="dropdown-menu" aria-labelledby="btnGroupDrop1" style="">
-                                <a class="dropdown-item" href="{{ path('secretariat-memberLicenceRenewUpdate', {'club': club.getClubId(), 'member': member.Id, 'renew': member.Licence}) }}">Modifier</a>
-                                <a class="dropdown-item" href="{{ path('secretariat-memberLicenceRenew', {'club': club.getClubId(), 'member': member.Id}) }}">Renouveller</a>
+                                <a class="dropdown-item" href="{{ path('secretariat-memberLicenceDetail', {'club': club.getClubId(), 'member': member.Id}) }}">Licence</a>
+                                <a class="dropdown-item" href="{{ path('secretariat-memberPersonalDetail', {'club': club.getClubId(), 'member': member.Id}) }}">Données personnelles</a>
                                 {% if member.Deadline < limit %}<a class="dropdown-item" href="{{ path('secretariat-memberFormRenew', {'club': club.getClubId(), 'member': member.Id}) }}">Formulaire renouvellement</a>{% endif %}
                             </div>
                         </div>

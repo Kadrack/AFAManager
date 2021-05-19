@@ -656,6 +656,8 @@ class SecretariatController extends AbstractController
 
         $limit = new DateTime('+3 month today');
 
+        $session->set('origin', 'inactive');
+
         return $this->render('Secretariat/Club/Member/list_ancient.html.twig', array('members' => $members ?? null, 'club' => $club, 'limit' => $limit));
     }
 
