@@ -650,7 +650,7 @@ class SecretariatController extends AbstractController
      * @return Response
      */
     #[Route('/liste-anciens-membres/{club<\d+>}', name:'membersAncient')]
-    public function membersAncient(Club $club): Response
+    public function membersAncient(SessionInterface $session, Club $club): Response
     {
         $members = $this->getDoctrine()->getRepository(Member::class)->getClubInactiveMembers($club);
 
