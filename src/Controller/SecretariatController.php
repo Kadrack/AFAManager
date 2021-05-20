@@ -216,37 +216,42 @@ class SecretariatController extends AbstractController
      * @param int|null $list
      * @return Response
      */
-    #[Route('/liste-mails-clubs/{list<\d+>}', name:'clubMailsList', defaults: ['list' => null])]
-    public function clubMailsList(?int $list): Response
+    #[Route('/export/{list<\d+>}', name:'export', defaults: ['list' => null])]
+    public function export(?int $list): Response
     {
         if (is_null($list))
         {
-            return $this->render('Secretariat/Club/mails_list.html.twig');
+            return $this->render('Secretariat/export.html.twig');
         }
 
-        if ($list == 3)
+        if ($list == 4)
         {
-            $mailing_list = array_merge($this->getDoctrine()->getRepository(Club::class)->getClubsMailsList(1), $this->getDoctrine()->getRepository(Club::class)->getClubsMailsList(2));
-
+            $export = $this->getDoctrine()->getRepository(Club::class)->getClubsListIAF();
+        }
+        else if ($list == 3)
+        {
+            $export = array_merge($this->getDoctrine()->getRepository(Club::class)->getClubsMailsList(1), $this->getDoctrine()->getRepository(Club::class)->getClubsMailsList(2));
         }
         else
         {
-            $mailing_list = $this->getDoctrine()->getRepository(Club::class)->getClubsMailsList($list);
+            $export = $this->getDoctrine()->getRepository(Club::class)->getClubsMailsList($list);
         }
 
-        $list = array();
+        $file = fopen('export.csv', 'w');
 
-        foreach ($mailing_list as $mail)
+        fwrite($file, chr(0xEF) . chr(0xBB) . chr(0xBF));
+
+        foreach ($export as $entry)
         {
-            $list[] = $mail['Mail'];
+            fputcsv($file, $entry, "\t");
         }
 
-        file_put_contents('mails.csv', implode(';', array_unique($list)));
+        fclose($file);
 
-        $stream = new Stream('mails.csv');
+        $stream = new Stream('export.csv');
 
         $response = new BinaryFileResponse($stream);
-        $response->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT, 'mails.csv');
+        $response->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT, 'export.csv');
 
         return $response->deleteFileAfterSend();
     }
@@ -646,6 +651,7 @@ class SecretariatController extends AbstractController
     }
 
     /**
+     * @param SessionInterface $session
      * @param Club $club
      * @return Response
      */

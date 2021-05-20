@@ -96,6 +96,22 @@ class ClubRepository extends ServiceEntityRepository
     }
 
     /**
+     * @return array|null
+     */
+    public function getClubsListIAF(): ?array
+    {
+        $qb = $this->createQueryBuilder('c');
+
+        return $qb->select('c.club_name AS Title', 'd.club_dojo_street AS Street', 'd.club_dojo_zip AS Zip', 'd.club_dojo_city AS City', 'c.club_url AS Website')
+            ->join(ClubDojo::class, 'd', 'WITH', $qb->expr()->eq('d.club_dojo_club', 'c.club_id'))
+            ->join(ClubHistory::class, 'h', 'WITH', $qb->expr()->eq('h.club_history_id', 'c.club_last_history'))
+            ->where($qb->expr()->eq('h.club_history_status', 1))
+            ->addOrderBy('c.club_id', 'ASC')
+            ->getQuery()
+            ->getArrayResult();
+    }
+
+    /**
      * @param int $list
      * @return array|null
      */
