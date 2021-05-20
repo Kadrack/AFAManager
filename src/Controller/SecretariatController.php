@@ -978,7 +978,11 @@ class SecretariatController extends AbstractController
 
             $licence->setMemberLicence($member);
             $licence->setMemberLicenceClub($club);
-            $licence->setMemberLicenceDeadline(new DateTime('+1 year '.$oldLicence->getMemberLicenceDeadline()->format('Y-m-d')));
+
+            if (strtotime('+1 year', $oldLicence->getMemberLicenceDeadline()->getTimestamp()) > strtotime('today'))
+            {
+                $licence->setMemberLicenceDeadline(new DateTime('+1 year '.$oldLicence->getMemberLicenceDeadline()->format('Y-m-d')));
+            }
         }
 
         $licence->setMemberLicenceUpdate(new DateTime('today'));
